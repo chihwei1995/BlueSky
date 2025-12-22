@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一步藍天 | One-Step Blue Sky</title>
+    <script src="//unpkg.com/globe.gl"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-crisis: #FF4D4D;
+            --color-hope: #00D2FF;
+            --bg-glass: rgba(20, 20, 30, 0.6);
+        }
+        
+        body { margin: 0; font-family: 'Inter', sans-serif; overflow: hidden; background: #000; color: white; }
+        
+        /* === UI 層 === */
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* 讓滑鼠穿透 UI 操作地球 */
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        /* 頂部導航 */
+        header {
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            pointer-events: auto;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+        .logo { font-size: 1.2rem; font-weight: 600; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--color-hope); }
+
+        /* 切換開關 */
+        .toggle-container {
+            pointer-events: auto;
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            padding: 5px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
+            display: flex; gap: 5px;
+        }
+        .toggle-btn {
+            background: transparent; border: none; color: rgba(255,255,255,0.5);
+            padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: 0.3s;
+        }
+        .toggle-btn.active { color: white; font-weight: 600; }
+        .toggle-btn.active[data-mode="crisis"] { background: var(--color-crisis); box-shadow: 0 0 10px var(--color-crisis); }
+        .toggle-btn.active[data-mode="hope"] { background: var(--color-hope); box-shadow: 0 0 10px var(--color-hope); }
+
+        /* 資訊卡片 (左側) */
+        .info-card {
+            pointer-events: auto;
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+            width: 300px; background: var(--bg-glass); backdrop-filter: blur(20px);
+            padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0; transition: 0.5s; transform: translateY(-40%); /* 預設隱藏 */
+        }
+        .info-card.show { opacity: 1; transform: translateY(-50%); }
+        .tag { font-size: 0.8rem; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;}
+        .tag.crisis { background: rgba(255, 77, 77, 0.2); color: var(--color-crisis); }
+        .tag.hope { background: rgba(0, 210, 255, 0.2); color: var(--color-hope); }
+        h2 { margin: 0 0 10px 0; font-size: 1.4rem; }
+        p { font-size: 0.9rem; color: #ddd; line-height: 1.5; }
+        
+        /* 模擬 IG 嵌入區 */
+        .mock-ig {
+            margin-top: 15px; height: 150px; background: #222; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; color: #555; font-size: 0.8rem;
+            border: 1px dashed #444;
+        }
+
+        /* 底部時間軸 */
+        .timeline-container {
+            pointer-events: auto;
+            padding: 20px; text-align: center;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+        .timeline {
+            display: flex; justify-content: center; gap: 20px; overflow-x: auto; padding-bottom: 10px;
+        }
+        .year-mark {
+            opacity: 0.5; cursor: pointer; position: relative; padding: 5px 10px; transition: 0.3s;
+        }
+        .year-mark:hover, .year-mark.active { opacity: 1; font-size: 1.2rem; font-weight: bold; }
+        .year-mark.active::after {
+            content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+            width: 6px; height: 6px; background: white; border-radius: 50%;
+        }
+
+        /* 手機版調整 */
+        @media (max-width: 768px) {
+            .info-card {
+                left: 0; bottom: 0; top: auto; width: 100%; border-radius: 20px 20px 0 0;
+                transform: translateY(100%); /* 初始在底部外 */
+            }
+            .info-card.show { transform: translateY(0); }
+            header { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="globeViz"></div>
+
+    <div id="ui-layer">
+        <header>
+            <div class="logo">👣 One-Step <span>Blue Sky</span></div>
+            <div class="toggle-container">
+                <button class="toggle-btn active" data-mode="crisis" onclick="setMode('crisis')">⚠️ CRISIS</button>
+                <button class="toggle-btn" data-mode="hope" onclick="setMode('hope')">🌏 HOPE</button>
+            </div>
+        </header>
+
+        <div class="info-card" id="infoPanel">
+            <span class="tag crisis" id="infoTag">Wildfire</span>
+            <h2 id="infoTitle">2019 Australia Bushfire</h2>
+            <p id="infoDesc">One of the most devastating wildfire seasons, burning over 18 million hectares.</p>
+            <div class="mock-ig">[ Instagram Embed Area ]</div>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline">
+                <div class="year-mark" onclick="jumpToYear(2018)">2018</div>
+                <div class="year-mark active" onclick="jumpToYear(2019)">2019</div>
+                <div class="year-mark" onclick="jumpToYear(2020)">2020</div>
+                <div class="year-mark" onclick="jumpToYear(2024)">2024</div>
+                <div class="year-mark" onclick="jumpToYear(2025)">2025</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. 模擬數據 (對應 data.json)
+        const eventsData = [
+            { id: 1, lat: -33.8, lng: 151.2, label: "Australia Fire", year: 2019, mode: "crisis", type: "Wildfire", desc: "Extreme heat caused massive bushfires." },
+            { id: 2, lat: 25.2, lng: 55.2, label: "Dubai Flood", year: 2024, mode: "crisis", type: "Flood", desc: "Unexpected torrential rain in desert city." },
+            { id: 3, lat: -3.4, lng: -62.2, label: "Amazon Reforest", year: 2025, mode: "hope", type: "Solution", desc: "Major reforestation project launched." },
+            { id: 4, lat: 23.5, lng: 121.0, label: "Taiwan Energy", year: 2025, mode: "hope", type: "Energy", desc: "New offshore wind farm completed." }
+        ];
+
+        let currentMode = 'crisis'; // 預設模式
+
+        // 2. 初始化地球
+        const world = Globe()
+            (document.getElementById('globeViz'))
+            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg') // 預設夜間圖
+            .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+            .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+            .pointAltitude(0.1)
+            .pointRadius(0.5)
+            .pointColor(d => d.mode === 'crisis' ? '#FF4D4D' : '#00D2FF') // 根據模式變色
+            .pointLabel('label')
+            .onPointClick(point => showInfo(point)) // 點擊事件
+            .pointsData(eventsData.filter(d => d.mode === 'crisis')); // 初始載入危機數據
+
+        // 自動旋轉
+        world.controls().autoRotate = true;
+        world.controls().autoRotateSpeed = 0.5;
+
+        // 3. 切換模式功能
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // 更新按鈕樣式
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.toggle-btn[data-mode="${mode}"]`).classList.add('active');
+
+            // 更新地球貼圖與數據
+            if (mode === 'crisis') {
+                world.globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg');
+                world.pointsData(eventsData.filter(d => d.mode === 'crisis'));
+            } else {
+                world.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg'); // 日間圖
+                world.pointsData(eventsData.filter(d => d.mode === 'hope'));
+            }
+        }
+
+        // 4. 顯示資訊卡片
+        function showInfo(data) {
+            world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.5 }, 1000); // 鏡頭飛越
+            
+            const card = document.getElementById('infoPanel');
+            const tag = document.getElementById('infoTag');
+            
+            // 更新內容
+            document.getElementById('infoTitle').innerText = `${data.year} ${data.label}`;
+            document.getElementById('infoDesc').innerText = data.desc;
+            tag.innerText = data.type;
+            
+            // 更新樣式
+            tag.className = `tag ${data.mode}`;
+            card.classList.add('show');
+            
+            // 暫停旋轉以便觀看
+            world.controls().autoRotate = false;
+        }
+
+        // 5. 點擊背景關閉卡片
+        world.onGlobeClick(() => {
+            document.getElementById('infoPanel').classList.remove('show');
+            world.controls().autoRotate = true;
+        });
+
+        // 6. 年份跳轉 (模擬)
+        function jumpToYear(year) {
+            document.querySelectorAll('.year-mark').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 找出該年份的第一個事件並飛過去
+            const targetEvent = eventsData.find(d => d.year === year && d.mode === currentMode);
+            if(targetEvent) {
+                showInfo(targetEvent);
+            }
+        }
+        
+        // RWD: 手機版調整視角高度 (簡單處理)
+        if(window.innerWidth < 768) {
+            world.pointOfView({ altitude: 3.5 }); 
+        }
+    </script>
+</body>
+</html>
