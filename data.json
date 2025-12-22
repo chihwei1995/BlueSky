@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "project": "One-Step Blue Sky",
+    "updated_at": "2025-12-22"
+  },
+  "config": {
+    "initial_view": { "lat": 23.5, "lng": 121.0, "altitude": 2.5 }
+  },
+  "events": [
+    {
+      "id": "evt_001",
+      "year": 2024,
+      "date": "2024-04-16",
+      "mode": "crisis",
+      "title": "杜拜極端暴雨",
+      "category": "disaster",
+      "coordinates": { "lat": 25.2048, "lng": 55.2708 },
+      "stats": [
+        { "label": "降雨量", "value": "254mm" },
+        { "label": "持續時間", "value": "24hr" }
+      ],
+      "description": "沙漠城市遭遇史無前例的降雨量，城市排水系統面臨巨大挑戰。",
+      "media": { "type": "instagram", "url": "https://www.instagram.com/p/C5_xyz123/" }
+    },
+    {
+      "id": "evt_002",
+      "year": 2019,
+      "date": "2019-12-01",
+      "mode": "crisis",
+      "title": "澳洲黑色夏季野火",
+      "category": "disaster",
+      "coordinates": { "lat": -33.8688, "lng": 151.2093 },
+      "stats": [
+        { "label": "燃燒面積", "value": "18M ha" },
+        { "label": "影響城市", "value": "100+" }
+      ],
+      "description": "高溫與乾旱引發的野火，煙霧覆蓋主要城市並影響數百萬居民。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=60" }
+    },
+    {
+      "id": "evt_003",
+      "year": 2020,
+      "date": "2020-09-15",
+      "mode": "crisis",
+      "title": "北極海冰創新低",
+      "category": "disaster",
+      "coordinates": { "lat": 80.0, "lng": -45.0 },
+      "stats": [
+        { "label": "面積", "value": "3.74M km²" },
+        { "label": "較 1981-2010", "value": "-40%" }
+      ],
+      "description": "衛星觀測顯示海冰面積降至歷史次低，反映高緯度暖化趨勢。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1476610182048-b716b8518aae?auto=format&fit=crop&w=800&q=60" }
+    },
+    {
+      "id": "sol_001",
+      "year": 2025,
+      "date": "2025-06-10",
+      "mode": "hope",
+      "title": "亞馬遜雨林復育站",
+      "category": "solution",
+      "coordinates": { "lat": -3.4653, "lng": -62.2159 },
+      "stats": [
+        { "label": "種植樹木", "value": "50,000+" },
+        { "label": "參與人數", "value": "120" }
+      ],
+      "description": "與當地原住民合作的種植計畫，透過生物多樣性提升碳吸存。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "sol_002",
+      "year": 2025,
+      "date": "2025-02-20",
+      "mode": "hope",
+      "title": "台灣外海離岸風場",
+      "category": "solution",
+      "coordinates": { "lat": 23.5, "lng": 121.0 },
+      "stats": [
+        { "label": "裝置容量", "value": "350 MW" },
+        { "label": "可供家庭", "value": "300,000" }
+      ],
+      "description": "新離岸風機併聯商轉，提供更穩定的綠電，支持區域能源轉型。",
+      "media": { "type": "instagram", "url": "https://www.instagram.com/p/C6_greenwind/" }
+    }
+  ]
+}
