@@ -356,6 +356,7 @@
         gsap.to('#globe-container', { opacity: 1, duration: 0.35 });
       }});
       renderPoints();
+      refreshTimeline();
       const active = state.filtered[0];
       if (active) {
         highlightYear(active.year);
@@ -368,6 +369,15 @@
     const renderPoints = () => {
       state.filtered = state.events.filter(ev => ev.mode === state.currentMode);
       state.world.pointsData(state.filtered);
+    };
+
+    const refreshTimeline = () => {
+      buildTimeline(state.filtered);
+      const fallbackYear = state.filtered[0]?.year;
+      if (fallbackYear) {
+        state.currentYear = fallbackYear;
+        highlightYear(fallbackYear);
+      }
     };
 
     const buildPointObject = (d) => {
@@ -435,18 +445,34 @@
       if (target) showInfo(target);
     };
 
-    const setupTimeline = () => {
-      buildTimeline(state.events);
-      const fallbackYear = state.filtered[0]?.year || state.events[0]?.year;
-      if (fallbackYear) {
-        state.currentYear = fallbackYear;
-        highlightYear(fallbackYear);
-      }
-    };
-
     const attachUIEvents = () => {
       document.getElementById('btn-crisis').addEventListener('click', () => applyMode('crisis'));
       document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
+    };
+
+    const configureControls = () => {
+      const controls = state.world.controls();
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.8;
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.enablePan = true;
+      controls.enableZoom = true;
+      controls.enableRotate = true;
+      controls.rotateSpeed = 0.8;
+
+      let resumeHandle;
+      const pauseRotate = () => {
+        controls.autoRotate = false;
+        clearTimeout(resumeHandle);
+      };
+      const resumeRotate = () => {
+        clearTimeout(resumeHandle);
+        resumeHandle = setTimeout(() => { controls.autoRotate = true; }, 2500);
+      };
+
+      controls.addEventListener('start', pauseRotate);
+      controls.addEventListener('end', resumeRotate);
     };
 
     const prepareData = (data) => {
@@ -489,10 +515,7 @@
         .pointThreeObject(buildPointObject)
         .pointThreeObjectExtend(true);
 
-      state.world.controls().autoRotate = true;
-      state.world.controls().autoRotateSpeed = 0.8;
-      state.world.controls().enableDamping = true;
-      state.world.controls().enablePan = false;
+      configureControls();
 
       const material = state.world.globeMaterial();
       material.bumpMap = state.bumpMap;
@@ -511,7 +534,7 @@
       }, 0);
 
       renderPoints();
-      setupTimeline();
+      refreshTimeline();
       const firstEvent = state.filtered[0];
       if (firstEvent) showInfo(firstEvent);
 
