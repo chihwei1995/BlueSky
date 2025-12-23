@@ -40,6 +40,32 @@
 
     #globeViz { width: 100vw; height: 100vh; }
 
+    /* ===== Mode overlay (氣氛色罩) ===== */
+    #modeOverlay{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.0;
+      transition: opacity 0.6s ease, background 0.6s ease, filter 0.6s ease;
+      mix-blend-mode: screen;
+      filter: saturate(1.05) contrast(1.05);
+      z-index: 1; /* 在 globe 上、UI 下 */
+    }
+    body[data-mode="crisis"] #modeOverlay{
+      opacity: 0.28;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,77,77,0.55), transparent 42%),
+        radial-gradient(circle at 80% 20%, rgba(255,140,0,0.22), transparent 40%),
+        radial-gradient(circle at 50% 70%, rgba(255,77,77,0.12), transparent 55%);
+    }
+    body[data-mode="hope"] #modeOverlay{
+      opacity: 0.22;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(0,210,255,0.55), transparent 45%),
+        radial-gradient(circle at 75% 30%, rgba(46,204,64,0.22), transparent 40%),
+        radial-gradient(circle at 50% 75%, rgba(0,210,255,0.10), transparent 55%);
+    }
+
     /* UI layer */
     #ui-layer {
       position: fixed;
@@ -49,6 +75,7 @@
       justify-content: space-between;
       pointer-events: none;
       padding: 16px;
+      z-index: 2; /* UI 在最上層 */
     }
 
     header {
@@ -200,12 +227,7 @@
     .year-mark[data-mode="crisis"].active { background: rgba(255,77,77,0.18); }
     .year-mark[data-mode="hope"].active { background: rgba(0,210,255,0.18); }
 
-    /* Helpers */
     .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); }
-
-    .mobile-offset { transform: translateY(-12%); }
-
-    .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 
     @media (max-width: 900px) {
       .info-card { width: 300px; }
@@ -232,9 +254,10 @@
     }
   </style>
 </head>
-<body>
+<body data-mode="crisis">
   <div id="globe-container">
     <div id="globeViz"></div>
+    <div id="modeOverlay" aria-hidden="true"></div>
   </div>
 
   <div id="ui-layer">
@@ -275,105 +298,23 @@
   <script>
     const svgDataUrl = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
-    const LAND_PATHS = `
-      <path d="M110 230 q30 -90 140 -90 q80 -5 120 70 q-10 50 -90 80 q-80 30 -150 -10 q-30 -20 -20 -50 z"/>
-      <path d="M250 270 q40 30 35 100 q-5 70 -45 90 q-30 -30 -15 -80 q10 -50 -15 -110 q25 -15 40 0 z"/>
-      <path d="M330 170 q100 -60 230 -20 q90 30 130 90 q10 30 -40 45 q-80 25 -200 30 q-110 5 -170 -10 q-50 -20 -30 -60 q15 -45 80 -75 z"/>
-      <path d="M410 230 q60 -20 110 10 q50 50 20 110 q-20 70 -50 90 q-50 10 -90 -50 q-35 -70 -10 -140 q20 -20 20 -20 z"/>
-      <path d="M700 310 q70 -20 110 25 q30 40 0 70 q-30 25 -90 10 q-50 -20 -30 -70 q5 -15 10 -35 z"/>
-      <path d="M40 430 q240 -70 420 -50 q240 25 420 -10 q40 25 -10 50 q-230 45 -410 25 q-220 -10 -390 -30 q-60 -10 -30 -45 z"/>
-      <path d="M210 130 q60 -30 100 -5 q20 30 -10 65 q-40 25 -90 -10 q-10 -25 0 -50 z"/>
-      <path d="M372 150 q12 -12 28 -6 q6 18 -16 26 q-18 2 -14 -20 z"/>
-      <path d="M640 210 q16 -12 36 -6 q12 22 -14 32 q-22 4 -22 -26 z"/>
-      <path d="M648 250 q20 8 18 38 q-18 16 -26 -6 q-2 -20 8 -32 z"/>
-      <path d="M674 276 q32 0 36 34 q-8 26 -38 26 q-30 -4 -24 -32 q4 -22 26 -28 z"/>
-      <path d="M730 274 q44 0 66 22 q12 34 -26 44 q-46 10 -66 -20 q-6 -22 26 -46 z"/>
-      <path d="M832 344 q22 8 18 26 q-18 16 -34 2 q-12 -14 16 -28 z"/>
-      <path d="M498 304 q26 10 16 40 q-12 26 -32 16 q-18 -12 -8 -34 q8 -18 24 -22 z"/>
-      <path d="M226 224 q18 6 24 18 q-10 14 -24 6 q-10 -10 0 -24 z"/>
-      <path d="M144 258 q12 -4 20 6 q-6 12 -18 10 q-10 -6 -2 -16 z"/>
-    `;
+    // === 真實貼圖（路線 A）===
+    // 請確保 /assets 內存在：
+    // earth_day.jpg, earth_bump.jpg, earth_specular.jpg, earth_clouds.png
+    const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
+    const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
 
-    const buildGlobeTexture = ({ id, oceanStops, landStops, coastline, highlight, ice }) => svgDataUrl(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-        <defs>
-          <linearGradient id="${id}-ocean" x1="0%" y1="0%" x2="100%" y2="50%">
-            <stop offset="0%" stop-color="${oceanStops[0]}"/>
-            <stop offset="50%" stop-color="${oceanStops[1]}"/>
-            <stop offset="100%" stop-color="${oceanStops[2]}"/>
-          </linearGradient>
-          <radialGradient id="${id}-land" cx="40%" cy="45%" r="70%">
-            <stop offset="0%" stop-color="${landStops[0]}"/>
-            <stop offset="50%" stop-color="${landStops[1]}"/>
-            <stop offset="100%" stop-color="${landStops[2]}"/>
-          </radialGradient>
-        </defs>
-        <rect width="1024" height="512" fill="url(#${id}-ocean)"/>
-        <rect width="1024" height="512" fill="url(#${id}-land)" opacity="0.12"/>
-        <g fill="url(#${id}-land)" stroke="${coastline}" stroke-width="1.4" stroke-opacity="0.6">
-          ${LAND_PATHS}
-        </g>
-        <g fill="${highlight}" opacity="0.2">
-          ${LAND_PATHS}
-        </g>
-        <path d="M0 36 q140 26 320 6 q160 -18 320 -12 q200 10 384 34 L1024 0 L0 0 Z" fill="${ice}" opacity="0.35"/>
-        <path d="M12 428 q240 -72 420 -52 q230 22 420 -10 q70 24 -12 60 q-230 44 -410 24 q-240 -16 -390 -32 q-50 -10 -28 -40 z" fill="${ice}" opacity="0.28"/>
-      </svg>
-    `);
-
-    const TEXTURE_DATA = {
-      crisisGlobe: buildGlobeTexture({
-        id: 'crisis',
-        oceanStops: ['#04070f', '#0b1427', '#0e182d'],
-        landStops: ['#4e342e', '#5c4439', '#8a5f3f'],
-        coastline: '#f7d7a0',
-        highlight: '#ffcf6b',
-        ice: '#8fb2d9'
-      }),
-      hopeGlobe: buildGlobeTexture({
-        id: 'hope',
-        oceanStops: ['#063a65', '#0b6a8f', '#0c89a0'],
-        landStops: ['#6bd992', '#4ebc6f', '#27824b'],
-        coastline: '#d7f2ce',
-        highlight: '#c0f7c9',
-        ice: '#bfe6ff'
-      }),
-      clouds: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <g fill="white" fill-opacity="0.22">
-            <ellipse cx="180" cy="120" rx="140" ry="60"/>
-            <ellipse cx="460" cy="90" rx="180" ry="70"/>
-            <ellipse cx="760" cy="140" rx="200" ry="80"/>
-            <ellipse cx="260" cy="320" rx="190" ry="70" fill-opacity="0.18"/>
-            <ellipse cx="640" cy="300" rx="210" ry="90" fill-opacity="0.2"/>
-          </g>
-        </svg>
-      `),
-      bump: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <defs>
-            <linearGradient id="bumpGradient" x1="0%" x2="100%">
-              <stop offset="0%" stop-color="#444"/>
-              <stop offset="50%" stop-color="#555"/>
-              <stop offset="100%" stop-color="#666"/>
-            </linearGradient>
-          </defs>
-          <rect width="1024" height="512" fill="url(#bumpGradient)"/>
-          <path d="M0,260 C140,220 260,260 400,230 C540,200 620,270 760,250 C900,230 950,270 1024,240 L1024,512 L0,512 Z" fill="#777" opacity="0.4"/>
-        </svg>
-      `),
-      specular: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <defs>
-            <linearGradient id="shine" x1="0%" x2="100%">
-              <stop offset="0%" stop-color="#888" stop-opacity="0.45"/>
-              <stop offset="50%" stop-color="#aaa" stop-opacity="0.7"/>
-              <stop offset="100%" stop-color="#666" stop-opacity="0.45"/>
-            </linearGradient>
-          </defs>
-          <rect width="1024" height="512" fill="url(#shine)"/>
-        </svg>
-      `),
+    const TEXTURE_SETS = {
+      globe: {
+        desktop: 'assets/earth_day.jpg',
+        mobile:  'assets/earth_day.jpg'
+      },
+      clouds: {
+        desktop: 'assets/earth_clouds.png',
+        mobile:  'assets/earth_clouds.png'
+      },
+      bump: 'assets/earth_bump.jpg',
+      specular: 'assets/earth_specular.jpg',
       background: svgDataUrl(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
           <defs>
@@ -393,29 +334,8 @@
       `)
     };
 
-    const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
-    const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
-    const TEXTURE_SETS = {
-      globe: {
-        crisis: {
-          desktop: TEXTURE_DATA.crisisGlobe,
-          mobile: TEXTURE_DATA.crisisGlobe
-        },
-        hope: {
-          desktop: TEXTURE_DATA.hopeGlobe,
-          mobile: TEXTURE_DATA.hopeGlobe
-        }
-      },
-      clouds: {
-        desktop: TEXTURE_DATA.clouds,
-        mobile: TEXTURE_DATA.clouds
-      },
-      bump: TEXTURE_DATA.bump,
-      specular: TEXTURE_DATA.specular,
-      background: TEXTURE_DATA.background
-    };
-
     const COLORS = { crisis: '#FF4D4D', hope: '#00D2FF', hopeAlt: '#2ECC40' };
+
     const state = {
       events: [],
       filtered: [],
@@ -478,7 +398,7 @@
       const cloudMat = new THREE.MeshPhongMaterial({
         map: state.cloudsMap,
         transparent: true,
-        opacity: 0.4,
+        opacity: 0.35,
         depthWrite: false
       });
       const clouds = new THREE.Mesh(cloudGeo, cloudMat);
@@ -504,7 +424,6 @@
       if (typeof state.world.onRender === 'function') {
         state.world.onRender(renderStep);
       } else {
-        console.warn('onRender not available; falling back to requestAnimationFrame');
         const fallbackLoop = () => {
           renderStep();
           requestAnimationFrame(fallbackLoop);
@@ -513,17 +432,28 @@
       }
     };
 
+    // === 模式切換：不換貼圖，只做「材質調色 + body[data-mode] 色罩」===
     const applyMode = (mode) => {
       state.currentMode = mode;
       document.body.dataset.mode = mode;
       document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
-      const targetUrl = TEXTURE_SETS.globe[mode][QUALITY];
-      gsap.to('#globe-container', { opacity: 0.5, duration: 0.35, onComplete: () => {
-        state.world.globeImageUrl(targetUrl);
-        gsap.to('#globe-container', { opacity: 1, duration: 0.35 });
-      }});
+
+      // globe material tint (輕微就好，避免地表失真)
+      const material = state.world?.globeMaterial?.();
+      if (material) {
+        if (!material.emissive) material.emissive = new THREE.Color('#000');
+        if (mode === 'crisis') {
+          gsap.to(material.color,    { r: 1.05, g: 0.90, b: 0.90, duration: 0.6 });
+          gsap.to(material.emissive, { r: 0.10, g: 0.03, b: 0.03, duration: 0.6 });
+        } else {
+          gsap.to(material.color,    { r: 0.92, g: 1.02, b: 1.05, duration: 0.6 });
+          gsap.to(material.emissive, { r: 0.02, g: 0.08, b: 0.10, duration: 0.6 });
+        }
+      }
+
       renderPoints();
       refreshTimeline();
+
       const active = state.filtered[0];
       if (active) {
         highlightYear(active.year);
@@ -557,7 +487,6 @@
         new THREE.SphereGeometry(0.28, 12, 12),
         new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9 })
       );
-      core.position.set(0, 0, 0);
       glow.add(core);
       return glow;
     };
@@ -565,10 +494,12 @@
     const showInfo = (data) => {
       if (!data) return;
       state.world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
+
       const card = document.getElementById('infoPanel');
       const tag = document.getElementById('infoTag');
       tag.className = `tag ${data.mode}`;
       tag.textContent = data.mode === 'crisis' ? 'CRISIS' : 'HOPE';
+
       document.getElementById('infoTitle').textContent = `${data.year} · ${data.title}`;
       document.getElementById('infoSubtitle').textContent = data.category === 'disaster' ? '危機事件' : '解方行動';
       document.getElementById('infoDesc').textContent = data.description;
@@ -673,12 +604,17 @@
     const bootstrap = async () => {
       const uiLayer = document.getElementById('ui-layer');
       uiLayer.style.pointerEvents = 'none';
+
       const data = await fetchJSON('data.json');
       prepareData(data);
+
+      // preload 真實貼圖
       await Promise.all([
-        preloadImage(TEXTURE_SETS.globe.crisis[QUALITY]),
-        preloadImage(TEXTURE_SETS.globe.hope[QUALITY])
+        preloadImage(TEXTURE_SETS.globe[QUALITY]),
+        preloadImage(TEXTURE_SETS.clouds[QUALITY])
       ]);
+
+      // load bump/specular/clouds
       const [bump, specular, clouds] = await Promise.all([
         loadTexture(TEXTURE_SETS.bump),
         loadTexture(TEXTURE_SETS.specular),
@@ -690,8 +626,7 @@
 
       state.world = Globe()(document.getElementById('globeViz'));
       state.world
-        .globeImageUrl(TEXTURE_SETS.globe.crisis[QUALITY])
-        .bumpImageUrl(TEXTURE_SETS.bump)
+        .globeImageUrl(TEXTURE_SETS.globe[QUALITY])
         .backgroundImageUrl(TEXTURE_SETS.background)
         .pointAltitude(0.02)
         .pointRadius(0.6)
@@ -704,17 +639,18 @@
         state.world
           .pointThreeObject(buildPointObject)
           .pointThreeObjectExtend(true);
-      } else {
-        console.warn('pointThreeObject not available on this Globe build; falling back to default point rendering.');
       }
 
       configureControls();
 
+      // material: bump/specular
       const material = state.world.globeMaterial();
       material.bumpMap = state.bumpMap;
+      material.bumpScale = 0.08;
       material.specularMap = state.specularMap;
       material.specular = new THREE.Color('#888');
       material.shininess = 6;
+      material.emissive = new THREE.Color('#000'); // for mode tint
 
       attachCloudLayer(state.world);
       createPulse();
@@ -728,11 +664,15 @@
 
       renderPoints();
       refreshTimeline();
+
       const firstEvent = state.filtered[0];
       if (firstEvent) showInfo(firstEvent);
 
       setInfoCollapsed(IS_MOBILE);
       setTimelineCollapsed(IS_MOBILE);
+
+      // 套用預設模式（crisis）
+      applyMode(state.currentMode);
 
       uiLayer.style.pointerEvents = 'auto';
     };
