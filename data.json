@@ -141,6 +141,298 @@
       ],
       "description": "新離岸風機併聯商轉，提供更穩定的綠電，支持區域能源轉型。",
       "media": { "type": "instagram", "url": "https://www.instagram.com/p/C6_greenwind/" }
+    },
+
+    {
+      "id": "evt_008",
+      "year": 2019,
+      "date": "2019-03-14",
+      "mode": "crisis",
+      "title": "莫三比克氣旋伊代（沿岸洪患）",
+      "category": "disaster",
+      "coordinates": { "lat": -19.8436, "lng": 34.8389 },
+      "stats": [
+        { "label": "重災區", "value": "沿岸城市" },
+        { "label": "衝擊", "value": "交通 / 供電" }
+      ],
+      "description": "熱帶氣旋帶來暴雨與風暴潮，沿岸地區出現廣泛淹水與基礎設施中斷。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_009",
+      "year": 2019,
+      "date": "2019-08-25",
+      "mode": "crisis",
+      "title": "亞馬遜雨林野火（煙霾擴散）",
+      "category": "disaster",
+      "coordinates": { "lat": -3.1190, "lng": -60.0217 },
+      "stats": [
+        { "label": "關注焦點", "value": "煙霾 / 森林退化" },
+        { "label": "連動", "value": "乾季延長" }
+      ],
+      "description": "野火與焚墾造成煙霾擴散，凸顯土地利用與氣候條件的交互風險。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80" }
+    },
+
+    {
+      "id": "evt_010",
+      "year": 2020,
+      "date": "2020-02-10",
+      "mode": "crisis",
+      "title": "南極高溫異常（短期極端）",
+      "category": "disaster",
+      "coordinates": { "lat": -63.4, "lng": -57.0 },
+      "stats": [
+        { "label": "特徵", "value": "極端溫度峰值" },
+        { "label": "風險", "value": "融冰加速" }
+      ],
+      "description": "短期溫度峰值事件成為暖化背景下的指標性極端訊號之一。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1516569422535-0b6d5b6e7b33?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_011",
+      "year": 2020,
+      "date": "2020-08-20",
+      "mode": "crisis",
+      "title": "美國西岸野火季（煙霾覆蓋）",
+      "category": "disaster",
+      "coordinates": { "lat": 37.7749, "lng": -122.4194 },
+      "stats": [
+        { "label": "影響", "value": "空品惡化" },
+        { "label": "連動", "value": "高溫 / 乾旱" }
+      ],
+      "description": "野火季疊加熱浪與乾旱，使城市空氣品質惡化、能見度下降並影響健康。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" }
+    },
+
+    {
+      "id": "evt_012",
+      "year": 2021,
+      "date": "2021-07-14",
+      "mode": "crisis",
+      "title": "歐洲西部暴雨洪災",
+      "category": "disaster",
+      "coordinates": { "lat": 50.1109, "lng": 8.6821 },
+      "stats": [
+        { "label": "型態", "value": "短延時強降雨" },
+        { "label": "衝擊", "value": "河川暴漲" }
+      ],
+      "description": "極端降雨造成河川快速暴漲與城鎮淹水，凸顯風險治理與預警的重要性。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_013",
+      "year": 2021,
+      "date": "2021-12-02",
+      "mode": "crisis",
+      "title": "極端降雨引發山區土石流（示例事件）",
+      "category": "disaster",
+      "coordinates": { "lat": 24.1374, "lng": 121.2754 },
+      "stats": [
+        { "label": "地形", "value": "坡地 / 河谷" },
+        { "label": "風險", "value": "落石 / 崩塌" }
+      ],
+      "description": "連續降雨造成坡地含水量飽和，土石流與落石風險上升，交通與聚落安全受影響。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=900&q=80" }
+    },
+
+    {
+      "id": "evt_014",
+      "year": 2022,
+      "date": "2022-03-08",
+      "mode": "crisis",
+      "title": "印度-巴基斯坦早春熱浪（示例）",
+      "category": "disaster",
+      "coordinates": { "lat": 28.6139, "lng": 77.2090 },
+      "stats": [
+        { "label": "影響", "value": "電網 / 健康" },
+        { "label": "特徵", "value": "提前到來" }
+      ],
+      "description": "熱浪提前到來並持續，對電力需求、戶外勞動與公共健康造成壓力。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1521292270410-a8c44e0c6b3f?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_015",
+      "year": 2022,
+      "date": "2022-11-19",
+      "mode": "crisis",
+      "title": "非洲之角長期乾旱（示例）",
+      "category": "disaster",
+      "coordinates": { "lat": 1.2921, "lng": 36.8219 },
+      "stats": [
+        { "label": "型態", "value": "多季降雨不足" },
+        { "label": "衝擊", "value": "糧食 / 牧場" }
+      ],
+      "description": "長期降雨不足加劇水資源與糧食安全壓力，並影響農牧生計。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=900&q=80" }
+    },
+
+    {
+      "id": "evt_016",
+      "year": 2023,
+      "date": "2023-02-03",
+      "mode": "crisis",
+      "title": "海洋熱浪擴張（示例）",
+      "category": "disaster",
+      "coordinates": { "lat": 0.0, "lng": -160.0 },
+      "stats": [
+        { "label": "影響", "value": "珊瑚 / 漁業" },
+        { "label": "特徵", "value": "持續偏暖" }
+      ],
+      "description": "海表溫度長期偏高造成海洋熱浪，影響珊瑚白化與海洋生態系。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1476610182048-b716b8518aae?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_017",
+      "year": 2023,
+      "date": "2023-10-12",
+      "mode": "crisis",
+      "title": "城市內澇頻發（示例）",
+      "category": "disaster",
+      "coordinates": { "lat": 13.7563, "lng": 100.5018 },
+      "stats": [
+        { "label": "焦點", "value": "排水 / 地勢" },
+        { "label": "應對", "value": "滯洪 / 海綿城市" }
+      ],
+      "description": "短延時強降雨搭配高密度建成區，使城市內澇風險上升，考驗排水與調蓄系統。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=900&q=80" }
+    },
+
+    {
+      "id": "evt_018",
+      "year": 2024,
+      "date": "2024-01-18",
+      "mode": "crisis",
+      "title": "冬季異常高溫（示例）",
+      "category": "disaster",
+      "coordinates": { "lat": 35.6762, "lng": 139.6503 },
+      "stats": [
+        { "label": "特徵", "value": "季節偏移" },
+        { "label": "風險", "value": "病媒 / 生態" }
+      ],
+      "description": "冬季偏暖造成生態節律改變與病媒風險變化，並影響用電與公共健康。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1521292270410-a8c44e0c6b3f?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_019",
+      "year": 2024,
+      "date": "2024-06-22",
+      "mode": "crisis",
+      "title": "東亞梅雨鋒面極端降雨（示例）",
+      "category": "disaster",
+      "coordinates": { "lat": 31.2304, "lng": 121.4737 },
+      "stats": [
+        { "label": "型態", "value": "鋒面滯留" },
+        { "label": "衝擊", "value": "淹水 / 交通" }
+      ],
+      "description": "鋒面滯留帶來連續強降雨，城市交通與排水承受壓力，低窪區出現積淹水。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_020",
+      "year": 2024,
+      "date": "2024-11-03",
+      "mode": "crisis",
+      "title": "晚秋強降雨與強對流（示例）",
+      "category": "disaster",
+      "coordinates": { "lat": 22.3964, "lng": 114.1095 },
+      "stats": [
+        { "label": "特徵", "value": "短時雨強大" },
+        { "label": "風險", "value": "樹倒 / 積水" }
+      ],
+      "description": "非典型季節出現強對流與短時強降雨，使都市災損與交通延誤風險升高。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=900&q=80" }
+    },
+
+    {
+      "id": "sol_003",
+      "year": 2025,
+      "date": "2025-01-12",
+      "mode": "hope",
+      "title": "城市滯洪公園（海綿城市示例）",
+      "category": "solution",
+      "coordinates": { "lat": 25.0330, "lng": 121.5654 },
+      "stats": [
+        { "label": "功能", "value": "調蓄 / 降溫" },
+        { "label": "效益", "value": "降低內澇風險" }
+      ],
+      "description": "以滯洪公園與透水鋪面提升降雨調蓄能力，兼具都市降溫與公共活動空間。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "sol_004",
+      "year": 2025,
+      "date": "2025-03-08",
+      "mode": "hope",
+      "title": "校園節能改造（示例）",
+      "category": "solution",
+      "coordinates": { "lat": 22.3027, "lng": 114.1772 },
+      "stats": [
+        { "label": "措施", "value": "LED / 智慧空調" },
+        { "label": "預估節電", "value": "20%-35%" }
+      ],
+      "description": "以照明與空調節能改造降低尖峰用電，並建立用能儀表板讓師生可視化參與。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "sol_005",
+      "year": 2025,
+      "date": "2025-04-18",
+      "mode": "hope",
+      "title": "社區太陽能共享（示例）",
+      "category": "solution",
+      "coordinates": { "lat": 1.3521, "lng": 103.8198 },
+      "stats": [
+        { "label": "模式", "value": "共享 / 虛擬電廠" },
+        { "label": "受益", "value": "用電成本下降" }
+      ],
+      "description": "以社區共享太陽能與用電回饋機制，讓住戶能共同受益並參與能源轉型。",
+      "media": { "type": "instagram", "url": "https://www.instagram.com/p/C5_solar_share/" }
+    },
+    {
+      "id": "sol_006",
+      "year": 2025,
+      "date": "2025-07-02",
+      "mode": "hope",
+      "title": "塑膠回收再生鏈（示例）",
+      "category": "solution",
+      "coordinates": { "lat": 22.5431, "lng": 114.0579 },
+      "stats": [
+        { "label": "回收量", "value": "每月 12t（示例）" },
+        { "label": "再生用途", "value": "建材 / 織品" }
+      ],
+      "description": "建立分選—清洗—再生的在地循環鏈，提升回收純度與再生材料的可用性。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "sol_007",
+      "year": 2025,
+      "date": "2025-08-16",
+      "mode": "hope",
+      "title": "社區防災演練與預警系統（示例）",
+      "category": "solution",
+      "coordinates": { "lat": 35.6895, "lng": 139.6917 },
+      "stats": [
+        { "label": "覆蓋", "value": "多語通知" },
+        { "label": "目標", "value": "縮短應變時間" }
+      ],
+      "description": "把預警通知、避難路線與演練流程整合進社區應變，提升極端天氣下的韌性。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "sol_008",
+      "year": 2025,
+      "date": "2025-11-22",
+      "mode": "hope",
+      "title": "動能發電體驗站（示例：單車/地板）",
+      "category": "solution",
+      "coordinates": { "lat": 22.3193, "lng": 114.1694 },
+      "stats": [
+        { "label": "形式", "value": "單車 / 地板" },
+        { "label": "目的", "value": "教育 / 參與" }
+      ],
+      "description": "以可視化的動能發電體驗，把「行動→電力→減碳」轉成群眾可理解的互動教育。",
+      "media": { "type": "instagram", "url": "https://www.instagram.com/p/C5_kinetic_demo/" }
     }
   ]
 }
