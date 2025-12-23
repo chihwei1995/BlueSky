@@ -53,6 +53,66 @@
       "media": { "type": "image", "url": "https://images.unsplash.com/photo-1476610182048-b716b8518aae?auto=format&fit=crop&w=800&q=60" }
     },
     {
+      "id": "evt_004",
+      "year": 2021,
+      "date": "2021-06-29",
+      "mode": "crisis",
+      "title": "加拿大西岸熱浪",
+      "category": "disaster",
+      "coordinates": { "lat": 49.2827, "lng": -123.1207 },
+      "stats": [
+        { "label": "最高氣溫", "value": "49.6°C" },
+        { "label": "估計死亡人數", "value": "600+" }
+      ],
+      "description": "高壓脊造成的穹頂效應使氣溫飆破歷史紀錄，熱浪引發健康危機與基礎設施故障。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1521292270410-a8c44e0c6b3f?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_005",
+      "year": 2022,
+      "date": "2022-08-30",
+      "mode": "crisis",
+      "title": "巴基斯坦季風洪災",
+      "category": "disaster",
+      "coordinates": { "lat": 30.3753, "lng": 69.3451 },
+      "stats": [
+        { "label": "受影響人口", "value": "33M+" },
+        { "label": "淹水面積", "value": "三分之一國土" }
+      ],
+      "description": "異常強烈的季風和冰川融水造成大規模洪災，基礎設施與農業嚴重受損。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_006",
+      "year": 2023,
+      "date": "2023-07-15",
+      "mode": "crisis",
+      "title": "南歐熱浪與野火",
+      "category": "disaster",
+      "coordinates": { "lat": 41.9028, "lng": 12.4964 },
+      "stats": [
+        { "label": "地表溫度", "value": "48°C" },
+        { "label": "撤離人數", "value": "60,000+" }
+      ],
+      "description": "連續高溫與乾旱引發地中海沿岸多國野火，空氣品質與觀光活動全面受衝擊。",
+      "media": { "type": "image", "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" }
+    },
+    {
+      "id": "evt_007",
+      "year": 2024,
+      "date": "2024-09-05",
+      "mode": "crisis",
+      "title": "超強颱風蘇拉再襲南中國",
+      "category": "disaster",
+      "coordinates": { "lat": 22.3193, "lng": 114.1694 },
+      "stats": [
+        { "label": "最大風速", "value": "65 m/s" },
+        { "label": "最高雨量", "value": "500mm/24hr" }
+      ],
+      "description": "颱風挾帶創紀錄風雨重創珠三角與港澳地區，城市防洪能力與交通系統受到考驗。",
+      "media": { "type": "instagram", "url": "https://www.instagram.com/p/C_sula_typhoon/" }
+    },
+    {
       "id": "sol_001",
       "year": 2025,
       "date": "2025-06-10",
