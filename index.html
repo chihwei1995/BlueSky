@@ -9,8 +9,7 @@
 
   <!-- ✅ 先載 THREE（只載一次） -->
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-
-  <!-- ✅ 再載 globe.gl（它會使用上面的 THREE） -->
+  <!-- ✅ 再載 globe.gl -->
   <script src="https://unpkg.com/globe.gl"></script>
 
   <!-- IG embed（可選） -->
@@ -23,6 +22,9 @@
       --color-hope-alt: #2ECC40;
       --bg-glass: rgba(15, 20, 30, 0.7);
       --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+      /* ✅ 手機底部資訊列預留高度（避免上方面板擠下去時撞到底部） */
+      --mobile-info-reserve: 120px;
     }
 
     * { box-sizing: border-box; }
@@ -179,15 +181,16 @@
       border-radius: 10px;
       padding: 8px 10px;
       font-weight: 600;
-      min-width: 120px;
+      min-width: 140px;
       cursor: pointer;
     }
 
+    /* ✅ 收合時只藏內容列，不影響標題列 */
     .timeline-container.collapsed .timeline { display: none; }
     .timeline-container.collapsed .timeline-label { margin-bottom: 0; }
 
     .timeline { display: flex; justify-content: flex-start; gap: 10px; overflow-x: auto; padding-bottom: 8px; }
-    .year-mark {
+    .pill-btn {
       border: 1px solid rgba(255,255,255,0.14);
       color: #cbd3f6;
       padding: 10px 12px;
@@ -200,41 +203,69 @@
       flex: 0 0 auto;
       user-select: none;
     }
-    .year-mark.active {
+    .pill-btn.active {
       color: #fff;
       font-weight: 700;
       transform: translateY(-2px);
       box-shadow: 0 8px 18px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
     }
-    .year-mark[data-mode="crisis"].active { background: rgba(255,77,77,0.18); }
-    .year-mark[data-mode="hope"].active { background: rgba(0,210,255,0.18); }
+    .pill-btn[data-mode="crisis"].active { background: rgba(255,77,77,0.18); }
+    .pill-btn[data-mode="hope"].active { background: rgba(0,210,255,0.18); }
 
     .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); }
 
     @media (max-width: 768px) {
+      #ui-layer{
+        /* ✅ iOS safe-area */
+        padding:
+          calc(8px + env(safe-area-inset-top))
+          calc(8px + env(safe-area-inset-right))
+          calc(8px + env(safe-area-inset-bottom))
+          calc(8px + env(safe-area-inset-left));
+      }
+
       header { flex-direction: column; align-items: flex-start; }
 
-      /* ✅ 手機：timeline 固定上方（header 下） */
+      /* ✅ 手機：時間表固定上方，但「高度受限」且內容可滾動 → 不再撞到底部資訊 */
       .timeline-container {
         position: fixed;
-        left: 8px;
-        right: 8px;
-        top: 76px;
+        left: calc(8px + env(safe-area-inset-left));
+        right: calc(8px + env(safe-area-inset-right));
+        top: calc(70px + env(safe-area-inset-top));
         bottom: auto;
         z-index: 3;
-        padding: 12px 10px 8px;
+        padding: 12px 10px 10px;
         border-radius: 16px;
-        max-height: 22vh;
+
+        /* 關鍵：最大高度 = 畫面 - (header top) - 底部預留 */
+        max-height: calc(
+          100vh
+          - (70px + env(safe-area-inset-top))
+          - (var(--mobile-info-reserve) + env(safe-area-inset-bottom))
+          - 14px
+        );
+
         overflow: hidden;
       }
-      .timeline-container .timeline { max-height: 12vh; }
 
-      .timeline-container.collapsed { max-height: 56px; }
+      /* ✅ 讓面板內容區可垂直滾動（避免面板變高去撞底部） */
+      .timeline-scroll {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+      }
 
-      /* ✅ 手機：info 固定下方，不跟 timeline 撞 */
+      .timeline-container.collapsed {
+        max-height: 58px;
+      }
+
+      /* ✅ 手機：info 固定下方 */
       .info-card {
-        left: 8px; right: 8px;
-        top: auto; bottom: 8px;
+        position: fixed;
+        left: calc(8px + env(safe-area-inset-left));
+        right: calc(8px + env(safe-area-inset-right));
+        top: auto;
+        bottom: calc(8px + env(safe-area-inset-bottom));
         width: auto;
         transform: translateY(120%);
         border-radius: 18px 18px 12px 12px;
@@ -251,9 +282,9 @@
         padding-right: 4px;
         margin-top: 8px;
       }
+
       .stats { grid-template-columns: 1fr; }
       #globe-container { transform: translateY(-12%); }
-      #ui-layer { padding: 8px; }
       header { border-radius: 14px; }
     }
   </style>
@@ -294,23 +325,24 @@
     <div class="timeline-container" id="timelineContainer">
       <div class="timeline-label-row">
         <div class="timeline-label">年份 / 月份 / 事件</div>
+
+        <!-- ✅ 只保留年份下拉（移除年份按鈕列） -->
         <select class="year-select" id="yearSelect" aria-label="選擇年份">
           <option value="">選擇年份</option>
         </select>
+
         <button class="collapse-btn" id="timelineCollapseBtn" type="button" aria-expanded="true">收合時間表</button>
       </div>
 
-      <!-- 年份列 -->
-      <div class="timeline" id="timeline"></div>
-      <!-- 月份列 -->
-      <div class="timeline" id="monthRow"></div>
-      <!-- 事件列 -->
-      <div class="timeline" id="eventRow"></div>
+      <!-- ✅ 內容區做成可滾動容器（手機避免面板過高撞到底部） -->
+      <div class="timeline-scroll" id="timelineScroll">
+        <div class="timeline" id="monthRow"></div>
+        <div class="timeline" id="eventRow"></div>
+      </div>
     </div>
   </div>
 
   <script>
-    // ===== Hard guard：如果 THREE 沒載入，直接報錯（避免 Color undefined）
     if (!window.THREE) {
       alert('THREE 未載入成功：請確認 three.min.js 能正常載入，且沒有被擋。');
       throw new Error('THREE is undefined');
@@ -327,7 +359,7 @@
     const TEXTURE = {
       day: `${ASSET_BASE}earth_day.jpg`,
       bump: `${ASSET_BASE}earth_bump.jpg`,
-      specular: `${ASSET_BASE}earth_specular.jpg` // 可缺
+      specular: `${ASSET_BASE}earth_specular.jpg`
     };
 
     const COLORS = { crisis: '#FF4D4D', hope: '#00D2FF', hopeAlt: '#2ECC40' };
@@ -358,7 +390,7 @@
       img.src = url;
     });
 
-    // ===== 資料工具
+    // ===== 資料工具（year/month 以 date 推導）
     const getYears = () =>
       Array.from(new Set(state.filtered.map(e => e.year))).sort((a,b)=>a-b);
 
@@ -371,21 +403,6 @@
         .filter(e => e.year === year && e.month === month)
         .sort((a,b)=> (a.date || '').localeCompare(b.date || ''));
 
-    // ===== UI：年份列
-    const buildTimeline = (years) => {
-      const timeline = document.getElementById('timeline');
-      timeline.innerHTML = '';
-      years.forEach(year => {
-        const item = document.createElement('button');
-        item.className = 'year-mark';
-        item.textContent = year;
-        item.dataset.year = year;
-        item.dataset.mode = state.currentMode;
-        item.addEventListener('click', () => jumpToYear(year));
-        timeline.appendChild(item);
-      });
-    };
-
     const updateYearSelect = (years) => {
       const select = document.getElementById('yearSelect');
       select.innerHTML = '<option value="">選擇年份</option>';
@@ -396,32 +413,23 @@
         select.appendChild(opt);
       });
       select.disabled = years.length === 0;
-    };
-
-    const highlightYear = (year) => {
-      document.querySelectorAll('#timeline .year-mark').forEach(btn => {
-        btn.classList.toggle('active', Number(btn.dataset.year) === Number(year));
-        btn.dataset.mode = state.currentMode;
-      });
-      const select = document.getElementById('yearSelect');
-      if (select) select.value = year ?? '';
+      if (state.currentYear != null) select.value = String(state.currentYear);
     };
 
     const highlightMonth = (month) => {
-      document.querySelectorAll('#monthRow .year-mark').forEach(btn => {
+      document.querySelectorAll('#monthRow .pill-btn').forEach(btn => {
         btn.classList.toggle('active', Number(btn.dataset.month) === Number(month));
         btn.dataset.mode = state.currentMode;
       });
     };
 
     const highlightEvent = (eventId) => {
-      document.querySelectorAll('#eventRow .year-mark').forEach(btn => {
+      document.querySelectorAll('#eventRow .pill-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.eventId === String(eventId));
         btn.dataset.mode = state.currentMode;
       });
     };
 
-    // ===== 渲染月份/事件列
     const renderMonths = (year) => {
       const row = document.getElementById('monthRow');
       row.innerHTML = '';
@@ -429,7 +437,7 @@
 
       months.forEach(m => {
         const btn = document.createElement('button');
-        btn.className = 'year-mark';
+        btn.className = 'pill-btn';
         btn.textContent = `${m}月`;
         btn.dataset.month = m;
         btn.dataset.mode = state.currentMode;
@@ -448,8 +456,8 @@
 
       items.forEach((ev) => {
         const btn = document.createElement('button');
-        btn.className = 'year-mark';
-        btn.style.minWidth = '140px';
+        btn.className = 'pill-btn';
+        btn.style.minWidth = '160px';
         btn.textContent = ev.title;
         btn.dataset.eventId = ev.id;
         btn.dataset.mode = state.currentMode;
@@ -463,19 +471,39 @@
       });
     };
 
-    // ===== 資料與 globe
     const renderPoints = () => {
       state.filtered = state.events.filter(ev => ev.mode === state.currentMode);
       state.world.pointsData(state.filtered);
     };
 
-    const refreshTimeline = () => {
+    const refreshFiltersUI = () => {
       const years = getYears();
-      buildTimeline(years);
       updateYearSelect(years);
 
       const y = state.currentYear ?? years[0];
-      if (y) jumpToYear(y);
+      if (!y) return;
+
+      state.currentYear = Number(y);
+      document.getElementById('yearSelect').value = String(state.currentYear);
+
+      const months = getMonthsByYear(state.currentYear);
+      state.currentMonth = (state.currentMonth && months.includes(state.currentMonth))
+        ? state.currentMonth
+        : (months[0] ?? null);
+
+      renderMonths(state.currentYear);
+      highlightMonth(state.currentMonth);
+
+      if (state.currentMonth != null) {
+        renderEvents(state.currentYear, state.currentMonth);
+        const first = getEventsByYearMonth(state.currentYear, state.currentMonth)[0];
+        if (first) {
+          state.currentEventId = first.id;
+          highlightEvent(first.id);
+        }
+      } else {
+        document.getElementById('eventRow').innerHTML = '';
+      }
     };
 
     const buildPointObject = (d) => {
@@ -556,11 +584,22 @@
 
       animateMaterialTint(mode);
       renderPoints();
-      refreshTimeline();
 
-      const active = state.filtered[0];
-      if (active) {
-        showInfo(active);
+      // mode 切換後：重建下拉/月份/事件
+      state.currentYear = null;
+      state.currentMonth = null;
+      state.currentEventId = null;
+
+      refreshFiltersUI();
+
+      // 自動顯示第一個事件
+      const first = state.filtered[0];
+      if (first) {
+        state.currentYear = first.year;
+        state.currentMonth = first.month;
+        state.currentEventId = first.id;
+        refreshFiltersUI();
+        showInfo(first);
       } else {
         document.getElementById('infoPanel').classList.remove('show');
       }
@@ -569,7 +608,7 @@
     const showInfo = (data) => {
       if (!data) return;
 
-      // ✅ 手機：點事件就收合時間軸，避免撞到 info
+      // ✅ 手機：點事件就收合時間表（避免干擾/重疊）
       if (IS_MOBILE) setTimelineCollapsed(true);
 
       state.world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
@@ -615,13 +654,11 @@
       card.classList.add('show');
     };
 
-    // ✅ 年份 → 月份 → 事件
     const jumpToYear = (year) => {
       state.currentYear = Number(year);
-      highlightYear(state.currentYear);
 
       const months = getMonthsByYear(state.currentYear);
-      state.currentMonth = (state.currentMonth && months.includes(state.currentMonth)) ? state.currentMonth : (months[0] ?? null);
+      state.currentMonth = months[0] ?? null;
       state.currentEventId = null;
 
       renderMonths(state.currentYear);
@@ -644,11 +681,13 @@
     const jumpToMonth = (year, month) => {
       state.currentYear = Number(year);
       state.currentMonth = Number(month);
-      highlightYear(state.currentYear);
+      state.currentEventId = null;
+
+      document.getElementById('yearSelect').value = String(state.currentYear);
+
+      renderMonths(state.currentYear);
       highlightMonth(state.currentMonth);
 
-      state.currentEventId = null;
-      renderMonths(state.currentYear);
       renderEvents(state.currentYear, state.currentMonth);
 
       const first = getEventsByYearMonth(state.currentYear, state.currentMonth)[0];
@@ -679,6 +718,7 @@
     const attachUIEvents = () => {
       document.getElementById('btn-crisis').addEventListener('click', () => applyMode('crisis'));
       document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
+
       document.getElementById('infoCollapseBtn').addEventListener('click', () => setInfoCollapsed(!state.infoCollapsed));
       document.getElementById('timelineCollapseBtn').addEventListener('click', () => setTimelineCollapsed(!state.timelineCollapsed));
 
@@ -752,14 +792,16 @@
         .pointLabel(d => `<div style="padding:6px 8px;">${d.title || ''}</div>`)
         .pointColor(d => d.mode === 'crisis' ? COLORS.crisis : COLORS.hope)
         .onPointClick((d) => {
-          // 同步狀態：點地圖點也能更新 month/event active
+          // ✅ 點地球點位：同步年份下拉/月份/事件
           state.currentYear = d.year;
           state.currentMonth = d.month;
           state.currentEventId = d.id;
 
-          highlightYear(d.year);
+          document.getElementById('yearSelect').value = String(d.year);
+
           renderMonths(d.year);
           highlightMonth(d.month);
+
           renderEvents(d.year, d.month);
           highlightEvent(d.id);
 
@@ -804,7 +846,16 @@
       }, 0);
 
       renderPoints();
-      refreshTimeline();
+      refreshFiltersUI();
+
+      const first = state.filtered[0];
+      if (first) {
+        state.currentYear = first.year;
+        state.currentMonth = first.month;
+        state.currentEventId = first.id;
+        refreshFiltersUI();
+        showInfo(first);
+      }
 
       setInfoCollapsed(IS_MOBILE);
       setTimelineCollapsed(IS_MOBILE);
