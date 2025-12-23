@@ -10,7 +10,8 @@
   <!-- ✅ 只載 globe.gl：避免 THREE 多重載入 -->
   <script src="https://unpkg.com/globe.gl"></script>
 
-  <script src="//www.instagram.com/embed.js"></script>
+  <!-- IG embed（async 避免阻塞） -->
+  <script async src="//www.instagram.com/embed.js"></script>
 
   <style>
     :root {
@@ -296,6 +297,9 @@
   </div>
 
   <script>
+    // ✅ 統一 THREE 來源：永遠用 Globe.THREE
+    const THREE = Globe.THREE;
+
     // ===== Utilities =====
     const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
     const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
@@ -303,12 +307,12 @@
     const lerp = (a, b, t) => a + (b - a) * t;
     const clamp01 = (x) => Math.max(0, Math.min(1, x));
 
-    // ===== Assets (相對於 index.html) =====
+    // ===== Assets =====
     const ASSET_BASE = './assets/';
     const TEXTURE = {
       day: `${ASSET_BASE}earth_day.jpg`,
       bump: `${ASSET_BASE}earth_bump.jpg`,
-      specular: `${ASSET_BASE}earth_specular.jpg` // 可選；沒有也能跑（有 fallback）
+      specular: `${ASSET_BASE}earth_specular.jpg` // 可缺
     };
 
     const COLORS = { crisis: '#FF4D4D', hope: '#00D2FF', hopeAlt: '#2ECC40' };
@@ -332,7 +336,6 @@
 
     const preloadImage = (url) => new Promise((resolve, reject) => {
       const img = new Image();
-      img.crossOrigin = 'anonymous';
       img.onload = () => resolve(url);
       img.onerror = () => reject(new Error('Image failed to load: ' + url));
       img.src = url;
@@ -376,7 +379,6 @@
 
     // ===== Points visuals =====
     const buildPointObject = (d) => {
-      const THREE = window.THREE; // globe.gl 會掛在 window.THREE
       const color = d.mode === 'crisis' ? COLORS.crisis : COLORS.hope;
       const glow = new THREE.Mesh(
         new THREE.SphereGeometry(0.6, 16, 16),
@@ -391,7 +393,6 @@
     };
 
     const createPulse = () => {
-      const THREE = window.THREE;
       const loop = () => {
         const t = Date.now() * 0.004;
         state.filtered.forEach(d => {
@@ -409,15 +410,12 @@
 
     // ===== Mode switching (no GSAP) =====
     const animateMaterialTint = (mode) => {
-      const THREE = window.THREE;
       const mat = state.world?.globeMaterial?.();
       if (!mat) return;
 
-      // 初始值保底
       if (!mat.color) mat.color = new THREE.Color('#ffffff');
       if (!mat.emissive) mat.emissive = new THREE.Color('#000000');
 
-      // 目標顏色（輕微即可）
       const target = (mode === 'crisis')
         ? { c: { r: 1.05, g: 0.90, b: 0.90 }, e: { r: 0.10, g: 0.03, b: 0.03 } }
         : { c: { r: 0.92, g: 1.02, b: 1.05 }, e: { r: 0.02, g: 0.08, b: 0.10 } };
@@ -427,12 +425,13 @@
         e: { r: mat.emissive.r, g: mat.emissive.g, b: mat.emissive.b }
       };
 
-      const duration = 450; // ms
+      const duration = 450;
       const t0 = performance.now();
 
       const step = (now) => {
         const t = clamp01((now - t0) / duration);
-        const ease = t * (2 - t); // easeOutQuad
+        const ease = t * (2 - t);
+
         mat.color.setRGB(
           lerp(start.c.r, target.c.r, ease),
           lerp(start.c.g, target.c.g, ease),
@@ -443,6 +442,7 @@
           lerp(start.e.g, target.e.g, ease),
           lerp(start.e.b, target.e.b, ease)
         );
+
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
@@ -503,7 +503,7 @@
         blockquote.setAttribute('data-instgrm-version', '14');
         blockquote.style.margin = '0 auto';
         mediaContainer.appendChild(blockquote);
-        setTimeout(() => window.instgrm?.Embeds?.process(), 60);
+        setTimeout(() => window.instgrm?.Embeds?.process?.(), 80);
       } else if (data.media?.type === 'image' && data.media.url) {
         const img = document.createElement('img');
         img.src = data.media.url;
@@ -613,28 +613,24 @@
 
       configureControls();
 
-      // set material maps（用 globeMaterial 直接掛）
-      const THREE = window.THREE;
+      // material maps
       const mat = state.world.globeMaterial();
       mat.emissive = new THREE.Color('#000000');
 
-      // bump/specular 由 THREE.TextureLoader 載入（globe.gl 已提供 THREE）
       const texLoader = new THREE.TextureLoader();
 
-      // bump
       texLoader.load(TEXTURE.bump, (bumpTex) => {
         mat.bumpMap = bumpTex;
         mat.bumpScale = 0.08;
         mat.needsUpdate = true;
-      }, undefined, () => { /* bump 可缺 */ });
+      }, undefined, () => {});
 
-      // specular（可缺）
       texLoader.load(TEXTURE.specular, (specTex) => {
         mat.specularMap = specTex;
         mat.specular = new THREE.Color('#888888');
         mat.shininess = 6;
         mat.needsUpdate = true;
-      }, undefined, () => { /* specular 可缺 */ });
+      }, undefined, () => { /* specular 缺也OK */ });
 
       attachUIEvents();
       createPulse();
@@ -654,7 +650,6 @@
       setInfoCollapsed(IS_MOBILE);
       setTimelineCollapsed(IS_MOBILE);
 
-      // 套用預設模式（crisis）
       applyMode(state.currentMode);
 
       uiLayer.style.pointerEvents = 'auto';
