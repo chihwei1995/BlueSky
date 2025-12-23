@@ -79,10 +79,167 @@
       background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));
       border-radius: 16px;
       pointer-events: auto;
+      flex-wrap: wrap;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 1px; }
     .logo span { color: var(--color-hope); }
+
+    .ghost-btn {
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.05);
+      color: #e5e7f2;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--panel-shadow);
+    }
+
+    .ghost-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.10); }
+
+    .anchor-panel {
+      position: fixed;
+      right: 18px;
+      top: 100px;
+      width: 380px;
+      max-height: calc(100vh - 140px);
+      background: var(--bg-glass);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 4;
+    }
+
+    .anchor-panel.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .anchor-panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .anchor-panel-title {
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      margin: 0;
+    }
+
+    .anchor-panel-sub {
+      margin: 4px 0 0 0;
+      color: #a8b2d8;
+      font-size: 0.9rem;
+    }
+
+    .anchor-list {
+      overflow-y: auto;
+      max-height: calc(100% - 42px);
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 4px;
+    }
+
+    .anchor-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      transition: border 0.2s ease, transform 0.2s ease;
+    }
+
+    .anchor-card:hover { border-color: rgba(255,255,255,0.16); transform: translateY(-1px); }
+
+    .anchor-heading { margin: 0; font-size: 1rem; }
+    .anchor-meta { color: #9aa2c3; font-size: 0.9rem; margin: 4px 0; }
+    .anchor-points { margin: 0; color: #dfe4ff; font-size: 0.92rem; line-height: 1.45; }
+    .anchor-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .tiny-btn {
+      background: rgba(255,255,255,0.08);
+      color: #e5e7f2;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tiny-btn:hover { background: rgba(255,255,255,0.14); }
+
+    .qr-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 6;
+      padding: 20px;
+    }
+
+    .qr-modal.show { opacity: 1; pointer-events: auto; }
+
+    .qr-card {
+      background: #0a0f1c;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px;
+      max-width: 360px;
+      text-align: center;
+      color: #e5e7f2;
+      box-shadow: var(--panel-shadow);
+    }
+
+    .qr-card img {
+      width: 240px;
+      height: 240px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px;
+      box-shadow: inset 0 1px 0 rgba(0,0,0,0.1);
+    }
+
+    .qr-card .tiny-btn { width: 100%; justify-content: center; margin-top: 12px; }
 
     .toggle-container {
       display: inline-flex;
@@ -286,6 +443,19 @@
       .stats { grid-template-columns: 1fr; }
       #globe-container { transform: translateY(-12%); }
       header { border-radius: 14px; }
+
+      .anchor-panel {
+        position: fixed;
+        top: auto;
+        bottom: calc(14px + env(safe-area-inset-bottom));
+        right: calc(8px + env(safe-area-inset-right));
+        left: calc(8px + env(safe-area-inset-left));
+        width: auto;
+        max-height: 48vh;
+        z-index: 5;
+      }
+
+      .qr-card img { width: 200px; height: 200px; }
     }
   </style>
 </head>
@@ -299,9 +469,12 @@
   <div id="ui-layer">
     <header>
       <div class="logo">👣 <span>Blue Sky Returns</span></div>
-      <div class="toggle-container" aria-label="切換模式">
-        <button class="toggle-btn active" data-mode="crisis" id="btn-crisis">⚠️ CRISIS</button>
-        <button class="toggle-btn" data-mode="hope" id="btn-hope">🌏 HOPE</button>
+      <div class="header-actions">
+        <button class="ghost-btn" id="anchorToggle" type="button">📌 時間線錨點</button>
+        <div class="toggle-container" aria-label="切換模式">
+          <button class="toggle-btn active" data-mode="crisis" id="btn-crisis">⚠️ CRISIS</button>
+          <button class="toggle-btn" data-mode="hope" id="btn-hope">🌏 HOPE</button>
+        </div>
       </div>
     </header>
 
@@ -339,6 +512,26 @@
         <div class="timeline" id="eventRow"></div>
       </div>
     </div>
+
+    <div class="anchor-panel" id="anchorPanel" aria-live="polite">
+      <div class="anchor-panel-header">
+        <div>
+          <p class="anchor-panel-title">一步．藍天｜時間線錨點</p>
+          <p class="anchor-panel-sub">掃 QRcode 可直接打開時間點、照片與貼文頁面</p>
+        </div>
+        <button class="tiny-btn" id="anchorCloseBtn" type="button">✕ 關閉</button>
+      </div>
+      <div class="anchor-list" id="anchorList"></div>
+    </div>
+  </div>
+
+  <div class="qr-modal" id="qrModal" role="dialog" aria-modal="true" aria-label="QRcode">
+    <div class="qr-card">
+      <h3 id="qrTitle" style="margin-top:0;margin-bottom:6px;">時間點 QR</h3>
+      <div id="qrSubtitle" style="color:#a8b2d8;margin-bottom:10px;"></div>
+      <img id="qrImage" src="" alt="QRcode for anchor link">
+      <button class="tiny-btn" id="qrCloseBtn" type="button">關閉</button>
+    </div>
   </div>
 
   <script>
@@ -373,7 +566,8 @@
       currentMonth: null,
       currentEventId: null,
       infoCollapsed: false,
-      timelineCollapsed: false
+      timelineCollapsed: false,
+      anchorOpen: false
     };
 
     const fetchJSON = async (path) => {
@@ -714,6 +908,154 @@
       document.getElementById('timelineCollapseBtn').setAttribute('aria-expanded', String(!collapsed));
     };
 
+    const openAnchorPanel = () => {
+      state.anchorOpen = true;
+      document.getElementById('anchorPanel').classList.add('show');
+    };
+
+    const closeAnchorPanel = () => {
+      state.anchorOpen = false;
+      document.getElementById('anchorPanel').classList.remove('show');
+    };
+
+    const toggleAnchorPanel = () => {
+      if (state.anchorOpen) closeAnchorPanel(); else openAnchorPanel();
+    };
+
+    const buildAnchorList = () => {
+      const anchors = [
+        {
+          id: 'anchor-2024-monitor',
+          title: '2024｜觀察與記錄 Monitoring & Documentation',
+          meta: '即時記錄、案例＋數據＋影響',
+          points: [
+            '啟動「一步．藍天」工作計劃，全年追蹤極端天氣',
+            '聚焦暴雨、洪水、熱浪、乾旱、寒潮、風暴等事件',
+            '以單一事件＋數據＋影響的故事化方式進行公眾教育'
+          ]
+        },
+        {
+          id: 'anchor-2024-awareness',
+          title: '2024｜議題連結日常 Public Awareness',
+          meta: '社交平台互動、香港日常連結',
+          points: [
+            '以社交平台分享氣候資訊並與受眾互動',
+            '把全球極端氣候趨勢與香港暴雨警告等日常生活連結',
+            '引導公眾思考「極端天氣是否已成新常態」'
+          ]
+        },
+        {
+          id: 'anchor-2024-film',
+          title: '2024｜文化媒介 × 公眾參與 Film Screening',
+          meta: '🎬 《Twisters》放映與對談',
+          points: [
+            '舉辦極端天氣主題電影放映《Twisters》',
+            '放映後以科學背景、日常衝擊為題進行分享與交流'
+          ]
+        },
+        {
+          id: 'anchor-2025-review',
+          title: '2025｜年度回顧整理 2024 Review',
+          meta: '發布《2024 年度十大極端氣候事件回顧》',
+          points: [
+            '整理 2024 全年極端天氣事件並進行系統性比較',
+            '以影響力與代表性選出年度十大事件，正式發布'
+          ]
+        },
+        {
+          id: 'anchor-2025-exhibition',
+          title: '2025｜實體展覽與社區教育 Exhibition',
+          meta: '主題展覽、案例與 Green Tips',
+          points: [
+            '舉辦「一步．藍天」主題展覽，呈現 2024 十大事件',
+            '結合全球與本地案例、國際人類責任與日常 Green Tips'
+          ]
+        },
+        {
+          id: 'anchor-2025-simulation',
+          title: '2025｜國際交流與政策模擬 UN Dialogue',
+          meta: 'UN Mongolia × 10+ 國家青年',
+          points: [
+            '在蒙古烏蘭巴托 UN House 舉辦氣候政策模擬',
+            '青年以國家/國際組織/利害關係人角色進行談判與交流'
+          ]
+        },
+        {
+          id: 'anchor-2025-closure',
+          title: '2025｜成果總結與閉環 Annual Closure',
+          meta: '青年角色、跨地域合作',
+          points: [
+            '回顧 2024 記錄、影展、公眾教育與 2025 展覽、對話',
+            '強調青年領導力與跨地域協作成果'
+          ]
+        },
+        {
+          id: 'anchor-key-message',
+          title: '一句話總結｜Key Message',
+          meta: 'Local action × International responsibility',
+          points: [
+            '將極端氣候記錄、影展、展覽、UN 級青年對話串連',
+            '把全球氣候議題轉化為在地行動與國際責任'
+          ]
+        }
+      ];
+
+      const list = document.getElementById('anchorList');
+      list.innerHTML = '';
+
+      anchors.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'anchor-card';
+        card.id = item.id;
+
+        const left = document.createElement('div');
+        const title = document.createElement('h4');
+        title.className = 'anchor-heading';
+        title.textContent = item.title;
+        const meta = document.createElement('div');
+        meta.className = 'anchor-meta';
+        meta.textContent = item.meta;
+        const points = document.createElement('p');
+        points.className = 'anchor-points';
+        points.innerHTML = item.points.map(p => `• ${p}`).join('<br>');
+        left.append(title, meta, points);
+
+        const actions = document.createElement('div');
+        actions.className = 'anchor-actions';
+        const qrBtn = document.createElement('button');
+        qrBtn.className = 'tiny-btn';
+        qrBtn.type = 'button';
+        qrBtn.textContent = 'QRcode';
+        qrBtn.addEventListener('click', () => showQRModal(item));
+        const linkBtn = document.createElement('a');
+        linkBtn.className = 'tiny-btn';
+        linkBtn.href = `#${item.id}`;
+        linkBtn.textContent = '定位';
+        linkBtn.addEventListener('click', () => {
+          openAnchorPanel();
+          setTimeout(() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
+        });
+        actions.append(qrBtn, linkBtn);
+
+        card.append(left, actions);
+        list.appendChild(card);
+      });
+    };
+
+    const showQRModal = (item) => {
+      const base = window.location.href.split('#')[0];
+      const targetUrl = `${base}#${item.id}`;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=340x340&data=${encodeURIComponent(targetUrl)}`;
+      document.getElementById('qrTitle').textContent = '時間點 QR';
+      document.getElementById('qrSubtitle').textContent = item.title;
+      document.getElementById('qrImage').src = qrUrl;
+      document.getElementById('qrModal').classList.add('show');
+    };
+
+    const closeQRModal = () => {
+      document.getElementById('qrModal').classList.remove('show');
+    };
+
     const attachUIEvents = () => {
       document.getElementById('btn-crisis').addEventListener('click', () => applyMode('crisis'));
       document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
@@ -724,6 +1066,13 @@
       document.getElementById('yearSelect').addEventListener('change', (e) => {
         const y = Number(e.target.value);
         if (y) jumpToYear(y);
+      });
+
+      document.getElementById('anchorToggle').addEventListener('click', toggleAnchorPanel);
+      document.getElementById('anchorCloseBtn').addEventListener('click', closeAnchorPanel);
+      document.getElementById('qrCloseBtn').addEventListener('click', closeQRModal);
+      document.getElementById('qrModal').addEventListener('click', (e) => {
+        if (e.target.id === 'qrModal') closeQRModal();
       });
     };
 
@@ -777,6 +1126,7 @@
 
       const data = await fetchJSON('data.json');
       prepareData(data);
+      buildAnchorList();
 
       await preloadImage(TEXTURE.day);
       await preloadImage(TEXTURE.bump).catch(() => {});
@@ -862,6 +1212,15 @@
       applyMode(state.currentMode);
 
       uiLayer.style.pointerEvents = 'auto';
+
+      if (window.location.hash) {
+        const targetId = window.location.hash.replace('#', '');
+        const el = document.getElementById(targetId);
+        if (el) {
+          openAnchorPanel();
+          setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+        }
+      }
     };
 
     bootstrap().catch(err => {
