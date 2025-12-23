@@ -434,7 +434,7 @@
     };
 
     const createPulse = () => {
-      state.world.onRender(() => {
+      const renderStep = () => {
         const t = Date.now() * 0.004;
         state.filtered.forEach(d => {
           const obj = d.__threeObj;
@@ -445,7 +445,18 @@
           if (material) material.opacity = 0.8 + 0.2 * Math.sin(t + d.lng);
         });
         if (state.clouds) state.clouds.rotation.y += 0.0006;
-      });
+      };
+
+      if (typeof state.world.onRender === 'function') {
+        state.world.onRender(renderStep);
+      } else {
+        console.warn('onRender not available; falling back to requestAnimationFrame');
+        const fallbackLoop = () => {
+          renderStep();
+          requestAnimationFrame(fallbackLoop);
+        };
+        fallbackLoop();
+      }
     };
 
     const applyMode = (mode) => {
