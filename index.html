@@ -89,9 +89,33 @@
       flex-wrap: wrap;
     }
 
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 1px; }
-    .logo span { color: var(--color-hope); }
-    .logo img { width: 40px; height: 40px; object-fit: contain; }
+       /* 點擊 logo 仍維持像標題，不要底線 */
+    .logo { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      font-weight: 700; 
+      letter-spacing: 1px; 
+      pointer-events: auto;
+      text-decoration: none;
+    }
+    
+    /* ✅ Blue Sky Returns 改白字 */
+    .logo .logo-text { 
+      color: #ffffff; 
+    }
+    
+    /* PJC logo 圖樣大小（可自行調） */
+    .pjc-logo{
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+    
+    /* hover 小效果（可選） */
+    .logo:hover { opacity: 0.92; }
+
 
     .ghost-btn {
       border: 1px solid rgba(255,255,255,0.16);
@@ -496,10 +520,12 @@
 
   <div id="ui-layer">
     <header>
-      <div class="logo">
-        <img src="PJC_LOGO.PNG" alt="PJC logo">
-        <span>Blue Sky Returns</span>
-      </div>
+      
+        <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" aria-label="前往 PJC 網站">
+          <img src="PJC_LOGO.PNG" alt="PJC logo" class="pjc-logo" />
+          <span class="logo-text">Blue Sky Returns</span>
+        </a>
+
       <div class="header-actions">
         <button class="ghost-btn" id="anchorToggle" type="button">📌 時間線</button>
         <div class="toggle-container" aria-label="切換模式">
@@ -550,7 +576,7 @@
           <p class="anchor-panel-title">一步．藍天｜時間線</p>
           <p class="anchor-panel-sub">掃 QRcode 可直接打開時間點、照片與貼文頁面，滑動查看</p>
         </div>
-        <button class="tiny-btn" id="anchorCloseBtn" type="button">✕ 關閉</button>
+        <button class="tiny-btn" id="anchorCloseBtn" type="button">✕</button>
       </div>
       <div class="anchor-list" id="anchorList"></div>
     </div>
