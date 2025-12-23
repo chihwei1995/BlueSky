@@ -231,7 +231,7 @@
         position: fixed;
         left: calc(8px + env(safe-area-inset-left));
         right: calc(8px + env(safe-area-inset-right));
-        top: calc(70px + env(safe-area-inset-top));
+        top: calc(100px + env(safe-area-inset-top));
         bottom: auto;
         z-index: 3;
         padding: 12px 10px 10px;
@@ -324,7 +324,6 @@
 
     <div class="timeline-container" id="timelineContainer">
       <div class="timeline-label-row">
-        <div class="timeline-label">年份 / 月份 / 事件</div>
 
         <!-- ✅ 只保留年份下拉（移除年份按鈕列） -->
         <select class="year-select" id="yearSelect" aria-label="選擇年份">
