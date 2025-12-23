@@ -244,49 +244,69 @@
   <script>
     const svgDataUrl = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
+    const LAND_PATHS = `
+      <path d="M110 230 q30 -90 140 -90 q80 -5 120 70 q-10 50 -90 80 q-80 30 -150 -10 q-30 -20 -20 -50 z"/>
+      <path d="M250 270 q40 30 35 100 q-5 70 -45 90 q-30 -30 -15 -80 q10 -50 -15 -110 q25 -15 40 0 z"/>
+      <path d="M330 170 q100 -60 230 -20 q90 30 130 90 q10 30 -40 45 q-80 25 -200 30 q-110 5 -170 -10 q-50 -20 -30 -60 q15 -45 80 -75 z"/>
+      <path d="M410 230 q60 -20 110 10 q50 50 20 110 q-20 70 -50 90 q-50 10 -90 -50 q-35 -70 -10 -140 q20 -20 20 -20 z"/>
+      <path d="M700 310 q70 -20 110 25 q30 40 0 70 q-30 25 -90 10 q-50 -20 -30 -70 q5 -15 10 -35 z"/>
+      <path d="M40 430 q240 -70 420 -50 q240 25 420 -10 q40 25 -10 50 q-230 45 -410 25 q-220 -10 -390 -30 q-60 -10 -30 -45 z"/>
+      <path d="M210 130 q60 -30 100 -5 q20 30 -10 65 q-40 25 -90 -10 q-10 -25 0 -50 z"/>
+      <path d="M372 150 q12 -12 28 -6 q6 18 -16 26 q-18 2 -14 -20 z"/>
+      <path d="M640 210 q16 -12 36 -6 q12 22 -14 32 q-22 4 -22 -26 z"/>
+      <path d="M648 250 q20 8 18 38 q-18 16 -26 -6 q-2 -20 8 -32 z"/>
+      <path d="M674 276 q32 0 36 34 q-8 26 -38 26 q-30 -4 -24 -32 q4 -22 26 -28 z"/>
+      <path d="M730 274 q44 0 66 22 q12 34 -26 44 q-46 10 -66 -20 q-6 -22 26 -46 z"/>
+      <path d="M832 344 q22 8 18 26 q-18 16 -34 2 q-12 -14 16 -28 z"/>
+      <path d="M498 304 q26 10 16 40 q-12 26 -32 16 q-18 -12 -8 -34 q8 -18 24 -22 z"/>
+      <path d="M226 224 q18 6 24 18 q-10 14 -24 6 q-10 -10 0 -24 z"/>
+      <path d="M144 258 q12 -4 20 6 q-6 12 -18 10 q-10 -6 -2 -16 z"/>
+    `;
+
+    const buildGlobeTexture = ({ id, oceanStops, landStops, coastline, highlight, ice }) => svgDataUrl(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+        <defs>
+          <linearGradient id="${id}-ocean" x1="0%" y1="0%" x2="100%" y2="50%">
+            <stop offset="0%" stop-color="${oceanStops[0]}"/>
+            <stop offset="50%" stop-color="${oceanStops[1]}"/>
+            <stop offset="100%" stop-color="${oceanStops[2]}"/>
+          </linearGradient>
+          <radialGradient id="${id}-land" cx="40%" cy="45%" r="70%">
+            <stop offset="0%" stop-color="${landStops[0]}"/>
+            <stop offset="50%" stop-color="${landStops[1]}"/>
+            <stop offset="100%" stop-color="${landStops[2]}"/>
+          </radialGradient>
+        </defs>
+        <rect width="1024" height="512" fill="url(#${id}-ocean)"/>
+        <rect width="1024" height="512" fill="url(#${id}-land)" opacity="0.12"/>
+        <g fill="url(#${id}-land)" stroke="${coastline}" stroke-width="1.4" stroke-opacity="0.6">
+          ${LAND_PATHS}
+        </g>
+        <g fill="${highlight}" opacity="0.2">
+          ${LAND_PATHS}
+        </g>
+        <path d="M0 36 q140 26 320 6 q160 -18 320 -12 q200 10 384 34 L1024 0 L0 0 Z" fill="${ice}" opacity="0.35"/>
+        <path d="M12 428 q240 -72 420 -52 q230 22 420 -10 q70 24 -12 60 q-230 44 -410 24 q-240 -16 -390 -32 q-50 -10 -28 -40 z" fill="${ice}" opacity="0.28"/>
+      </svg>
+    `);
+
     const TEXTURE_DATA = {
-      crisisGlobe: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <defs>
-            <radialGradient id="nightGlow" cx="30%" cy="35%" r="70%">
-              <stop offset="0%" stop-color="#0c1226"/>
-              <stop offset="60%" stop-color="#0a0f1d"/>
-              <stop offset="100%" stop-color="#050812"/>
-            </radialGradient>
-            <linearGradient id="cityLights" x1="0%" x2="100%" y1="0%" y2="100%">
-              <stop offset="0%" stop-color="#2b8eff" stop-opacity="0.05"/>
-              <stop offset="50%" stop-color="#6ae2ff" stop-opacity="0.12"/>
-              <stop offset="100%" stop-color="#ffb347" stop-opacity="0.18"/>
-            </linearGradient>
-          </defs>
-          <rect width="1024" height="512" fill="url(#nightGlow)"/>
-          <path d="M0,220 C140,260 260,180 400,200 C540,220 620,300 760,280 C900,260 950,300 1024,270 L1024,512 L0,512 Z" fill="url(#cityLights)" opacity="0.8"/>
-          <path d="M20,120 q80 40 160 0 t160 0 t160 0 t160 0 t160 0 l0 40 q-80 30 -160 0 t-160 0 t-160 0 t-160 0 t-160 0 z" fill="#14233d" opacity="0.35"/>
-          <g fill="#ffcf6b" opacity="0.25">
-            <circle cx="240" cy="220" r="2"/><circle cx="380" cy="190" r="2.5"/><circle cx="520" cy="250" r="2.2"/><circle cx="680" cy="210" r="2.4"/><circle cx="820" cy="260" r="2.1"/>
-          </g>
-        </svg>
-      `),
-      hopeGlobe: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <defs>
-            <linearGradient id="ocean" x1="0%" x2="100%" y1="0%" y2="0%">
-              <stop offset="0%" stop-color="#0c3b60"/>
-              <stop offset="50%" stop-color="#0b6a8f"/>
-              <stop offset="100%" stop-color="#0c3b60"/>
-            </linearGradient>
-            <radialGradient id="land" cx="45%" cy="45%" r="70%">
-              <stop offset="0%" stop-color="#6bd992" stop-opacity="0.9"/>
-              <stop offset="50%" stop-color="#42c070" stop-opacity="0.75"/>
-              <stop offset="100%" stop-color="#0b6a8f" stop-opacity="0.25"/>
-            </radialGradient>
-          </defs>
-          <rect width="1024" height="512" fill="url(#ocean)"/>
-          <path d="M0,260 C140,220 260,260 400,230 C540,200 620,270 760,250 C900,230 950,270 1024,240 L1024,512 L0,512 Z" fill="url(#land)"/>
-          <path d="M60,160 q80 60 160 0 t160 0 t160 0 t160 0 t160 0 l0 35 q-80 45 -160 0 t-160 0 t-160 0 t-160 0 t-160 0 z" fill="#1f8761" opacity="0.55"/>
-          <path d="M120,320 q80 -40 160 0 t160 0 t160 0 t160 0 t160 0 l0 40 q-80 30 -160 0 t-160 0 t-160 0 t-160 0 t-160 0 z" fill="#1d9c6f" opacity="0.4"/>
-        </svg>
-      `),
+      crisisGlobe: buildGlobeTexture({
+        id: 'crisis',
+        oceanStops: ['#04070f', '#0b1427', '#0e182d'],
+        landStops: ['#4e342e', '#5c4439', '#8a5f3f'],
+        coastline: '#f7d7a0',
+        highlight: '#ffcf6b',
+        ice: '#8fb2d9'
+      }),
+      hopeGlobe: buildGlobeTexture({
+        id: 'hope',
+        oceanStops: ['#063a65', '#0b6a8f', '#0c89a0'],
+        landStops: ['#6bd992', '#4ebc6f', '#27824b'],
+        coastline: '#d7f2ce',
+        highlight: '#c0f7c9',
+        ice: '#bfe6ff'
+      }),
       clouds: svgDataUrl(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
           <g fill="white" fill-opacity="0.22">
