@@ -91,6 +91,7 @@
 
     .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 1px; }
     .logo span { color: var(--color-hope); }
+    .logo img { width: 40px; height: 40px; object-fit: contain; }
 
     .ghost-btn {
       border: 1px solid rgba(255,255,255,0.16);
@@ -117,6 +118,8 @@
       top: 100px;
       width: 380px;
       max-height: calc(100vh - 140px);
+      display: flex;
+      flex-direction: column;
       background: var(--bg-glass);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 18px;
@@ -158,6 +161,7 @@
     }
 
     .anchor-list {
+      flex: 1 1 auto;
       overflow-y: auto;
       max-height: calc(100% - 42px);
       -webkit-overflow-scrolling: touch;
@@ -371,6 +375,27 @@
 
     .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); }
 
+    #entryOverlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 40% 30%, rgba(0,210,255,0.12), transparent 45%), rgba(3,7,18,0.92);
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 8;
+      pointer-events: none;
+    }
+    #entryOverlay.show { opacity: 1; }
+    #entryOverlay.fade-out { opacity: 0; }
+    #entryOverlay img {
+      width: min(380px, 80vw);
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
+    }
+
     @media (max-width: 768px) {
       #ui-layer{
         /* ✅ iOS safe-area */
@@ -461,6 +486,9 @@
 </head>
 
 <body data-mode="crisis">
+  <div id="entryOverlay" aria-hidden="true">
+    <img src="Enter.PNG" alt="Enter illustration">
+  </div>
   <div id="globe-container">
     <div id="globeViz"></div>
     <div id="modeOverlay" aria-hidden="true"></div>
@@ -468,9 +496,12 @@
 
   <div id="ui-layer">
     <header>
-      <div class="logo">👣 <span>Blue Sky Returns</span></div>
+      <div class="logo">
+        <img src="PJC_LOGO.PNG" alt="PJC logo">
+        <span>Blue Sky Returns</span>
+      </div>
       <div class="header-actions">
-        <button class="ghost-btn" id="anchorToggle" type="button">📌 時間線錨點</button>
+        <button class="ghost-btn" id="anchorToggle" type="button">📌 時間線</button>
         <div class="toggle-container" aria-label="切換模式">
           <button class="toggle-btn active" data-mode="crisis" id="btn-crisis">⚠️ CRISIS</button>
           <button class="toggle-btn" data-mode="hope" id="btn-hope">🌏 HOPE</button>
@@ -516,8 +547,8 @@
     <div class="anchor-panel" id="anchorPanel" aria-live="polite">
       <div class="anchor-panel-header">
         <div>
-          <p class="anchor-panel-title">一步．藍天｜時間線錨點</p>
-          <p class="anchor-panel-sub">掃 QRcode 可直接打開時間點、照片與貼文頁面</p>
+          <p class="anchor-panel-title">一步．藍天｜時間線</p>
+          <p class="anchor-panel-sub">掃 QRcode 可直接打開時間點、照片與貼文頁面，滑動查看</p>
         </div>
         <button class="tiny-btn" id="anchorCloseBtn" type="button">✕ 關閉</button>
       </div>
@@ -546,6 +577,20 @@
 
     const lerp = (a, b, t) => a + (b - a) * t;
     const clamp01 = (x) => Math.max(0, Math.min(1, x));
+
+    const playEntryOverlay = () => {
+      const overlay = document.getElementById('entryOverlay');
+      if (!overlay) return;
+
+      requestAnimationFrame(() => {
+        overlay.classList.add('show');
+        setTimeout(() => {
+          overlay.classList.add('fade-out');
+          overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+          setTimeout(() => overlay.remove(), 2200);
+        }, 1200);
+      });
+    };
 
     const ASSET_BASE = './assets/';
     const TEXTURE = {
@@ -1123,6 +1168,8 @@
     const bootstrap = async () => {
       const uiLayer = document.getElementById('ui-layer');
       uiLayer.style.pointerEvents = 'none';
+
+      playEntryOverlay();
 
       const data = await fetchJSON('data.json');
       prepareData(data);
