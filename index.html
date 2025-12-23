@@ -300,7 +300,7 @@
 
     // === 真實貼圖（路線 A）===
     // 請確保 /assets 內存在：
-    // earth_day.jpg, earth_bump.jpg, earth_specular.jpg, earth_clouds.png
+    // earth_day.jpg, earth_bump.jpg, earth_specular.jpg,
     const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
     const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
 
@@ -308,10 +308,6 @@
       globe: {
         desktop: 'assets/earth_day.jpg',
         mobile:  'assets/earth_day.jpg'
-      },
-      clouds: {
-        desktop: 'assets/earth_clouds.png',
-        mobile:  'assets/earth_clouds.png'
       },
       bump: 'assets/earth_bump.jpg',
       specular: 'assets/earth_specular.jpg',
@@ -341,10 +337,8 @@
       filtered: [],
       currentMode: 'crisis',
       world: null,
-      clouds: null,
       bumpMap: null,
       specularMap: null,
-      cloudsMap: null,
       initialView: { lat: 23.5, lng: 121.0, altitude: 2.5 },
       currentYear: null,
       infoCollapsed: false,
@@ -393,20 +387,6 @@
       });
     };
 
-    const attachCloudLayer = (globe) => {
-      const cloudGeo = new THREE.SphereGeometry(globe.getGlobeRadius() * 1.01, 64, 64);
-      const cloudMat = new THREE.MeshPhongMaterial({
-        map: state.cloudsMap,
-        transparent: true,
-        opacity: 0.35,
-        depthWrite: false
-      });
-      const clouds = new THREE.Mesh(cloudGeo, cloudMat);
-      clouds.renderOrder = 10;
-      globe.scene().add(clouds);
-      state.clouds = clouds;
-    };
-
     const createPulse = () => {
       const renderStep = () => {
         const t = Date.now() * 0.004;
@@ -418,7 +398,6 @@
           const material = obj.children?.[0]?.material || obj.material;
           if (material) material.opacity = 0.8 + 0.2 * Math.sin(t + d.lng);
         });
-        if (state.clouds) state.clouds.rotation.y += 0.0006;
       };
 
       if (typeof state.world.onRender === 'function') {
@@ -611,18 +590,15 @@
       // preload 真實貼圖
       await Promise.all([
         preloadImage(TEXTURE_SETS.globe[QUALITY]),
-        preloadImage(TEXTURE_SETS.clouds[QUALITY])
       ]);
 
-      // load bump/specular/clouds
-      const [bump, specular, clouds] = await Promise.all([
+      // load bump/specular
+      const [bump, specular] = await Promise.all([
         loadTexture(TEXTURE_SETS.bump),
         loadTexture(TEXTURE_SETS.specular),
-        loadTexture(TEXTURE_SETS.clouds[QUALITY])
       ]);
       state.bumpMap = bump;
       state.specularMap = specular;
-      state.cloudsMap = clouds;
 
       state.world = Globe()(document.getElementById('globeViz'));
       state.world
