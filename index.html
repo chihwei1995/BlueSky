@@ -1,222 +1,551 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一步藍天 | One-Step Blue Sky</title>
-    <script src="//unpkg.com/globe.gl"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --color-crisis: #FF4D4D;
-            --color-hope: #00D2FF;
-            --bg-glass: rgba(20, 20, 30, 0.6);
-        }
-        
-        body { margin: 0; font-family: 'Inter', sans-serif; overflow: hidden; background: #000; color: white; }
-        
-        /* === UI 層 === */
-        #ui-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* 讓滑鼠穿透 UI 操作地球 */
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>一步藍天 | One-Step Blue Sky</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" crossorigin="anonymous"></script>
+  <script src="//unpkg.com/globe.gl"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//www.instagram.com/embed.js"></script>
+  <style>
+    :root {
+      --color-crisis: #FF4D4D;
+      --color-hope: #00D2FF;
+      --color-hope-alt: #2ECC40;
+      --bg-glass: rgba(15, 20, 30, 0.7);
+      --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
 
-        /* 頂部導航 */
-        header {
-            padding: 20px; display: flex; justify-content: space-between; align-items: center;
-            pointer-events: auto;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-        }
-        .logo { font-size: 1.2rem; font-weight: 600; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .logo span { color: var(--color-hope); }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 20%, rgba(0, 210, 255, 0.15), transparent 35%),
+                  radial-gradient(circle at 80% 10%, rgba(255, 77, 77, 0.25), transparent 30%),
+                  #030712;
+      color: #f6f7fb;
+    }
 
-        /* 切換開關 */
-        .toggle-container {
-            pointer-events: auto;
-            background: var(--bg-glass);
-            backdrop-filter: blur(10px);
-            padding: 5px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
-            display: flex; gap: 5px;
-        }
-        .toggle-btn {
-            background: transparent; border: none; color: rgba(255,255,255,0.5);
-            padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: 0.3s;
-        }
-        .toggle-btn.active { color: white; font-weight: 600; }
-        .toggle-btn.active[data-mode="crisis"] { background: var(--color-crisis); box-shadow: 0 0 10px var(--color-crisis); }
-        .toggle-btn.active[data-mode="hope"] { background: var(--color-hope); box-shadow: 0 0 10px var(--color-hope); }
+    a { color: inherit; text-decoration: none; }
 
-        /* 資訊卡片 (左側) */
-        .info-card {
-            pointer-events: auto;
-            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
-            width: 300px; background: var(--bg-glass); backdrop-filter: blur(20px);
-            padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            opacity: 0; transition: 0.5s; transform: translateY(-40%); /* 預設隱藏 */
-        }
-        .info-card.show { opacity: 1; transform: translateY(-50%); }
-        .tag { font-size: 0.8rem; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;}
-        .tag.crisis { background: rgba(255, 77, 77, 0.2); color: var(--color-crisis); }
-        .tag.hope { background: rgba(0, 210, 255, 0.2); color: var(--color-hope); }
-        h2 { margin: 0 0 10px 0; font-size: 1.4rem; }
-        p { font-size: 0.9rem; color: #ddd; line-height: 1.5; }
-        
-        /* 模擬 IG 嵌入區 */
-        .mock-ig {
-            margin-top: 15px; height: 150px; background: #222; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center; color: #555; font-size: 0.8rem;
-            border: 1px dashed #444;
-        }
+    /* Globe layer */
+    #globe-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: auto;
+    }
 
-        /* 底部時間軸 */
-        .timeline-container {
-            pointer-events: auto;
-            padding: 20px; text-align: center;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-        }
-        .timeline {
-            display: flex; justify-content: center; gap: 20px; overflow-x: auto; padding-bottom: 10px;
-        }
-        .year-mark {
-            opacity: 0.5; cursor: pointer; position: relative; padding: 5px 10px; transition: 0.3s;
-        }
-        .year-mark:hover, .year-mark.active { opacity: 1; font-size: 1.2rem; font-weight: bold; }
-        .year-mark.active::after {
-            content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
-            width: 6px; height: 6px; background: white; border-radius: 50%;
-        }
+    #globeViz { width: 100vw; height: 100vh; }
 
-        /* 手機版調整 */
-        @media (max-width: 768px) {
-            .info-card {
-                left: 0; bottom: 0; top: auto; width: 100%; border-radius: 20px 20px 0 0;
-                transform: translateY(100%); /* 初始在底部外 */
-            }
-            .info-card.show { transform: translateY(0); }
-            header { flex-direction: column; gap: 10px; }
-        }
-    </style>
+    /* UI layer */
+    #ui-layer {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+      padding: 16px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));
+      border-radius: 16px;
+      pointer-events: auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .logo span { color: var(--color-hope); }
+
+    .toggle-container {
+      display: inline-flex;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 6px;
+      box-shadow: var(--panel-shadow);
+    }
+
+    .toggle-btn {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: #d6d8e2;
+      background: transparent;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn.active[data-mode="crisis"] {
+      background: radial-gradient(circle at 20% 20%, rgba(255,77,77,0.9), rgba(255,77,77,0.7));
+      box-shadow: 0 10px 25px rgba(255,77,77,0.35);
+      color: #fff;
+    }
+
+    .toggle-btn.active[data-mode="hope"] {
+      background: linear-gradient(120deg, var(--color-hope), var(--color-hope-alt));
+      box-shadow: 0 10px 25px rgba(0,210,255,0.35);
+      color: #0b1020;
+    }
+
+    /* Info card */
+    .info-card {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 360px;
+      background: var(--bg-glass);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--panel-shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.45s ease, opacity 0.45s ease;
+      backdrop-filter: blur(16px);
+    }
+
+    .info-card.show { opacity: 1; pointer-events: auto; transform: translateY(-50%) translateY(0); }
+
+    .info-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .tag { padding: 6px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+    .tag.crisis { background: rgba(255,77,77,0.2); color: var(--color-crisis); }
+    .tag.hope { background: rgba(0,210,255,0.2); color: var(--color-hope); }
+
+    h2 { margin: 10px 0 6px 0; font-size: 1.35rem; }
+    .subtitle { color: #9aa2c3; font-size: 0.9rem; margin-bottom: 8px; }
+    p { margin: 0 0 12px 0; color: #e7e9f4; line-height: 1.5; }
+
+    .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0; }
+    .stat-pill { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px; font-size: 0.85rem; }
+    .stat-label { opacity: 0.7; font-size: 0.78rem; }
+    .media-area { border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.35); min-height: 150px; }
+    .media-area img { width: 100%; display: block; object-fit: cover; }
+
+    .timeline-container {
+      pointer-events: auto;
+      background: linear-gradient(to top, rgba(3,7,18,0.92), transparent);
+      padding: 16px 12px 10px;
+      border-radius: 18px 18px 12px 12px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .timeline-label { text-align: center; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; color: #dce2ff; }
+
+    .timeline { display: flex; justify-content: center; gap: 10px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
+    .timeline::-webkit-scrollbar { height: 6px; }
+    .timeline::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+    .year-mark {
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #cbd3f6;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      cursor: pointer;
+      min-width: 68px;
+      text-align: center;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .year-mark.active {
+      color: #fff;
+      font-weight: 700;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .year-mark[data-mode="crisis"].active { background: rgba(255,77,77,0.18); }
+    .year-mark[data-mode="hope"].active { background: rgba(0,210,255,0.18); }
+
+    /* Helpers */
+    .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); }
+
+    .mobile-offset { transform: translateY(-12%); }
+
+    .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+    @media (max-width: 900px) {
+      .info-card { width: 300px; }
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 0; }
+      header { flex-direction: column; align-items: flex-start; }
+      .info-card {
+        left: 0;
+        right: 0;
+        margin: 0 12px;
+        width: auto;
+        top: auto;
+        bottom: 10px;
+        transform: translateY(120%);
+        border-radius: 18px 18px 12px 12px;
+      }
+      .info-card.show { transform: translateY(0); }
+      .stats { grid-template-columns: 1fr; }
+      #globe-container { transform: translateY(-12%); }
+      #ui-layer { padding: 8px; }
+      header { border-radius: 14px; }
+    }
+  </style>
 </head>
 <body>
-
+  <div id="globe-container">
     <div id="globeViz"></div>
+  </div>
 
-    <div id="ui-layer">
-        <header>
-            <div class="logo">👣 One-Step <span>Blue Sky</span></div>
-            <div class="toggle-container">
-                <button class="toggle-btn active" data-mode="crisis" onclick="setMode('crisis')">⚠️ CRISIS</button>
-                <button class="toggle-btn" data-mode="hope" onclick="setMode('hope')">🌏 HOPE</button>
-            </div>
-        </header>
+  <div id="ui-layer">
+    <header>
+      <div class="logo">👣 One-Step <span>Blue Sky</span></div>
+      <div class="toggle-container" aria-label="切換模式">
+        <button class="toggle-btn active" data-mode="crisis" id="btn-crisis">⚠️ CRISIS</button>
+        <button class="toggle-btn" data-mode="hope" id="btn-hope">🌏 HOPE</button>
+      </div>
+    </header>
 
-        <div class="info-card" id="infoPanel">
-            <span class="tag crisis" id="infoTag">Wildfire</span>
-            <h2 id="infoTitle">2019 Australia Bushfire</h2>
-            <p id="infoDesc">One of the most devastating wildfire seasons, burning over 18 million hectares.</p>
-            <div class="mock-ig">[ Instagram Embed Area ]</div>
-        </div>
-
-        <div class="timeline-container">
-            <div class="timeline">
-                <div class="year-mark" onclick="jumpToYear(2018)">2018</div>
-                <div class="year-mark active" onclick="jumpToYear(2019)">2019</div>
-                <div class="year-mark" onclick="jumpToYear(2020)">2020</div>
-                <div class="year-mark" onclick="jumpToYear(2024)">2024</div>
-                <div class="year-mark" onclick="jumpToYear(2025)">2025</div>
-            </div>
-        </div>
+    <div class="info-card" id="infoPanel" aria-live="polite">
+      <div class="info-header">
+        <span class="tag crisis" id="infoTag">CRISIS</span>
+        <span class="badge" id="infoDate">--</span>
+      </div>
+      <h2 id="infoTitle">Loading...</h2>
+      <div class="subtitle" id="infoSubtitle">---</div>
+      <p id="infoDesc">---</p>
+      <div class="stats" id="statList"></div>
+      <div class="media-area" id="mediaContainer"></div>
     </div>
 
-    <script>
-        // 1. 模擬數據 (對應 data.json)
-        const eventsData = [
-            { id: 1, lat: -33.8, lng: 151.2, label: "Australia Fire", year: 2019, mode: "crisis", type: "Wildfire", desc: "Extreme heat caused massive bushfires." },
-            { id: 2, lat: 25.2, lng: 55.2, label: "Dubai Flood", year: 2024, mode: "crisis", type: "Flood", desc: "Unexpected torrential rain in desert city." },
-            { id: 3, lat: -3.4, lng: -62.2, label: "Amazon Reforest", year: 2025, mode: "hope", type: "Solution", desc: "Major reforestation project launched." },
-            { id: 4, lat: 23.5, lng: 121.0, label: "Taiwan Energy", year: 2025, mode: "hope", type: "Energy", desc: "New offshore wind farm completed." }
-        ];
+    <div class="timeline-container">
+      <div class="timeline-label">年份時間軸</div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </div>
 
-        let currentMode = 'crisis'; // 預設模式
-
-        // 2. 初始化地球
-        const world = Globe()
-            (document.getElementById('globeViz'))
-            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg') // 預設夜間圖
-            .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
-            .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
-            .pointAltitude(0.1)
-            .pointRadius(0.5)
-            .pointColor(d => d.mode === 'crisis' ? '#FF4D4D' : '#00D2FF') // 根據模式變色
-            .pointLabel('label')
-            .onPointClick(point => showInfo(point)) // 點擊事件
-            .pointsData(eventsData.filter(d => d.mode === 'crisis')); // 初始載入危機數據
-
-        // 自動旋轉
-        world.controls().autoRotate = true;
-        world.controls().autoRotateSpeed = 0.5;
-
-        // 3. 切換模式功能
-        function setMode(mode) {
-            currentMode = mode;
-            
-            // 更新按鈕樣式
-            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.toggle-btn[data-mode="${mode}"]`).classList.add('active');
-
-            // 更新地球貼圖與數據
-            if (mode === 'crisis') {
-                world.globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg');
-                world.pointsData(eventsData.filter(d => d.mode === 'crisis'));
-            } else {
-                world.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg'); // 日間圖
-                world.pointsData(eventsData.filter(d => d.mode === 'hope'));
-            }
+  <script>
+    const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
+    const TEXTURE_SETS = {
+      globe: {
+        crisis: {
+          desktop: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/earth_night_lrg.png',
+          mobile: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/earth_night_2048.png'
+        },
+        hope: {
+          desktop: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57747/land_shallow_topo_4096.jpg',
+          mobile: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73909/world.topo.bathy.200412.3x2048x1024.jpg'
         }
+      },
+      clouds: {
+        desktop: 'https://raw.githubusercontent.com/turban/webgl-earth/master/images/fair_clouds_4k.png',
+        mobile: 'https://raw.githubusercontent.com/turban/webgl-earth/master/images/fair_clouds_2k.png'
+      },
+      bump: 'https://unpkg.com/three-globe/example/img/earth-topology.png',
+      specular: 'https://unpkg.com/three-globe/example/img/earth-water.png',
+      background: 'https://unpkg.com/three-globe/example/img/night-sky.png'
+    };
 
-        // 4. 顯示資訊卡片
-        function showInfo(data) {
-            world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.5 }, 1000); // 鏡頭飛越
-            
-            const card = document.getElementById('infoPanel');
-            const tag = document.getElementById('infoTag');
-            
-            // 更新內容
-            document.getElementById('infoTitle').innerText = `${data.year} ${data.label}`;
-            document.getElementById('infoDesc').innerText = data.desc;
-            tag.innerText = data.type;
-            
-            // 更新樣式
-            tag.className = `tag ${data.mode}`;
-            card.classList.add('show');
-            
-            // 暫停旋轉以便觀看
-            world.controls().autoRotate = false;
-        }
+    const COLORS = { crisis: '#FF4D4D', hope: '#00D2FF', hopeAlt: '#2ECC40' };
+    const state = {
+      events: [],
+      filtered: [],
+      currentMode: 'crisis',
+      world: null,
+      clouds: null,
+      bumpMap: null,
+      specularMap: null,
+      cloudsMap: null,
+      initialView: { lat: 23.5, lng: 121.0, altitude: 2.5 },
+      currentYear: null
+    };
 
-        // 5. 點擊背景關閉卡片
-        world.onGlobeClick(() => {
-            document.getElementById('infoPanel').classList.remove('show');
-            world.controls().autoRotate = true;
+    const loader = new THREE.TextureLoader();
+
+    const fetchJSON = async (path) => {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error('無法載入資料檔案');
+      return res.json();
+    };
+
+    const preloadImage = (url) => new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(url);
+      img.onerror = reject;
+      img.src = url;
+    });
+
+    const loadTexture = (url) => new Promise((resolve, reject) => {
+      loader.load(url, resolve, undefined, reject);
+    });
+
+    const buildTimeline = (events) => {
+      const timeline = document.getElementById('timeline');
+      timeline.innerHTML = '';
+      const years = Array.from(new Set(events.map(ev => ev.year))).sort((a,b) => a - b);
+      years.forEach(year => {
+        const item = document.createElement('button');
+        item.className = 'year-mark';
+        item.textContent = year;
+        item.dataset.year = year;
+        item.addEventListener('click', () => jumpToYear(year));
+        timeline.appendChild(item);
+      });
+    };
+
+    const highlightYear = (year) => {
+      document.querySelectorAll('.year-mark').forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.year) === Number(year));
+        btn.dataset.mode = state.currentMode;
+      });
+    };
+
+    const attachCloudLayer = (globe) => {
+      const cloudGeo = new THREE.SphereGeometry(globe.getGlobeRadius() * 1.01, 64, 64);
+      const cloudMat = new THREE.MeshPhongMaterial({
+        map: state.cloudsMap,
+        transparent: true,
+        opacity: 0.4,
+        depthWrite: false
+      });
+      const clouds = new THREE.Mesh(cloudGeo, cloudMat);
+      clouds.renderOrder = 10;
+      globe.scene().add(clouds);
+      state.clouds = clouds;
+    };
+
+    const createPulse = () => {
+      state.world.onRender(() => {
+        const t = Date.now() * 0.004;
+        state.filtered.forEach(d => {
+          const obj = d.__threeObj;
+          if (!obj) return;
+          const scale = 0.85 + 0.25 * Math.sin(t + d.lat);
+          obj.scale.setScalar(scale);
+          const material = obj.children?.[0]?.material || obj.material;
+          if (material) material.opacity = 0.8 + 0.2 * Math.sin(t + d.lng);
         });
+        if (state.clouds) state.clouds.rotation.y += 0.0006;
+      });
+    };
 
-        // 6. 年份跳轉 (模擬)
-        function jumpToYear(year) {
-            document.querySelectorAll('.year-mark').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // 找出該年份的第一個事件並飛過去
-            const targetEvent = eventsData.find(d => d.year === year && d.mode === currentMode);
-            if(targetEvent) {
-                showInfo(targetEvent);
-            }
-        }
-        
-        // RWD: 手機版調整視角高度 (簡單處理)
-        if(window.innerWidth < 768) {
-            world.pointOfView({ altitude: 3.5 }); 
-        }
-    </script>
+    const applyMode = (mode) => {
+      state.currentMode = mode;
+      document.body.dataset.mode = mode;
+      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+      const targetUrl = TEXTURE_SETS.globe[mode][QUALITY];
+      gsap.to('#globe-container', { opacity: 0.5, duration: 0.35, onComplete: () => {
+        state.world.globeImageUrl(targetUrl);
+        gsap.to('#globe-container', { opacity: 1, duration: 0.35 });
+      }});
+      renderPoints();
+      refreshTimeline();
+      const active = state.filtered[0];
+      if (active) {
+        highlightYear(active.year);
+        showInfo(active);
+      } else {
+        document.getElementById('infoPanel').classList.remove('show');
+      }
+    };
+
+    const renderPoints = () => {
+      state.filtered = state.events.filter(ev => ev.mode === state.currentMode);
+      state.world.pointsData(state.filtered);
+    };
+
+    const refreshTimeline = () => {
+      buildTimeline(state.filtered);
+      const fallbackYear = state.filtered[0]?.year;
+      if (fallbackYear) {
+        state.currentYear = fallbackYear;
+        highlightYear(fallbackYear);
+      }
+    };
+
+    const buildPointObject = (d) => {
+      const color = d.mode === 'crisis' ? COLORS.crisis : COLORS.hope;
+      const glow = new THREE.Mesh(
+        new THREE.SphereGeometry(0.6, 16, 16),
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.25 })
+      );
+      const core = new THREE.Mesh(
+        new THREE.SphereGeometry(0.28, 12, 12),
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9 })
+      );
+      core.position.set(0, 0, 0);
+      glow.add(core);
+      return glow;
+    };
+
+    const showInfo = (data) => {
+      if (!data) return;
+      state.world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
+      const card = document.getElementById('infoPanel');
+      const tag = document.getElementById('infoTag');
+      tag.className = `tag ${data.mode}`;
+      tag.textContent = data.mode === 'crisis' ? 'CRISIS' : 'HOPE';
+      document.getElementById('infoTitle').textContent = `${data.year} · ${data.title}`;
+      document.getElementById('infoSubtitle').textContent = data.category === 'disaster' ? '危機事件' : '解方行動';
+      document.getElementById('infoDesc').textContent = data.description;
+      document.getElementById('infoDate').textContent = data.date;
+
+      const statList = document.getElementById('statList');
+      statList.innerHTML = '';
+      (data.stats || []).forEach(item => {
+        const block = document.createElement('div');
+        block.className = 'stat-pill';
+        block.innerHTML = `<div class="stat-label">${item.label}</div><div><strong>${item.value}</strong></div>`;
+        statList.appendChild(block);
+      });
+
+      const mediaContainer = document.getElementById('mediaContainer');
+      mediaContainer.innerHTML = '';
+      if (data.media?.type === 'instagram' && data.media.url) {
+        const blockquote = document.createElement('blockquote');
+        blockquote.className = 'instagram-media';
+        blockquote.setAttribute('data-instgrm-permalink', data.media.url);
+        blockquote.setAttribute('data-instgrm-version', '14');
+        blockquote.style.margin = '0 auto';
+        mediaContainer.appendChild(blockquote);
+        setTimeout(() => window.instgrm?.Embeds?.process(), 50);
+      } else if (data.media?.type === 'image' && data.media.url) {
+        const img = document.createElement('img');
+        img.src = data.media.url;
+        img.alt = data.title;
+        mediaContainer.appendChild(img);
+      } else {
+        mediaContainer.innerHTML = '<div style="padding:16px;opacity:0.7;">無媒體資料</div>';
+      }
+
+      card.classList.add('show');
+    };
+
+    const jumpToYear = (year) => {
+      state.currentYear = year;
+      highlightYear(year);
+      const target = state.filtered.find(ev => ev.year === year);
+      if (target) showInfo(target);
+    };
+
+    const attachUIEvents = () => {
+      document.getElementById('btn-crisis').addEventListener('click', () => applyMode('crisis'));
+      document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
+    };
+
+    const configureControls = () => {
+      const controls = state.world.controls();
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.8;
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.enablePan = true;
+      controls.enableZoom = true;
+      controls.enableRotate = true;
+      controls.rotateSpeed = 0.8;
+
+      let resumeHandle;
+      const pauseRotate = () => {
+        controls.autoRotate = false;
+        clearTimeout(resumeHandle);
+      };
+      const resumeRotate = () => {
+        clearTimeout(resumeHandle);
+        resumeHandle = setTimeout(() => { controls.autoRotate = true; }, 2500);
+      };
+
+      controls.addEventListener('start', pauseRotate);
+      controls.addEventListener('end', resumeRotate);
+    };
+
+    const prepareData = (data) => {
+      state.events = data.events.map(ev => ({
+        ...ev,
+        lat: ev.coordinates.lat,
+        lng: ev.coordinates.lng
+      }));
+      if (data.config?.initial_view) state.initialView = data.config.initial_view;
+    };
+
+    const bootstrap = async () => {
+      const uiLayer = document.getElementById('ui-layer');
+      uiLayer.style.pointerEvents = 'none';
+      const data = await fetchJSON('data.json');
+      prepareData(data);
+      await Promise.all([
+        preloadImage(TEXTURE_SETS.globe.crisis[QUALITY]),
+        preloadImage(TEXTURE_SETS.globe.hope[QUALITY])
+      ]);
+      const [bump, specular, clouds] = await Promise.all([
+        loadTexture(TEXTURE_SETS.bump),
+        loadTexture(TEXTURE_SETS.specular),
+        loadTexture(TEXTURE_SETS.clouds[QUALITY])
+      ]);
+      state.bumpMap = bump;
+      state.specularMap = specular;
+      state.cloudsMap = clouds;
+
+      state.world = Globe()(document.getElementById('globeViz'))
+        .globeImageUrl(TEXTURE_SETS.globe.crisis[QUALITY])
+        .bumpImageUrl(TEXTURE_SETS.bump)
+        .backgroundImageUrl(TEXTURE_SETS.background)
+        .pointAltitude(0.02)
+        .pointRadius(0.6)
+        .pointLabel(d => `<div style="padding:6px 8px;">${d.title}</div>`)
+        .pointColor(d => d.mode === 'crisis' ? COLORS.crisis : COLORS.hope)
+        .onPointClick(showInfo)
+        .onGlobeClick(() => document.getElementById('infoPanel').classList.remove('show'))
+        .pointThreeObject(buildPointObject)
+        .pointThreeObjectExtend(true);
+
+      configureControls();
+
+      const material = state.world.globeMaterial();
+      material.bumpMap = state.bumpMap;
+      material.specularMap = state.specularMap;
+      material.specular = new THREE.Color('#888');
+      material.shininess = 6;
+
+      attachCloudLayer(state.world);
+      createPulse();
+      attachUIEvents();
+
+      state.world.pointOfView({
+        lat: state.initialView.lat,
+        lng: state.initialView.lng,
+        altitude: (QUALITY === 'mobile') ? state.initialView.altitude + 0.6 : state.initialView.altitude
+      }, 0);
+
+      renderPoints();
+      refreshTimeline();
+      const firstEvent = state.filtered[0];
+      if (firstEvent) showInfo(firstEvent);
+
+      uiLayer.style.pointerEvents = 'auto';
+    };
+
+    bootstrap().catch(err => {
+      console.error(err);
+      alert('初始化失敗：' + err.message);
+    });
+  </script>
 </body>
 </html>
