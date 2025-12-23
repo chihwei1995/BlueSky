@@ -168,8 +168,18 @@
       border-radius: 18px 18px 12px 12px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
     }
-    .timeline-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .timeline-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
     .timeline-label { text-align: center; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; color: #dce2ff; }
+    .year-select {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #dce2ff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-weight: 600;
+      min-width: 120px;
+      cursor: pointer;
+    }
 
     .timeline-container.collapsed .timeline { display: none; }
     .timeline-container.collapsed .timeline-label { margin-bottom: 0; }
@@ -204,8 +214,18 @@
         top: auto; bottom: 10px;
         transform: translateY(120%);
         border-radius: 18px 18px 12px 12px;
+        max-height: 65vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
       }
       .info-card.show { transform: translateY(0); }
+      .info-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding-right: 4px;
+        margin-top: 8px;
+      }
       .stats { grid-template-columns: 1fr; }
       #globe-container { transform: translateY(-12%); }
       #ui-layer { padding: 8px; }
@@ -249,6 +269,9 @@
     <div class="timeline-container" id="timelineContainer">
       <div class="timeline-label-row">
         <div class="timeline-label">年份時間軸</div>
+        <select class="year-select" id="yearSelect" aria-label="選擇年份">
+          <option value="">選擇年份</option>
+        </select>
         <button class="collapse-btn" id="timelineCollapseBtn" type="button" aria-expanded="true">收合時間表</button>
       </div>
       <div class="timeline" id="timeline"></div>
@@ -302,10 +325,9 @@
       img.src = url;
     });
 
-    const buildTimeline = (events) => {
+    const buildTimeline = (years) => {
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
-      const years = Array.from(new Set(events.map(ev => ev.year))).sort((a,b) => a - b);
       years.forEach(year => {
         const item = document.createElement('button');
         item.className = 'year-mark';
@@ -316,11 +338,25 @@
       });
     };
 
+    const updateYearSelect = (years) => {
+      const select = document.getElementById('yearSelect');
+      select.innerHTML = '<option value=\"\">選擇年份</option>';
+      years.forEach(year => {
+        const opt = document.createElement('option');
+        opt.value = year;
+        opt.textContent = year;
+        select.appendChild(opt);
+      });
+      select.disabled = years.length === 0;
+    };
+
     const highlightYear = (year) => {
       document.querySelectorAll('.year-mark').forEach(btn => {
         btn.classList.toggle('active', Number(btn.dataset.year) === Number(year));
         btn.dataset.mode = state.currentMode;
       });
+      const select = document.getElementById('yearSelect');
+      if (select) select.value = year ?? '';
     };
 
     const renderPoints = () => {
@@ -329,8 +365,10 @@
     };
 
     const refreshTimeline = () => {
-      buildTimeline(state.filtered);
-      const fallbackYear = state.filtered[0]?.year;
+      const years = Array.from(new Set(state.filtered.map(ev => ev.year))).sort((a,b) => a - b);
+      buildTimeline(years);
+      updateYearSelect(years);
+      const fallbackYear = years[0];
       if (fallbackYear) {
         state.currentYear = fallbackYear;
         highlightYear(fallbackYear);
@@ -502,6 +540,10 @@
       document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
       document.getElementById('infoCollapseBtn').addEventListener('click', () => setInfoCollapsed(!state.infoCollapsed));
       document.getElementById('timelineCollapseBtn').addEventListener('click', () => setTimelineCollapsed(!state.timelineCollapsed));
+      document.getElementById('yearSelect').addEventListener('change', (e) => {
+        const targetYear = e.target.value;
+        if (targetYear) jumpToYear(Number(targetYear));
+      });
     };
 
     const configureControls = () => {
