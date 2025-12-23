@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blue Sky Returns</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="//unpkg.com/globe.gl"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- ✅ 只載 globe.gl：避免 THREE 多重載入 -->
+  <script src="https://unpkg.com/globe.gl"></script>
+
   <script src="//www.instagram.com/embed.js"></script>
+
   <style>
     :root {
       --color-crisis: #FF4D4D;
@@ -28,7 +31,6 @@
                   #030712;
       color: #f6f7fb;
     }
-
     a { color: inherit; text-decoration: none; }
 
     /* Globe layer */
@@ -37,7 +39,6 @@
       inset: 0;
       pointer-events: auto;
     }
-
     #globeViz { width: 100vw; height: 100vh; }
 
     /* ===== Mode overlay (氣氛色罩) ===== */
@@ -232,9 +233,7 @@
     @media (max-width: 900px) {
       .info-card { width: 300px; }
     }
-
     @media (max-width: 768px) {
-      body { padding: 0; }
       header { flex-direction: column; align-items: flex-start; }
       .info-card {
         left: 0;
@@ -254,6 +253,7 @@
     }
   </style>
 </head>
+
 <body data-mode="crisis">
   <div id="globe-container">
     <div id="globeViz"></div>
@@ -296,38 +296,19 @@
   </div>
 
   <script>
-    const svgDataUrl = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-
-    // === 真實貼圖（路線 A）===
-    // 請確保 /assets 內存在：
-    // earth_day.jpg, earth_bump.jpg, earth_specular.jpg,
+    // ===== Utilities =====
     const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
     const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
 
-    const TEXTURE_SETS = {
-      globe: {
-        desktop: 'assets/earth_day.jpg',
-        mobile:  'assets/earth_day.jpg'
-      },
-      bump: 'assets/earth_bump.jpg',
-      specular: 'assets/earth_specular.jpg',
-      background: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <defs>
-            <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#060a1a"/>
-              <stop offset="100%" stop-color="#02040a"/>
-            </linearGradient>
-          </defs>
-          <rect width="1024" height="512" fill="url(#sky)"/>
-          <g fill="white" fill-opacity="0.8">
-            <circle cx="120" cy="80" r="2"/><circle cx="240" cy="140" r="1.5"/><circle cx="360" cy="60" r="2.3"/>
-            <circle cx="520" cy="120" r="1.8"/><circle cx="700" cy="90" r="2.5"/><circle cx="860" cy="130" r="1.6"/>
-            <circle cx="980" cy="70" r="2"/><circle cx="180" cy="260" r="1.2"/><circle cx="420" cy="230" r="1.5"/>
-            <circle cx="620" cy="200" r="1.4"/><circle cx="800" cy="240" r="1.3"/><circle cx="940" cy="210" r="1.6"/>
-          </g>
-        </svg>
-      `)
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const clamp01 = (x) => Math.max(0, Math.min(1, x));
+
+    // ===== Assets (相對於 index.html) =====
+    const ASSET_BASE = './assets/';
+    const TEXTURE = {
+      day: `${ASSET_BASE}earth_day.jpg`,
+      bump: `${ASSET_BASE}earth_bump.jpg`,
+      specular: `${ASSET_BASE}earth_specular.jpg` // 可選；沒有也能跑（有 fallback）
     };
 
     const COLORS = { crisis: '#FF4D4D', hope: '#00D2FF', hopeAlt: '#2ECC40' };
@@ -337,20 +318,15 @@
       filtered: [],
       currentMode: 'crisis',
       world: null,
-      bumpMap: null,
-      specularMap: null,
       initialView: { lat: 23.5, lng: 121.0, altitude: 2.5 },
       currentYear: null,
       infoCollapsed: false,
       timelineCollapsed: false
     };
 
-    const loader = new THREE.TextureLoader();
-    loader.setCrossOrigin('anonymous');
-
     const fetchJSON = async (path) => {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error('無法載入資料檔案');
+      const res = await fetch(path, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`無法載入資料檔案：${path} (${res.status})`);
       return res.json();
     };
 
@@ -358,14 +334,11 @@
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => resolve(url);
-      img.onerror = reject;
+      img.onerror = () => reject(new Error('Image failed to load: ' + url));
       img.src = url;
     });
 
-    const loadTexture = (url) => new Promise((resolve, reject) => {
-      loader.load(url, resolve, undefined, reject);
-    });
-
+    // ===== Timeline =====
     const buildTimeline = (events) => {
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
@@ -387,61 +360,6 @@
       });
     };
 
-    const createPulse = () => {
-      const renderStep = () => {
-        const t = Date.now() * 0.004;
-        state.filtered.forEach(d => {
-          const obj = d.__threeObj;
-          if (!obj) return;
-          const scale = 0.85 + 0.25 * Math.sin(t + d.lat);
-          obj.scale.setScalar(scale);
-          const material = obj.children?.[0]?.material || obj.material;
-          if (material) material.opacity = 0.8 + 0.2 * Math.sin(t + d.lng);
-        });
-      };
-
-      if (typeof state.world.onRender === 'function') {
-        state.world.onRender(renderStep);
-      } else {
-        const fallbackLoop = () => {
-          renderStep();
-          requestAnimationFrame(fallbackLoop);
-        };
-        fallbackLoop();
-      }
-    };
-
-    // === 模式切換：不換貼圖，只做「材質調色 + body[data-mode] 色罩」===
-    const applyMode = (mode) => {
-      state.currentMode = mode;
-      document.body.dataset.mode = mode;
-      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
-
-      // globe material tint (輕微就好，避免地表失真)
-      const material = state.world?.globeMaterial?.();
-      if (material) {
-        if (!material.emissive) material.emissive = new THREE.Color('#000');
-        if (mode === 'crisis') {
-          gsap.to(material.color,    { r: 1.05, g: 0.90, b: 0.90, duration: 0.6 });
-          gsap.to(material.emissive, { r: 0.10, g: 0.03, b: 0.03, duration: 0.6 });
-        } else {
-          gsap.to(material.color,    { r: 0.92, g: 1.02, b: 1.05, duration: 0.6 });
-          gsap.to(material.emissive, { r: 0.02, g: 0.08, b: 0.10, duration: 0.6 });
-        }
-      }
-
-      renderPoints();
-      refreshTimeline();
-
-      const active = state.filtered[0];
-      if (active) {
-        highlightYear(active.year);
-        showInfo(active);
-      } else {
-        document.getElementById('infoPanel').classList.remove('show');
-      }
-    };
-
     const renderPoints = () => {
       state.filtered = state.events.filter(ev => ev.mode === state.currentMode);
       state.world.pointsData(state.filtered);
@@ -456,7 +374,9 @@
       }
     };
 
+    // ===== Points visuals =====
     const buildPointObject = (d) => {
+      const THREE = window.THREE; // globe.gl 會掛在 window.THREE
       const color = d.mode === 'crisis' ? COLORS.crisis : COLORS.hope;
       const glow = new THREE.Mesh(
         new THREE.SphereGeometry(0.6, 16, 16),
@@ -470,8 +390,89 @@
       return glow;
     };
 
+    const createPulse = () => {
+      const THREE = window.THREE;
+      const loop = () => {
+        const t = Date.now() * 0.004;
+        state.filtered.forEach(d => {
+          const obj = d.__threeObj;
+          if (!obj) return;
+          const scale = 0.85 + 0.25 * Math.sin(t + d.lat);
+          obj.scale.setScalar(scale);
+          const mat = obj.children?.[0]?.material || obj.material;
+          if (mat) mat.opacity = 0.8 + 0.2 * Math.sin(t + d.lng);
+        });
+        requestAnimationFrame(loop);
+      };
+      loop();
+    };
+
+    // ===== Mode switching (no GSAP) =====
+    const animateMaterialTint = (mode) => {
+      const THREE = window.THREE;
+      const mat = state.world?.globeMaterial?.();
+      if (!mat) return;
+
+      // 初始值保底
+      if (!mat.color) mat.color = new THREE.Color('#ffffff');
+      if (!mat.emissive) mat.emissive = new THREE.Color('#000000');
+
+      // 目標顏色（輕微即可）
+      const target = (mode === 'crisis')
+        ? { c: { r: 1.05, g: 0.90, b: 0.90 }, e: { r: 0.10, g: 0.03, b: 0.03 } }
+        : { c: { r: 0.92, g: 1.02, b: 1.05 }, e: { r: 0.02, g: 0.08, b: 0.10 } };
+
+      const start = {
+        c: { r: mat.color.r, g: mat.color.g, b: mat.color.b },
+        e: { r: mat.emissive.r, g: mat.emissive.g, b: mat.emissive.b }
+      };
+
+      const duration = 450; // ms
+      const t0 = performance.now();
+
+      const step = (now) => {
+        const t = clamp01((now - t0) / duration);
+        const ease = t * (2 - t); // easeOutQuad
+        mat.color.setRGB(
+          lerp(start.c.r, target.c.r, ease),
+          lerp(start.c.g, target.c.g, ease),
+          lerp(start.c.b, target.c.b, ease)
+        );
+        mat.emissive.setRGB(
+          lerp(start.e.r, target.e.r, ease),
+          lerp(start.e.g, target.e.g, ease),
+          lerp(start.e.b, target.e.b, ease)
+        );
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    const applyMode = (mode) => {
+      state.currentMode = mode;
+      document.body.dataset.mode = mode;
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+
+      animateMaterialTint(mode);
+
+      renderPoints();
+      refreshTimeline();
+
+      const active = state.filtered[0];
+      if (active) {
+        highlightYear(active.year);
+        showInfo(active);
+      } else {
+        document.getElementById('infoPanel').classList.remove('show');
+      }
+    };
+
+    // ===== Info panel =====
     const showInfo = (data) => {
       if (!data) return;
+
       state.world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
 
       const card = document.getElementById('infoPanel');
@@ -481,8 +482,8 @@
 
       document.getElementById('infoTitle').textContent = `${data.year} · ${data.title}`;
       document.getElementById('infoSubtitle').textContent = data.category === 'disaster' ? '危機事件' : '解方行動';
-      document.getElementById('infoDesc').textContent = data.description;
-      document.getElementById('infoDate').textContent = data.date;
+      document.getElementById('infoDesc').textContent = data.description || '';
+      document.getElementById('infoDate').textContent = data.date || '--';
 
       const statList = document.getElementById('statList');
       statList.innerHTML = '';
@@ -502,11 +503,11 @@
         blockquote.setAttribute('data-instgrm-version', '14');
         blockquote.style.margin = '0 auto';
         mediaContainer.appendChild(blockquote);
-        setTimeout(() => window.instgrm?.Embeds?.process(), 50);
+        setTimeout(() => window.instgrm?.Embeds?.process(), 60);
       } else if (data.media?.type === 'image' && data.media.url) {
         const img = document.createElement('img');
         img.src = data.media.url;
-        img.alt = data.title;
+        img.alt = data.title || 'image';
         mediaContainer.appendChild(img);
       } else {
         mediaContainer.innerHTML = '<div style="padding:16px;opacity:0.7;">無媒體資料</div>';
@@ -522,6 +523,7 @@
       if (target) showInfo(target);
     };
 
+    // ===== Collapses =====
     const setInfoCollapsed = (collapsed) => {
       state.infoCollapsed = collapsed;
       const panel = document.getElementById('infoPanel');
@@ -546,6 +548,7 @@
       document.getElementById('timelineCollapseBtn').addEventListener('click', () => setTimelineCollapsed(!state.timelineCollapsed));
     };
 
+    // ===== Controls =====
     const configureControls = () => {
       const controls = state.world.controls();
       controls.autoRotate = true;
@@ -558,10 +561,7 @@
       controls.rotateSpeed = 0.8;
 
       let resumeHandle;
-      const pauseRotate = () => {
-        controls.autoRotate = false;
-        clearTimeout(resumeHandle);
-      };
+      const pauseRotate = () => { controls.autoRotate = false; clearTimeout(resumeHandle); };
       const resumeRotate = () => {
         clearTimeout(resumeHandle);
         resumeHandle = setTimeout(() => { controls.autoRotate = true; }, 2500);
@@ -571,15 +571,18 @@
       controls.addEventListener('end', resumeRotate);
     };
 
+    // ===== Data =====
     const prepareData = (data) => {
-      state.events = data.events.map(ev => ({
+      state.events = (data.events || []).map(ev => ({
         ...ev,
-        lat: ev.coordinates.lat,
-        lng: ev.coordinates.lng
-      }));
+        lat: ev.coordinates?.lat,
+        lng: ev.coordinates?.lng
+      })).filter(ev => Number.isFinite(ev.lat) && Number.isFinite(ev.lng));
+
       if (data.config?.initial_view) state.initialView = data.config.initial_view;
     };
 
+    // ===== Bootstrap =====
     const bootstrap = async () => {
       const uiLayer = document.getElementById('ui-layer');
       uiLayer.style.pointerEvents = 'none';
@@ -587,50 +590,54 @@
       const data = await fetchJSON('data.json');
       prepareData(data);
 
-      // preload 真實貼圖
-      await Promise.all([
-        preloadImage(TEXTURE_SETS.globe[QUALITY]),
-      ]);
+      // 預載貼圖（specular 若缺檔，允許跳過）
+      await preloadImage(TEXTURE.day);
+      await preloadImage(TEXTURE.bump).catch(() => {});
+      await preloadImage(TEXTURE.specular).catch(() => {});
 
-      // load bump/specular
-      const [bump, specular] = await Promise.all([
-        loadTexture(TEXTURE_SETS.bump),
-        loadTexture(TEXTURE_SETS.specular),
-      ]);
-      state.bumpMap = bump;
-      state.specularMap = specular;
-
+      // init globe
       state.world = Globe()(document.getElementById('globeViz'));
       state.world
-        .globeImageUrl(TEXTURE_SETS.globe[QUALITY])
-        .backgroundImageUrl(TEXTURE_SETS.background)
+        .globeImageUrl(TEXTURE.day)
+        .backgroundColor('#000000')
         .pointAltitude(0.02)
         .pointRadius(0.6)
-        .pointLabel(d => `<div style="padding:6px 8px;">${d.title}</div>`)
+        .pointLabel(d => `<div style="padding:6px 8px;">${d.title || ''}</div>`)
         .pointColor(d => d.mode === 'crisis' ? COLORS.crisis : COLORS.hope)
         .onPointClick(showInfo)
         .onGlobeClick(() => document.getElementById('infoPanel').classList.remove('show'));
 
       if (typeof state.world.pointThreeObject === 'function') {
-        state.world
-          .pointThreeObject(buildPointObject)
-          .pointThreeObjectExtend(true);
+        state.world.pointThreeObject(buildPointObject).pointThreeObjectExtend(true);
       }
 
       configureControls();
 
-      // material: bump/specular
-      const material = state.world.globeMaterial();
-      material.bumpMap = state.bumpMap;
-      material.bumpScale = 0.08;
-      material.specularMap = state.specularMap;
-      material.specular = new THREE.Color('#888');
-      material.shininess = 6;
-      material.emissive = new THREE.Color('#000'); // for mode tint
+      // set material maps（用 globeMaterial 直接掛）
+      const THREE = window.THREE;
+      const mat = state.world.globeMaterial();
+      mat.emissive = new THREE.Color('#000000');
 
-      attachCloudLayer(state.world);
-      createPulse();
+      // bump/specular 由 THREE.TextureLoader 載入（globe.gl 已提供 THREE）
+      const texLoader = new THREE.TextureLoader();
+
+      // bump
+      texLoader.load(TEXTURE.bump, (bumpTex) => {
+        mat.bumpMap = bumpTex;
+        mat.bumpScale = 0.08;
+        mat.needsUpdate = true;
+      }, undefined, () => { /* bump 可缺 */ });
+
+      // specular（可缺）
+      texLoader.load(TEXTURE.specular, (specTex) => {
+        mat.specularMap = specTex;
+        mat.specular = new THREE.Color('#888888');
+        mat.shininess = 6;
+        mat.needsUpdate = true;
+      }, undefined, () => { /* specular 可缺 */ });
+
       attachUIEvents();
+      createPulse();
 
       state.world.pointOfView({
         lat: state.initialView.lat,
