@@ -1,64 +1,80 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blue Sky Returns</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="//unpkg.com/globe.gl"></script>
+  <script src="https://unpkg.com/globe.gl@4.6.8/dist/globe.gl.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="//www.instagram.com/embed.js"></script>
   <style>
     :root {
-      --color-crisis: #FF4D4D;
-      --color-hope: #00D2FF;
-      --color-hope-alt: #2ECC40;
-      --bg-glass: rgba(15, 20, 30, 0.7);
-      --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      --bg1: #070911;
+      --bg2: #040712;
+      --glass: rgba(255, 255, 255, 0.06);
+      --text: #e8ecff;
+      --accent: #ff4d4d;
+      --accent-secondary: #5c2222;
+      --stroke: #ff4d4d;
+      --button-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
     }
 
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
       overflow: hidden;
-      background: radial-gradient(circle at 20% 20%, rgba(0, 210, 255, 0.15), transparent 35%),
-                  radial-gradient(circle at 80% 10%, rgba(255, 77, 77, 0.25), transparent 30%),
-                  #030712;
-      color: #f6f7fb;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 20% 30%, rgba(255, 77, 77, 0.2), transparent 35%),
+                  radial-gradient(circle at 80% 10%, rgba(0, 195, 255, 0.18), transparent 32%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    a { color: inherit; text-decoration: none; }
-
-    /* Globe layer */
     #globe-container {
       position: fixed;
       inset: 0;
-      pointer-events: auto;
+      background: linear-gradient(160deg, #04060d 0%, #050915 45%, #01030a 100%);
     }
 
-    #globeViz { width: 100vw; height: 100vh; }
+    #globe {
+      width: 100vw;
+      height: 100vh;
+    }
 
-    /* UI layer */
-    #ui-layer {
+    .atmosphere-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.08), transparent 55%);
+      mix-blend-mode: screen;
+      transition: background 0.6s ease;
+    }
+
+    .ui-layer {
       position: fixed;
       inset: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      pointer-events: none;
       padding: 16px;
+      pointer-events: none;
     }
 
     header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
-      padding: 12px 16px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));
+      padding: 14px 16px;
       border-radius: 16px;
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+      backdrop-filter: blur(14px);
+      box-shadow: var(--button-shadow);
       pointer-events: auto;
     }
 
@@ -67,679 +83,364 @@
       align-items: center;
       gap: 10px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
     }
 
-    .logo span { color: var(--color-hope); }
-
-    .toggle-container {
-      display: inline-flex;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 999px;
-      padding: 4px;
-      gap: 6px;
-      box-shadow: var(--panel-shadow);
-    }
-
-    .toggle-btn {
-      border: none;
-      padding: 10px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      color: #d6d8e2;
-      background: transparent;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .toggle-btn.active[data-mode="crisis"] {
-      background: radial-gradient(circle at 20% 20%, rgba(255,77,77,0.9), rgba(255,77,77,0.7));
-      box-shadow: 0 10px 25px rgba(255,77,77,0.35);
-      color: #fff;
-    }
-
-    .toggle-btn.active[data-mode="hope"] {
-      background: linear-gradient(120deg, var(--color-hope), var(--color-hope-alt));
-      box-shadow: 0 10px 25px rgba(0,210,255,0.35);
-      color: #0b1020;
-    }
-
-    /* Info card */
-    .info-card {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 360px;
-      background: var(--bg-glass);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: var(--panel-shadow);
-      opacity: 0;
-      pointer-events: none;
-      transition: transform 0.45s ease, opacity 0.45s ease;
-      backdrop-filter: blur(16px);
-    }
-
-    .info-card.show { opacity: 1; pointer-events: auto; transform: translateY(-50%) translateY(0); }
-    .info-card.collapsed { padding: 14px 16px; }
-    .info-card.collapsed .info-body { display: none; }
-
-    .info-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .info-header-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .tag { padding: 6px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
-    .tag.crisis { background: rgba(255,77,77,0.2); color: var(--color-crisis); }
-    .tag.hope { background: rgba(0,210,255,0.2); color: var(--color-hope); }
-
-    h2 { margin: 10px 0 6px 0; font-size: 1.35rem; }
-    .subtitle { color: #9aa2c3; font-size: 0.9rem; margin-bottom: 8px; }
-    p { margin: 0 0 12px 0; color: #e7e9f4; line-height: 1.5; }
-
-    .collapse-btn {
-      background: rgba(255,255,255,0.06);
-      color: #d6d8e2;
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      pointer-events: auto;
-      white-space: nowrap;
-    }
-
-    .collapse-btn:hover { background: rgba(255,255,255,0.1); }
-    .collapse-btn:focus-visible { outline: 2px solid var(--color-hope); outline-offset: 2px; }
-
-    .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0; }
-    .stat-pill { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px; font-size: 0.85rem; }
-    .stat-label { opacity: 0.7; font-size: 0.78rem; }
-    .media-area { border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.35); min-height: 150px; }
-    .media-area img { width: 100%; display: block; object-fit: cover; }
-
-    .timeline-container {
-      pointer-events: auto;
-      background: linear-gradient(to top, rgba(3,7,18,0.92), transparent);
-      padding: 16px 12px 10px;
-      border-radius: 18px 18px 12px 12px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-    }
-
-    .timeline-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .timeline-label { text-align: center; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; color: #dce2ff; }
-
-    .timeline-container.collapsed .timeline { display: none; }
-    .timeline-container.collapsed .timeline-label { margin-bottom: 0; }
-
-    .timeline { display: flex; justify-content: center; gap: 10px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
-    .timeline::-webkit-scrollbar { height: 6px; }
-    .timeline::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-
-    .year-mark {
-      border: 1px solid rgba(255,255,255,0.14);
-      color: #cbd3f6;
-      padding: 10px 12px;
+    .logo-mark {
+      width: 36px;
+      height: 36px;
       border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-      cursor: pointer;
-      min-width: 68px;
-      text-align: center;
-      transition: all 0.25s ease;
+      background: linear-gradient(135deg, rgba(255, 77, 77, 0.7), rgba(0, 210, 255, 0.7));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .glass-panel {
       position: relative;
+      pointer-events: auto;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--button-shadow);
     }
 
-    .year-mark.active {
-      color: #fff;
+    .hero-text {
+      font-size: clamp(24px, 3vw, 32px);
       font-weight: 700;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+      margin: 0 0 6px;
+      letter-spacing: 0.5px;
     }
 
-    .year-mark[data-mode="crisis"].active { background: rgba(255,77,77,0.18); }
-    .year-mark[data-mode="hope"].active { background: rgba(0,210,255,0.18); }
+    .subtext { margin: 0; opacity: 0.8; line-height: 1.5; max-width: 620px; }
 
-    /* Helpers */
-    .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); }
-
-    .mobile-offset { transform: translateY(-12%); }
-
-    .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-
-    @media (max-width: 900px) {
-      .info-card { width: 300px; }
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
+
+    .mode-toggle {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      gap: 6px;
+      box-shadow: var(--button-shadow);
+    }
+
+    .mode-btn {
+      border: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.35s ease;
+    }
+
+    .mode-btn.active[data-mode="crisis"] {
+      background: linear-gradient(120deg, #ff4d4d, #7c1a1a);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(255, 77, 77, 0.35);
+    }
+
+    .mode-btn.active[data-mode="hope"] {
+      background: linear-gradient(120deg, #14cba8, #0f4c3a);
+      color: #e9fff9;
+      box-shadow: 0 10px 30px rgba(46, 204, 113, 0.35);
+    }
+
+    .legend {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.06);
+    }
+
+    .loading {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--button-shadow);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .dot-pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      position: relative;
+      box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.6);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.6); }
+      70% { box-shadow: 0 0 0 14px rgba(255, 77, 77, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+    }
+
+    .footer-note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      pointer-events: auto;
+      font-size: 14px;
+      align-self: flex-start;
+    }
+
+    .footer-note strong { letter-spacing: 0.5px; }
 
     @media (max-width: 768px) {
-      body { padding: 0; }
+      .ui-layer { padding: 10px; }
       header { flex-direction: column; align-items: flex-start; }
-      .info-card {
-        left: 0;
-        right: 0;
-        margin: 0 12px;
-        width: auto;
-        top: auto;
-        bottom: 10px;
-        transform: translateY(120%);
-        border-radius: 18px 18px 12px 12px;
-      }
-      .info-card.show { transform: translateY(0); }
-      .stats { grid-template-columns: 1fr; }
-      #globe-container { transform: translateY(-12%); }
-      #ui-layer { padding: 8px; }
-      header { border-radius: 14px; }
+      .glass-panel { padding: 16px; }
     }
   </style>
 </head>
 <body>
   <div id="globe-container">
-    <div id="globeViz"></div>
+    <div id="globe"></div>
+    <div class="atmosphere-overlay" id="atmosphereOverlay"></div>
+    <div class="loading" id="loading">
+      <div class="dot-pulse"></div>
+      Loading real-world geography...
+    </div>
   </div>
 
-  <div id="ui-layer">
+  <div class="ui-layer">
     <header>
-      <div class="logo">👣 <span>Blue Sky Returns</span></div>
-      <div class="toggle-container" aria-label="切換模式">
-        <button class="toggle-btn active" data-mode="crisis" id="btn-crisis">⚠️ CRISIS</button>
-        <button class="toggle-btn" data-mode="hope" id="btn-hope">🌏 HOPE</button>
+      <div class="logo">
+        <span class="logo-mark">🌌</span>
+        <div>
+          <div style="font-size:14px; opacity:0.7;">Blue Sky Returns</div>
+          <div style="font-weight:700;">Interactive Earth</div>
+        </div>
+      </div>
+      <div class="mode-toggle" aria-label="Toggle Crisis or Hope mode">
+        <button class="mode-btn active" data-mode="crisis" id="btn-crisis">⚠️ Crisis</button>
+        <button class="mode-btn" data-mode="hope" id="btn-hope">🌿 Hope</button>
       </div>
     </header>
 
-    <div class="info-card" id="infoPanel" aria-live="polite">
-      <div class="info-header">
-        <div class="info-header-left">
-          <span class="tag crisis" id="infoTag">CRISIS</span>
-          <span class="badge" id="infoDate">--</span>
+    <div class="glass-panel">
+      <h1 class="hero-text">A living atlas of crisis and hope.</h1>
+      <p class="subtext">Explore our planet in full 3D without texture downloads. Toggle between climate crisis and regenerative hope themes while the globe streams real Natural Earth polygons.</p>
+      <div class="control-row">
+        <div class="legend">
+          <span class="legend-dot" id="legendLand" style="background:#5c2222;"></span>
+          <span>Landmass polygons (real GeoJSON)</span>
         </div>
-        <button class="collapse-btn" id="infoCollapseBtn" type="button" aria-expanded="true">收合資訊</button>
-      </div>
-      <div class="info-body" id="infoBody">
-        <h2 id="infoTitle">Loading...</h2>
-        <div class="subtitle" id="infoSubtitle">---</div>
-        <p id="infoDesc">---</p>
-        <div class="stats" id="statList"></div>
-        <div class="media-area" id="mediaContainer"></div>
+        <div class="legend">
+          <span class="legend-dot" id="legendStroke" style="background:#ff4d4d;"></span>
+          <span>Country borders</span>
+        </div>
       </div>
     </div>
 
-    <div class="timeline-container" id="timelineContainer">
-      <div class="timeline-label-row">
-        <div class="timeline-label">年份時間軸</div>
-        <button class="collapse-btn" id="timelineCollapseBtn" type="button" aria-expanded="true">收合時間表</button>
-      </div>
-      <div class="timeline" id="timeline"></div>
+    <div class="footer-note">
+      <strong>Data:</strong> Natural Earth Admin 0 · Polygons rendered at altitude 0.005 with hover highlight.
     </div>
   </div>
 
   <script>
-    const svgDataUrl = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+    const GEOJSON_URL = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson';
 
-    const LAND_PATHS = `
-      <path d="M110 230 q30 -90 140 -90 q80 -5 120 70 q-10 50 -90 80 q-80 30 -150 -10 q-30 -20 -20 -50 z"/>
-      <path d="M250 270 q40 30 35 100 q-5 70 -45 90 q-30 -30 -15 -80 q10 -50 -15 -110 q25 -15 40 0 z"/>
-      <path d="M330 170 q100 -60 230 -20 q90 30 130 90 q10 30 -40 45 q-80 25 -200 30 q-110 5 -170 -10 q-50 -20 -30 -60 q15 -45 80 -75 z"/>
-      <path d="M410 230 q60 -20 110 10 q50 50 20 110 q-20 70 -50 90 q-50 10 -90 -50 q-35 -70 -10 -140 q20 -20 20 -20 z"/>
-      <path d="M700 310 q70 -20 110 25 q30 40 0 70 q-30 25 -90 10 q-50 -20 -30 -70 q5 -15 10 -35 z"/>
-      <path d="M40 430 q240 -70 420 -50 q240 25 420 -10 q40 25 -10 50 q-230 45 -410 25 q-220 -10 -390 -30 q-60 -10 -30 -45 z"/>
-      <path d="M210 130 q60 -30 100 -5 q20 30 -10 65 q-40 25 -90 -10 q-10 -25 0 -50 z"/>
-      <path d="M372 150 q12 -12 28 -6 q6 18 -16 26 q-18 2 -14 -20 z"/>
-      <path d="M640 210 q16 -12 36 -6 q12 22 -14 32 q-22 4 -22 -26 z"/>
-      <path d="M648 250 q20 8 18 38 q-18 16 -26 -6 q-2 -20 8 -32 z"/>
-      <path d="M674 276 q32 0 36 34 q-8 26 -38 26 q-30 -4 -24 -32 q4 -22 26 -28 z"/>
-      <path d="M730 274 q44 0 66 22 q12 34 -26 44 q-46 10 -66 -20 q-6 -22 26 -46 z"/>
-      <path d="M832 344 q22 8 18 26 q-18 16 -34 2 q-12 -14 16 -28 z"/>
-      <path d="M498 304 q26 10 16 40 q-12 26 -32 16 q-18 -12 -8 -34 q8 -18 24 -22 z"/>
-      <path d="M226 224 q18 6 24 18 q-10 14 -24 6 q-10 -10 0 -24 z"/>
-      <path d="M144 258 q12 -4 20 6 q-6 12 -18 10 q-10 -6 -2 -16 z"/>
-    `;
-
-    const buildGlobeTexture = ({ id, oceanStops, landStops, coastline, highlight, ice }) => svgDataUrl(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-        <defs>
-          <linearGradient id="${id}-ocean" x1="0%" y1="0%" x2="100%" y2="50%">
-            <stop offset="0%" stop-color="${oceanStops[0]}"/>
-            <stop offset="50%" stop-color="${oceanStops[1]}"/>
-            <stop offset="100%" stop-color="${oceanStops[2]}"/>
-          </linearGradient>
-          <radialGradient id="${id}-land" cx="40%" cy="45%" r="70%">
-            <stop offset="0%" stop-color="${landStops[0]}"/>
-            <stop offset="50%" stop-color="${landStops[1]}"/>
-            <stop offset="100%" stop-color="${landStops[2]}"/>
-          </radialGradient>
-        </defs>
-        <rect width="1024" height="512" fill="url(#${id}-ocean)"/>
-        <rect width="1024" height="512" fill="url(#${id}-land)" opacity="0.12"/>
-        <g fill="url(#${id}-land)" stroke="${coastline}" stroke-width="1.4" stroke-opacity="0.6">
-          ${LAND_PATHS}
-        </g>
-        <g fill="${highlight}" opacity="0.2">
-          ${LAND_PATHS}
-        </g>
-        <path d="M0 36 q140 26 320 6 q160 -18 320 -12 q200 10 384 34 L1024 0 L0 0 Z" fill="${ice}" opacity="0.35"/>
-        <path d="M12 428 q240 -72 420 -52 q230 22 420 -10 q70 24 -12 60 q-230 44 -410 24 q-240 -16 -390 -32 q-50 -10 -28 -40 z" fill="${ice}" opacity="0.28"/>
-      </svg>
-    `);
-
-    const TEXTURE_DATA = {
-      crisisGlobe: buildGlobeTexture({
-        id: 'crisis',
-        oceanStops: ['#04070f', '#0b1427', '#0e182d'],
-        landStops: ['#4e342e', '#5c4439', '#8a5f3f'],
-        coastline: '#f7d7a0',
-        highlight: '#ffcf6b',
-        ice: '#8fb2d9'
-      }),
-      hopeGlobe: buildGlobeTexture({
-        id: 'hope',
-        oceanStops: ['#063a65', '#0b6a8f', '#0c89a0'],
-        landStops: ['#6bd992', '#4ebc6f', '#27824b'],
-        coastline: '#d7f2ce',
-        highlight: '#c0f7c9',
-        ice: '#bfe6ff'
-      }),
-      clouds: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <g fill="white" fill-opacity="0.22">
-            <ellipse cx="180" cy="120" rx="140" ry="60"/>
-            <ellipse cx="460" cy="90" rx="180" ry="70"/>
-            <ellipse cx="760" cy="140" rx="200" ry="80"/>
-            <ellipse cx="260" cy="320" rx="190" ry="70" fill-opacity="0.18"/>
-            <ellipse cx="640" cy="300" rx="210" ry="90" fill-opacity="0.2"/>
-          </g>
-        </svg>
-      `),
-      bump: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <defs>
-            <linearGradient id="bumpGradient" x1="0%" x2="100%">
-              <stop offset="0%" stop-color="#444"/>
-              <stop offset="50%" stop-color="#555"/>
-              <stop offset="100%" stop-color="#666"/>
-            </linearGradient>
-          </defs>
-          <rect width="1024" height="512" fill="url(#bumpGradient)"/>
-          <path d="M0,260 C140,220 260,260 400,230 C540,200 620,270 760,250 C900,230 950,270 1024,240 L1024,512 L0,512 Z" fill="#777" opacity="0.4"/>
-        </svg>
-      `),
-      specular: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <defs>
-            <linearGradient id="shine" x1="0%" x2="100%">
-              <stop offset="0%" stop-color="#888" stop-opacity="0.45"/>
-              <stop offset="50%" stop-color="#aaa" stop-opacity="0.7"/>
-              <stop offset="100%" stop-color="#666" stop-opacity="0.45"/>
-            </linearGradient>
-          </defs>
-          <rect width="1024" height="512" fill="url(#shine)"/>
-        </svg>
-      `),
-      background: svgDataUrl(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
-          <defs>
-            <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#060a1a"/>
-              <stop offset="100%" stop-color="#02040a"/>
-            </linearGradient>
-          </defs>
-          <rect width="1024" height="512" fill="url(#sky)"/>
-          <g fill="white" fill-opacity="0.8">
-            <circle cx="120" cy="80" r="2"/><circle cx="240" cy="140" r="1.5"/><circle cx="360" cy="60" r="2.3"/>
-            <circle cx="520" cy="120" r="1.8"/><circle cx="700" cy="90" r="2.5"/><circle cx="860" cy="130" r="1.6"/>
-            <circle cx="980" cy="70" r="2"/><circle cx="180" cy="260" r="1.2"/><circle cx="420" cy="230" r="1.5"/>
-            <circle cx="620" cy="200" r="1.4"/><circle cx="800" cy="240" r="1.3"/><circle cx="940" cy="210" r="1.6"/>
-          </g>
-        </svg>
-      `)
+    const THEMES = {
+      crisis: {
+        ocean: '#1a0505',
+        land: '#5c2222',
+        stroke: '#ff4d4d',
+        atmosphere: '#c54141',
+        background: ['#0b0303', '#120202'],
+        overlay: 'radial-gradient(circle at 50% 50%, rgba(197, 65, 65, 0.15), transparent 60%)'
+      },
+      hope: {
+        ocean: '#061836',
+        land: '#0f4c3a',
+        stroke: '#2ecc71',
+        atmosphere: '#2cb6ff',
+        background: ['#031022', '#020810'],
+        overlay: 'radial-gradient(circle at 50% 50%, rgba(44, 182, 255, 0.18), transparent 60%)'
+      }
     };
 
-    const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
-    const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
-    const TEXTURE_SETS = {
-      globe: {
-        crisis: {
-          desktop: TEXTURE_DATA.crisisGlobe,
-          mobile: TEXTURE_DATA.crisisGlobe
-        },
-        hope: {
-          desktop: TEXTURE_DATA.hopeGlobe,
-          mobile: TEXTURE_DATA.hopeGlobe
-        }
-      },
-      clouds: {
-        desktop: TEXTURE_DATA.clouds,
-        mobile: TEXTURE_DATA.clouds
-      },
-      bump: TEXTURE_DATA.bump,
-      specular: TEXTURE_DATA.specular,
-      background: TEXTURE_DATA.background
-    };
-
-    const COLORS = { crisis: '#FF4D4D', hope: '#00D2FF', hopeAlt: '#2ECC40' };
     const state = {
-      events: [],
-      filtered: [],
-      currentMode: 'crisis',
-      world: null,
-      clouds: null,
-      bumpMap: null,
-      specularMap: null,
-      cloudsMap: null,
-      initialView: { lat: 23.5, lng: 121.0, altitude: 2.5 },
-      currentYear: null,
-      infoCollapsed: false,
-      timelineCollapsed: false
+      mode: 'crisis',
+      globe: null,
+      polygons: [],
+      hoverPolygon: null,
+      textures: {}
     };
 
-    const loader = new THREE.TextureLoader();
-    loader.setCrossOrigin('anonymous');
-
-    const fetchJSON = async (path) => {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error('無法載入資料檔案');
-      return res.json();
+    const createSolidTexture = (color) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 2;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, 2, 2);
+      return canvas.toDataURL('image/png');
     };
 
-    const preloadImage = (url) => new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(url);
-      img.onerror = reject;
-      img.src = url;
-    });
+    const prepareTextures = () => {
+      state.textures.crisis = createSolidTexture(THEMES.crisis.ocean);
+      state.textures.hope = createSolidTexture(THEMES.hope.ocean);
+    };
 
-    const loadTexture = (url) => new Promise((resolve, reject) => {
-      loader.load(url, resolve, undefined, reject);
-    });
+    const applyTheme = (mode) => {
+      state.mode = mode;
+      const theme = THEMES[mode];
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+      document.getElementById('legendLand').style.background = theme.land;
+      document.getElementById('legendStroke').style.background = theme.stroke;
 
-    const buildTimeline = (events) => {
-      const timeline = document.getElementById('timeline');
-      timeline.innerHTML = '';
-      const years = Array.from(new Set(events.map(ev => ev.year))).sort((a,b) => a - b);
-      years.forEach(year => {
-        const item = document.createElement('button');
-        item.className = 'year-mark';
-        item.textContent = year;
-        item.dataset.year = year;
-        item.addEventListener('click', () => jumpToYear(year));
-        timeline.appendChild(item);
+      gsap.to(':root', {
+        duration: 0.8,
+        '--bg1': theme.background[0],
+        '--bg2': theme.background[1],
+        '--accent': theme.stroke,
+        '--accent-secondary': theme.land,
+        '--stroke': theme.stroke,
+        ease: 'power2.out'
       });
+
+      const overlay = document.getElementById('atmosphereOverlay');
+      overlay.style.background = theme.overlay;
+
+      if (state.globe) {
+        state.globe.globeImageUrl(state.textures[mode]);
+        state.globe.atmosphereColor(theme.atmosphere);
+        state.globe.polygonStrokeColor(() => theme.stroke);
+        state.globe.polygonCapColor((poly) => poly === state.hoverPolygon ? new THREE.Color(theme.stroke).offsetHSL(0, 0.1, 0.1) : theme.land);
+      }
     };
 
-    const highlightYear = (year) => {
-      document.querySelectorAll('.year-mark').forEach(btn => {
-        btn.classList.toggle('active', Number(btn.dataset.year) === Number(year));
-        btn.dataset.mode = state.currentMode;
-      });
+    const handleHover = (polygon) => {
+      state.hoverPolygon = polygon;
+      const theme = THEMES[state.mode];
+      state.globe.polygonCapColor((poly) => poly === state.hoverPolygon ? new THREE.Color(theme.stroke).offsetHSL(0, 0.15, 0.15) : theme.land);
     };
 
-    const attachCloudLayer = (globe) => {
-      const cloudGeo = new THREE.SphereGeometry(globe.getGlobeRadius() * 1.01, 64, 64);
-      const cloudMat = new THREE.MeshPhongMaterial({
-        map: state.cloudsMap,
-        transparent: true,
-        opacity: 0.4,
-        depthWrite: false
-      });
-      const clouds = new THREE.Mesh(cloudGeo, cloudMat);
-      clouds.renderOrder = 10;
-      globe.scene().add(clouds);
-      state.clouds = clouds;
-    };
-
-    const createPulse = () => {
-      const renderStep = () => {
-        const t = Date.now() * 0.004;
-        state.filtered.forEach(d => {
-          const obj = d.__threeObj;
-          if (!obj) return;
-          const scale = 0.85 + 0.25 * Math.sin(t + d.lat);
-          obj.scale.setScalar(scale);
-          const material = obj.children?.[0]?.material || obj.material;
-          if (material) material.opacity = 0.8 + 0.2 * Math.sin(t + d.lng);
+    const initGlobe = async () => {
+      const globe = Globe()(document.getElementById('globe'))
+        .backgroundColor('rgba(0,0,0,0)')
+        .atmosphereAltitude(0.18)
+        .polygonsTransitionDuration(400)
+        .polygonAltitude(() => 0.005)
+        .polygonSideColor(() => 'rgba(255,255,255,0.06)')
+        .polygonCapColor(() => THEMES[state.mode].land)
+        .polygonStrokeColor(() => THEMES[state.mode].stroke)
+        .onPolygonHover(handleHover)
+        .onPolygonClick((polygon) => {
+          if (!polygon || !polygon.properties) return;
+          const name = polygon.properties.ADMIN || polygon.properties.name || 'Unknown';
+          const region = polygon.properties.CONTINENT || 'Earth';
+          const title = `${name}, ${region}`;
+          gsap.to(globe.pointOfView(), {
+            duration: 1.2,
+            lat: polygon.center ? polygon.center.lat : 0,
+            lng: polygon.center ? polygon.center.lng : 0,
+            altitude: 1.8,
+            onUpdate: function () {
+              globe.pointOfView({ lat: this.targets().lat, lng: this.targets().lng, altitude: this.targets().altitude });
+            },
+            ease: 'power2.out'
+          });
+          const note = document.querySelector('.hero-text');
+          note.textContent = `Viewing ${title}`;
         });
-        if (state.clouds) state.clouds.rotation.y += 0.0006;
-      };
 
-      if (typeof state.world.onRender === 'function') {
-        state.world.onRender(renderStep);
-      } else {
-        console.warn('onRender not available; falling back to requestAnimationFrame');
-        const fallbackLoop = () => {
-          renderStep();
-          requestAnimationFrame(fallbackLoop);
-        };
-        fallbackLoop();
-      }
-    };
-
-    const applyMode = (mode) => {
-      state.currentMode = mode;
-      document.body.dataset.mode = mode;
-      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
-      const targetUrl = TEXTURE_SETS.globe[mode][QUALITY];
-      gsap.to('#globe-container', { opacity: 0.5, duration: 0.35, onComplete: () => {
-        state.world.globeImageUrl(targetUrl);
-        gsap.to('#globe-container', { opacity: 1, duration: 0.35 });
-      }});
-      renderPoints();
-      refreshTimeline();
-      const active = state.filtered[0];
-      if (active) {
-        highlightYear(active.year);
-        showInfo(active);
-      } else {
-        document.getElementById('infoPanel').classList.remove('show');
-      }
-    };
-
-    const renderPoints = () => {
-      state.filtered = state.events.filter(ev => ev.mode === state.currentMode);
-      state.world.pointsData(state.filtered);
-    };
-
-    const refreshTimeline = () => {
-      buildTimeline(state.filtered);
-      const fallbackYear = state.filtered[0]?.year;
-      if (fallbackYear) {
-        state.currentYear = fallbackYear;
-        highlightYear(fallbackYear);
-      }
-    };
-
-    const buildPointObject = (d) => {
-      const color = d.mode === 'crisis' ? COLORS.crisis : COLORS.hope;
-      const glow = new THREE.Mesh(
-        new THREE.SphereGeometry(0.6, 16, 16),
-        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.25 })
-      );
-      const core = new THREE.Mesh(
-        new THREE.SphereGeometry(0.28, 12, 12),
-        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9 })
-      );
-      core.position.set(0, 0, 0);
-      glow.add(core);
-      return glow;
-    };
-
-    const showInfo = (data) => {
-      if (!data) return;
-      state.world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
-      const card = document.getElementById('infoPanel');
-      const tag = document.getElementById('infoTag');
-      tag.className = `tag ${data.mode}`;
-      tag.textContent = data.mode === 'crisis' ? 'CRISIS' : 'HOPE';
-      document.getElementById('infoTitle').textContent = `${data.year} · ${data.title}`;
-      document.getElementById('infoSubtitle').textContent = data.category === 'disaster' ? '危機事件' : '解方行動';
-      document.getElementById('infoDesc').textContent = data.description;
-      document.getElementById('infoDate').textContent = data.date;
-
-      const statList = document.getElementById('statList');
-      statList.innerHTML = '';
-      (data.stats || []).forEach(item => {
-        const block = document.createElement('div');
-        block.className = 'stat-pill';
-        block.innerHTML = `<div class="stat-label">${item.label}</div><div><strong>${item.value}</strong></div>`;
-        statList.appendChild(block);
-      });
-
-      const mediaContainer = document.getElementById('mediaContainer');
-      mediaContainer.innerHTML = '';
-      if (data.media?.type === 'instagram' && data.media.url) {
-        const blockquote = document.createElement('blockquote');
-        blockquote.className = 'instagram-media';
-        blockquote.setAttribute('data-instgrm-permalink', data.media.url);
-        blockquote.setAttribute('data-instgrm-version', '14');
-        blockquote.style.margin = '0 auto';
-        mediaContainer.appendChild(blockquote);
-        setTimeout(() => window.instgrm?.Embeds?.process(), 50);
-      } else if (data.media?.type === 'image' && data.media.url) {
-        const img = document.createElement('img');
-        img.src = data.media.url;
-        img.alt = data.title;
-        mediaContainer.appendChild(img);
-      } else {
-        mediaContainer.innerHTML = '<div style="padding:16px;opacity:0.7;">無媒體資料</div>';
-      }
-
-      card.classList.add('show');
-    };
-
-    const jumpToYear = (year) => {
-      state.currentYear = year;
-      highlightYear(year);
-      const target = state.filtered.find(ev => ev.year === year);
-      if (target) showInfo(target);
-    };
-
-    const setInfoCollapsed = (collapsed) => {
-      state.infoCollapsed = collapsed;
-      const panel = document.getElementById('infoPanel');
-      panel.classList.toggle('collapsed', collapsed);
-      document.getElementById('infoCollapseBtn').textContent = collapsed ? '展開資訊' : '收合資訊';
-      document.getElementById('infoCollapseBtn').setAttribute('aria-expanded', String(!collapsed));
-      document.getElementById('infoBody').setAttribute('aria-hidden', String(collapsed));
-    };
-
-    const setTimelineCollapsed = (collapsed) => {
-      state.timelineCollapsed = collapsed;
-      const container = document.getElementById('timelineContainer');
-      container.classList.toggle('collapsed', collapsed);
-      document.getElementById('timelineCollapseBtn').textContent = collapsed ? '展開時間表' : '收合時間表';
-      document.getElementById('timelineCollapseBtn').setAttribute('aria-expanded', String(!collapsed));
-    };
-
-    const attachUIEvents = () => {
-      document.getElementById('btn-crisis').addEventListener('click', () => applyMode('crisis'));
-      document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
-      document.getElementById('infoCollapseBtn').addEventListener('click', () => setInfoCollapsed(!state.infoCollapsed));
-      document.getElementById('timelineCollapseBtn').addEventListener('click', () => setTimelineCollapsed(!state.timelineCollapsed));
-    };
-
-    const configureControls = () => {
-      const controls = state.world.controls();
+      const controls = globe.controls();
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.8;
+      controls.autoRotateSpeed = 0.4;
       controls.enableDamping = true;
-      controls.dampingFactor = 0.05;
-      controls.enablePan = true;
-      controls.enableZoom = true;
-      controls.enableRotate = true;
-      controls.rotateSpeed = 0.8;
+      controls.dampingFactor = 0.04;
 
-      let resumeHandle;
-      const pauseRotate = () => {
-        controls.autoRotate = false;
-        clearTimeout(resumeHandle);
+      const resizer = () => {
+        globe.width(window.innerWidth);
+        globe.height(window.innerHeight);
       };
-      const resumeRotate = () => {
-        clearTimeout(resumeHandle);
-        resumeHandle = setTimeout(() => { controls.autoRotate = true; }, 2500);
-      };
+      window.addEventListener('resize', resizer);
+      resizer();
 
-      controls.addEventListener('start', pauseRotate);
-      controls.addEventListener('end', resumeRotate);
+      state.globe = globe;
     };
 
-    const prepareData = (data) => {
-      state.events = data.events.map(ev => ({
-        ...ev,
-        lat: ev.coordinates.lat,
-        lng: ev.coordinates.lng
-      }));
-      if (data.config?.initial_view) state.initialView = data.config.initial_view;
+    const enrichPolygons = (features) => {
+      return features.map((feature) => {
+        const coords = feature?.properties?.LABEL_Y || feature?.properties?.LAT || 0;
+        const lng = feature?.properties?.LABEL_X || feature?.properties?.LONG || 0;
+        const center = { lat: Number(coords) || 0, lng: Number(lng) || 0 };
+        return { ...feature, center };
+      });
+    };
+
+    const loadGeoData = async () => {
+      const response = await fetch(GEOJSON_URL);
+      if (!response.ok) throw new Error('Failed to load GeoJSON.');
+      const data = await response.json();
+      const features = data.features || [];
+      return enrichPolygons(features);
     };
 
     const bootstrap = async () => {
-      const uiLayer = document.getElementById('ui-layer');
-      uiLayer.style.pointerEvents = 'none';
-      const data = await fetchJSON('data.json');
-      prepareData(data);
-      await Promise.all([
-        preloadImage(TEXTURE_SETS.globe.crisis[QUALITY]),
-        preloadImage(TEXTURE_SETS.globe.hope[QUALITY])
-      ]);
-      const [bump, specular, clouds] = await Promise.all([
-        loadTexture(TEXTURE_SETS.bump),
-        loadTexture(TEXTURE_SETS.specular),
-        loadTexture(TEXTURE_SETS.clouds[QUALITY])
-      ]);
-      state.bumpMap = bump;
-      state.specularMap = specular;
-      state.cloudsMap = clouds;
+      prepareTextures();
+      await initGlobe();
+      applyTheme('crisis');
 
-      state.world = Globe()(document.getElementById('globeViz'));
-      state.world
-        .globeImageUrl(TEXTURE_SETS.globe.crisis[QUALITY])
-        .bumpImageUrl(TEXTURE_SETS.bump)
-        .backgroundImageUrl(TEXTURE_SETS.background)
-        .pointAltitude(0.02)
-        .pointRadius(0.6)
-        .pointLabel(d => `<div style="padding:6px 8px;">${d.title}</div>`)
-        .pointColor(d => d.mode === 'crisis' ? COLORS.crisis : COLORS.hope)
-        .onPointClick(showInfo)
-        .onGlobeClick(() => document.getElementById('infoPanel').classList.remove('show'));
+      const polygons = await loadGeoData();
+      state.polygons = polygons;
+      state.globe
+        .globeImageUrl(state.textures[state.mode])
+        .atmosphereColor(THEMES[state.mode].atmosphere)
+        .polygonsData(polygons)
+        .polygonLabel((d) => `${d.properties.ADMIN || d.properties.name}`);
 
-      if (typeof state.world.pointThreeObject === 'function') {
-        state.world
-          .pointThreeObject(buildPointObject)
-          .pointThreeObjectExtend(true);
-      } else {
-        console.warn('pointThreeObject not available on this Globe build; falling back to default point rendering.');
-      }
-
-      configureControls();
-
-      const material = state.world.globeMaterial();
-      material.bumpMap = state.bumpMap;
-      material.specularMap = state.specularMap;
-      material.specular = new THREE.Color('#888');
-      material.shininess = 6;
-
-      attachCloudLayer(state.world);
-      createPulse();
-      attachUIEvents();
-
-      state.world.pointOfView({
-        lat: state.initialView.lat,
-        lng: state.initialView.lng,
-        altitude: (QUALITY === 'mobile') ? state.initialView.altitude + 0.6 : state.initialView.altitude
-      }, 0);
-
-      renderPoints();
-      refreshTimeline();
-      const firstEvent = state.filtered[0];
-      if (firstEvent) showInfo(firstEvent);
-
-      setInfoCollapsed(IS_MOBILE);
-      setTimelineCollapsed(IS_MOBILE);
-
-      uiLayer.style.pointerEvents = 'auto';
+      document.getElementById('loading').style.display = 'none';
     };
 
-    bootstrap().catch(err => {
+    document.getElementById('btn-crisis').addEventListener('click', () => applyTheme('crisis'));
+    document.getElementById('btn-hope').addEventListener('click', () => applyTheme('hope'));
+
+    bootstrap().catch((err) => {
       console.error(err);
-      alert('初始化失敗：' + err.message);
+      document.getElementById('loading').textContent = err.message;
     });
   </script>
 </body>
