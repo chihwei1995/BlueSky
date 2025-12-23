@@ -242,25 +242,125 @@
   </div>
 
   <script>
+    const svgDataUrl = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+
+    const TEXTURE_DATA = {
+      crisisGlobe: svgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+          <defs>
+            <radialGradient id="nightGlow" cx="30%" cy="35%" r="70%">
+              <stop offset="0%" stop-color="#0c1226"/>
+              <stop offset="60%" stop-color="#0a0f1d"/>
+              <stop offset="100%" stop-color="#050812"/>
+            </radialGradient>
+            <linearGradient id="cityLights" x1="0%" x2="100%" y1="0%" y2="100%">
+              <stop offset="0%" stop-color="#2b8eff" stop-opacity="0.05"/>
+              <stop offset="50%" stop-color="#6ae2ff" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#ffb347" stop-opacity="0.18"/>
+            </linearGradient>
+          </defs>
+          <rect width="1024" height="512" fill="url(#nightGlow)"/>
+          <path d="M0,220 C140,260 260,180 400,200 C540,220 620,300 760,280 C900,260 950,300 1024,270 L1024,512 L0,512 Z" fill="url(#cityLights)" opacity="0.8"/>
+          <path d="M20,120 q80 40 160 0 t160 0 t160 0 t160 0 t160 0 l0 40 q-80 30 -160 0 t-160 0 t-160 0 t-160 0 t-160 0 z" fill="#14233d" opacity="0.35"/>
+          <g fill="#ffcf6b" opacity="0.25">
+            <circle cx="240" cy="220" r="2"/><circle cx="380" cy="190" r="2.5"/><circle cx="520" cy="250" r="2.2"/><circle cx="680" cy="210" r="2.4"/><circle cx="820" cy="260" r="2.1"/>
+          </g>
+        </svg>
+      `),
+      hopeGlobe: svgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+          <defs>
+            <linearGradient id="ocean" x1="0%" x2="100%" y1="0%" y2="0%">
+              <stop offset="0%" stop-color="#0c3b60"/>
+              <stop offset="50%" stop-color="#0b6a8f"/>
+              <stop offset="100%" stop-color="#0c3b60"/>
+            </linearGradient>
+            <radialGradient id="land" cx="45%" cy="45%" r="70%">
+              <stop offset="0%" stop-color="#6bd992" stop-opacity="0.9"/>
+              <stop offset="50%" stop-color="#42c070" stop-opacity="0.75"/>
+              <stop offset="100%" stop-color="#0b6a8f" stop-opacity="0.25"/>
+            </radialGradient>
+          </defs>
+          <rect width="1024" height="512" fill="url(#ocean)"/>
+          <path d="M0,260 C140,220 260,260 400,230 C540,200 620,270 760,250 C900,230 950,270 1024,240 L1024,512 L0,512 Z" fill="url(#land)"/>
+          <path d="M60,160 q80 60 160 0 t160 0 t160 0 t160 0 t160 0 l0 35 q-80 45 -160 0 t-160 0 t-160 0 t-160 0 t-160 0 z" fill="#1f8761" opacity="0.55"/>
+          <path d="M120,320 q80 -40 160 0 t160 0 t160 0 t160 0 t160 0 l0 40 q-80 30 -160 0 t-160 0 t-160 0 t-160 0 t-160 0 z" fill="#1d9c6f" opacity="0.4"/>
+        </svg>
+      `),
+      clouds: svgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+          <g fill="white" fill-opacity="0.22">
+            <ellipse cx="180" cy="120" rx="140" ry="60"/>
+            <ellipse cx="460" cy="90" rx="180" ry="70"/>
+            <ellipse cx="760" cy="140" rx="200" ry="80"/>
+            <ellipse cx="260" cy="320" rx="190" ry="70" fill-opacity="0.18"/>
+            <ellipse cx="640" cy="300" rx="210" ry="90" fill-opacity="0.2"/>
+          </g>
+        </svg>
+      `),
+      bump: svgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+          <defs>
+            <linearGradient id="bumpGradient" x1="0%" x2="100%">
+              <stop offset="0%" stop-color="#444"/>
+              <stop offset="50%" stop-color="#555"/>
+              <stop offset="100%" stop-color="#666"/>
+            </linearGradient>
+          </defs>
+          <rect width="1024" height="512" fill="url(#bumpGradient)"/>
+          <path d="M0,260 C140,220 260,260 400,230 C540,200 620,270 760,250 C900,230 950,270 1024,240 L1024,512 L0,512 Z" fill="#777" opacity="0.4"/>
+        </svg>
+      `),
+      specular: svgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+          <defs>
+            <linearGradient id="shine" x1="0%" x2="100%">
+              <stop offset="0%" stop-color="#888" stop-opacity="0.45"/>
+              <stop offset="50%" stop-color="#aaa" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#666" stop-opacity="0.45"/>
+            </linearGradient>
+          </defs>
+          <rect width="1024" height="512" fill="url(#shine)"/>
+        </svg>
+      `),
+      background: svgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+          <defs>
+            <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#060a1a"/>
+              <stop offset="100%" stop-color="#02040a"/>
+            </linearGradient>
+          </defs>
+          <rect width="1024" height="512" fill="url(#sky)"/>
+          <g fill="white" fill-opacity="0.8">
+            <circle cx="120" cy="80" r="2"/><circle cx="240" cy="140" r="1.5"/><circle cx="360" cy="60" r="2.3"/>
+            <circle cx="520" cy="120" r="1.8"/><circle cx="700" cy="90" r="2.5"/><circle cx="860" cy="130" r="1.6"/>
+            <circle cx="980" cy="70" r="2"/><circle cx="180" cy="260" r="1.2"/><circle cx="420" cy="230" r="1.5"/>
+            <circle cx="620" cy="200" r="1.4"/><circle cx="800" cy="240" r="1.3"/><circle cx="940" cy="210" r="1.6"/>
+          </g>
+        </svg>
+      `)
+    };
+
     const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
     const TEXTURE_SETS = {
       globe: {
         crisis: {
-          desktop: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/earth_night_lrg.png',
-          mobile: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/earth_night_2048.png'
+          desktop: TEXTURE_DATA.crisisGlobe,
+          mobile: TEXTURE_DATA.crisisGlobe
         },
         hope: {
-          desktop: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57747/land_shallow_topo_4096.jpg',
-          mobile: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73909/world.topo.bathy.200412.3x2048x1024.jpg'
+          desktop: TEXTURE_DATA.hopeGlobe,
+          mobile: TEXTURE_DATA.hopeGlobe
         }
       },
       clouds: {
-        desktop: 'https://raw.githubusercontent.com/turban/webgl-earth/master/images/fair_clouds_4k.png',
-        mobile: 'https://raw.githubusercontent.com/turban/webgl-earth/master/images/fair_clouds_2k.png'
+        desktop: TEXTURE_DATA.clouds,
+        mobile: TEXTURE_DATA.clouds
       },
-      bump: 'https://unpkg.com/three-globe/example/img/earth-topology.png',
-      specular: 'https://unpkg.com/three-globe/example/img/earth-water.png',
-      background: 'https://unpkg.com/three-globe/example/img/night-sky.png'
+      bump: TEXTURE_DATA.bump,
+      specular: TEXTURE_DATA.specular,
+      background: TEXTURE_DATA.background
     };
 
     const COLORS = { crisis: '#FF4D4D', hope: '#00D2FF', hopeAlt: '#2ECC40' };
@@ -278,6 +378,7 @@
     };
 
     const loader = new THREE.TextureLoader();
+    loader.setCrossOrigin('anonymous');
 
     const fetchJSON = async (path) => {
       const res = await fetch(path);
