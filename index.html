@@ -105,12 +105,37 @@
       color: #ffffff; 
     }
     
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     /* PJC logo 圖樣大小（可自行調） */
     .pjc-logo{
-      width: 26px;
-      height: 26px;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
-      border-radius: 6px;
+      border-radius: 8px;
+    }
+
+    .logo-divider {
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 600;
+    }
+
+    .about-link {
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      padding: 4px 6px;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .about-link:hover {
+      background: rgba(255, 255, 255, 0.12);
     }
     
     /* hover 小效果（可選） */
@@ -521,10 +546,14 @@
   <div id="ui-layer">
     <header>
       
-        <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" aria-label="前往 PJC 網站">
-          <img src="PJC_LOGO.PNG" alt="PJC logo" class="pjc-logo" />
-          <span class="logo-text">Blue Sky Returns</span>
-        </a>
+        <div class="logo-area">
+          <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" aria-label="前往 PJC 網站">
+            <img src="PJC_LOGO.PNG" alt="PJC logo" class="pjc-logo" />
+            <span class="logo-text">Blue Sky Returns</span>
+          </a>
+          <span class="logo-divider" aria-hidden="true">｜</span>
+          <a class="about-link" href="blueskyreturns/index.html" aria-label="關於 Blue Sky Returns">about</a>
+        </div>
 
       <div class="header-actions">
         <button class="ghost-btn" id="anchorToggle" type="button">📌 時間線</button>
