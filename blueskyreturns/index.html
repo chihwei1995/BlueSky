@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>一步・藍天 BLUE SKY RETURNS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f172a;
+      --ink-soft: #334155;
+      --accent: #0ea5e9;
+      --accent-dark: #0369a1;
+      --surface: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      background: var(--surface);
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(248, 250, 252, 0.92);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .logo img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fff;
+      padding: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--accent-dark);
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 6px 16px rgba(14, 165, 233, 0.15);
+      transform: translateY(-1px);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 64px;
+      display: grid;
+      gap: 32px;
+    }
+
+    .hero {
+      background: linear-gradient(120deg, rgba(14, 165, 233, 0.08), rgba(56, 189, 248, 0.16));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 40px);
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--ink-soft);
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .card h2,
+    .card h3 {
+      margin-top: 0;
+    }
+
+    .card ul {
+      padding-left: 18px;
+      margin: 12px 0 0;
+      color: var(--ink-soft);
+    }
+
+    .infographic {
+      display: grid;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .infographic img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .infographic caption,
+    .infographic p {
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    .contact {
+      display: grid;
+      gap: 16px;
+    }
+
+    .contact a {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px 16px 40px;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 720px) {
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      .hero { padding: 24px; }
+      main { padding: 32px 20px 56px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer">
+        <img src="../PJC_LOGO.PNG" alt="JCI Peninsula logo" />
+        <span>一步・藍天 BLUE SKY RETURNS</span>
+      </a>
+      <a class="nav-link" href="../index.html">← 回到主頁</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>國際事務組｜一步・藍天 BLUE SKY RETURNS</h1>
+      <p>
+        JCI Peninsula（半島青年商會）的「一步・藍天 BLUE SKY RETURNS」項目，旨在積極應對全球氣候變化導致極端天氣日益頻繁的嚴峻挑戰，並強調改變現代生活習慣是有效應對氣候變化的關鍵所在。
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>「一步・藍天」項目背景與目的</h2>
+      <p>此國際事務旗艦工作計劃的設立，是為了應對以下挑戰：</p>
+      <ul>
+        <li>喚起公眾對氣候變化直接引致極端天氣事件頻發的廣泛關注。</li>
+        <li>強調並教育公眾有關現代生活方式對氣候變化所造成的深遠影響。</li>
+      </ul>
+    </section>
+
+    <section class="card-grid">
+      <article class="card">
+        <h3>項目內容和重點活動</h3>
+        <ul>
+          <li><strong>2024 十大極端天氣選舉：</strong> 透過公眾參與提升對極端天氣影響的認識。</li>
+          <li><strong>開幕典禮：</strong> 正式啟動項目，廣邀社會各界共同關注氣候議題。</li>
+          <li><strong>模擬聯合國氣候變化大會：</strong> 體驗國際氣候談判，深化對全球合作重要性的理解。</li>
+          <li><strong>閉幕典禮及展覽：</strong> 總結成果，展示進展並展望未來行動方向。</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>預期成效和社會影響</h3>
+        <ul>
+          <li>加深公眾對氣候變化及其引致極端天氣的認識。</li>
+          <li>廣泛傳播氣候保護意識，倡導可持續低碳生活方式。</li>
+          <li>推動建立長期合作機制，持續推動香港及全球的氣候保護行動。</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="infographic">
+      <h2>項目資訊圖</h2>
+      <img
+        src="https://hkpjc.org/wp-content/uploads/2025/05/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png"
+        alt="一步・藍天 BLUE SKY RETURNS 項目資訊圖"
+      />
+      <p>項目重點與活動摘要圖，呈現氣候行動的核心資訊。</p>
+    </section>
+
+    <section class="card">
+      <h2>如何支持我們的項目</h2>
+      <p>
+        您的參與對我們的氣候行動至關重要！請密切留意 JCI Peninsula（半島青年商會）的社交媒體，獲取最新動向，報名參與亞太大會相關活動，親身蒞臨我們日後舉辦的工作坊和座談會，並積極參與我們舉辦的模擬聯合國氣候變化大會，共同為保護我們的藍天而努力！
+      </p>
+    </section>
+
+    <section class="card contact">
+      <h2>保持聯繫（Stay Connected with JCI Peninsula）</h2>
+      <p>更多詳情及最新動態，請關注半島青年商會（JCI Peninsula）的官方社交平台：</p>
+      <ul>
+        <li><a href="https://www.facebook.com/hkpjc" target="_blank" rel="noopener noreferrer">Facebook 專頁：JCI Peninsula Facebook</a></li>
+        <li><a href="https://www.instagram.com/hkpjc/" target="_blank" rel="noopener noreferrer">Instagram 專頁：JCI Peninsula Instagram</a></li>
+        <li><a href="https://www.linkedin.com/company/jci-peninsula/" target="_blank" rel="noopener noreferrer">LinkedIn 專頁：JCI Peninsula LinkedIn</a></li>
+      </ul>
+      <p>
+        JCI Peninsula 半島青年商會<br />
+        香港干諾道西21至24號<br />
+        海景商業大廈21字樓
+      </p>
+      <p>
+        電話：(852) 2543 8913<br />
+        傳真：(852) 3007 8718<br />
+        電郵：info@hkpjc.org
+      </p>
+    </section>
+  </main>
+
+  <footer>Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). 保留一切權利。</footer>
+</body>
+</html>
