@@ -237,6 +237,11 @@
     .anchor-meta { color: #9aa2c3; font-size: 0.9rem; margin: 4px 0; }
     .anchor-points { margin: 0; color: #dfe4ff; font-size: 0.92rem; line-height: 1.45; }
     .anchor-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .anchor-ig-section { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+    .anchor-ig-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+    .anchor-ig-card { flex: 0 0 320px; max-width: 320px; }
+    .anchor-ig-card.hidden { display: none; }
+    .anchor-ig-toggle { align-self: flex-start; }
 
     .tiny-btn {
       background: rgba(255,255,255,0.08);
@@ -705,7 +710,9 @@
           subtitle: 'Scan the QR code to open each timeline item with photos and posts. Scroll to explore.',
           close: '✕',
           qr: 'QR code',
-          locate: 'Locate'
+          locate: 'Locate',
+          showMore: 'Show more',
+          showLess: 'Show less'
         },
         qr: {
           title: 'Timeline QR',
@@ -760,7 +767,9 @@
           subtitle: '掃 QRcode 可直接打開時間點、照片與貼文頁面，滑動查看',
           close: '✕',
           qr: 'QRcode',
-          locate: '定位'
+          locate: '定位',
+          showMore: '展開更多',
+          showLess: '收合'
         },
         qr: {
           title: '時間點 QR',
@@ -980,154 +989,200 @@
     const ANCHORS = {
       en: [
         {
-          id: 'anchor-2024-monitor',
+          id: 'anchor-2024-observation',
           title: '2024 | Monitoring & Documentation',
-          meta: 'Real-time tracking, cases + data + impact',
+          meta: 'Single-event focus with data and impact tracking',
           points: [
-            'Launch the One Step Blue Sky program to track extreme weather year-round',
-            'Focus on heavy rain, floods, heatwaves, droughts, cold snaps, storms, and more',
-            'Educate the public through single-event storytelling with data and impact'
+            'Launch One Step Blue Sky with a focus on individual extreme weather events',
+            'Build climate observation records through data, visuals, and impacts',
+            'Document each case as a public-facing climate log'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C-C2Ao8vq8P/',
+            'https://www.instagram.com/p/C9wIiMIhwY-/',
+            'https://www.instagram.com/p/C9ZiOZ-NNR2/',
+            'https://www.instagram.com/p/C8_yyagv87R/',
+            'https://www.instagram.com/p/C8WlkFMB--7/',
+            'https://www.instagram.com/p/C7JF2sOPAnv/',
+            'https://www.instagram.com/p/C63WPmMPh6O/',
+            'https://www.instagram.com/p/C6BQzMdtcVW/'
           ]
         },
         {
           id: 'anchor-2024-awareness',
-          title: '2024 | Public Awareness',
-          meta: 'Social engagement and Hong Kong daily life links',
+          title: '2024 | Public Awareness & Engagement',
+          meta: 'Connect climate trends with daily life in Hong Kong',
           points: [
-            'Share climate updates on social platforms and engage audiences',
-            'Connect global extreme climate trends with local signals like rainstorm warnings',
-            'Prompt reflection on whether extreme weather is the new normal'
-          ]
-        },
-        {
-          id: 'anchor-2024-film',
-          title: '2024 | Film Screening',
-          meta: '🎬 Twisters screening & dialogue',
-          points: [
-            'Host an extreme-weather film screening of Twisters',
-            'Facilitate post-screening talks on science and everyday impacts'
+            'Publish climate logs and cultural media to spark everyday connections',
+            'Link global climate signals to local routines and public warnings',
+            'Invite reflection on how extreme weather shapes daily life'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C7REEP3vwe-/',
+            'https://www.instagram.com/p/C6nVBzQvsLm/',
+            'https://www.instagram.com/p/C6OHdsfvejs/',
+            'https://www.instagram.com/p/C6I91dUBsF9/',
+            'https://www.instagram.com/p/C5k6sjUPWZr/',
+            'https://www.instagram.com/p/C5TMOz-PwnH/',
+            'https://www.instagram.com/p/C5A2sRrvLTC/'
           ]
         },
         {
           id: 'anchor-2025-review',
-          title: '2025 | 2024 Review',
-          meta: 'Publish the 2024 Top 10 Extreme Climate Review',
+          title: '2025 | Annual Review Release',
+          meta: 'Release of the 2024 extreme weather report',
           points: [
-            'Compile and compare 2024 extreme weather events',
-            'Select and publish the top ten events by impact and representativeness'
+            'Systematically review 2024 climate data for an annual report',
+            'Publish the official 2024 extreme weather review',
+            'Keep related 2025 series posts in the extended archive'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DFmNIOwPthe/'
           ]
         },
         {
           id: 'anchor-2025-exhibition',
           title: '2025 | Exhibition & Community Education',
-          meta: 'Thematic exhibition, cases, and green tips',
+          meta: 'On-site exhibition and education initiatives',
           points: [
-            'Host a One Step Blue Sky exhibition featuring the 2024 top 10 events',
-            'Combine global and local cases, international responsibility, and daily green tips'
+            'Translate climate data into actionable knowledge through exhibitions',
+            'Support community learning with visual stories and education programs',
+            'Highlight climate solutions alongside documentation outcomes'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DL9qBMOPf1L/',
+            'https://www.instagram.com/p/DLznY8lPiTu/',
+            'https://www.instagram.com/p/DLeHQbFvCbg/',
+            'https://www.instagram.com/p/DJ6cm_jqvgd/',
+            'https://www.instagram.com/p/DIwC9DSPqs2/'
           ]
         },
         {
-          id: 'anchor-2025-simulation',
-          title: '2025 | UN Dialogue & Policy Simulation',
-          meta: 'UN Mongolia × 10+ countries youth',
+          id: 'anchor-2025-international',
+          title: '2025 | International Exchange & Closure',
+          meta: 'UN exchange and youth collaboration outcomes',
           points: [
-            'Run a climate policy simulation at the UN House in Ulaanbaatar',
-            'Youth negotiate as countries, international orgs, and stakeholders'
+            'Facilitate international dialogue and climate policy simulations',
+            'Showcase youth collaboration across regions and institutions',
+            'Conclude the phase with shared insights and collective outcomes'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DNkpy4BPspK/',
+            'https://www.instagram.com/p/DNu-Al5XijM/',
+            'https://www.instagram.com/p/DNM1eG1Tpfa/',
+            'https://www.instagram.com/p/DHasIQjvYHk/',
+            'https://www.instagram.com/p/DGM3X2fPwvE/'
           ]
         },
         {
-          id: 'anchor-2025-closure',
-          title: '2025 | Annual Closure',
-          meta: 'Youth leadership and cross-region collaboration',
+          id: 'anchor-2026-energy',
+          title: '2026 | Transforming into Energy',
+          meta: 'Kinetic energy to clean power',
           points: [
-            'Review 2024 monitoring, film, public education, plus 2025 exhibitions and dialogues',
-            'Highlight youth leadership and cross-regional collaboration outcomes'
-          ]
-        },
-        {
-          id: 'anchor-key-message',
-          title: 'Key Message',
-          meta: 'Local action × International responsibility',
-          points: [
-            'Connect monitoring, film, exhibitions, and UN-level youth dialogue',
-            'Translate global climate issues into local action and international responsibility'
-          ]
+            'Combine sports and green technology to generate clean electricity',
+            'Turn human kinetic energy into tangible low-carbon action',
+            'Prepare for upcoming demonstrations and installations'
+          ],
+          igPosts: []
         }
       ],
       zh: [
         {
-          id: 'anchor-2024-monitor',
+          id: 'anchor-2024-observation',
           title: '2024｜觀察與記錄 Monitoring & Documentation',
-          meta: '即時記錄、案例＋數據＋影響',
+          meta: '聚焦單一事件，以數據與影響建立觀察檔案',
           points: [
-            '啟動「一步．藍天」工作計劃，全年追蹤極端天氣',
-            '聚焦暴雨、洪水、熱浪、乾旱、寒潮、風暴等事件',
-            '以單一事件＋數據＋影響的故事化方式進行公眾教育'
+            '啟動「一步．藍天」計畫，聚焦個別極端氣候事件',
+            '以數據、影像與影響建立氣候觀察檔案',
+            '把每個事件整理成可公開分享的氣候天氣簿'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C-C2Ao8vq8P/',
+            'https://www.instagram.com/p/C9wIiMIhwY-/',
+            'https://www.instagram.com/p/C9ZiOZ-NNR2/',
+            'https://www.instagram.com/p/C8_yyagv87R/',
+            'https://www.instagram.com/p/C8WlkFMB--7/',
+            'https://www.instagram.com/p/C7JF2sOPAnv/',
+            'https://www.instagram.com/p/C63WPmMPh6O/',
+            'https://www.instagram.com/p/C6BQzMdtcVW/'
           ]
         },
         {
           id: 'anchor-2024-awareness',
-          title: '2024｜議題連結日常 Public Awareness',
-          meta: '社交平台互動、香港日常連結',
+          title: '2024｜議題連結日常 Public Awareness & Engagement',
+          meta: '把全球氣候變化連結至香港日常生活',
           points: [
-            '以社交平台分享氣候資訊並與受眾互動',
-            '把全球極端氣候趨勢與香港暴雨警告等日常生活連結',
-            '引導公眾思考「極端天氣是否已成新常態」'
-          ]
-        },
-        {
-          id: 'anchor-2024-film',
-          title: '2024｜文化媒介 × 公眾參與 Film Screening',
-          meta: '🎬 《Twisters》放映與對談',
-          points: [
-            '舉辦極端天氣主題電影放映《Twisters》',
-            '放映後以科學背景、日常衝擊為題進行分享與交流'
+            '透過氣候天氣簿與文化媒介推進公眾參與',
+            '將全球極端趨勢連結至本地日常與公共警報',
+            '引導公眾思考極端氣候對日常的影響'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C7REEP3vwe-/',
+            'https://www.instagram.com/p/C6nVBzQvsLm/',
+            'https://www.instagram.com/p/C6OHdsfvejs/',
+            'https://www.instagram.com/p/C6I91dUBsF9/',
+            'https://www.instagram.com/p/C5k6sjUPWZr/',
+            'https://www.instagram.com/p/C5TMOz-PwnH/',
+            'https://www.instagram.com/p/C5A2sRrvLTC/'
           ]
         },
         {
           id: 'anchor-2025-review',
-          title: '2025｜年度回顧整理 2024 Review',
-          meta: '發布《2024 年度十大極端氣候事件回顧》',
+          title: '2025｜年度回顧發布 Annual Review Release',
+          meta: '發布《2024 年度極端氣候回顧》',
           points: [
-            '整理 2024 全年極端天氣事件並進行系統性比較',
-            '以影響力與代表性選出年度十大事件，正式發布'
+            '系統性整理 2024 全年資料並完成報告',
+            '正式發布《2024 年度極端氣候回顧》',
+            '其餘 2025 系列貼文可置於資料庫延伸閱讀'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DFmNIOwPthe/'
           ]
         },
         {
           id: 'anchor-2025-exhibition',
-          title: '2025｜實體展覽與社區教育 Exhibition',
-          meta: '主題展覽、案例與 Green Tips',
+          title: '2025｜實體展覽與社區教育 Exhibition & Community Education',
+          meta: '以展覽與教育把數據轉化為可行動的知識',
           points: [
-            '舉辦「一步．藍天」主題展覽，呈現 2024 十大事件',
-            '結合全球與本地案例、國際人類責任與日常 Green Tips'
+            '透過實體展覽呈現氣候數據與案例',
+            '以社區教育推動可行動的氣候知識',
+            '強調資料視覺化與生活應用'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DL9qBMOPf1L/',
+            'https://www.instagram.com/p/DLznY8lPiTu/',
+            'https://www.instagram.com/p/DLeHQbFvCbg/',
+            'https://www.instagram.com/p/DJ6cm_jqvgd/',
+            'https://www.instagram.com/p/DIwC9DSPqs2/'
           ]
         },
         {
-          id: 'anchor-2025-simulation',
-          title: '2025｜國際交流與政策模擬 UN Dialogue',
-          meta: 'UN Mongolia × 10+ 國家青年',
+          id: 'anchor-2025-international',
+          title: '2025｜國際交流與總結 International Exchange & Closure',
+          meta: '國際交流與氣候政策模擬',
           points: [
-            '在蒙古烏蘭巴托 UN House 舉辦氣候政策模擬',
-            '青年以國家/國際組織/利害關係人角色進行談判與交流'
+            '於聯合國場域進行國際交流與政策模擬',
+            '展現青年跨地域合作與成果',
+            '整理交流成果作為階段性總結'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DNkpy4BPspK/',
+            'https://www.instagram.com/p/DNu-Al5XijM/',
+            'https://www.instagram.com/p/DNM1eG1Tpfa/',
+            'https://www.instagram.com/p/DHasIQjvYHk/',
+            'https://www.instagram.com/p/DGM3X2fPwvE/'
           ]
         },
         {
-          id: 'anchor-2025-closure',
-          title: '2025｜成果總結與閉環 Annual Closure',
-          meta: '青年角色、跨地域合作',
+          id: 'anchor-2026-energy',
+          title: '2026｜轉化為能 Transforming into Energy',
+          meta: '以動能轉化為清潔電力',
           points: [
-            '回顧 2024 記錄、影展、公眾教育與 2025 展覽、對話',
-            '強調青年領導力與跨地域協作成果'
-          ]
-        },
-        {
-          id: 'anchor-key-message',
-          title: '一句話總結｜Key Message',
-          meta: 'Local action × International responsibility',
-          points: [
-            '將極端氣候記錄、影展、展覽、UN 級青年對話串連',
-            '把全球氣候議題轉化為在地行動與國際責任'
-          ]
+            '結合運動與綠能科技把動能轉為電力',
+            '實踐零碳行動與可視化教育',
+            '作為下一階段即將展開的項目'
+          ],
+          igPosts: []
         }
       ]
     };
@@ -1620,6 +1675,19 @@
     };
 
     const getAnchorItems = () => ANCHORS[state.language] ?? ANCHORS.en;
+    const IG_PREVIEW_COUNT = 4;
+
+    const createIgEmbed = (url, hidden = false) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = `anchor-ig-card${hidden ? ' hidden' : ''}`;
+      const blockquote = document.createElement('blockquote');
+      blockquote.className = 'instagram-media';
+      blockquote.setAttribute('data-instgrm-permalink', url);
+      blockquote.setAttribute('data-instgrm-version', '14');
+      blockquote.style.margin = '0';
+      wrapper.appendChild(blockquote);
+      return wrapper;
+    };
 
     function buildAnchorList() {
       const anchors = getAnchorItems();
@@ -1662,8 +1730,41 @@
         actions.append(qrBtn, linkBtn);
 
         card.append(left, actions);
+
+        if (Array.isArray(item.igPosts) && item.igPosts.length) {
+          const section = document.createElement('div');
+          section.className = 'anchor-ig-section';
+          const scroll = document.createElement('div');
+          scroll.className = 'anchor-ig-scroll';
+          item.igPosts.forEach((url, index) => {
+            scroll.appendChild(createIgEmbed(url, index >= IG_PREVIEW_COUNT));
+          });
+          section.appendChild(scroll);
+
+          if (item.igPosts.length > IG_PREVIEW_COUNT) {
+            const toggleBtn = document.createElement('button');
+            toggleBtn.type = 'button';
+            toggleBtn.className = 'tiny-btn anchor-ig-toggle';
+            toggleBtn.textContent = getI18n('anchor.showMore');
+            toggleBtn.addEventListener('click', () => {
+              const hiddenCards = scroll.querySelectorAll('.anchor-ig-card.hidden');
+              const isExpanded = hiddenCards.length === 0;
+              scroll.querySelectorAll('.anchor-ig-card').forEach((card, idx) => {
+                card.classList.toggle('hidden', isExpanded && idx >= IG_PREVIEW_COUNT);
+              });
+              toggleBtn.textContent = isExpanded ? getI18n('anchor.showMore') : getI18n('anchor.showLess');
+              setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
+            });
+            section.appendChild(toggleBtn);
+          }
+
+          card.appendChild(section);
+        }
+
         list.appendChild(card);
       });
+
+      setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
     }
 
     const showQRModal = (item) => {
