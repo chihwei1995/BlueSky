@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>一步・藍天 BLUE SKY RETURNS</title>
+  <title>One Step Blue Sky Returns</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -47,6 +47,13 @@
       gap: 16px;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     .logo {
       display: flex;
       align-items: center;
@@ -82,6 +89,32 @@
       color: var(--accent);
       box-shadow: 0 6px 16px rgba(14, 165, 233, 0.15);
       transform: translateY(-1px);
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 6px;
+      background: #fff;
+    }
+
+    .lang-btn {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--ink-soft);
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(14, 165, 233, 0.2);
     }
 
     main {
@@ -185,89 +218,279 @@
 <body>
   <header>
     <div class="header-inner">
-      <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer">
+      <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" data-i18n-aria-label="aria.pjcSite">
         <img src="../PJC_LOGO.PNG" alt="JCI Peninsula logo" />
-        <span>一步・藍天 BLUE SKY RETURNS</span>
+        <span data-i18n="header.title">One Step Blue Sky Returns</span>
       </a>
-      <a class="nav-link" href="../index.html">← 回到主頁</a>
+      <div class="header-actions">
+        <a class="nav-link" href="../index.html" data-i18n="nav.back">← Back to Main</a>
+        <div class="lang-toggle" role="group" data-i18n-aria-label="aria.languageToggle">
+          <button class="lang-btn active" data-lang="en" type="button">EN</button>
+          <button class="lang-btn" data-lang="zh" type="button">中文</button>
+        </div>
+      </div>
     </div>
   </header>
 
   <main>
     <section class="hero">
-      <h1>國際事務組｜一步・藍天 BLUE SKY RETURNS</h1>
-      <p>
-        JCI Peninsula（半島青年商會）的「一步・藍天 BLUE SKY RETURNS」項目，旨在積極應對全球氣候變化導致極端天氣日益頻繁的嚴峻挑戰，並強調改變現代生活習慣是有效應對氣候變化的關鍵所在。
+      <h1 data-i18n="hero.title">International Affairs | One Step Blue Sky Returns</h1>
+      <p data-i18n="hero.body">
+        JCI Peninsula’s One Step Blue Sky Returns project responds to the growing challenge of extreme weather driven by climate change, emphasizing that changing modern lifestyles is a key to effective climate action.
       </p>
     </section>
 
     <section class="card">
-      <h2>「一步・藍天」項目背景與目的</h2>
-      <p>此國際事務旗艦工作計劃的設立，是為了應對以下挑戰：</p>
+      <h2 data-i18n="background.title">Project Background & Objectives</h2>
+      <p data-i18n="background.subtitle">This flagship international affairs program was created to address:</p>
       <ul>
-        <li>喚起公眾對氣候變化直接引致極端天氣事件頻發的廣泛關注。</li>
-        <li>強調並教育公眾有關現代生活方式對氣候變化所造成的深遠影響。</li>
+        <li data-i18n="background.point1">Raise public awareness of the rising frequency of extreme weather directly linked to climate change.</li>
+        <li data-i18n="background.point2">Highlight and educate the public about the profound impact of modern lifestyles on climate change.</li>
       </ul>
     </section>
 
     <section class="card-grid">
       <article class="card">
-        <h3>項目內容和重點活動</h3>
+        <h3 data-i18n="activities.title">Project Content & Key Activities</h3>
         <ul>
-          <li><strong>2024 十大極端天氣選舉：</strong> 透過公眾參與提升對極端天氣影響的認識。</li>
-          <li><strong>開幕典禮：</strong> 正式啟動項目，廣邀社會各界共同關注氣候議題。</li>
-          <li><strong>模擬聯合國氣候變化大會：</strong> 體驗國際氣候談判，深化對全球合作重要性的理解。</li>
-          <li><strong>閉幕典禮及展覽：</strong> 總結成果，展示進展並展望未來行動方向。</li>
+          <li data-i18n-html="activities.point1"><strong>2024 Top 10 Extreme Weather Voting:</strong> Build public awareness through participation.</li>
+          <li data-i18n-html="activities.point2"><strong>Opening Ceremony:</strong> Official launch inviting broad community attention to climate issues.</li>
+          <li data-i18n-html="activities.point3"><strong>Model United Nations on Climate Change:</strong> Experience international climate negotiations and deepen understanding of global cooperation.</li>
+          <li data-i18n-html="activities.point4"><strong>Closing Ceremony & Exhibition:</strong> Summarize outcomes and showcase progress and future actions.</li>
         </ul>
       </article>
 
       <article class="card">
-        <h3>預期成效和社會影響</h3>
+        <h3 data-i18n="impact.title">Expected Outcomes & Social Impact</h3>
         <ul>
-          <li>加深公眾對氣候變化及其引致極端天氣的認識。</li>
-          <li>廣泛傳播氣候保護意識，倡導可持續低碳生活方式。</li>
-          <li>推動建立長期合作機制，持續推動香港及全球的氣候保護行動。</li>
+          <li data-i18n="impact.point1">Deepen public understanding of climate change and extreme weather.</li>
+          <li data-i18n="impact.point2">Spread climate protection awareness and promote sustainable, low-carbon lifestyles.</li>
+          <li data-i18n="impact.point3">Build long-term collaboration mechanisms to advance climate action in Hong Kong and globally.</li>
         </ul>
       </article>
     </section>
 
     <section class="infographic">
-      <h2>項目資訊圖</h2>
+      <h2 data-i18n="infographic.title">Project Infographic</h2>
       <img
         src="https://hkpjc.org/wp-content/uploads/2025/05/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png"
-        alt="一步・藍天 BLUE SKY RETURNS 項目資訊圖"
+        alt="One Step Blue Sky Returns infographic"
+        data-i18n-alt="infographic.alt"
       />
-      <p>項目重點與活動摘要圖，呈現氣候行動的核心資訊。</p>
+      <p data-i18n="infographic.caption">A snapshot of the project's key initiatives and activities.</p>
     </section>
 
     <section class="card">
-      <h2>如何支持我們的項目</h2>
-      <p>
-        您的參與對我們的氣候行動至關重要！請密切留意 JCI Peninsula（半島青年商會）的社交媒體，獲取最新動向，報名參與亞太大會相關活動，親身蒞臨我們日後舉辦的工作坊和座談會，並積極參與我們舉辦的模擬聯合國氣候變化大會，共同為保護我們的藍天而努力！
+      <h2 data-i18n="support.title">How to Support Our Project</h2>
+      <p data-i18n="support.body">
+        Your participation is vital to our climate action. Follow JCI Peninsula’s social media for updates, join Asia-Pacific conference activities, attend upcoming workshops and talks, and take part in our Model UN on climate change to protect our blue skies together.
       </p>
     </section>
 
     <section class="card contact">
-      <h2>保持聯繫（Stay Connected with JCI Peninsula）</h2>
-      <p>更多詳情及最新動態，請關注半島青年商會（JCI Peninsula）的官方社交平台：</p>
+      <h2 data-i18n="contact.title">Stay Connected with JCI Peninsula</h2>
+      <p data-i18n="contact.subtitle">For more details and the latest updates, follow JCI Peninsula on social platforms:</p>
       <ul>
-        <li><a href="https://www.facebook.com/hkpjc" target="_blank" rel="noopener noreferrer">Facebook 專頁：JCI Peninsula Facebook</a></li>
-        <li><a href="https://www.instagram.com/hkpjc/" target="_blank" rel="noopener noreferrer">Instagram 專頁：JCI Peninsula Instagram</a></li>
-        <li><a href="https://www.linkedin.com/company/jci-peninsula/" target="_blank" rel="noopener noreferrer">LinkedIn 專頁：JCI Peninsula LinkedIn</a></li>
+        <li><a href="https://www.facebook.com/hkpjc" target="_blank" rel="noopener noreferrer" data-i18n="contact.facebook">Facebook: JCI Peninsula</a></li>
+        <li><a href="https://www.instagram.com/hkpjc/" target="_blank" rel="noopener noreferrer" data-i18n="contact.instagram">Instagram: JCI Peninsula</a></li>
+        <li><a href="https://www.linkedin.com/company/jci-peninsula/" target="_blank" rel="noopener noreferrer" data-i18n="contact.linkedin">LinkedIn: JCI Peninsula</a></li>
       </ul>
-      <p>
-        JCI Peninsula 半島青年商會<br />
-        香港干諾道西21至24號<br />
-        海景商業大廈21字樓
+      <p data-i18n-html="contact.address">
+        JCI Peninsula<br />
+        21–24 Connaught Road West<br />
+        Harbourview Commercial Building, 21/F
       </p>
-      <p>
-        電話：(852) 2543 8913<br />
-        傳真：(852) 3007 8718<br />
-        電郵：info@hkpjc.org
+      <p data-i18n-html="contact.details">
+        Tel: (852) 2543 8913<br />
+        Fax: (852) 3007 8718<br />
+        Email: info@hkpjc.org
       </p>
     </section>
   </main>
 
-  <footer>Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). 保留一切權利。</footer>
+  <footer data-i18n="footer">Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). All rights reserved.</footer>
+
+  <script>
+    const LANG_STORAGE_KEY = 'bsr_lang';
+    const I18N = {
+      en: {
+        aria: {
+          pjcSite: 'Visit the PJC website',
+          languageToggle: 'Switch language'
+        },
+        page: {
+          title: 'One Step Blue Sky Returns'
+        },
+        header: {
+          title: 'One Step Blue Sky Returns'
+        },
+        nav: {
+          back: '← Back to Main'
+        },
+        hero: {
+          title: 'International Affairs | One Step Blue Sky Returns',
+          body: 'JCI Peninsula’s One Step Blue Sky Returns project responds to the growing challenge of extreme weather driven by climate change, emphasizing that changing modern lifestyles is a key to effective climate action.'
+        },
+        background: {
+          title: 'Project Background & Objectives',
+          subtitle: 'This flagship international affairs program was created to address:',
+          point1: 'Raise public awareness of the rising frequency of extreme weather directly linked to climate change.',
+          point2: 'Highlight and educate the public about the profound impact of modern lifestyles on climate change.'
+        },
+        activities: {
+          title: 'Project Content & Key Activities',
+          point1: '<strong>2024 Top 10 Extreme Weather Voting:</strong> Build public awareness through participation.',
+          point2: '<strong>Opening Ceremony:</strong> Official launch inviting broad community attention to climate issues.',
+          point3: '<strong>Model United Nations on Climate Change:</strong> Experience international climate negotiations and deepen understanding of global cooperation.',
+          point4: '<strong>Closing Ceremony & Exhibition:</strong> Summarize outcomes and showcase progress and future actions.'
+        },
+        impact: {
+          title: 'Expected Outcomes & Social Impact',
+          point1: 'Deepen public understanding of climate change and extreme weather.',
+          point2: 'Spread climate protection awareness and promote sustainable, low-carbon lifestyles.',
+          point3: 'Build long-term collaboration mechanisms to advance climate action in Hong Kong and globally.'
+        },
+        infographic: {
+          title: 'Project Infographic',
+          alt: 'One Step Blue Sky Returns infographic',
+          caption: 'A snapshot of the project’s key initiatives and activities.'
+        },
+        support: {
+          title: 'How to Support Our Project',
+          body: 'Your participation is vital to our climate action. Follow JCI Peninsula’s social media for updates, join Asia-Pacific conference activities, attend upcoming workshops and talks, and take part in our Model UN on climate change to protect our blue skies together.'
+        },
+        contact: {
+          title: 'Stay Connected with JCI Peninsula',
+          subtitle: 'For more details and the latest updates, follow JCI Peninsula on social platforms:',
+          facebook: 'Facebook: JCI Peninsula',
+          instagram: 'Instagram: JCI Peninsula',
+          linkedin: 'LinkedIn: JCI Peninsula',
+          address: 'JCI Peninsula<br />21–24 Connaught Road West<br />Harbourview Commercial Building, 21/F',
+          details: 'Tel: (852) 2543 8913<br />Fax: (852) 3007 8718<br />Email: info@hkpjc.org'
+        },
+        footer: 'Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). All rights reserved.'
+      },
+      zh: {
+        aria: {
+          pjcSite: '前往 PJC 網站',
+          languageToggle: '切換語言'
+        },
+        page: {
+          title: '一步・藍天 BLUE SKY RETURNS'
+        },
+        header: {
+          title: '一步・藍天 BLUE SKY RETURNS'
+        },
+        nav: {
+          back: '← 回到主頁'
+        },
+        hero: {
+          title: '國際事務組｜一步・藍天 BLUE SKY RETURNS',
+          body: 'JCI Peninsula（半島青年商會）的「一步・藍天 BLUE SKY RETURNS」項目，旨在積極應對全球氣候變化導致極端天氣日益頻繁的嚴峻挑戰，並強調改變現代生活習慣是有效應對氣候變化的關鍵所在。'
+        },
+        background: {
+          title: '「一步・藍天」項目背景與目的',
+          subtitle: '此國際事務旗艦工作計劃的設立，是為了應對以下挑戰：',
+          point1: '喚起公眾對氣候變化直接引致極端天氣事件頻發的廣泛關注。',
+          point2: '強調並教育公眾有關現代生活方式對氣候變化所造成的深遠影響。'
+        },
+        activities: {
+          title: '項目內容和重點活動',
+          point1: '<strong>2024 十大極端天氣選舉：</strong> 透過公眾參與提升對極端天氣影響的認識。',
+          point2: '<strong>開幕典禮：</strong> 正式啟動項目，廣邀社會各界共同關注氣候議題。',
+          point3: '<strong>模擬聯合國氣候變化大會：</strong> 體驗國際氣候談判，深化對全球合作重要性的理解。',
+          point4: '<strong>閉幕典禮及展覽：</strong> 總結成果，展示進展並展望未來行動方向。'
+        },
+        impact: {
+          title: '預期成效和社會影響',
+          point1: '加深公眾對氣候變化及其引致極端天氣的認識。',
+          point2: '廣泛傳播氣候保護意識，倡導可持續低碳生活方式。',
+          point3: '推動建立長期合作機制，持續推動香港及全球的氣候保護行動。'
+        },
+        infographic: {
+          title: '項目資訊圖',
+          alt: '一步・藍天 BLUE SKY RETURNS 項目資訊圖',
+          caption: '項目重點與活動摘要圖，呈現氣候行動的核心資訊。'
+        },
+        support: {
+          title: '如何支持我們的項目',
+          body: '您的參與對我們的氣候行動至關重要！請密切留意 JCI Peninsula（半島青年商會）的社交媒體，獲取最新動向，報名參與亞太大會相關活動，親身蒞臨我們日後舉辦的工作坊和座談會，並積極參與我們舉辦的模擬聯合國氣候變化大會，共同為保護我們的藍天而努力！'
+        },
+        contact: {
+          title: '保持聯繫（Stay Connected with JCI Peninsula）',
+          subtitle: '更多詳情及最新動態，請關注半島青年商會（JCI Peninsula）的官方社交平台：',
+          facebook: 'Facebook 專頁：JCI Peninsula Facebook',
+          instagram: 'Instagram 專頁：JCI Peninsula Instagram',
+          linkedin: 'LinkedIn 專頁：JCI Peninsula LinkedIn',
+          address: 'JCI Peninsula 半島青年商會<br />香港干諾道西21至24號<br />海景商業大廈21字樓',
+          details: '電話：(852) 2543 8913<br />傳真：(852) 3007 8718<br />電郵：info@hkpjc.org'
+        },
+        footer: 'Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). 保留一切權利。'
+      }
+    };
+
+    const state = { language: 'en' };
+
+    const getI18n = (path) => {
+      const keys = path.split('.');
+      let value = I18N[state.language] ?? I18N.en;
+      for (const key of keys) {
+        if (value && typeof value === 'object' && key in value) {
+          value = value[key];
+        } else {
+          return '';
+        }
+      }
+      return value;
+    };
+
+    const applyTranslations = () => {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        const text = getI18n(key);
+        if (text) el.textContent = text;
+      });
+
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.dataset.i18nHtml;
+        const text = getI18n(key);
+        if (text) el.innerHTML = text;
+      });
+
+      document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        const key = el.dataset.i18nAriaLabel;
+        const text = getI18n(key);
+        if (text) el.setAttribute('aria-label', text);
+      });
+
+      document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+        const key = el.dataset.i18nAlt;
+        const text = getI18n(key);
+        if (text) el.setAttribute('alt', text);
+      });
+
+      document.title = getI18n('page.title') || document.title;
+      document.documentElement.lang = state.language === 'en' ? 'en' : 'zh-Hant';
+    };
+
+    const applyLanguage = (lang) => {
+      state.language = lang === 'zh' ? 'zh' : 'en';
+      localStorage.setItem(LANG_STORAGE_KEY, state.language);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === state.language);
+      });
+      applyTranslations();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem(LANG_STORAGE_KEY);
+      const initial = saved === 'zh' ? 'zh' : 'en';
+      applyLanguage(initial);
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+      });
+    });
+  </script>
 </body>
 </html>
