@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -324,6 +324,33 @@
       color: #0b1020;
     }
 
+    .lang-toggle {
+      display: inline-flex;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 6px;
+      box-shadow: var(--panel-shadow);
+    }
+
+    .lang-btn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: #d6d8e2;
+      background: transparent;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .lang-btn.active {
+      background: rgba(255,255,255,0.9);
+      color: #0b1020;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+
     .info-card {
       position: absolute;
       left: 20px;
@@ -547,19 +574,23 @@
     <header>
       
         <div class="logo-area">
-          <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" aria-label="前往 PJC 網站">
+          <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" data-i18n-aria-label="aria.pjcSite">
             <img src="PJC_LOGO.PNG" alt="PJC logo" class="pjc-logo" />
             <span class="logo-text">Blue Sky Returns</span>
           </a>
           <span class="logo-divider" aria-hidden="true">｜</span>
-          <a class="about-link" href="blueskyreturns/index.html" aria-label="關於 Blue Sky Returns">about</a>
+          <a class="about-link" href="blueskyreturns/index.html" data-i18n="header.about" data-i18n-aria-label="aria.about">About</a>
         </div>
 
       <div class="header-actions">
-        <button class="ghost-btn" id="anchorToggle" type="button">📌 時間線</button>
-        <div class="toggle-container" aria-label="切換模式">
-          <button class="toggle-btn active" data-mode="crisis" id="btn-crisis">⚠️ CRISIS</button>
-          <button class="toggle-btn" data-mode="hope" id="btn-hope">🌏 HOPE</button>
+        <button class="ghost-btn" id="anchorToggle" type="button" data-i18n="header.timeline">📌 Timeline</button>
+        <div class="toggle-container" data-i18n-aria-label="aria.modeToggle">
+          <button class="toggle-btn active" data-mode="crisis" id="btn-crisis" data-i18n="mode.crisis">⚠️ CRISIS</button>
+          <button class="toggle-btn" data-mode="hope" id="btn-hope" data-i18n="mode.hope">🌏 HOPE</button>
+        </div>
+        <div class="lang-toggle" role="group" data-i18n-aria-label="aria.languageToggle">
+          <button class="lang-btn active" data-lang="en" type="button">EN</button>
+          <button class="lang-btn" data-lang="zh" type="button">中文</button>
         </div>
       </div>
     </header>
@@ -570,10 +601,10 @@
           <span class="tag crisis" id="infoTag">CRISIS</span>
           <span class="badge" id="infoDate">--</span>
         </div>
-        <button class="collapse-btn" id="infoCollapseBtn" type="button" aria-expanded="true">收合資訊</button>
+        <button class="collapse-btn" id="infoCollapseBtn" type="button" aria-expanded="true" data-i18n="info.collapse">Collapse info</button>
       </div>
       <div class="info-body" id="infoBody">
-        <h2 id="infoTitle">Loading...</h2>
+        <h2 id="infoTitle" data-i18n="info.loading">Loading...</h2>
         <div class="subtitle" id="infoSubtitle">---</div>
         <p id="infoDesc">---</p>
         <div class="stats" id="statList"></div>
@@ -585,11 +616,11 @@
       <div class="timeline-label-row">
 
         <!-- ✅ 只保留年份下拉（移除年份按鈕列） -->
-        <select class="year-select" id="yearSelect" aria-label="選擇年份">
-          <option value="">選擇年份</option>
+        <select class="year-select" id="yearSelect" data-i18n-aria-label="aria.selectYear">
+          <option value="" data-i18n="timeline.selectYear">Select year</option>
         </select>
 
-        <button class="collapse-btn" id="timelineCollapseBtn" type="button" aria-expanded="true">收合時間表</button>
+        <button class="collapse-btn" id="timelineCollapseBtn" type="button" aria-expanded="true" data-i18n="timeline.collapse">Collapse timeline</button>
       </div>
 
       <!-- ✅ 內容區做成可滾動容器（手機避免面板過高撞到底部） -->
@@ -602,33 +633,504 @@
     <div class="anchor-panel" id="anchorPanel" aria-live="polite">
       <div class="anchor-panel-header">
         <div>
-          <p class="anchor-panel-title">一步．藍天｜時間線</p>
-          <p class="anchor-panel-sub">掃 QRcode 可直接打開時間點、照片與貼文頁面，滑動查看</p>
+          <p class="anchor-panel-title" data-i18n="anchor.title">One Step Blue Sky | Timeline</p>
+          <p class="anchor-panel-sub" data-i18n="anchor.subtitle">Scan the QR code to open each timeline item with photos and posts. Scroll to explore.</p>
         </div>
-        <button class="tiny-btn" id="anchorCloseBtn" type="button">✕</button>
+        <button class="tiny-btn" id="anchorCloseBtn" type="button" data-i18n="anchor.close">✕</button>
       </div>
       <div class="anchor-list" id="anchorList"></div>
     </div>
   </div>
 
-  <div class="qr-modal" id="qrModal" role="dialog" aria-modal="true" aria-label="QRcode">
+  <div class="qr-modal" id="qrModal" role="dialog" aria-modal="true" data-i18n-aria-label="aria.qrDialog">
     <div class="qr-card">
-      <h3 id="qrTitle" style="margin-top:0;margin-bottom:6px;">時間點 QR</h3>
+      <h3 id="qrTitle" style="margin-top:0;margin-bottom:6px;" data-i18n="qr.title">Timeline QR</h3>
       <div id="qrSubtitle" style="color:#a8b2d8;margin-bottom:10px;"></div>
       <img id="qrImage" src="" alt="QRcode for anchor link">
-      <button class="tiny-btn" id="qrCloseBtn" type="button">關閉</button>
+      <button class="tiny-btn" id="qrCloseBtn" type="button" data-i18n="qr.close">Close</button>
     </div>
   </div>
 
   <script>
     if (!window.THREE) {
-      alert('THREE 未載入成功：請確認 three.min.js 能正常載入，且沒有被擋。');
+      alert('THREE failed to load. Please confirm three.min.js can load and is not blocked.');
       throw new Error('THREE is undefined');
     }
     const THREE = window.THREE;
 
     const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
     const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
+    const LANG_STORAGE_KEY = 'bsr_lang';
+
+    const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const I18N = {
+      en: {
+        aria: {
+          pjcSite: 'Visit the PJC website',
+          about: 'About Blue Sky Returns',
+          modeToggle: 'Toggle mode',
+          languageToggle: 'Switch language',
+          selectYear: 'Select year',
+          qrDialog: 'Timeline QR code'
+        },
+        header: {
+          about: 'About',
+          timeline: '📌 Timeline'
+        },
+        mode: {
+          crisis: '⚠️ CRISIS',
+          hope: '🌏 HOPE'
+        },
+        labels: {
+          crisis: 'CRISIS',
+          hope: 'HOPE'
+        },
+        info: {
+          collapse: 'Collapse info',
+          expand: 'Expand info',
+          loading: 'Loading...',
+          subtitle: {
+            disaster: 'Crisis event',
+            solution: 'Hope action'
+          }
+        },
+        timeline: {
+          selectYear: 'Select year',
+          collapse: 'Collapse timeline',
+          expand: 'Expand timeline'
+        },
+        anchor: {
+          title: 'One Step Blue Sky | Timeline',
+          subtitle: 'Scan the QR code to open each timeline item with photos and posts. Scroll to explore.',
+          close: '✕',
+          qr: 'QR code',
+          locate: 'Locate'
+        },
+        qr: {
+          title: 'Timeline QR',
+          close: 'Close'
+        },
+        misc: {
+          noMedia: 'No media available',
+          fetchFail: 'Unable to load data file',
+          initFail: 'Initialization failed'
+        },
+        page: {
+          title: 'Blue Sky Returns'
+        }
+      },
+      zh: {
+        aria: {
+          pjcSite: '前往 PJC 網站',
+          about: '關於 Blue Sky Returns',
+          modeToggle: '切換模式',
+          languageToggle: '切換語言',
+          selectYear: '選擇年份',
+          qrDialog: '時間線 QRcode'
+        },
+        header: {
+          about: '關於',
+          timeline: '📌 時間線'
+        },
+        mode: {
+          crisis: '⚠️ 危機',
+          hope: '🌏 希望'
+        },
+        labels: {
+          crisis: '危機',
+          hope: '希望'
+        },
+        info: {
+          collapse: '收合資訊',
+          expand: '展開資訊',
+          loading: '載入中...',
+          subtitle: {
+            disaster: '危機事件',
+            solution: '解方行動'
+          }
+        },
+        timeline: {
+          selectYear: '選擇年份',
+          collapse: '收合時間表',
+          expand: '展開時間表'
+        },
+        anchor: {
+          title: '一步．藍天｜時間線',
+          subtitle: '掃 QRcode 可直接打開時間點、照片與貼文頁面，滑動查看',
+          close: '✕',
+          qr: 'QRcode',
+          locate: '定位'
+        },
+        qr: {
+          title: '時間點 QR',
+          close: '關閉'
+        },
+        misc: {
+          noMedia: '無媒體資料',
+          fetchFail: '無法載入資料檔案',
+          initFail: '初始化失敗'
+        },
+        page: {
+          title: '一步・藍天 BLUE SKY RETURNS'
+        }
+      }
+    };
+
+    const STAT_LABELS_EN = {
+      '降雨量': 'Rainfall',
+      '持續時間': 'Duration',
+      '燃燒面積': 'Burned area',
+      '影響城市': 'Affected cities',
+      '面積': 'Area',
+      '較 1981-2010': 'vs 1981–2010',
+      '最高氣溫': 'Peak temperature',
+      '估計死亡人數': 'Estimated deaths',
+      '受影響人口': 'Affected population',
+      '淹水面積': 'Flooded area',
+      '地表溫度': 'Surface temperature',
+      '撤離人數': 'Evacuations',
+      '最大風速': 'Max wind speed',
+      '最高雨量': 'Peak rainfall',
+      '種植樹木': 'Trees planted',
+      '參與人數': 'Participants',
+      '裝置容量': 'Installed capacity',
+      '可供家庭': 'Homes powered',
+      '重災區': 'Hardest-hit areas',
+      '衝擊': 'Impact',
+      '關注焦點': 'Focus',
+      '連動': 'Linkages',
+      '特徵': 'Key trait',
+      '風險': 'Risk',
+      '影響': 'Impact',
+      '型態': 'Pattern',
+      '地形': 'Terrain',
+      '焦點': 'Focus',
+      '應對': 'Response',
+      '功能': 'Function',
+      '效益': 'Benefit',
+      '措施': 'Measures',
+      '預估節電': 'Estimated savings',
+      '模式': 'Model',
+      '受益': 'Benefit',
+      '回收量': 'Recovered volume',
+      '再生用途': 'Reuse outputs',
+      '覆蓋': 'Coverage',
+      '目標': 'Goal',
+      '形式': 'Format',
+      '目的': 'Purpose'
+    };
+
+    const STAT_VALUES_EN = {
+      '三分之一國土': 'One-third of the country',
+      '沿岸城市': 'Coastal cities',
+      '交通 / 供電': 'Transport / power',
+      '煙霾 / 森林退化': 'Haze / forest degradation',
+      '乾季延長': 'Longer dry season',
+      '極端溫度峰值': 'Extreme temperature spike',
+      '融冰加速': 'Accelerated ice melt',
+      '空品惡化': 'Air quality decline',
+      '高溫 / 乾旱': 'Heat / drought',
+      '短延時強降雨': 'Short-duration intense rainfall',
+      '河川暴漲': 'Rapid river rise',
+      '坡地 / 河谷': 'Slopes / valleys',
+      '落石 / 崩塌': 'Rockfall / landslide',
+      '電網 / 健康': 'Grid / health',
+      '提前到來': 'Earlier onset',
+      '多季降雨不足': 'Multi-season rainfall deficit',
+      '糧食 / 牧場': 'Food / pasture',
+      '珊瑚 / 漁業': 'Coral / fisheries',
+      '持續偏暖': 'Persistently warm',
+      '排水 / 地勢': 'Drainage / terrain',
+      '滯洪 / 海綿城市': 'Retention / sponge city',
+      '季節偏移': 'Seasonal shift',
+      '病媒 / 生態': 'Vectors / ecology',
+      '鋒面滯留': 'Stalled front',
+      '淹水 / 交通': 'Flooding / transport',
+      '短時雨強大': 'Intense short-duration rain',
+      '樹倒 / 積水': 'Fallen trees / pooling',
+      '調蓄 / 降溫': 'Retention / cooling',
+      '降低內澇風險': 'Lower pluvial flood risk',
+      'LED / 智慧空調': 'LED / smart HVAC',
+      '共享 / 虛擬電廠': 'Sharing / virtual power plant',
+      '用電成本下降': 'Lower electricity costs',
+      '每月 12t（示例）': '12t per month (example)',
+      '建材 / 織品': 'Construction / textiles',
+      '多語通知': 'Multilingual alerts',
+      '縮短應變時間': 'Shorter response time',
+      '單車 / 地板': 'Bikes / floors',
+      '教育 / 參與': 'Education / participation'
+    };
+
+    const EVENT_TRANSLATIONS_EN = {
+      evt_001: {
+        title: 'Dubai Extreme Rainfall',
+        description: 'A desert city faced unprecedented rainfall, putting urban drainage systems under massive strain.'
+      },
+      evt_002: {
+        title: 'Australia Black Summer Bushfires',
+        description: 'Heat and drought-driven fires blanketed major cities in smoke and affected millions.'
+      },
+      evt_003: {
+        title: 'Arctic Sea Ice Hits New Low',
+        description: 'Satellite data showed sea ice area at a record low, reflecting high-latitude warming trends.'
+      },
+      evt_004: {
+        title: 'Western Canada Heat Dome',
+        description: 'A heat dome pushed temperatures to record highs, triggering health crises and infrastructure failures.'
+      },
+      evt_005: {
+        title: 'Pakistan Monsoon Floods',
+        description: 'Exceptionally strong monsoons and glacial melt caused widespread flooding, damaging infrastructure and agriculture.'
+      },
+      evt_006: {
+        title: 'Southern Europe Heatwave & Wildfires',
+        description: 'Sustained heat and drought sparked wildfires across Mediterranean countries, impacting air quality and tourism.'
+      },
+      evt_007: {
+        title: 'Super Typhoon Saola Strikes South China Again',
+        description: 'Record winds and rain battered the Pearl River Delta and Hong Kong–Macau, testing flood protection and transport.'
+      },
+      sol_001: {
+        title: 'Amazon Rainforest Restoration Hub',
+        description: 'A reforestation program with Indigenous partners to boost biodiversity and carbon sequestration.'
+      },
+      sol_002: {
+        title: 'Taiwan Offshore Wind Farm',
+        description: 'New offshore turbines came online, delivering stable green power to support energy transition.'
+      },
+      evt_008: {
+        title: 'Cyclone Idai in Mozambique (Coastal Flooding)',
+        description: 'A tropical cyclone brought heavy rain and storm surge, flooding coastal areas and disrupting infrastructure.'
+      },
+      evt_009: {
+        title: 'Amazon Rainforest Fires (Smoke Haze Spread)',
+        description: 'Fires and land clearing spread haze, highlighting the combined risks of land use and climate conditions.'
+      },
+      evt_010: {
+        title: 'Antarctic Temperature Anomaly (Short-Term Extreme)',
+        description: 'A short-lived temperature spike became a signal of extreme warming conditions.'
+      },
+      evt_011: {
+        title: 'US West Coast Fire Season (Smoke Coverage)',
+        description: 'Fire season combined with heat and drought, degrading air quality and visibility and impacting health.'
+      },
+      evt_012: {
+        title: 'Western Europe Floods',
+        description: 'Extreme rain rapidly swelled rivers and flooded towns, underscoring risk governance and early warning.'
+      },
+      evt_013: {
+        title: 'Extreme Rainfall Triggers Landslides (Example)',
+        description: 'Continuous rain saturated slopes, increasing landslide and rockfall risks and affecting transport and settlements.'
+      },
+      evt_014: {
+        title: 'India–Pakistan Early Spring Heatwave (Example)',
+        description: 'An early, prolonged heatwave strained power demand, outdoor labor, and public health.'
+      },
+      evt_015: {
+        title: 'Horn of Africa Prolonged Drought (Example)',
+        description: 'Multi-season rainfall deficits intensified water and food insecurity, hurting pastoral livelihoods.'
+      },
+      evt_016: {
+        title: 'Marine Heatwave Expansion (Example)',
+        description: 'Persistently warm sea surface temperatures stressed corals and marine ecosystems.'
+      },
+      evt_017: {
+        title: 'Frequent Urban Flooding (Example)',
+        description: 'Short, intense rainfall over dense urban areas raised pluvial flood risk, testing drainage and retention systems.'
+      },
+      evt_018: {
+        title: 'Unseasonal Winter Warmth (Example)',
+        description: 'Warmer winters disrupted ecosystems and disease vectors, affecting energy demand and public health.'
+      },
+      evt_019: {
+        title: 'East Asian Mei-Yu Front Extreme Rainfall (Example)',
+        description: 'A stalled frontal system brought continuous heavy rain, stressing transport and drainage with low-lying inundation.'
+      },
+      evt_020: {
+        title: 'Late Autumn Downpours & Severe Convection (Example)',
+        description: 'Out-of-season severe storms and intense rain elevated urban damage and transport delays.'
+      },
+      sol_003: {
+        title: 'Urban Detention Park (Sponge City Example)',
+        description: 'Detention parks and permeable paving increase stormwater storage while cooling cities and providing public space.'
+      },
+      sol_004: {
+        title: 'Campus Energy Retrofit (Example)',
+        description: 'Lighting and HVAC upgrades cut peak demand, with dashboards enabling campus participation.'
+      },
+      sol_005: {
+        title: 'Community Solar Sharing (Example)',
+        description: 'Shared solar and bill credits let residents benefit and join the energy transition.'
+      },
+      sol_006: {
+        title: 'Plastic Recycling Circular Chain (Example)',
+        description: 'Local sorting–washing–reprocessing improves purity and usability of recycled materials.'
+      },
+      sol_007: {
+        title: 'Community Disaster Drills & Alert System (Example)',
+        description: 'Integrates alerts, evacuation routes, and drills to boost resilience during extreme weather.'
+      },
+      sol_008: {
+        title: 'Kinetic Power Experience Station (Example: Bikes/Floors)',
+        description: 'Interactive kinetic power demos turn action → electricity → carbon reduction into public education.'
+      }
+    };
+
+    const ANCHORS = {
+      en: [
+        {
+          id: 'anchor-2024-monitor',
+          title: '2024 | Monitoring & Documentation',
+          meta: 'Real-time tracking, cases + data + impact',
+          points: [
+            'Launch the One Step Blue Sky program to track extreme weather year-round',
+            'Focus on heavy rain, floods, heatwaves, droughts, cold snaps, storms, and more',
+            'Educate the public through single-event storytelling with data and impact'
+          ]
+        },
+        {
+          id: 'anchor-2024-awareness',
+          title: '2024 | Public Awareness',
+          meta: 'Social engagement and Hong Kong daily life links',
+          points: [
+            'Share climate updates on social platforms and engage audiences',
+            'Connect global extreme climate trends with local signals like rainstorm warnings',
+            'Prompt reflection on whether extreme weather is the new normal'
+          ]
+        },
+        {
+          id: 'anchor-2024-film',
+          title: '2024 | Film Screening',
+          meta: '🎬 Twisters screening & dialogue',
+          points: [
+            'Host an extreme-weather film screening of Twisters',
+            'Facilitate post-screening talks on science and everyday impacts'
+          ]
+        },
+        {
+          id: 'anchor-2025-review',
+          title: '2025 | 2024 Review',
+          meta: 'Publish the 2024 Top 10 Extreme Climate Review',
+          points: [
+            'Compile and compare 2024 extreme weather events',
+            'Select and publish the top ten events by impact and representativeness'
+          ]
+        },
+        {
+          id: 'anchor-2025-exhibition',
+          title: '2025 | Exhibition & Community Education',
+          meta: 'Thematic exhibition, cases, and green tips',
+          points: [
+            'Host a One Step Blue Sky exhibition featuring the 2024 top 10 events',
+            'Combine global and local cases, international responsibility, and daily green tips'
+          ]
+        },
+        {
+          id: 'anchor-2025-simulation',
+          title: '2025 | UN Dialogue & Policy Simulation',
+          meta: 'UN Mongolia × 10+ countries youth',
+          points: [
+            'Run a climate policy simulation at the UN House in Ulaanbaatar',
+            'Youth negotiate as countries, international orgs, and stakeholders'
+          ]
+        },
+        {
+          id: 'anchor-2025-closure',
+          title: '2025 | Annual Closure',
+          meta: 'Youth leadership and cross-region collaboration',
+          points: [
+            'Review 2024 monitoring, film, public education, plus 2025 exhibitions and dialogues',
+            'Highlight youth leadership and cross-regional collaboration outcomes'
+          ]
+        },
+        {
+          id: 'anchor-key-message',
+          title: 'Key Message',
+          meta: 'Local action × International responsibility',
+          points: [
+            'Connect monitoring, film, exhibitions, and UN-level youth dialogue',
+            'Translate global climate issues into local action and international responsibility'
+          ]
+        }
+      ],
+      zh: [
+        {
+          id: 'anchor-2024-monitor',
+          title: '2024｜觀察與記錄 Monitoring & Documentation',
+          meta: '即時記錄、案例＋數據＋影響',
+          points: [
+            '啟動「一步．藍天」工作計劃，全年追蹤極端天氣',
+            '聚焦暴雨、洪水、熱浪、乾旱、寒潮、風暴等事件',
+            '以單一事件＋數據＋影響的故事化方式進行公眾教育'
+          ]
+        },
+        {
+          id: 'anchor-2024-awareness',
+          title: '2024｜議題連結日常 Public Awareness',
+          meta: '社交平台互動、香港日常連結',
+          points: [
+            '以社交平台分享氣候資訊並與受眾互動',
+            '把全球極端氣候趨勢與香港暴雨警告等日常生活連結',
+            '引導公眾思考「極端天氣是否已成新常態」'
+          ]
+        },
+        {
+          id: 'anchor-2024-film',
+          title: '2024｜文化媒介 × 公眾參與 Film Screening',
+          meta: '🎬 《Twisters》放映與對談',
+          points: [
+            '舉辦極端天氣主題電影放映《Twisters》',
+            '放映後以科學背景、日常衝擊為題進行分享與交流'
+          ]
+        },
+        {
+          id: 'anchor-2025-review',
+          title: '2025｜年度回顧整理 2024 Review',
+          meta: '發布《2024 年度十大極端氣候事件回顧》',
+          points: [
+            '整理 2024 全年極端天氣事件並進行系統性比較',
+            '以影響力與代表性選出年度十大事件，正式發布'
+          ]
+        },
+        {
+          id: 'anchor-2025-exhibition',
+          title: '2025｜實體展覽與社區教育 Exhibition',
+          meta: '主題展覽、案例與 Green Tips',
+          points: [
+            '舉辦「一步．藍天」主題展覽，呈現 2024 十大事件',
+            '結合全球與本地案例、國際人類責任與日常 Green Tips'
+          ]
+        },
+        {
+          id: 'anchor-2025-simulation',
+          title: '2025｜國際交流與政策模擬 UN Dialogue',
+          meta: 'UN Mongolia × 10+ 國家青年',
+          points: [
+            '在蒙古烏蘭巴托 UN House 舉辦氣候政策模擬',
+            '青年以國家/國際組織/利害關係人角色進行談判與交流'
+          ]
+        },
+        {
+          id: 'anchor-2025-closure',
+          title: '2025｜成果總結與閉環 Annual Closure',
+          meta: '青年角色、跨地域合作',
+          points: [
+            '回顧 2024 記錄、影展、公眾教育與 2025 展覽、對話',
+            '強調青年領導力與跨地域協作成果'
+          ]
+        },
+        {
+          id: 'anchor-key-message',
+          title: '一句話總結｜Key Message',
+          meta: 'Local action × International responsibility',
+          points: [
+            '將極端氣候記錄、影展、展覽、UN 級青年對話串連',
+            '把全球氣候議題轉化為在地行動與國際責任'
+          ]
+        }
+      ]
+    };
 
     const lerp = (a, b, t) => a + (b - a) * t;
     const clamp01 = (x) => Math.max(0, Math.min(1, x));
@@ -667,12 +1169,93 @@
       currentEventId: null,
       infoCollapsed: false,
       timelineCollapsed: false,
-      anchorOpen: false
+      anchorOpen: false,
+      language: 'en'
+    };
+
+    const getI18n = (path) => {
+      const keys = path.split('.');
+      let value = I18N[state.language] ?? I18N.en;
+      for (const key of keys) {
+        if (value && typeof value === 'object' && key in value) {
+          value = value[key];
+        } else {
+          return '';
+        }
+      }
+      return value;
+    };
+
+    const getEventTranslation = (event) => {
+      if (state.language !== 'en') return event;
+      const translated = EVENT_TRANSLATIONS_EN[event.id];
+      if (!translated) return event;
+      return {
+        ...event,
+        title: translated.title ?? event.title,
+        description: translated.description ?? event.description
+      };
+    };
+
+    const translateStatLabel = (label) => (
+      state.language === 'en' ? (STAT_LABELS_EN[label] ?? label) : label
+    );
+
+    const translateStatValue = (value) => (
+      state.language === 'en' ? (STAT_VALUES_EN[value] ?? value) : value
+    );
+
+    const getMonthLabel = (month) => (
+      state.language === 'en' ? (MONTHS_EN[month - 1] ?? month) : `${month}月`
+    );
+
+    const applyTranslations = () => {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        const text = getI18n(key);
+        if (text) el.textContent = text;
+      });
+
+      document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        const key = el.dataset.i18nAriaLabel;
+        const text = getI18n(key);
+        if (text) el.setAttribute('aria-label', text);
+      });
+
+      document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.dataset.i18nTitle;
+        const text = getI18n(key);
+        if (text) el.setAttribute('title', text);
+      });
+
+      document.documentElement.lang = state.language === 'en' ? 'en' : 'zh-Hant';
+    };
+
+    const applyLanguage = (lang) => {
+      state.language = lang === 'zh' ? 'zh' : 'en';
+      localStorage.setItem(LANG_STORAGE_KEY, state.language);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === state.language);
+      });
+      applyTranslations();
+      document.title = getI18n('page.title') || document.title;
+      buildAnchorList();
+      refreshFiltersUI();
+      setInfoCollapsed(state.infoCollapsed);
+      setTimelineCollapsed(state.timelineCollapsed);
+      if (state.world) {
+        renderPoints();
+        if (state.currentEventId) {
+          const current = state.events.find(ev => ev.id === state.currentEventId);
+          if (current) showInfo(current);
+        }
+      }
+      updateYearSelect(getYears());
     };
 
     const fetchJSON = async (path) => {
       const res = await fetch(path, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`無法載入資料檔案：${path} (${res.status})`);
+      if (!res.ok) throw new Error(`${getI18n('misc.fetchFail')}: ${path} (${res.status})`);
       return res.json();
     };
 
@@ -698,7 +1281,11 @@
 
     const updateYearSelect = (years) => {
       const select = document.getElementById('yearSelect');
-      select.innerHTML = '<option value="">選擇年份</option>';
+      select.innerHTML = '';
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = getI18n('timeline.selectYear');
+      select.appendChild(placeholder);
       years.forEach(year => {
         const opt = document.createElement('option');
         opt.value = year;
@@ -731,7 +1318,7 @@
       months.forEach(m => {
         const btn = document.createElement('button');
         btn.className = 'pill-btn';
-        btn.textContent = `${m}月`;
+        btn.textContent = getMonthLabel(m);
         btn.dataset.month = m;
         btn.dataset.mode = state.currentMode;
         btn.classList.toggle('active', Number(m) === Number(state.currentMonth));
@@ -748,10 +1335,11 @@
       const items = getEventsByYearMonth(year, month);
 
       items.forEach((ev) => {
+        const translated = getEventTranslation(ev);
         const btn = document.createElement('button');
         btn.className = 'pill-btn';
         btn.style.minWidth = '160px';
-        btn.textContent = ev.title;
+        btn.textContent = translated.title;
         btn.dataset.eventId = ev.id;
         btn.dataset.mode = state.currentMode;
         btn.classList.toggle('active', ev.id === state.currentEventId);
@@ -906,14 +1494,17 @@
 
       state.world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
 
+      const translated = getEventTranslation(data);
       const card = document.getElementById('infoPanel');
       const tag = document.getElementById('infoTag');
       tag.className = `tag ${data.mode}`;
-      tag.textContent = data.mode === 'crisis' ? 'CRISIS' : 'HOPE';
+      tag.textContent = data.mode === 'crisis' ? getI18n('labels.crisis') : getI18n('labels.hope');
 
-      document.getElementById('infoTitle').textContent = `${data.year} · ${data.title}`;
-      document.getElementById('infoSubtitle').textContent = data.category === 'disaster' ? '危機事件' : '解方行動';
-      document.getElementById('infoDesc').textContent = data.description || '';
+      document.getElementById('infoTitle').textContent = `${data.year} · ${translated.title}`;
+      document.getElementById('infoSubtitle').textContent = data.category === 'disaster'
+        ? getI18n('info.subtitle.disaster')
+        : getI18n('info.subtitle.solution');
+      document.getElementById('infoDesc').textContent = translated.description || '';
       document.getElementById('infoDate').textContent = data.date || '--';
 
       const statList = document.getElementById('statList');
@@ -921,7 +1512,9 @@
       (data.stats || []).forEach(item => {
         const block = document.createElement('div');
         block.className = 'stat-pill';
-        block.innerHTML = `<div class="stat-label">${item.label}</div><div><strong>${item.value}</strong></div>`;
+        const label = translateStatLabel(item.label);
+        const value = translateStatValue(item.value);
+        block.innerHTML = `<div class="stat-label">${label}</div><div><strong>${value}</strong></div>`;
         statList.appendChild(block);
       });
 
@@ -941,7 +1534,7 @@
         img.alt = data.title || 'image';
         mediaContainer.appendChild(img);
       } else {
-        mediaContainer.innerHTML = '<div style="padding:16px;opacity:0.7;">無媒體資料</div>';
+        mediaContainer.innerHTML = `<div style="padding:16px;opacity:0.7;">${getI18n('misc.noMedia')}</div>`;
       }
 
       card.classList.add('show');
@@ -995,7 +1588,9 @@
       state.infoCollapsed = collapsed;
       const panel = document.getElementById('infoPanel');
       panel.classList.toggle('collapsed', collapsed);
-      document.getElementById('infoCollapseBtn').textContent = collapsed ? '展開資訊' : '收合資訊';
+      document.getElementById('infoCollapseBtn').textContent = collapsed
+        ? getI18n('info.expand')
+        : getI18n('info.collapse');
       document.getElementById('infoCollapseBtn').setAttribute('aria-expanded', String(!collapsed));
       document.getElementById('infoBody').setAttribute('aria-hidden', String(collapsed));
     };
@@ -1004,7 +1599,9 @@
       state.timelineCollapsed = collapsed;
       const container = document.getElementById('timelineContainer');
       container.classList.toggle('collapsed', collapsed);
-      document.getElementById('timelineCollapseBtn').textContent = collapsed ? '展開時間表' : '收合時間表';
+      document.getElementById('timelineCollapseBtn').textContent = collapsed
+        ? getI18n('timeline.expand')
+        : getI18n('timeline.collapse');
       document.getElementById('timelineCollapseBtn').setAttribute('aria-expanded', String(!collapsed));
     };
 
@@ -1022,83 +1619,10 @@
       if (state.anchorOpen) closeAnchorPanel(); else openAnchorPanel();
     };
 
-    const buildAnchorList = () => {
-      const anchors = [
-        {
-          id: 'anchor-2024-monitor',
-          title: '2024｜觀察與記錄 Monitoring & Documentation',
-          meta: '即時記錄、案例＋數據＋影響',
-          points: [
-            '啟動「一步．藍天」工作計劃，全年追蹤極端天氣',
-            '聚焦暴雨、洪水、熱浪、乾旱、寒潮、風暴等事件',
-            '以單一事件＋數據＋影響的故事化方式進行公眾教育'
-          ]
-        },
-        {
-          id: 'anchor-2024-awareness',
-          title: '2024｜議題連結日常 Public Awareness',
-          meta: '社交平台互動、香港日常連結',
-          points: [
-            '以社交平台分享氣候資訊並與受眾互動',
-            '把全球極端氣候趨勢與香港暴雨警告等日常生活連結',
-            '引導公眾思考「極端天氣是否已成新常態」'
-          ]
-        },
-        {
-          id: 'anchor-2024-film',
-          title: '2024｜文化媒介 × 公眾參與 Film Screening',
-          meta: '🎬 《Twisters》放映與對談',
-          points: [
-            '舉辦極端天氣主題電影放映《Twisters》',
-            '放映後以科學背景、日常衝擊為題進行分享與交流'
-          ]
-        },
-        {
-          id: 'anchor-2025-review',
-          title: '2025｜年度回顧整理 2024 Review',
-          meta: '發布《2024 年度十大極端氣候事件回顧》',
-          points: [
-            '整理 2024 全年極端天氣事件並進行系統性比較',
-            '以影響力與代表性選出年度十大事件，正式發布'
-          ]
-        },
-        {
-          id: 'anchor-2025-exhibition',
-          title: '2025｜實體展覽與社區教育 Exhibition',
-          meta: '主題展覽、案例與 Green Tips',
-          points: [
-            '舉辦「一步．藍天」主題展覽，呈現 2024 十大事件',
-            '結合全球與本地案例、國際人類責任與日常 Green Tips'
-          ]
-        },
-        {
-          id: 'anchor-2025-simulation',
-          title: '2025｜國際交流與政策模擬 UN Dialogue',
-          meta: 'UN Mongolia × 10+ 國家青年',
-          points: [
-            '在蒙古烏蘭巴托 UN House 舉辦氣候政策模擬',
-            '青年以國家/國際組織/利害關係人角色進行談判與交流'
-          ]
-        },
-        {
-          id: 'anchor-2025-closure',
-          title: '2025｜成果總結與閉環 Annual Closure',
-          meta: '青年角色、跨地域合作',
-          points: [
-            '回顧 2024 記錄、影展、公眾教育與 2025 展覽、對話',
-            '強調青年領導力與跨地域協作成果'
-          ]
-        },
-        {
-          id: 'anchor-key-message',
-          title: '一句話總結｜Key Message',
-          meta: 'Local action × International responsibility',
-          points: [
-            '將極端氣候記錄、影展、展覽、UN 級青年對話串連',
-            '把全球氣候議題轉化為在地行動與國際責任'
-          ]
-        }
-      ];
+    const getAnchorItems = () => ANCHORS[state.language] ?? ANCHORS.en;
+
+    function buildAnchorList() {
+      const anchors = getAnchorItems();
 
       const list = document.getElementById('anchorList');
       list.innerHTML = '';
@@ -1125,12 +1649,12 @@
         const qrBtn = document.createElement('button');
         qrBtn.className = 'tiny-btn';
         qrBtn.type = 'button';
-        qrBtn.textContent = 'QRcode';
+        qrBtn.textContent = getI18n('anchor.qr');
         qrBtn.addEventListener('click', () => showQRModal(item));
         const linkBtn = document.createElement('a');
         linkBtn.className = 'tiny-btn';
         linkBtn.href = `#${item.id}`;
-        linkBtn.textContent = '定位';
+        linkBtn.textContent = getI18n('anchor.locate');
         linkBtn.addEventListener('click', () => {
           openAnchorPanel();
           setTimeout(() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
@@ -1140,13 +1664,13 @@
         card.append(left, actions);
         list.appendChild(card);
       });
-    };
+    }
 
     const showQRModal = (item) => {
       const base = window.location.href.split('#')[0];
       const targetUrl = `${base}#${item.id}`;
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=340x340&data=${encodeURIComponent(targetUrl)}`;
-      document.getElementById('qrTitle').textContent = '時間點 QR';
+      document.getElementById('qrTitle').textContent = getI18n('qr.title');
       document.getElementById('qrSubtitle').textContent = item.title;
       document.getElementById('qrImage').src = qrUrl;
       document.getElementById('qrModal').classList.add('show');
@@ -1173,6 +1697,10 @@
       document.getElementById('qrCloseBtn').addEventListener('click', closeQRModal);
       document.getElementById('qrModal').addEventListener('click', (e) => {
         if (e.target.id === 'qrModal') closeQRModal();
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
       });
     };
 
@@ -1226,9 +1754,12 @@
 
       playEntryOverlay();
 
+      const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
+      const initialLang = savedLang === 'zh' ? 'zh' : 'en';
+      applyLanguage(initialLang);
+
       const data = await fetchJSON('data.json');
       prepareData(data);
-      buildAnchorList();
 
       await preloadImage(TEXTURE.day);
       await preloadImage(TEXTURE.bump).catch(() => {});
@@ -1240,7 +1771,10 @@
         .backgroundColor('#000000')
         .pointAltitude(0.02)
         .pointRadius(0.6)
-        .pointLabel(d => `<div style="padding:6px 8px;">${d.title || ''}</div>`)
+        .pointLabel(d => {
+          const translated = getEventTranslation(d);
+          return `<div style="padding:6px 8px;">${translated.title || ''}</div>`;
+        })
         .pointColor(d => d.mode === 'crisis' ? COLORS.crisis : COLORS.hope)
         .onPointClick((d) => {
           // ✅ 點地球點位：同步年份下拉/月份/事件
@@ -1327,7 +1861,7 @@
 
     bootstrap().catch(err => {
       console.error(err);
-      alert('初始化失敗：' + err.message);
+      alert(`${getI18n('misc.initFail')}: ${err.message}`);
     });
   </script>
 </body>
