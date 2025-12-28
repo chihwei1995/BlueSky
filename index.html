@@ -25,6 +25,9 @@
 
       /* ✅ 手機底部資訊列預留高度（避免上方面板擠下去時撞到底部） */
       --mobile-info-reserve: 120px;
+      --mobile-ui-padding: 8px;
+      --mobile-header-height: 120px;
+      --mobile-header-gap: 10px;
     }
 
     * { box-sizing: border-box; }
@@ -481,20 +484,26 @@
       #ui-layer{
         /* ✅ iOS safe-area */
         padding:
-          calc(8px + env(safe-area-inset-top))
-          calc(8px + env(safe-area-inset-right))
-          calc(8px + env(safe-area-inset-bottom))
-          calc(8px + env(safe-area-inset-left));
+          calc(var(--mobile-ui-padding) + env(safe-area-inset-top))
+          calc(var(--mobile-ui-padding) + env(safe-area-inset-right))
+          calc(var(--mobile-ui-padding) + env(safe-area-inset-bottom))
+          calc(var(--mobile-ui-padding) + env(safe-area-inset-left));
       }
 
-      header { flex-direction: column; align-items: flex-start; }
+      header { flex-direction: column; align-items: flex-start; width: 100%; gap: 10px; }
+      .header-actions { width: 100%; }
 
       /* ✅ 手機：時間表固定上方，但「高度受限」且內容可滾動 → 不再撞到底部資訊 */
       .timeline-container {
         position: fixed;
         left: calc(8px + env(safe-area-inset-left));
         right: calc(8px + env(safe-area-inset-right));
-        top: calc(100px + env(safe-area-inset-top));
+        top: calc(
+          var(--mobile-ui-padding)
+          + env(safe-area-inset-top)
+          + var(--mobile-header-height)
+          + var(--mobile-header-gap)
+        );
         bottom: auto;
         z-index: 3;
         padding: 12px 10px 10px;
@@ -503,7 +512,7 @@
         /* 關鍵：最大高度 = 畫面 - (header top) - 底部預留 */
         max-height: calc(
           100vh
-          - (70px + env(safe-area-inset-top))
+          - (var(--mobile-ui-padding) + env(safe-area-inset-top) + var(--mobile-header-height) + var(--mobile-header-gap))
           - (var(--mobile-info-reserve) + env(safe-area-inset-bottom))
           - 14px
         );
@@ -1286,6 +1295,16 @@
       document.documentElement.lang = state.language === 'en' ? 'en' : 'zh-Hant';
     };
 
+    const updateMobileLayoutVars = () => {
+      if (!window.matchMedia('(max-width: 768px)').matches) return;
+      const header = document.querySelector('header');
+      if (!header) return;
+      const height = header.offsetHeight;
+      if (height) {
+        document.documentElement.style.setProperty('--mobile-header-height', `${height}px`);
+      }
+    };
+
     const applyLanguage = (lang) => {
       state.language = lang === 'zh' ? 'zh' : 'en';
       localStorage.setItem(LANG_STORAGE_KEY, state.language);
@@ -1306,6 +1325,7 @@
         }
       }
       updateYearSelect(getYears());
+      updateMobileLayoutVars();
     };
 
     const fetchJSON = async (path) => {
@@ -1848,6 +1868,9 @@
 
       if (data.config?.initial_view) state.initialView = data.config.initial_view;
     };
+
+    window.addEventListener('resize', updateMobileLayoutVars);
+    window.addEventListener('orientationchange', updateMobileLayoutVars);
 
     const bootstrap = async () => {
       const uiLayer = document.getElementById('ui-layer');
