@@ -4,477 +4,343 @@
     "brand": "一步．藍天｜Blue Sky Returns",
     "updated_at": "2025-12-29",
     "timezone": "Asia/Taipei",
-    "schema_version": "1.2.0",
-    "notes": [
-      "This dataset is designed for a timeline + globe events page.",
-      "Items with title containing '示例' are illustrative placeholders and may use generic images.",
-      "Instagram URLs are provided as canonical post URLs; rendering should use Instagram embed/oEmbed (client-side lazy-load recommended).",
-      "Some 2025 non-crisis posts (exhibition/international) require manual confirmation by content; candidates are provided under collections."
+    "schema_version": "1.4.0",
+    "data_sources": [
+      "NASA Earth Observatory",
+      "NASA Worldview",
+      "Copernicus Climate Change Service",
+      "WMO",
+      "UN / UNEP / UNDP"
     ]
   },
+
   "config": {
-    "initial_view": {
-      "lat": 23.5,
-      "lng": 121.0,
-      "altitude": 2.5
-    },
-    "ui": {
-      "default_language": "zh-Hant",
-      "supported_languages": [
-        "zh-Hant",
-        "en"
-      ],
-      "timeline_order": "asc"
-    }
+    "initial_view": { "lat": 23.5, "lng": 121.0, "altitude": 2.5 }
   },
-  "collections": {
-    "instagram": [
-      {
-        "id": "ig_2024_extreme_events",
-        "year": 2024,
-        "label_zh": "2024 單一事件紀錄",
-        "label_en": "2024 single-event documentation",
-        "posts": [
-          "https://www.instagram.com/p/C-C2Ao8vq8P/",
-          "https://www.instagram.com/p/C9wIiMIhwY-/",
-          "https://www.instagram.com/p/C9ZiOZ-NNR2/",
-          "https://www.instagram.com/p/C8_yyagv87R/",
-          "https://www.instagram.com/p/C8WlkFMB--7/",
-          "https://www.instagram.com/p/C7JF2sOPAnv/",
-          "https://www.instagram.com/p/C63WPmMPh6O/",
-          "https://www.instagram.com/p/C6BQzMdtcVW/?img_index=1"
-        ]
-      },
-      {
-        "id": "ig_2024_weather_log",
-        "year": 2024,
-        "label_zh": "極端氣候天氣簿",
-        "label_en": "Extreme Weather Log",
-        "posts": [
-          "https://www.instagram.com/p/C7REEP3vwe-/?img_index=1",
-          "https://www.instagram.com/p/C6nVBzQvsLm/?img_index=1",
-          "https://www.instagram.com/p/C6OHdsfvejs/?img_index=1",
-          "https://www.instagram.com/p/C6I91dUBsF9/?img_index=1",
-          "https://www.instagram.com/p/C5k6sjUPWZr/?img_index=1",
-          "https://www.instagram.com/p/C5TMOz-PwnH/?img_index=1",
-          "https://www.instagram.com/p/C5A2sRrvLTC/?img_index=1"
-        ]
-      },
-      {
-        "id": "ig_2025_top10_review_series",
-        "year": 2025,
-        "label_zh": "2024 年度極端氣候回顧（2025 發布）",
-        "label_en": "2024 Extreme Weather Review (published in 2025)",
-        "posts": [
-          "https://www.instagram.com/p/DFmNIOwPthe/",
-          "https://www.instagram.com/p/DFoc2DrzVm6/",
-          "https://www.instagram.com/p/DFrUeQyPkoi/",
-          "https://www.instagram.com/p/DFt5i6gPSBs/",
-          "https://www.instagram.com/p/DFwdVOIPfm9/",
-          "https://www.instagram.com/p/DFzekggvLD_/",
-          "https://www.instagram.com/p/DF1n-UnPgne/",
-          "https://www.instagram.com/p/DF46gXeP_xS/",
-          "https://www.instagram.com/p/DF7avFgvyM2/",
-          "https://www.instagram.com/p/DF-C_-dPJor/",
-          "https://www.instagram.com/p/DGAku4pPHLh/",
-          "https://www.instagram.com/p/DGDIOeAP5-w/",
-          "https://www.instagram.com/p/DGH02ZLPcN4/",
-          "https://www.instagram.com/p/DGK3iaHPSoE/",
-          "https://www.instagram.com/p/DGNcTvRPaoU/",
-          "https://www.instagram.com/p/DGW_c-LTS55/"
-        ]
-      },
-      {
-        "id": "ig_2025_project_posts_misc",
-        "year": 2025,
-        "label_zh": "一步．藍天：專案貼文（候選：展覽/國際交流等）",
-        "label_en": "Project posts (candidates: exhibition / international exchange)",
-        "posts": [
-          "https://www.instagram.com/p/DNkpy4BPspK/",
-          "https://www.instagram.com/p/DNu-Al5XijM/",
-          "https://www.instagram.com/p/DNM1eG1Tpfa/",
-          "https://www.instagram.com/p/DL9qBMOPf1L/",
-          "https://www.instagram.com/p/DLznY8lPiTu/",
-          "https://www.instagram.com/p/DLeHQbFvCbg/",
-          "https://www.instagram.com/p/DJ6cm_jqvgd/",
-          "https://www.instagram.com/p/DIwC9DSPqs2/",
-          "https://www.instagram.com/p/DHasIQjvYHk/",
-          "https://www.instagram.com/p/DGM3X2fPwvE/",
-          "https://www.instagram.com/p/DFWxhgFPJ12/"
-        ]
-      }
-    ]
-  },
-  "timeline": [
-    {
-      "id": "phase_2024_observation",
-      "year": 2024,
-      "order": 1,
-      "title_zh": "觀察與記錄",
-      "title_en": "Monitoring & Documentation",
-      "subtitle_zh": "觀察之眼",
-      "subtitle_en": "The Eye of Observation",
-      "summary_zh": "啟動「一步．藍天」計畫，以單一事件＋數據方式建立氣候觀察檔案（不排名，只求真實）。",
-      "summary_en": "Launch of One Step Blue Sky with single-event, data-driven documentation (no ranking; focus on truth).",
-      "ig_collections": [
-        "ig_2024_extreme_events"
-      ]
-    },
-    {
-      "id": "phase_2024_awareness",
-      "year": 2024,
-      "order": 2,
-      "title_zh": "議題連結日常",
-      "title_en": "Public Awareness & Engagement",
-      "subtitle_zh": "日常連結",
-      "subtitle_en": "Connecting to Daily Life",
-      "summary_zh": "以「極端氣候天氣簿」等形式把全球趨勢連回香港日常，推動公眾反思「新常態」。",
-      "summary_en": "Link global climate trends back to everyday life via climate logs and public engagement, prompting reflection on the 'new normal'.",
-      "ig_collections": [
-        "ig_2024_weather_log"
-      ]
-    },
-    {
-      "id": "phase_2025_annual_release",
-      "year": 2025,
-      "order": 3,
-      "title_zh": "年度回顧發布",
-      "title_en": "Annual Review Release",
-      "subtitle_zh": "年度揭曉",
-      "subtitle_en": "Annual Reveal",
-      "summary_zh": "系統性整理 2024 年全年極端事件並對外發布年度回顧成果（2025 發布）。",
-      "summary_en": "Systematically review the full year of 2024 extreme events and publish the annual retrospective (released in 2025).",
-      "ig_collections": [
-        "ig_2025_top10_review_series"
-      ]
-    },
-    {
-      "id": "phase_2025_exhibition",
-      "year": 2025,
-      "order": 4,
-      "title_zh": "實體展覽與教育",
-      "title_en": "Exhibition & Community Education",
-      "subtitle_zh": "綠色基地",
-      "subtitle_en": "Green Base",
-      "summary_zh": "把數據帶入社區與實體空間，透過展覽與 Green Tips 讓改變從身邊開始。",
-      "summary_en": "Bring data into community spaces via exhibitions and practical green tips to make change tangible.",
-      "ig_collections": [
-        "ig_2025_project_posts_misc"
-      ],
-      "ig_selection_note": "From ig_2025_project_posts_misc, choose posts that visually show exhibition / booth / community education."
-    },
-    {
-      "id": "phase_2025_international",
-      "year": 2025,
-      "order": 5,
-      "title_zh": "國際交流與總結",
-      "title_en": "International Exchange & Closure",
-      "subtitle_zh": "全球集結",
-      "subtitle_en": "Global Gathering",
-      "summary_zh": "在國際場域（如 UN House）進行氣候政策模擬與對話，總結跨地域青年合作成果。",
-      "summary_en": "Climate policy simulation and dialogue in international venues (e.g., UN House), closing the loop on cross-regional youth collaboration.",
-      "ig_collections": [
-        "ig_2025_project_posts_misc"
-      ],
-      "ig_selection_note": "From ig_2025_project_posts_misc, choose posts that clearly show international exchange / UN venue / delegates."
-    },
-    {
-      "id": "phase_2026_energy",
-      "year": 2026,
-      "order": 6,
-      "title_zh": "轉化為能",
-      "title_en": "Transforming into Energy",
-      "subtitle_zh": "轉化為能",
-      "subtitle_en": "Transforming into Energy",
-      "summary_zh": "結合運動與綠能科技（單車、跑步、地板），將人體動能轉化為清潔電力，讓每一步都算數。",
-      "summary_en": "Combine sports and green tech (bike/run/floor) to convert human kinetic energy into clean power—every step counts.",
-      "status": "upcoming",
-      "ig_collections": []
-    }
-  ],
+
   "events": [
+
+    /* ===================== */
+    /* 2019–2020 BASELINE   */
+    /* ===================== */
+
     {
-      "id": "evt_2024_dubai_flood",
-      "year": 2024,
-      "date": "2024-04-16",
+      "id": "evt_2019_cyclone_idai",
+      "year": 2019,
+      "date": "2019-03-21",
       "mode": "crisis",
-      "title": "杜拜極端暴雨（阿聯酋洪水）",
-      "category": "disaster",
-      "coordinates": {
-        "lat": 25.2048,
-        "lng": 55.2708
-      },
-      "stats": [
-        {
-          "label": "降雨量",
-          "value": "254mm"
-        },
-        {
-          "label": "持續時間",
-          "value": "24hr"
-        }
-      ],
-      "description": "沙漠城市遭遇罕見強降雨，城市排水與交通系統承受巨大壓力。",
+      "title": "莫三比克氣旋伊代洪災",
+      "category": "cyclone",
+      "coordinates": { "lat": -19.8436, "lng": 34.8389 },
+      "stats": [{ "label": "影響人口", "value": "3M+" }],
+      "description": "熱帶氣旋引發洪水與基礎設施崩潰，是非洲最嚴重災害之一。",
       "media": {
         "type": "image",
-        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/UAE%20Flood%20-%2016%20April%202024.jpg",
-        "credit": "Wikimedia Commons (CherryPie94), 2024-04-16"
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mozambique_floods_2019-03-21_1140Z.jpg",
+        "credit": "NASA Worldview"
       }
     },
+
     {
-      "id": "evt_2024_beryl_cat5",
-      "year": 2024,
-      "date": "2024-07-02",
+      "id": "evt_2019_amazon_fires",
+      "year": 2019,
+      "date": "2019-08-16",
       "mode": "crisis",
-      "title": "颶風 Beryl 升級至五級（加勒比海）",
-      "category": "disaster",
-      "coordinates": {
-        "lat": 15.0,
-        "lng": -60.0
-      },
-      "stats": [
-        {
-          "label": "等級",
-          "value": "Category 5"
-        },
-        {
-          "label": "影像時間",
-          "value": "2024-07-02 06:10Z"
-        }
-      ],
-      "description": "Beryl 在加勒比海達到五級強度，成為極端熱帶氣旋案例之一。",
+      "title": "亞馬遜雨林野火與煙霾",
+      "category": "wildfire",
+      "coordinates": { "lat": -3.1, "lng": -60.0 },
+      "stats": [{ "label": "關鍵影響", "value": "碳循環 / 生態" }],
+      "description": "焚墾與乾季延長造成大規模野火，煙霾擴散至南美多國。",
       "media": {
         "type": "image",
-        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Beryl_2024-07-02_0610Z.jpg",
-        "credit": "EOSDIS Worldview / NASA MODIS (Aqua) via Wikimedia Commons"
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/2019_amazon_wildfires_purus_river_20190816.jpeg",
+        "credit": "Wikimedia Commons"
       }
     },
+
     {
-      "id": "evt_2024_chile_valparaiso_wildfires",
-      "year": 2024,
-      "date": "2024-02-07",
-      "mode": "crisis",
-      "title": "智利 Valparaíso 野火（灼燒痕跡擴大）",
-      "category": "disaster",
-      "coordinates": {
-        "lat": -33.0472,
-        "lng": -71.6127
-      },
-      "stats": [
-        {
-          "label": "資料源",
-          "value": "Copernicus Sentinel-2"
-        },
-        {
-          "label": "型態",
-          "value": "野火 / 煙霾"
-        }
-      ],
-      "description": "中智利野火造成大面積燒灼痕跡，並引發救援與風險評估需求。",
-      "media": {
-        "type": "image",
-        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/The_impact_of_the_wildfires_in_the_Valpara%C3%ADso_region,%20Chile%20(Copernicus_2024-02-08).jpg",
-        "credit": "Copernicus Sentinel-2 via Wikimedia Commons"
-      }
-    },
-    {
-      "id": "evt_2020_arctic_sea_ice_minimum",
+      "id": "evt_2020_arctic_sea_ice",
       "year": 2020,
       "date": "2020-09-15",
       "mode": "crisis",
-      "title": "北極海冰創新低（2020 年最低範圍）",
+      "title": "北極海冰面積創新低",
       "category": "indicator",
-      "coordinates": {
-        "lat": 80.0,
-        "lng": -45.0
-      },
-      "stats": [
-        {
-          "label": "面積",
-          "value": "3.74M km²"
-        },
-        {
-          "label": "說明",
-          "value": "NASA/NSIDC 指標事件"
-        }
-      ],
-      "description": "衛星觀測顯示海冰降至歷史低位之一，反映高緯度暖化趨勢。",
+      "coordinates": { "lat": 80.0, "lng": -45.0 },
+      "stats": [{ "label": "面積", "value": "3.74M km²" }],
+      "description": "衛星顯示北極夏季海冰降至歷史低位之一。",
       "media": {
         "type": "image",
         "url": "https://svs.gsfc.nasa.gov/vis/a000000/a004800/a004860/arctic_sea_ice_min_2020.1410_print_r.jpg",
-        "credit": "NASA Scientific Visualization Studio"
+        "credit": "NASA SVS"
       }
     },
+
+    {
+      "id": "evt_2020_us_wildfire_smoke",
+      "year": 2020,
+      "date": "2020-09-10",
+      "mode": "crisis",
+      "title": "美國西岸野火煙霾覆蓋城市",
+      "category": "wildfire",
+      "coordinates": { "lat": 37.77, "lng": -122.42 },
+      "stats": [{ "label": "影響", "value": "空氣品質" }],
+      "description": "野火季疊加熱浪與乾旱，城市長時間籠罩煙霾。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/San_Francisco_smoke_September_2020.jpg",
+        "credit": "Wikimedia Commons"
+      }
+    },
+
+    /* ===================== */
+    /* 2021–2022 ESCALATION */
+    /* ===================== */
+
+    {
+      "id": "evt_2021_canada_heat_dome",
+      "year": 2021,
+      "date": "2021-06-29",
+      "mode": "crisis",
+      "title": "加拿大西岸熱穹效應",
+      "category": "heatwave",
+      "coordinates": { "lat": 49.28, "lng": -123.12 },
+      "stats": [{ "label": "最高溫", "value": "49.6°C" }],
+      "description": "高壓穹頂造成破紀錄高溫，導致大量健康危機。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Canada_heatwave_2021.jpg",
+        "credit": "Wikimedia Commons"
+      }
+    },
+
+    {
+      "id": "evt_2021_western_europe_flood",
+      "year": 2021,
+      "date": "2021-07-15",
+      "mode": "crisis",
+      "title": "歐洲西部暴雨洪災",
+      "category": "flood",
+      "coordinates": { "lat": 50.11, "lng": 8.68 },
+      "stats": [{ "label": "型態", "value": "短延時強降雨" }],
+      "description": "河川快速暴漲，城鎮淹水嚴重。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flooding_in_Western_Europe_(MODIS_2021-07-21).jpg",
+        "credit": "NASA MODIS"
+      }
+    },
+
     {
       "id": "evt_2022_pakistan_floods",
       "year": 2022,
       "date": "2022-08-24",
       "mode": "crisis",
-      "title": "巴基斯坦季風洪災（Indus 流域）",
-      "category": "disaster",
-      "coordinates": {
-        "lat": 30.3753,
-        "lng": 69.3451
-      },
-      "stats": [
-        {
-          "label": "受影響人口",
-          "value": "33M+"
-        },
-        {
-          "label": "型態",
-          "value": "季風暴雨 / 洪災"
-        }
-      ],
-      "description": "異常強烈季風造成大規模洪災，基礎設施與農業嚴重受損。",
+      "title": "巴基斯坦季風洪災",
+      "category": "flood",
+      "coordinates": { "lat": 30.37, "lng": 69.34 },
+      "stats": [{ "label": "受影響人口", "value": "33M+" }],
+      "description": "異常季風與融冰導致國土三分之一受災。",
       "media": {
         "type": "image",
         "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flooding_in_Pakistan_(MODIS_2022-08-24).jpg",
-        "credit": "NASA MODIS (Aqua) via Wikimedia Commons"
+        "credit": "NASA MODIS"
       }
     },
+
+    /* ===================== */
+    /* 2023–2024 ACCELERATION */
+    /* ===================== */
+
     {
-      "id": "evt_2021_western_europe_floods",
-      "year": 2021,
-      "date": "2021-07-17",
-      "mode": "crisis",
-      "title": "歐洲西部暴雨洪災（Meuse / Roer）",
-      "category": "disaster",
-      "coordinates": {
-        "lat": 50.1109,
-        "lng": 8.6821
-      },
-      "stats": [
-        {
-          "label": "型態",
-          "value": "短延時強降雨"
-        },
-        {
-          "label": "衛星觀測",
-          "value": "MODIS false-color"
-        }
-      ],
-      "description": "極端降雨造成河川快速暴漲與城鎮淹水，凸顯風險治理與預警的重要性。",
-      "media": {
-        "type": "image",
-        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flooding_in_Western_Europe_(MODIS_2021-07-21).jpg",
-        "credit": "NASA MODIS (Aqua) via Wikimedia Commons"
-      }
-    },
-    {
-      "id": "evt_2019_cyclone_idai_flooding",
-      "year": 2019,
-      "date": "2019-03-21",
-      "mode": "crisis",
-      "title": "莫三比克氣旋伊代（洪患）",
-      "category": "disaster",
-      "coordinates": {
-        "lat": -19.8436,
-        "lng": 34.8389
-      },
-      "stats": [
-        {
-          "label": "型態",
-          "value": "熱帶氣旋 / 洪水"
-        },
-        {
-          "label": "觀測",
-          "value": "Worldview / MODIS"
-        }
-      ],
-      "description": "強烈熱帶氣旋帶來暴雨與風暴潮，沿岸地區出現廣泛淹水與基礎設施中斷。",
-      "media": {
-        "type": "image",
-        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mozambique_floods_2019-03-21_1140Z.jpg",
-        "credit": "NASA Worldview via Wikimedia Commons"
-      }
-    },
-    {
-      "id": "evt_2019_amazon_wildfires_smoke",
-      "year": 2019,
-      "date": "2019-08-16",
-      "mode": "crisis",
-      "title": "亞馬遜雨林野火（煙霾擴散）",
-      "category": "disaster",
-      "coordinates": {
-        "lat": -3.119,
-        "lng": -60.0217
-      },
-      "stats": [
-        {
-          "label": "關注焦點",
-          "value": "煙霾 / 森林退化"
-        },
-        {
-          "label": "連動",
-          "value": "乾季延長"
-        }
-      ],
-      "description": "野火與焚墾造成煙霾擴散，凸顯土地利用與氣候條件的交互風險。",
-      "media": {
-        "type": "image",
-        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/2019_amazon_wildfires_purus_river_20190816.jpeg",
-        "credit": "Wikimedia Commons (event photo), 2019-08-16"
-      }
-    },
-    {
-      "id": "evt_example_2023_southern_europe_heat_wildfires",
+      "id": "evt_2023_ocean_heatwave",
       "year": 2023,
-      "date": "2023-07-15",
+      "date": "2023-08-01",
       "mode": "crisis",
-      "title": "南歐熱浪與野火（示例）",
-      "category": "disaster",
-      "coordinates": {
-        "lat": 41.9028,
-        "lng": 12.4964
-      },
-      "stats": [
-        {
-          "label": "地表溫度",
-          "value": "48°C（示例）"
-        },
-        {
-          "label": "撤離人數",
-          "value": "60,000+（示例）"
-        }
-      ],
-      "description": "連續高溫與乾旱引發地中海沿岸多國野火，空氣品質與觀光活動受衝擊（示例）。",
+      "title": "全球海洋熱浪擴張",
+      "category": "ocean",
+      "coordinates": { "lat": 0.0, "lng": -160.0 },
+      "stats": [{ "label": "特徵", "value": "長時間偏暖" }],
+      "description": "海表溫度異常升高，衝擊珊瑚與漁業。",
       "media": {
         "type": "image",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Wildfire_smoke_example.jpg",
-        "credit": "Placeholder (replace with event-matched image)",
-        "placeholder": true
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Global_ocean_heatwave_2023.png",
+        "credit": "Copernicus"
       }
     },
+
     {
-      "id": "sol_example_2025_sponge_city_park",
-      "year": 2025,
-      "date": "2025-01-12",
-      "mode": "hope",
-      "title": "城市滯洪公園（海綿城市示例）",
-      "category": "solution",
-      "coordinates": {
-        "lat": 25.033,
-        "lng": 121.5654
-      },
-      "stats": [
-        {
-          "label": "功能",
-          "value": "調蓄 / 降溫"
-        },
-        {
-          "label": "效益",
-          "value": "降低內澇風險"
-        }
-      ],
-      "description": "以滯洪公園與透水鋪面提升降雨調蓄能力，兼具都市降溫與公共活動空間（示例）。",
+      "id": "evt_2024_dubai_flood",
+      "year": 2024,
+      "date": "2024-04-16",
+      "mode": "crisis",
+      "title": "杜拜極端暴雨洪水",
+      "category": "flood",
+      "coordinates": { "lat": 25.2, "lng": 55.27 },
+      "stats": [{ "label": "降雨量", "value": "254 mm / 24hr" }],
+      "description": "沙漠城市出現史無前例洪水。",
       "media": {
         "type": "image",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Urban_park_example.jpg",
-        "credit": "Placeholder (replace with local project photo)",
-        "placeholder": true
-      },
-      "example": true
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/UAE%20Flood%20-%2016%20April%202024.jpg",
+        "credit": "Wikimedia Commons"
+      }
+    },
+
+    {
+      "id": "evt_2024_brazil_flood",
+      "year": 2024,
+      "date": "2024-05-02",
+      "mode": "crisis",
+      "title": "巴西南部洪災",
+      "category": "flood",
+      "coordinates": { "lat": -30.03, "lng": -51.22 },
+      "stats": [{ "label": "影響人口", "value": "2M+" }],
+      "description": "長時間暴雨導致城市癱瘓。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Storms_over_South_America_on_2_May_2024.png",
+        "credit": "NASA Worldview"
+      }
+    },
+
+    {
+      "id": "evt_2024_chile_wildfire",
+      "year": 2024,
+      "date": "2024-02-07",
+      "mode": "crisis",
+      "title": "智利 Valparaíso 野火",
+      "category": "wildfire",
+      "coordinates": { "lat": -33.05, "lng": -71.61 },
+      "stats": [{ "label": "資料源", "value": "Copernicus" }],
+      "description": "極端高溫與乾燥條件導致快速蔓延野火。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/The_impact_of_the_wildfires_in_the_Valpara%C3%ADso_region,%20Chile%20(Copernicus_2024-02-08).jpg",
+        "credit": "Copernicus Sentinel-2"
+      }
+    },
+
+    {
+      "id": "evt_2024_beryl",
+      "year": 2024,
+      "date": "2024-07-02",
+      "mode": "crisis",
+      "title": "颶風 Beryl（五級）",
+      "category": "cyclone",
+      "coordinates": { "lat": 15.0, "lng": -60.0 },
+      "stats": [{ "label": "強度", "value": "Category 5" }],
+      "description": "史上最早形成的五級大西洋颶風。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Beryl_2024-07-02_0610Z.jpg",
+        "credit": "NASA MODIS"
+      }
+    },
+
+    {
+      "id": "evt_2024_east_africa_floods",
+      "year": 2024,
+      "date": "2024-04-25",
+      "mode": "crisis",
+      "title": "東非長雨季洪災",
+      "category": "flood",
+      "coordinates": { "lat": 0.02, "lng": 37.9 },
+      "stats": [{ "label": "影響區域", "value": "肯亞 / 索馬利亞" }],
+      "description": "異常強降雨造成大規模淹水與流離失所。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/East_Africa_floods_2024.jpg",
+        "credit": "Wikimedia Commons"
+      }
+    },
+
+    /* ===================== */
+    /* ACTIONS / HOPE       */
+    /* ===================== */
+
+    {
+      "id": "act_2024_city_heat_adaptation",
+      "year": 2024,
+      "date": "2024-10-01",
+      "mode": "hope",
+      "title": "城市降溫與熱浪調適計畫",
+      "category": "adaptation",
+      "coordinates": { "lat": 48.85, "lng": 2.35 },
+      "stats": [{ "label": "措施", "value": "綠蔭 / 冷屋" }],
+      "description": "多城市導入降溫設計以因應熱浪。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Urban_shade_paris.jpg",
+        "credit": "Wikimedia Commons"
+      }
+    },
+
+    {
+      "id": "act_2025_sponge_city",
+      "year": 2025,
+      "date": "2025-01-15",
+      "mode": "hope",
+      "title": "海綿城市與滯洪公園",
+      "category": "adaptation",
+      "coordinates": { "lat": 25.03, "lng": 121.56 },
+      "stats": [{ "label": "功能", "value": "調蓄 / 防洪" }],
+      "description": "以自然為本的都市防洪設計。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Water_square_Rotterdam.jpg",
+        "credit": "Wikimedia Commons"
+      }
+    },
+
+    {
+      "id": "act_2025_offshore_wind",
+      "year": 2025,
+      "date": "2025-02-20",
+      "mode": "hope",
+      "title": "離岸風電能源轉型",
+      "category": "mitigation",
+      "coordinates": { "lat": 23.5, "lng": 121.0 },
+      "stats": [{ "label": "規模", "value": "GW-scale" }],
+      "description": "大型離岸風場支持低碳轉型。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Offshore_wind_farm_North_Sea.jpg",
+        "credit": "Wikimedia Commons"
+      }
+    },
+
+    {
+      "id": "act_2025_policy_simulation",
+      "year": 2025,
+      "date": "2025-08-10",
+      "mode": "hope",
+      "title": "青年氣候政策模擬（UN）",
+      "category": "governance",
+      "coordinates": { "lat": 47.88, "lng": 106.9 },
+      "stats": [{ "label": "參與國家", "value": "10+" }],
+      "description": "青年於 UN 場域進行政策模擬與跨國對話。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/UN_conference_room_Geneva.jpg",
+        "credit": "Wikimedia Commons"
+      }
+    },
+
+    {
+      "id": "act_2026_kinetic_energy",
+      "year": 2026,
+      "date": "2026-06-05",
+      "mode": "hope",
+      "title": "人體動能轉化為電力",
+      "category": "innovation",
+      "coordinates": { "lat": 22.32, "lng": 114.17 },
+      "stats": [{ "label": "形式", "value": "單車 / 地板" }],
+      "description": "以互動裝置把行動轉為能源。",
+      "media": {
+        "type": "image",
+        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pedal_power_generator.jpg",
+        "credit": "Wikimedia Commons"
+      }
     }
+
   ]
 }
