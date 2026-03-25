@@ -383,7 +383,8 @@
         deploymentId: 'AKfycbz0gc1mCqobQrHUb1Pm7Fc7ul1njeLytqwv54p1OkGkMAXknnmhwB4ModRnQMH8e4-LRw',
         name: String(formData.get('name') || ''),
         email: String(formData.get('email') || ''),
-        isJci: String(formData.get('isJci') || ''),
+        // 與 Apps Script doPost(e) 參數命名對齊（is_jci / result_role）
+        is_jci: String(formData.get('isJci') || ''),
         region: String(formData.get('region') || ''),
         chapter: String(formData.get('chapter') || ''),
         q1: String(formData.get('q1') || ''),
@@ -391,24 +392,22 @@
         q3: String(formData.get('q3') || ''),
         q4: String(formData.get('q4') || ''),
         q5: String(formData.get('q5') || ''),
+        result_role: role.title,
         totalScore: String(score),
-        roleTitle: role.title,
         submittedAt: new Date().toISOString()
       });
 
       try {
-        const response = await fetch(APPS_SCRIPT_URL, {
+        await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
+          // Apps Script Web App 常見不回傳 CORS header，使用 no-cors 避免前端被擋下
+          mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
           body: payload.toString()
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
         statusEl.classList.add('ok');
-        statusEl.textContent = '已成功提交！資料已送到 Google Apps Script。';
+        statusEl.textContent = '已送出！如網路正常，資料會寫入 Google 試算表。';
         form.reset();
         setJciFields('否');
       } catch (error) {
