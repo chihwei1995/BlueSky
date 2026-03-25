@@ -154,8 +154,8 @@
         <fieldset>
           <label class="required">是否為 JCI（青商會）會友？ (Are you a JCI member?)</label>
           <div class="options">
-            <label class="option"><input type="radio" name="isJci" value="是" required />是 Yes</label>
-            <label class="option"><input type="radio" name="isJci" value="否" />否 No</label>
+            <label class="option"><input type="radio" name="is_jci" value="是" required />是 Yes</label>
+            <label class="option"><input type="radio" name="is_jci" value="否" />否 No</label>
           </div>
         </fieldset>
 
@@ -351,7 +351,7 @@
       modal.setAttribute('aria-hidden', 'false');
     };
 
-    document.querySelectorAll('input[name="isJci"]').forEach((radio) => {
+    document.querySelectorAll('input[name="is_jci"]').forEach((radio) => {
       radio.addEventListener('change', () => setJciFields(radio.value));
     });
 
@@ -384,7 +384,7 @@
         name: String(formData.get('name') || ''),
         email: String(formData.get('email') || ''),
         // 與 Apps Script doPost(e) 參數命名對齊（is_jci / result_role）
-        is_jci: String(formData.get('isJci') || ''),
+        is_jci: String(formData.get('is_jci') || ''),
         region: String(formData.get('region') || ''),
         chapter: String(formData.get('chapter') || ''),
         q1: String(formData.get('q1') || ''),
