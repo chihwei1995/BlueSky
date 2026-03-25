@@ -246,7 +246,7 @@
   </section>
 
   <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxNl1B637iFZl89_Dq7woAa0B5tsM1-e7PCLvGE6AgjjPWILJ_Ebx1jr08HtdqgUaqADg/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXdAvMo-u2UZV44eWxUsY9JvzBIwDLg9bx7mTB9AqiU-Z2ViK6LwQssGJbMa6b1TzNyA/exec';
 
     const roleRules = [
       {
@@ -379,31 +379,15 @@
 
       openResultModal({ score, role });
 
-      const payload = new URLSearchParams({
-        deploymentId: 'AKfycbxNl1B637iFZl89_Dq7woAa0B5tsM1-e7PCLvGE6AgjjPWILJ_Ebx1jr08HtdqgUaqADg',
-        name: String(formData.get('name') || ''),
-        email: String(formData.get('email') || ''),
-        // 與 Apps Script doPost(e) 參數命名對齊（is_jci / result_role）
-        is_jci: String(formData.get('is_jci') || ''),
-        region: String(formData.get('region') || ''),
-        chapter: String(formData.get('chapter') || ''),
-        q1: String(formData.get('q1') || ''),
-        q2: String(formData.get('q2') || ''),
-        q3: String(formData.get('q3') || ''),
-        q4: String(formData.get('q4') || ''),
-        q5: String(formData.get('q5') || ''),
-        result_role: role.title,
-        totalScore: String(score),
-        submittedAt: new Date().toISOString()
-      });
+      // 將表單資料改為 URLSearchParams，提升 Google Apps Script 端 e.parameter 的解析成功率
+      formData.set('result_role', role.title);
+      formData.set('totalScore', String(score));
+      formData.set('submittedAt', new Date().toISOString());
 
       try {
         await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          // Apps Script Web App 常見不回傳 CORS header，使用 no-cors 避免前端被擋下
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-          body: payload.toString()
+          body: new URLSearchParams(formData)
         });
 
         statusEl.classList.add('ok');
