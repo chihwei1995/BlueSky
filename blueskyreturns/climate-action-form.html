@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JCI 氣候行動互動表單</title>
+  <style>
+    :root {
+      --bg: #f4f8fb;
+      --card: #fff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --border: #dbe7f2;
+      --ok: #15803d;
+      --danger: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 920px;
+      margin: 32px auto;
+      padding: 0 16px 48px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 3.4vw, 34px);
+    }
+    .subtitle { color: var(--muted); margin: 4px 0 24px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 24px rgba(2, 132, 199, 0.08);
+    }
+    h2 { margin: 0 0 12px; font-size: 1.2rem; }
+    label { display: block; font-weight: 700; margin: 12px 0 6px; }
+    .required::after { content: ' *'; color: #dc2626; }
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.98rem;
+    }
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    .options {
+      display: grid;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .option {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border: 1px solid #dbe5f0;
+      border-radius: 10px;
+      background: #f8fbff;
+    }
+    .option input { margin-top: 3px; }
+    #jciDetails[hidden] { display: none; }
+    .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+    button {
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover { background: var(--primary-dark); }
+    .status { font-weight: 700; }
+    .status.ok { color: var(--ok); }
+    .status.error { color: var(--danger); }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 99;
+    }
+    .modal.open { display: flex; }
+    .modal-card {
+      width: min(660px, 100%);
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+    .role-title { margin: 0 0 4px; }
+    .role-range { color: var(--primary-dark); font-weight: 700; margin: 0 0 12px; }
+    .small-note { color: var(--muted); margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="topbar">
+      <h1>你是哪一種類型的氣候行動者？</h1>
+      <a class="back-link" href="./index.html">← 返回 Blue Sky Returns</a>
+    </div>
+    <p class="subtitle">填寫以下表單，完成後會立即獲得你的雙語角色分析，並同步提交至 Google Apps Script。</p>
+
+    <form id="climateForm">
+      <section class="card">
+        <h2>第一部分：基本聯絡與 JCI 身分資料</h2>
+
+        <label class="required" for="name">姓名 / 單位名稱</label>
+        <input id="name" name="name" type="text" required />
+
+        <label class="required" for="email">電子郵件 Email（用於 6 月發送電子書）</label>
+        <input id="email" name="email" type="email" required />
+
+        <fieldset>
+          <label class="required">是否為 JCI（青商會）會友？</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="isJci" value="是" required />是</label>
+            <label class="option"><input type="radio" name="isJci" value="否" />否</label>
+          </div>
+        </fieldset>
+
+        <div id="jciDetails" hidden>
+          <label class="required" for="region">所屬地區 / 國家 (Region/Country)</label>
+          <input id="region" name="region" type="text" placeholder="例：Japan, Hong Kong, Taiwan" />
+
+          <label class="required" for="chapter">所屬分會 (LOM / Chapter)</label>
+          <input id="chapter" name="chapter" type="text" placeholder="例：Peninsula" />
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>第二部分：互動挑戰題庫（A=1, B=2, C=3, D=4）</h2>
+
+        <fieldset class="quiz" data-question="q1">
+          <label class="required">Q1: 對於你所在地區的極端氣候（危機），你的焦慮程度是：</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q1" value="1" required />A. 完全不焦慮，一切都會好起來的</label>
+            <label class="option"><input type="radio" name="q1" value="2" />B. 有點焦慮，但我更專注於當下能做的事情</label>
+            <label class="option"><input type="radio" name="q1" value="3" />C. 非常焦慮，常常感到無助和恐懼</label>
+            <label class="option"><input type="radio" name="q1" value="4" />D. 焦慮推動我去尋求改變和行動</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz" data-question="q2">
+          <label class="required">Q2: 談到採取氣候行動，你最認同的態度是：</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q2" value="1" required />A. 這是政府和企業的責任，個人無能為力</label>
+            <label class="option"><input type="radio" name="q2" value="2" />B. 我願意做小小的改變，但不想犧牲太多生活品質</label>
+            <label class="option"><input type="radio" name="q2" value="3" />C. 每個人的行動都很重要，可以積少成多</label>
+            <label class="option"><input type="radio" name="q2" value="4" />D. 我們需要根本性的、系統性的變革，並為此而戰</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz" data-question="q3">
+          <label class="required">Q3: 對於你所在地區大力發展綠能（希望）設施（如風力、太陽能），你的態度是：</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q3" value="1" required />A. 支持，但不能在我的社區附近，怕影響風景或房價</label>
+            <label class="option"><input type="radio" name="q3" value="2" />B. 支持，這雖然重要，但應該優先考慮經濟發展</label>
+            <label class="option"><input type="radio" name="q3" value="3" />C. 支持，即使有不便，也願意接受並參與討論</label>
+            <label class="option"><input type="radio" name="q3" value="4" />D. 迫切支持，我們需要盡一切可能加速轉型</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz" data-question="q4">
+          <label class="required">Q4: 你認為在解決全球性氣候問題中，國際合作（如 JCI 姐妹會）的作用是：</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q4" value="1" required />A. 這太遙遠了，我更關心當地的問題</label>
+            <label class="option"><input type="radio" name="q4" value="2" />B. 這很有趣，但可能只是做做樣子，實際影響有限</label>
+            <label class="option"><input type="radio" name="q4" value="3" />C. 這是不可或缺的，可以分享資源和經驗</label>
+            <label class="option"><input type="radio" name="q4" value="4" />D. 這是唯一的出路，我們需要全球性的、團結的行動</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz" data-question="q5">
+          <label class="required">Q5: 你願意為當地的綠能宣導或氣候行動付出多少？</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q5" value="1" required />A. 只願意按讚或分享訊息</label>
+            <label class="option"><input type="radio" name="q5" value="2" />B. 願意參加小型的社區活動或工作坊</label>
+            <label class="option"><input type="radio" name="q5" value="3" />C. 願意擔任志工，協助拍攝、收集數據</label>
+            <label class="option"><input type="radio" name="q5" value="4" />D. 願意領導專案，推動更大範圍的改變</label>
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="submit">送出表單並查看結果</button>
+          <span id="submitStatus" class="status" aria-live="polite"></span>
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <section id="resultModal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <h3 class="role-title" id="roleTitle"></h3>
+      <p class="role-range" id="roleRange"></p>
+      <p id="roleDescZh"></p>
+      <p id="roleDescEn"></p>
+      <p class="small-note" id="scoreText"></p>
+      <div class="actions">
+        <button type="button" id="closeModal">關閉</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz0gc1mCqobQrHUb1Pm7Fc7ul1njeLytqwv54p1OkGkMAXknnmhwB4ModRnQMH8e4-LRw/exec';
+
+    const roleRules = [
+      {
+        min: 5,
+        max: 8,
+        title: '環境學習者 / Environmental Learner',
+        descZh: '對環境充滿好奇與熱情，正處於建立知識基礎的階段。這個專案將為你打開一扇窗，了解全球氣候挑戰與解決方案。',
+        descEn: 'You are curious and passionate about the environment, and currently building your foundation. This project helps you explore global climate challenges and solutions.'
+      },
+      {
+        min: 9,
+        max: 12,
+        title: '社區綠色大使 / Community Green Ambassador',
+        descZh: '你是一位實踐者，相信改變可以從自身做起。樂於參與具體行動，非常適合擔任當地綠能設施拍攝小組的關鍵成員。',
+        descEn: 'You are a practical doer who believes change begins with yourself. You are ideal for joining local green-energy documentation and engagement teams.'
+      },
+      {
+        min: 13,
+        max: 16,
+        title: '青商全球影響力催化劑 / JCI Global Impact Catalyst',
+        descZh: '你具有國際視野，深知團結與合作的力量。是推動跨國姐妹會合作、將「希望與危機」傳遞給全球的重要力量。',
+        descEn: 'You hold a global perspective and value collaboration. You can catalyze cross-border JCI sister chapter cooperation and spread the message of hope and crisis worldwide.'
+      },
+      {
+        min: 17,
+        max: 20,
+        title: '氣候行動倡議者 / Climate Action Advocate',
+        descZh: '你是充滿熱情的領導者，致力推動系統性變革。準備好將專案成果傳遞給中小學與國際論壇，是引領可持續未來的先鋒。',
+        descEn: 'You are a passionate leader driving systemic change. You are ready to bring project outcomes to schools and global forums to champion a sustainable future.'
+      }
+    ];
+
+    const form = document.getElementById('climateForm');
+    const jciDetails = document.getElementById('jciDetails');
+    const regionInput = document.getElementById('region');
+    const chapterInput = document.getElementById('chapter');
+    const statusEl = document.getElementById('submitStatus');
+    const modal = document.getElementById('resultModal');
+
+    const setJciFields = (isJci) => {
+      const show = isJci === '是';
+      jciDetails.hidden = !show;
+      regionInput.required = show;
+      chapterInput.required = show;
+      if (!show) {
+        regionInput.value = '';
+        chapterInput.value = '';
+      }
+    };
+
+    const calculateResult = (data) => {
+      const score = ['q1', 'q2', 'q3', 'q4', 'q5'].reduce((sum, key) => sum + Number(data.get(key) || 0), 0);
+      const role = roleRules.find(rule => score >= rule.min && score <= rule.max);
+      return { score, role };
+    };
+
+    const openResultModal = ({ score, role }) => {
+      document.getElementById('roleTitle').textContent = role.title;
+      document.getElementById('roleRange').textContent = `分數區間 Score Range: ${role.min}-${role.max}`;
+      document.getElementById('roleDescZh').textContent = `中文分析：${role.descZh}`;
+      document.getElementById('roleDescEn').textContent = `English Analysis: ${role.descEn}`;
+      document.getElementById('scoreText').textContent = `你的總分 Your Total Score: ${score}`;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    };
+
+    document.querySelectorAll('input[name="isJci"]').forEach((radio) => {
+      radio.addEventListener('change', () => setJciFields(radio.value));
+    });
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      statusEl.className = 'status';
+      statusEl.textContent = '';
+
+      const formData = new FormData(form);
+      const { score, role } = calculateResult(formData);
+
+      if (!role) {
+        statusEl.classList.add('error');
+        statusEl.textContent = '分數計算異常，請檢查填答。';
+        return;
+      }
+
+      openResultModal({ score, role });
+
+      const payload = new URLSearchParams({
+        deploymentId: 'AKfycbz0gc1mCqobQrHUb1Pm7Fc7ul1njeLytqwv54p1OkGkMAXknnmhwB4ModRnQMH8e4-LRw',
+        name: String(formData.get('name') || ''),
+        email: String(formData.get('email') || ''),
+        isJci: String(formData.get('isJci') || ''),
+        region: String(formData.get('region') || ''),
+        chapter: String(formData.get('chapter') || ''),
+        q1: String(formData.get('q1') || ''),
+        q2: String(formData.get('q2') || ''),
+        q3: String(formData.get('q3') || ''),
+        q4: String(formData.get('q4') || ''),
+        q5: String(formData.get('q5') || ''),
+        totalScore: String(score),
+        roleTitle: role.title,
+        submittedAt: new Date().toISOString()
+      });
+
+      try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body: payload.toString()
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        statusEl.classList.add('ok');
+        statusEl.textContent = '已成功提交！資料已送到 Google Apps Script。';
+        form.reset();
+        setJciFields('否');
+      } catch (error) {
+        statusEl.classList.add('error');
+        statusEl.textContent = '角色卡已產生，但資料提交失敗，請稍後重試。';
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
