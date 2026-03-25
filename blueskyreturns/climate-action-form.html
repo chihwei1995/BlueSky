@@ -385,13 +385,16 @@
       formData.set('submittedAt', new Date().toISOString());
 
       try {
+        // Google Apps Script Web App 常見不回傳 CORS header。
+        // 以 no-cors 送出可避免瀏覽器因 CORS 擋下請求（response 會是 opaque，無法讀取內容）。
         await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
+          mode: 'no-cors',
           body: new URLSearchParams(formData)
         });
 
         statusEl.classList.add('ok');
-        statusEl.textContent = '已送出！如網路正常，資料會寫入 Google 試算表。';
+        statusEl.textContent = '已送出！若網路正常，資料會寫入 Google 試算表。';
         form.reset();
         setJciFields('否');
       } catch (error) {
