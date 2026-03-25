@@ -123,10 +123,13 @@
     .modal.open { display: flex; }
     .modal-card {
       width: min(660px, 100%);
+      max-height: calc(100dvh - 36px);
+      overflow-y: auto;
       background: #fff;
       border-radius: 16px;
       border: 1px solid var(--border);
       padding: 20px;
+      -webkit-overflow-scrolling: touch;
     }
     .role-title { margin: 0 0 4px; }
     .role-range { color: var(--primary-dark); font-weight: 700; margin: 0 0 12px; }
@@ -135,10 +138,44 @@
     .role-image {
       width: 100%;
       max-width: 420px;
+      max-height: min(52vh, 700px);
+      object-fit: contain;
       border-radius: 12px;
       border: 1px solid var(--border);
       display: block;
       margin: 0 auto;
+    }
+
+    #resultModal .actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    #resultModal .actions button {
+      width: 100%;
+    }
+
+    @media (max-width: 640px) {
+      .modal {
+        padding: 10px;
+        align-items: flex-end;
+      }
+
+      .modal-card {
+        width: 100%;
+        max-height: calc(100dvh - 20px);
+        padding: 14px;
+        border-radius: 14px;
+      }
+
+      .role-image {
+        max-height: 42vh;
+      }
+
+      #resultModal .actions {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
