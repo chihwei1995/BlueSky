@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countries & Regions: Hope and Crisis | 藍天再現：希望與危機</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #dbe3ef;
+      --crisis: #ef4444;
+      --hope: #0ea5e9;
+      --hope-soft: #16a34a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 10%, rgba(14, 165, 233, 0.12), transparent 35%),
+        radial-gradient(circle at 85% 0%, rgba(239, 68, 68, 0.13), transparent 30%),
+        var(--bg);
+      line-height: 1.75;
+    }
+
+    a { color: inherit; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(248, 250, 252, 0.9);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 14px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-weight: 700;
+      color: #0c4a6e;
+      letter-spacing: 0.3px;
+    }
+
+    .top-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      font-weight: 600;
+      color: #0369a1;
+      background: #fff;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 36px 22px 64px;
+      display: grid;
+      gap: 22px;
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 10px 25px rgba(2, 6, 23, 0.05);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.13), rgba(22, 163, 74, 0.1));
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.2;
+    }
+
+    .hero h2 {
+      margin: 10px 0 0;
+      font-size: clamp(17px, 2.5vw, 24px);
+      color: #0c4a6e;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: clamp(22px, 3vw, 30px);
+    }
+
+    .cn { font-weight: 700; color: #0f172a; }
+    .en { color: var(--muted); margin-top: 8px; }
+
+    .split-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      padding: 4px 10px;
+    }
+
+    .crisis { color: #991b1b; background: rgba(239, 68, 68, 0.12); }
+    .hope { color: #075985; background: rgba(14, 165, 233, 0.12); }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    li { margin: 8px 0; }
+
+    .cta {
+      border: 1px solid rgba(14, 165, 233, 0.4);
+      background: linear-gradient(140deg, rgba(14, 165, 233, 0.1), rgba(22, 163, 74, 0.08));
+    }
+
+    .cta-link {
+      display: inline-flex;
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(120deg, #0284c7, #16a34a);
+    }
+
+
+
+    .poster-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    figure {
+      margin: 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 10px 20px rgba(2, 6, 23, 0.06);
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      object-fit: cover;
+    }
+
+    figcaption {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 0 18px 40px;
+      color: #64748b;
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="badge">JCI IA × UN SDGs | 2026 Blue Sky Returns</div>
+      <a class="top-link" href="./index.html">← Back to One Step Blue Sky Returns</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Blue Sky Returns: Hope and Crisis<br>藍天再現：希望與危機</h1>
+      <h2>2026 Global Green Initiative / 2026 全球綠色倡議</h2>
+    </section>
+
+    <section>
+      <h3>Project Visual / 專案視覺</h3>
+      <div class="poster-grid">
+        <figure>
+          <img src="./assets/hope-crisis-en.svg" alt="Blue Sky Returns: Hope and Crisis 2026 Global Green Initiative poster (English)" />
+          <figcaption>English campaign poster: Blue Sky Returns: Hope and Crisis.</figcaption>
+        </figure>
+        <figure>
+          <img src="./assets/hope-crisis-zh.svg" alt="藍天再現：希望與危機 2026 全球綠色倡議海報（中文）" />
+          <figcaption>中文宣傳海報：藍天再現：希望與危機。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h3>2. Introduction: The Urgency and The Opportunity<br>專案簡介：迫切與轉機</h3>
+      <p class="cn">2026 年，我們站在關鍵轉折點：危機已經抵達社區，解方也正在各地萌芽。JCI 夥伴的跨國協作，不只是分享故事，而是共同建立可複製、可教育、可行動的綠色路徑，讓「希望」成為下一代真正看得見的未來。</p>
+      <p class="en">In 2026, we stand at a decisive turning point: the crisis is already impacting our communities, while solutions are emerging locally. Through JCI cross-border collaboration, we are not only sharing stories—we are building replicable, educational, and actionable green pathways so that “Hope” becomes a visible future for the next generation.</p>
+    </section>
+
+    <section>
+      <div class="split-title crisis">3. Crisis</div>
+      <h3>The Crisis: Climate Impacts (2024-2026)<br>危機：氣候影響</h3>
+      <p class="cn">這就是我們各地正在面對的現實（以下為模擬案例，實際資料將由夥伴蒐集）：北方城市在非典型季節出現突發降雪，沿海地區遭遇更頻繁的滿潮倒灌與局部淹水，內陸都會則在夏季承受長時間熱浪與夜間高溫不退，農業區面臨乾旱與短時強降雨交替衝擊。危機不再是遠方新聞，而是每一個地區共同的現在進行式。</p>
+      <p class="en">This is what our regions are facing (simulated examples; real data will be collected by partners): sudden out-of-season snowfall in northern cities, more frequent tidal backflow and localized flooding in coastal communities, prolonged heatwaves and elevated nighttime temperatures in inland urban zones, and alternating drought and intense short-duration rainfall in agricultural areas. The crisis is no longer distant news—it is a shared present across all regions.</p>
+    </section>
+
+    <section>
+      <div class="split-title hope">4. Hope</div>
+      <h3>The Hope: Green Facilities<br>希望：綠能設施</h3>
+      <p class="cn">這就是我們希望你們捕捉的「希望」（以下為模擬案例）：校園與社區屋頂太陽能系統穩定供電，社區型微型風場支持公共設施減碳，綠建築透過通風、遮陽與節能設備降低能耗，再生能源站與儲能系統提升在地韌性。每一個可見的設施，都是讓公眾理解「轉型正在發生」的最佳教材。</p>
+      <p class="en">This is the “Hope” we want you to capture (simulated examples): rooftop solar systems on schools and community facilities providing stable power, community-scale wind projects supporting low-carbon public services, green buildings reducing energy use through passive ventilation and efficient design, and renewable energy plants with storage systems strengthening local resilience. Every visible facility becomes practical proof that the transition is already happening.</p>
+    </section>
+
+    <section>
+      <h3>5. Call for Collaboration: Participate in Hope and Crisis<br>合作徵件：參與希望與危機</h3>
+      <p class="cn">我們誠邀各國姊妹會、分會與合作夥伴，以行動加入 2026 Blue Sky Returns 全球綠色倡議：</p>
+      <p class="en">We invite sister chapters, local chapters, and partners worldwide to join the 2026 Blue Sky Returns Global Green Initiative through action:</p>
+      <ul>
+        <li>
+          <strong>Film Green Facilities｜拍攝綠能設施：</strong>
+          <span class="cn">製作 90–120 秒短片，呈現你所在地區最具代表性的綠色科技與減碳場景。</span>
+          <span class="en">Create a 90–120 second video showcasing representative green technologies and decarbonization scenes in your region.</span>
+        </li>
+        <li>
+          <strong>Collect Climate Data｜整理氣候數據：</strong>
+          <span class="cn">彙整 2024–2026 年具體氣候衝擊紀錄（溫度、降雨、海平面、災害影響等）。</span>
+          <span class="en">Share specific climate impact records from 2024–2026 (temperature, rainfall, sea-level effects, and disaster impacts).</span>
+        </li>
+        <li>
+          <strong>Timeline｜時程：</strong>
+          <span class="cn">專案啟動日為 2026 年 4 月 15 日，資料與影片提交截止為 2026 年 6 月。</span>
+          <span class="en">Project launch: April 15, 2026. Submission deadline for data and videos: June 2026.</span>
+        </li>
+        <li>
+          <strong>Join Collaboration｜加入聯合宣傳：</strong>
+          <span class="cn">透過 Instagram Collab 發布成果，擴大全球青年與社區影響力。</span>
+          <span class="en">Use Instagram Collab to co-publish outcomes and amplify global youth and community impact.</span>
+        </li>
+      </ul>
+      <p class="cn"><strong>專案目標：</strong>所有影片與資料將整合為《Countries & Regions: Hope and Crisis》國際電子書，並發送至各地中小學，作為環境與氣候教育教材，讓學生看見危機、理解解方、啟動行動。</p>
+      <p class="en"><strong>Project Goal:</strong> All submitted videos and data will be compiled into the international e-book, <em>Countries & Regions: Hope and Crisis</em>, and delivered to local primary and secondary schools as environmental education material—helping students recognize the crisis, understand solutions, and take action.</p>
+    </section>
+
+    <section class="cta">
+      <h3>6. Integration: Connect to Form<br>串接：表單</h3>
+      <p class="cn">準備好把「希望」帶到你的城市與國家了嗎？請在下方填寫你的聯絡資料與合作意向，我們將立即發送完整徵件指南與提交流程。</p>
+      <p class="en">Ready to bring Hope to your city and region? Leave your contact details and collaboration intent below, and we will send you the full submission guide and workflow immediately.</p>
+      <a class="cta-link" href="./index.html#contact" aria-label="Go to sign-up form">Go to Sign-up Form / 前往報名表單</a>
+    </section>
+  </main>
+
+  <footer>Blue Sky Returns: Hope and Crisis • 2026 Global Green Initiative</footer>
+</body>
+</html>
