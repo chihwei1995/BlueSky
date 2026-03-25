@@ -151,6 +151,15 @@
         <label class="required" for="email">電子郵件 Email（用於發送相關資訊）(Email for sending related information)</label>
         <input id="email" name="email" type="email" required />
 
+        <label class="required" for="whatsapp_line">WhatsApp 或 Line 聯絡方式 (WhatsApp or Line Contact)</label>
+        <input
+          id="whatsapp_line"
+          name="whatsapp_line"
+          type="text"
+          placeholder="格式：WhatsApp：+886912345678 或 Line：your_line_id"
+          required
+        />
+
         <fieldset>
           <label class="required">是否為 JCI（青商會）會友？ (Are you a JCI member?)</label>
           <div class="options">
@@ -246,7 +255,7 @@
   </section>
 
   <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDyXELqGUVXccUdhYWhOA6gMX6BJx60jciG8lpQbaoI5tGYc-716w0huH_r5jGyiXxcQ/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9sWfvyp6Xhdz-lN40oCGvjNquGKj9Tp0yZDeNWEC8dA3N-L_oU6pBPd8Sfi-GHgzU/exec';
 
     const roleRules = [
       {
