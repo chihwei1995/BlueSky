@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Blue Sky Returns - Hope and Crisis (English)</title>
+  <desc id="desc">Campaign cover with split colors representing hope and crisis.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b2748"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="crisis" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7f1d1d"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="900" fill="url(#sky)"/>
+  <rect x="800" width="800" height="900" fill="url(#crisis)"/>
+  <circle cx="360" cy="220" r="82" fill="#fde68a" opacity="0.95"/>
+  <path d="M1020 210c48-86 196-86 244 0" fill="none" stroke="#fca5a5" stroke-width="14"/>
+  <path d="M1130 270l40 65h-80z" fill="#fecaca"/>
+  <text x="800" y="420" text-anchor="middle" fill="#f8fafc" font-size="92" font-family="Inter, Arial, sans-serif" font-weight="800">BLUE SKY RETURNS</text>
+  <text x="800" y="520" text-anchor="middle" fill="#fef08a" font-size="78" font-family="Inter, Arial, sans-serif" font-weight="800">HOPE AND CRISIS</text>
+  <text x="800" y="610" text-anchor="middle" fill="#e2e8f0" font-size="44" font-family="Inter, Arial, sans-serif" font-weight="700">2026 GLOBAL GREEN INITIATIVE</text>
+</svg>
