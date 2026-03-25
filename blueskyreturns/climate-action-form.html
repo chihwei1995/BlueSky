@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JCI 氣候行動互動表單</title>
+  <title>JCI 氣候行動互動表單 | JCI Climate Action Interactive Form</title>
   <style>
     :root {
       --bg: #f4f8fb;
@@ -136,26 +136,26 @@
 <body>
   <main class="container">
     <div class="topbar">
-      <h1>你是哪一種類型的氣候行動者？</h1>
-      <a class="back-link" href="./index.html">← 返回 Blue Sky Returns</a>
+      <h1>你是哪一種類型的氣候行動者？<br>What Type of Climate Action Partner Are You?</h1>
+      <a class="back-link" href="./index.html">← 返回 Blue Sky Returns / Back to Blue Sky Returns</a>
     </div>
-    <p class="subtitle">填寫以下表單，完成後會立即獲得你的雙語角色分析，並同步提交至 Google Apps Script。</p>
+    <p class="subtitle">填寫以下表單，完成後會立即獲得你的雙語角色分析，並同步提交至 Google Apps Script。<br>Complete the form below to receive your bilingual role result instantly; your submission will also be sent to Google Apps Script.</p>
 
     <form id="climateForm">
       <section class="card">
-        <h2>第一部分：基本聯絡與 JCI 身分資料</h2>
+        <h2>第一部分：基本聯絡與 JCI 身分資料<br>Part 1: Contact Details and JCI Affiliation</h2>
 
-        <label class="required" for="name">姓名 / 單位名稱</label>
+        <label class="required" for="name">姓名 / 單位名稱 (Name / Organization)</label>
         <input id="name" name="name" type="text" required />
 
-        <label class="required" for="email">電子郵件 Email（用於 6 月發送電子書）</label>
+        <label class="required" for="email">電子郵件 Email（用於 6 月發送電子書）(Email for June e-book delivery)</label>
         <input id="email" name="email" type="email" required />
 
         <fieldset>
-          <label class="required">是否為 JCI（青商會）會友？</label>
+          <label class="required">是否為 JCI（青商會）會友？ (Are you a JCI member?)</label>
           <div class="options">
-            <label class="option"><input type="radio" name="isJci" value="是" required />是</label>
-            <label class="option"><input type="radio" name="isJci" value="否" />否</label>
+            <label class="option"><input type="radio" name="isJci" value="是" required />是 Yes</label>
+            <label class="option"><input type="radio" name="isJci" value="否" />否 No</label>
           </div>
         </fieldset>
 
@@ -169,61 +169,61 @@
       </section>
 
       <section class="card">
-        <h2>第二部分：互動挑戰題庫（A=1, B=2, C=3, D=4）</h2>
+        <h2>第二部分：互動挑戰題庫（A=1, B=2, C=3, D=4）<br>Part 2: Interactive Challenge Questions (A=1, B=2, C=3, D=4)</h2>
 
         <fieldset class="quiz" data-question="q1">
-          <label class="required">Q1: 對於你所在地區的極端氣候（危機），你的焦慮程度是：</label>
+          <label class="required">Q1: 對於你所在地區的極端氣候（危機），你的焦慮程度是？<br>Q1: How anxious are you about extreme climate events (crisis) in your region?</label>
           <div class="options">
-            <label class="option"><input type="radio" name="q1" value="1" required />A. 完全不焦慮，一切都會好起來的</label>
-            <label class="option"><input type="radio" name="q1" value="2" />B. 有點焦慮，但我更專注於當下能做的事情</label>
-            <label class="option"><input type="radio" name="q1" value="3" />C. 非常焦慮，常常感到無助和恐懼</label>
-            <label class="option"><input type="radio" name="q1" value="4" />D. 焦慮推動我去尋求改變和行動</label>
+            <label class="option"><input type="radio" name="q1" value="1" required />A. 完全不焦慮，一切都會好起來的 / Not anxious at all; everything will be fine</label>
+            <label class="option"><input type="radio" name="q1" value="2" />B. 有點焦慮，但我更專注於當下能做的事情 / Somewhat anxious, but focused on what I can do now</label>
+            <label class="option"><input type="radio" name="q1" value="3" />C. 非常焦慮，常常感到無助和恐懼 / Very anxious; often feel helpless and fearful</label>
+            <label class="option"><input type="radio" name="q1" value="4" />D. 焦慮推動我去尋求改變和行動 / Anxiety motivates me to seek change and action</label>
           </div>
         </fieldset>
 
         <fieldset class="quiz" data-question="q2">
-          <label class="required">Q2: 談到採取氣候行動，你最認同的態度是：</label>
+          <label class="required">Q2: 談到採取氣候行動，你最認同的態度是？<br>Q2: Which statement best matches your attitude toward climate action?</label>
           <div class="options">
-            <label class="option"><input type="radio" name="q2" value="1" required />A. 這是政府和企業的責任，個人無能為力</label>
-            <label class="option"><input type="radio" name="q2" value="2" />B. 我願意做小小的改變，但不想犧牲太多生活品質</label>
-            <label class="option"><input type="radio" name="q2" value="3" />C. 每個人的行動都很重要，可以積少成多</label>
-            <label class="option"><input type="radio" name="q2" value="4" />D. 我們需要根本性的、系統性的變革，並為此而戰</label>
+            <label class="option"><input type="radio" name="q2" value="1" required />A. 這是政府和企業的責任，個人無能為力 / It is up to governments and corporations; individuals cannot do much</label>
+            <label class="option"><input type="radio" name="q2" value="2" />B. 我願意做小小的改變，但不想犧牲太多生活品質 / I can make small changes but do not want major lifestyle trade-offs</label>
+            <label class="option"><input type="radio" name="q2" value="3" />C. 每個人的行動都很重要，可以積少成多 / Everyone's action matters and adds up</label>
+            <label class="option"><input type="radio" name="q2" value="4" />D. 我們需要根本性的、系統性的變革，並為此而戰 / We need deep, systemic transformation and must fight for it</label>
           </div>
         </fieldset>
 
         <fieldset class="quiz" data-question="q3">
-          <label class="required">Q3: 對於你所在地區大力發展綠能（希望）設施（如風力、太陽能），你的態度是：</label>
+          <label class="required">Q3: 對於你所在地區大力發展綠能（希望）設施（如風力、太陽能），你的態度是？<br>Q3: What is your stance on developing renewable “Hope” facilities (e.g., wind/solar) in your region?</label>
           <div class="options">
-            <label class="option"><input type="radio" name="q3" value="1" required />A. 支持，但不能在我的社區附近，怕影響風景或房價</label>
-            <label class="option"><input type="radio" name="q3" value="2" />B. 支持，這雖然重要，但應該優先考慮經濟發展</label>
-            <label class="option"><input type="radio" name="q3" value="3" />C. 支持，即使有不便，也願意接受並參與討論</label>
-            <label class="option"><input type="radio" name="q3" value="4" />D. 迫切支持，我們需要盡一切可能加速轉型</label>
+            <label class="option"><input type="radio" name="q3" value="1" required />A. 支持，但不能在我的社區附近，怕影響風景或房價 / Support it, but not near my neighborhood due to landscape/property concerns</label>
+            <label class="option"><input type="radio" name="q3" value="2" />B. 支持，這雖然重要，但應該優先考慮經濟發展 / Support it, but economic development should still come first</label>
+            <label class="option"><input type="radio" name="q3" value="3" />C. 支持，即使有不便，也願意接受並參與討論 / Support it and willing to accept inconvenience and engage in dialogue</label>
+            <label class="option"><input type="radio" name="q3" value="4" />D. 迫切支持，我們需要盡一切可能加速轉型 / Strongly support urgent acceleration by every possible means</label>
           </div>
         </fieldset>
 
         <fieldset class="quiz" data-question="q4">
-          <label class="required">Q4: 你認為在解決全球性氣候問題中，國際合作（如 JCI 姐妹會）的作用是：</label>
+          <label class="required">Q4: 你認為在解決全球性氣候問題中，國際合作（如 JCI 姐妹會）的作用是？<br>Q4: How important is international collaboration (e.g., JCI sister chapters) in solving global climate issues?</label>
           <div class="options">
-            <label class="option"><input type="radio" name="q4" value="1" required />A. 這太遙遠了，我更關心當地的問題</label>
-            <label class="option"><input type="radio" name="q4" value="2" />B. 這很有趣，但可能只是做做樣子，實際影響有限</label>
-            <label class="option"><input type="radio" name="q4" value="3" />C. 這是不可或缺的，可以分享資源和經驗</label>
-            <label class="option"><input type="radio" name="q4" value="4" />D. 這是唯一的出路，我們需要全球性的、團結的行動</label>
+            <label class="option"><input type="radio" name="q4" value="1" required />A. 這太遙遠了，我更關心當地的問題 / Too distant; I care more about local issues</label>
+            <label class="option"><input type="radio" name="q4" value="2" />B. 這很有趣，但可能只是做做樣子，實際影響有限 / Interesting, but likely symbolic with limited real impact</label>
+            <label class="option"><input type="radio" name="q4" value="3" />C. 這是不可或缺的，可以分享資源和經驗 / Essential for sharing resources and experience</label>
+            <label class="option"><input type="radio" name="q4" value="4" />D. 這是唯一的出路，我們需要全球性的、團結的行動 / The only way forward is united global action</label>
           </div>
         </fieldset>
 
         <fieldset class="quiz" data-question="q5">
-          <label class="required">Q5: 你願意為當地的綠能宣導或氣候行動付出多少？</label>
+          <label class="required">Q5: 你願意為當地的綠能宣導或氣候行動付出多少？<br>Q5: How much are you willing to contribute to local renewable advocacy or climate action?</label>
           <div class="options">
-            <label class="option"><input type="radio" name="q5" value="1" required />A. 只願意按讚或分享訊息</label>
-            <label class="option"><input type="radio" name="q5" value="2" />B. 願意參加小型的社區活動或工作坊</label>
-            <label class="option"><input type="radio" name="q5" value="3" />C. 願意擔任志工，協助拍攝、收集數據</label>
-            <label class="option"><input type="radio" name="q5" value="4" />D. 願意領導專案，推動更大範圍的改變</label>
+            <label class="option"><input type="radio" name="q5" value="1" required />A. 只願意按讚或分享訊息 / Only willing to like or share posts</label>
+            <label class="option"><input type="radio" name="q5" value="2" />B. 願意參加小型的社區活動或工作坊 / Willing to join small community events/workshops</label>
+            <label class="option"><input type="radio" name="q5" value="3" />C. 願意擔任志工，協助拍攝、收集數據 / Willing to volunteer for filming and data collection</label>
+            <label class="option"><input type="radio" name="q5" value="4" />D. 願意領導專案，推動更大範圍的改變 / Willing to lead projects and drive broader change</label>
           </div>
         </fieldset>
 
         <div class="actions">
-          <button type="submit">送出表單並查看結果</button>
-          <button type="button" id="shareCampaignBtn" class="secondary-btn">分享表單給他人</button>
+          <button type="submit">送出表單並查看結果 / Submit & View Result</button>
+          <button type="button" id="shareCampaignBtn" class="secondary-btn">分享表單給他人 / Share This Form</button>
           <span id="submitStatus" class="status" aria-live="polite"></span>
         </div>
       </section>
@@ -238,8 +238,8 @@
       <p id="roleDescEn"></p>
       <p class="small-note" id="scoreText"></p>
       <div class="actions">
-        <button type="button" id="shareResultBtn" class="secondary-btn">分享這個測驗</button>
-        <button type="button" id="closeModal">關閉</button>
+        <button type="button" id="shareResultBtn" class="secondary-btn">分享這個測驗 / Share This Quiz</button>
+        <button type="button" id="closeModal">關閉 / Close</button>
       </div>
       <p class="small-note" id="shareStatus" aria-live="polite"></p>
     </div>
