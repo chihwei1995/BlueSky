@@ -131,6 +131,15 @@
     .role-title { margin: 0 0 4px; }
     .role-range { color: var(--primary-dark); font-weight: 700; margin: 0 0 12px; }
     .small-note { color: var(--muted); margin-top: 10px; }
+    .role-image-wrap { margin: 12px 0; }
+    .role-image {
+      width: 100%;
+      max-width: 420px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: block;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -245,8 +254,13 @@
       <p class="role-range" id="roleRange"></p>
       <p id="roleDescZh"></p>
       <p id="roleDescEn"></p>
+      <div class="role-image-wrap">
+        <img id="roleImage" class="role-image" alt="氣候角色卡圖片 / Climate role card image" />
+      </div>
       <p class="small-note" id="scoreText"></p>
       <div class="actions">
+        <button type="button" id="downloadResultBtn" class="secondary-btn">下載角色卡 / Download Card</button>
+        <button type="button" id="shareImageBtn" class="secondary-btn">分享圖片＋連結 / Share Image + Link</button>
         <button type="button" id="shareResultBtn" class="secondary-btn">分享這個測驗 / Share This Quiz</button>
         <button type="button" id="closeModal">關閉 / Close</button>
       </div>
@@ -262,6 +276,7 @@
         min: 5,
         max: 8,
         title: '環境學習者 / Environmental Learner',
+        image: '../assets/p1.png',
         descZh: '對環境充滿好奇與熱情，正處於建立知識基礎的階段。這個專案將為你打開一扇窗，了解全球氣候挑戰與解決方案。',
         descEn: 'You are curious and passionate about the environment, and currently building your foundation. This project helps you explore global climate challenges and solutions.'
       },
@@ -269,6 +284,7 @@
         min: 9,
         max: 12,
         title: '社區綠色大使 / Community Green Ambassador',
+        image: '../assets/p2.png',
         descZh: '你是一位實踐者，相信改變可以從自身做起。樂於參與具體行動，非常適合擔任當地綠能設施拍攝小組的關鍵成員。',
         descEn: 'You are a practical doer who believes change begins with yourself. You are ideal for joining local green-energy documentation and engagement teams.'
       },
@@ -276,6 +292,7 @@
         min: 13,
         max: 16,
         title: '青商全球影響力催化劑 / JCI Global Impact Catalyst',
+        image: '../assets/p3.png',
         descZh: '你具有國際視野，深知團結與合作的力量。是推動跨國姐妹會合作、將「希望與危機」傳遞給全球的重要力量。',
         descEn: 'You hold a global perspective and value collaboration. You can catalyze cross-border JCI sister chapter cooperation and spread the message of hope and crisis worldwide.'
       },
@@ -283,6 +300,7 @@
         min: 17,
         max: 20,
         title: '氣候行動倡議者 / Climate Action Advocate',
+        image: '../assets/p4.png',
         descZh: '你是充滿熱情的領導者，致力推動系統性變革。準備好將專案成果傳遞給中小學與國際論壇，是引領可持續未來的先鋒。',
         descEn: 'You are a passionate leader driving systemic change. You are ready to bring project outcomes to schools and global forums to champion a sustainable future.'
       }
@@ -297,6 +315,10 @@
     const shareStatusEl = document.getElementById('shareStatus');
     const shareCampaignBtn = document.getElementById('shareCampaignBtn');
     const shareResultBtn = document.getElementById('shareResultBtn');
+    const shareImageBtn = document.getElementById('shareImageBtn');
+    const downloadResultBtn = document.getElementById('downloadResultBtn');
+    const roleImageEl = document.getElementById('roleImage');
+    let currentRole = null;
 
     const sharePayload = {
       title: 'JCI 氣候行動互動測驗',
@@ -351,13 +373,88 @@
     };
 
     const openResultModal = ({ score, role }) => {
+      currentRole = role;
       document.getElementById('roleTitle').textContent = role.title;
       document.getElementById('roleRange').textContent = `分數區間 Score Range: ${role.min}-${role.max}`;
       document.getElementById('roleDescZh').textContent = `中文分析：${role.descZh}`;
       document.getElementById('roleDescEn').textContent = `English Analysis: ${role.descEn}`;
+      roleImageEl.src = role.image;
+      roleImageEl.alt = `${role.title} 角色卡 / role card`;
       document.getElementById('scoreText').textContent = `你的總分 Your Total Score: ${score}`;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
+    };
+
+    const getRoleCardFileName = (role) => {
+      const base = role?.title?.split('/')[0]?.trim() || 'climate-role-card';
+      return `${base.replace(/[\\/:*?"<>|]/g, '_')}.png`;
+    };
+
+    const fetchRoleImageBlob = async () => {
+      if (!currentRole?.image) {
+        throw new Error('No role image selected');
+      }
+      const response = await fetch(currentRole.image);
+      if (!response.ok) {
+        throw new Error('Failed to load role image');
+      }
+      return response.blob();
+    };
+
+    const downloadRoleCard = async () => {
+      shareStatusEl.textContent = '';
+      try {
+        const blob = await fetchRoleImageBlob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = getRoleCardFileName(currentRole);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        shareStatusEl.textContent = '角色卡已開始下載。';
+      } catch (error) {
+        shareStatusEl.textContent = '下載失敗，請稍後重試。';
+        console.error(error);
+      }
+    };
+
+    const shareRoleCardWithLink = async () => {
+      shareStatusEl.textContent = '';
+      if (!currentRole) {
+        shareStatusEl.textContent = '請先完成測驗取得角色卡。';
+        return;
+      }
+
+      try {
+        const blob = await fetchRoleImageBlob();
+        const fileName = getRoleCardFileName(currentRole);
+        const file = new File([blob], fileName, { type: blob.type || 'image/png' });
+        const payload = {
+          title: `我的氣候角色：${currentRole.title}`,
+          text: `我在 JCI 氣候行動測驗的結果是：${currentRole.title}`,
+          url: window.location.href,
+          files: [file]
+        };
+
+        if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+          await navigator.share(payload);
+          shareStatusEl.textContent = '已分享圖片與連結，感謝你的擴散！';
+          return;
+        }
+
+        await downloadRoleCard();
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(window.location.href);
+          shareStatusEl.textContent = '已下載角色卡，並複製表單連結可貼到社群分享。';
+        } else {
+          shareStatusEl.textContent = `已下載角色卡，請手動分享連結：${window.location.href}`;
+        }
+      } catch (error) {
+        shareStatusEl.textContent = '分享失敗，請改用下載後手動上傳。';
+        console.error(error);
+      }
     };
 
     document.querySelectorAll('input[name="is_jci"]').forEach((radio) => {
@@ -366,6 +463,8 @@
 
     shareCampaignBtn.addEventListener('click', () => shareFormLink('campaign'));
     shareResultBtn.addEventListener('click', () => shareFormLink('result'));
+    shareImageBtn.addEventListener('click', shareRoleCardWithLink);
+    downloadResultBtn.addEventListener('click', downloadRoleCard);
 
     document.getElementById('closeModal').addEventListener('click', () => {
       modal.classList.remove('open');
