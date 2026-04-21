@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Countries & Regions: Hope and Crisis | 一步・藍天：希望與危機</title>
+  <title>Collaboration & Vision | 一步・藍天：合作與願景</title>
   <style>
     :root {
       --bg: #f3f7fb;
@@ -751,13 +751,13 @@
   <header>
     <div class="shell nav">
       <div class="brand">
-        <strong id="brandTitle">Blue Sky Returns | Countries & Regions</strong>
+        <strong id="brandTitle">Blue Sky Returns | Collaboration & Vision</strong>
         <span id="brandSubtitle">一步・藍天：希望與危機 導覽頁</span>
       </div>
       <div class="nav-actions">
         <a id="navMain" class="pill" href="../index.html">主地球首頁 / Main Globe</a>
         <a id="navAbout" class="pill" href="./index.html">項目介紹 / About</a>
-        <a id="navRegions" class="pill active" href="./countries-regions-hope-crisis.html">各國與區域 / Countries & Regions</a>
+        <a id="navRegions" class="pill active" href="./countries-regions-hope-crisis.html">合作與願景 / Collaboration & Vision</a>
         <a id="navProposal" class="pill" href="./green-action-7day.html">7 日綠色提案 / 7-Day Green Proposal</a>
         <a id="navStep" class="pill" href="./climate-action-form.html">邁出一步 / Take One Step</a>
         <div id="navMemberState" class="nav-member" hidden>尚未登入 / Signed out</div>
@@ -812,7 +812,7 @@
       <section id="heroSection" class="panel hero">
         <div class="hero-copy">
           <div class="hero-kicker">JCI Peninsula • SDG 13 • Global E-book</div>
-          <h1>Countries & Regions:<br>Hope and Crisis</h1>
+          <h1>Collaboration & Vision:<br>Hope and Crisis</h1>
           <p>
             這一頁是 Blue Sky Returns 的專案導覽中心。你可以先理解整個合作旅程，再依照你的氣候行動者等級進入對應任務：
             Level 2 與 Level 3 可上傳地方資料，Level 3 可審核投稿內容。
@@ -972,7 +972,7 @@
     </div>
   </main>
 
-  <footer id="pageFooter" class="footer">Blue Sky Returns: Countries & Regions • Hope and Crisis • 2026</footer>
+  <footer id="pageFooter" class="footer">Blue Sky Returns: Collaboration & Vision • Hope and Crisis • 2026</footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
@@ -999,6 +999,105 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
+    const LANG_STORAGE_KEY = "bsr_lang";
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
+    const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
+    const I18N = {
+      zh: {
+        pageTitle: "Collaboration & Vision | 一步・藍天：合作與願景",
+        brandTitle: "Blue Sky Returns | Collaboration & Vision",
+        brandSubtitle: "一步・藍天：希望與危機 導覽頁",
+        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "7 日綠色提案", step: "邁出一步", member: "會員中心", signOut: "登出 / Sign Out" },
+        footer: "Blue Sky Returns: Collaboration & Vision • Hope and Crisis • 2026",
+        states: {
+          signedOut: "尚未登入 / Signed out",
+          authSummary: "請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或進入審核。",
+          visitorAbility: "一般訪客目前可閱讀導覽、了解資料需求與專案流程。",
+          memberNotice: "尚未登入氣候行動者帳號。請先登入後查看你的權限與可執行任務。",
+          reviewGate: "只有 Level 3 帳號可進入審核台。",
+          untitled: "未命名投稿",
+          unknown: "未知",
+          unknownRegion: "未知地區",
+          noDescription: "未提供說明。",
+          submitter: "提交者",
+          permissionLevel: "權限等級",
+          approve: "Approve / 通過",
+          reject: "Reject / 退回",
+          current: "目前狀態",
+          pending: "Pending / 待審核",
+          updating: "Updating status...",
+          updateFailed: "更新失敗，請稍後再試。",
+          loadReviewFailed: "讀取審核資料失敗，請確認目前帳號仍具有 Level 3 權限。",
+          signedInPrefix: "登入中",
+          readPermissionFailed: "已登入，但目前讀取權限資料失敗，請稍後重新整理。",
+          levelUnknown: "暫時無法判斷你的 permissionLevel。",
+          memberReadFailed: "讀取會員資料時發生問題，請稍後再試。",
+          reviewPermissionUnknown: "目前無法載入審核權限資訊。",
+          canSubmit: "你的帳號可提交地方 Hope / Crisis 資料。請前往上傳入口完成內容填寫與附件上傳。",
+          level3Ability: "你目前是 Level 3，可上傳地方資料並直接進入審核流程。",
+          level2Ability: "你目前是 Level 2，可上傳地方 Hope / Crisis 資料。",
+          level1Notice: "你目前是 Level 1。若要上傳地方資料，請由後台將你的 permissionLevel 提升到 2 或 3。",
+          level1Ability: "你目前可閱讀專案導覽與準備資料，但尚未開放提交地方內容。",
+          level3Review: "你目前具有 Level 3 權限，可直接審核待處理投稿。"
+        }
+      },
+      en: {
+        pageTitle: "Collaboration & Vision | Blue Sky Returns",
+        brandTitle: "Blue Sky Returns | Collaboration & Vision",
+        brandSubtitle: "Hope and Crisis Guide",
+        nav: { main: "Main Globe", about: "About", regions: "Collaboration & Vision", proposal: "7-Day Green Proposal", step: "Take One Step", member: "Member Center", signOut: "Sign Out" },
+        footer: "Blue Sky Returns: Collaboration & Vision • Hope and Crisis • 2026",
+        states: {
+          signedOut: "Signed out",
+          authSummary: "Sign in with your climate action partner account. The system will detect whether you can upload data or access the reviewer desk.",
+          visitorAbility: "Visitors can currently read the guide and understand the project flow and data requirements.",
+          memberNotice: "You are not signed in yet. Sign in first to view your permission level and available actions.",
+          reviewGate: "Only Level 3 accounts can access the reviewer desk.",
+          untitled: "Untitled Submission",
+          unknown: "Unknown",
+          unknownRegion: "Unknown Region",
+          noDescription: "No description provided.",
+          submitter: "Submitter",
+          permissionLevel: "Permission Level",
+          approve: "Approve",
+          reject: "Reject",
+          current: "Current",
+          pending: "Pending",
+          updating: "Updating status...",
+          updateFailed: "Update failed. Please try again later.",
+          loadReviewFailed: "Failed to load review items. Please confirm this account still has Level 3 access.",
+          signedInPrefix: "Signed in",
+          readPermissionFailed: "Signed in, but permission data could not be loaded right now. Please refresh later.",
+          levelUnknown: "Your permissionLevel cannot be determined at the moment.",
+          memberReadFailed: "There was a problem loading member data. Please try again later.",
+          reviewPermissionUnknown: "Reviewer permission data is currently unavailable.",
+          canSubmit: "Your account can submit local Hope / Crisis data. Use the upload entry to complete the content and attachments.",
+          level3Ability: "You are Level 3 and can submit local data and review incoming entries.",
+          level2Ability: "You are Level 2 and can submit local Hope / Crisis data.",
+          level1Notice: "You are currently Level 1. To submit local data, an admin needs to raise your permissionLevel to 2 or 3.",
+          level1Ability: "You can currently read the project guide and prepare materials, but submission is not enabled yet.",
+          level3Review: "You have Level 3 access and can review pending submissions directly."
+        }
+      }
+    };
+    const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
+    const applyLanguage = (lang) => {
+      currentLang = lang;
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+      document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+      document.title = t("pageTitle");
+      document.getElementById("brandTitle").textContent = t("brandTitle");
+      document.getElementById("brandSubtitle").textContent = t("brandSubtitle");
+      document.getElementById("navMain").textContent = t("nav.main");
+      document.getElementById("navAbout").textContent = t("nav.about");
+      document.getElementById("navRegions").textContent = t("nav.regions");
+      document.getElementById("navProposal").textContent = t("nav.proposal");
+      document.getElementById("navStep").textContent = t("nav.step");
+      navLoginLink.textContent = t("nav.member");
+      navLogoutBtn.textContent = t("nav.signOut");
+      document.getElementById("pageFooter").textContent = t("footer");
+      langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
+    };
 
     const authChip = document.getElementById("authChip");
     const authSummary = document.getElementById("authSummary");
@@ -1015,33 +1114,36 @@
     const navLogoutBtn = document.getElementById("navLogoutBtn");
 
     const getPermissionLabel = (level) => {
-      if (level === 3) return "Level 3 Reviewer / 審核者";
-      if (level === 2) return "Level 2 Contributor / 核心上傳者";
-      if (level === 1) return "Level 1 Partner / 一般氣候行動者";
-      return "Guest / 訪客";
+      if (level === 3) return currentLang === "zh" ? "Level 3 Reviewer / 審核者" : "Level 3 Reviewer";
+      if (level === 2) return currentLang === "zh" ? "Level 2 Contributor / 核心上傳者" : "Level 2 Contributor";
+      if (level === 1) return currentLang === "zh" ? "Level 1 Partner / 一般氣候行動者" : "Level 1 Partner";
+      return currentLang === "zh" ? "Guest / 訪客" : "Guest";
     };
 
-    const formatMode = (mode) => mode === "hope" ? "Hope / 希望" : "Crisis / 危機";
+    const formatMode = (mode) => {
+      if (mode === "hope") return currentLang === "zh" ? "Hope / 希望" : "Hope";
+      return currentLang === "zh" ? "Crisis / 危機" : "Crisis";
+    };
 
     const formatStatus = (status) => {
-      if (status === "approved") return "Approved / 已通過";
-      if (status === "rejected") return "Rejected / 已退回";
-      return "Pending / 待審核";
+      if (status === "approved") return currentLang === "zh" ? "Approved / 已通過" : "Approved";
+      if (status === "rejected") return currentLang === "zh" ? "Rejected / 已退回" : "Rejected";
+      return currentLang === "zh" ? "Pending / 待審核" : "Pending";
     };
 
     const setGuestState = () => {
-      authChip.textContent = "尚未登入 / Signed out";
-      authSummary.textContent = "請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或進入審核。";
-      abilitySummary.textContent = "一般訪客目前可閱讀導覽、了解資料需求與專案流程。";
-      memberNotice.textContent = "尚未登入氣候行動者帳號。請先登入後查看你的權限與可執行任務。";
+      authChip.textContent = t("states.signedOut");
+      authSummary.textContent = t("states.authSummary");
+      abilitySummary.textContent = t("states.visitorAbility");
+      memberNotice.textContent = t("states.memberNotice");
       navMemberState.hidden = true;
-      navMemberState.textContent = "尚未登入 / Signed out";
+      navMemberState.textContent = t("states.signedOut");
       navLoginLink.hidden = false;
       navLogoutBtn.hidden = true;
       accessLoginCta.hidden = false;
       registerCta.hidden = false;
       uploadCta.hidden = true;
-      reviewGate.textContent = "只有 Level 3 帳號可進入審核台。";
+      reviewGate.textContent = t("states.reviewGate");
       reviewList.hidden = true;
       reviewEmpty.hidden = true;
       reviewList.innerHTML = "";
@@ -1067,10 +1169,10 @@
 
       const titleWrap = document.createElement("div");
       const title = document.createElement("h3");
-      title.textContent = review.title || "Untitled Submission";
+      title.textContent = review.title || t("states.untitled");
       const source = document.createElement("div");
       source.className = "status-inline";
-      source.textContent = `${review.organizationName || review.submitterName || "Unknown"} • ${review.region || "Unknown Region"}`;
+      source.textContent = `${review.organizationName || review.submitterName || t("states.unknown")} • ${review.region || t("states.unknownRegion")}`;
       titleWrap.append(title, source);
 
       const meta = document.createElement("div");
@@ -1088,14 +1190,14 @@
       const copy = document.createElement("div");
       copy.className = "review-copy";
       const desc = document.createElement("p");
-      desc.textContent = review.description || "No description provided.";
+      desc.textContent = review.description || t("states.noDescription");
       copy.appendChild(desc);
 
       const details = document.createElement("ul");
       const submitterItem = document.createElement("li");
-      submitterItem.textContent = `Submitter: ${review.submitterEmail || "N/A"}`;
+      submitterItem.textContent = `${t("states.submitter")}: ${review.submitterEmail || "N/A"}`;
       const permissionItem = document.createElement("li");
-      permissionItem.textContent = `Permission Level: ${review.permissionLevel || "N/A"}`;
+      permissionItem.textContent = `${t("states.permissionLevel")}: ${review.permissionLevel || "N/A"}`;
       details.append(submitterItem, permissionItem);
 
       const actions = document.createElement("div");
@@ -1104,33 +1206,33 @@
       const approveBtn = document.createElement("button");
       approveBtn.type = "button";
       approveBtn.className = "primary";
-      approveBtn.textContent = "Approve / 通過";
+      approveBtn.textContent = t("states.approve");
 
       const rejectBtn = document.createElement("button");
       rejectBtn.type = "button";
       rejectBtn.className = "soft";
-      rejectBtn.textContent = "Reject / 退回";
+      rejectBtn.textContent = t("states.reject");
 
       const statusText = document.createElement("div");
       statusText.className = "status-inline";
-      statusText.textContent = review.status ? `Current: ${formatStatus(review.status)}` : "Current: Pending / 待審核";
+      statusText.textContent = review.status ? `${t("states.current")}: ${formatStatus(review.status)}` : `${t("states.current")}: ${t("states.pending")}`;
 
       const setReviewStatus = async (nextStatus) => {
         approveBtn.disabled = true;
         rejectBtn.disabled = true;
-        statusText.textContent = "Updating status...";
+        statusText.textContent = t("states.updating");
 
         try {
           await updateDoc(doc(db, "globeEventReviews", review.reviewId), {
             status: nextStatus,
             reviewedAt: new Date().toISOString()
           });
-          statusText.textContent = `Current: ${formatStatus(nextStatus)}`;
+          statusText.textContent = `${t("states.current")}: ${formatStatus(nextStatus)}`;
           statusTag.className = `tag ${nextStatus}`;
           statusTag.textContent = formatStatus(nextStatus);
         } catch (error) {
           console.error(error);
-          statusText.textContent = "更新失敗，請稍後再試。";
+          statusText.textContent = t("states.updateFailed");
         } finally {
           approveBtn.disabled = false;
           rejectBtn.disabled = false;
@@ -1173,7 +1275,7 @@
         reviewList.hidden = false;
       } catch (error) {
         console.error(error);
-        reviewGate.textContent = "讀取審核資料失敗，請確認目前帳號仍具有 Level 3 權限。";
+        reviewGate.textContent = t("states.loadReviewFailed");
         reviewList.hidden = true;
       }
     };
@@ -1190,7 +1292,9 @@
         const permissionLevel = Number(memberData.permissionLevel || 1);
 
         authChip.textContent = `${getPermissionLabel(permissionLevel)} • ${user.email || ""}`;
-        authSummary.textContent = `目前登入帳號：${user.email || "Unknown"}，權限等級為 ${permissionLevel}。`;
+        authSummary.textContent = currentLang === "zh"
+          ? `目前登入帳號：${user.email || t("states.unknown")}，權限等級為 ${permissionLevel}。`
+          : `Current account: ${user.email || t("states.unknown")}, permission level ${permissionLevel}.`;
         navMemberState.hidden = false;
         navMemberState.textContent = `${getPermissionLabel(permissionLevel)} • ${user.email || ""}`;
         navLoginLink.hidden = true;
@@ -1201,41 +1305,52 @@
         if (permissionLevel >= 2) {
           uploadCta.hidden = false;
           uploadCta.href = "./climate-action-form.html";
-          memberNotice.textContent = "你的帳號可提交地方 Hope / Crisis 資料。請前往上傳入口完成內容填寫與附件上傳。";
+          memberNotice.textContent = t("states.canSubmit");
           abilitySummary.textContent = permissionLevel === 3
-            ? "你可以上傳地方資料，也可以在本頁審核投稿內容。"
-            : "你可以上傳地方 Hope / Crisis 資料，提交後會進入 Level 3 審核流程。";
+            ? t("states.level3Ability")
+            : t("states.level2Ability");
         } else {
           uploadCta.hidden = true;
-          memberNotice.textContent = "你目前是 Level 1。若要上傳地方資料，請由後台將你的 permissionLevel 提升到 2 或 3。";
-          abilitySummary.textContent = "你目前可閱讀專案導覽與準備資料，但尚未開放提交地方內容。";
+          memberNotice.textContent = t("states.level1Notice");
+          abilitySummary.textContent = t("states.level1Ability");
         }
 
         if (permissionLevel === 3) {
-          reviewGate.textContent = "你目前具有 Level 3 權限，可直接審核待處理投稿。";
+          reviewGate.textContent = t("states.level3Review");
           await loadReviewQueue();
         } else {
-          reviewGate.textContent = "只有 Level 3 帳號可進入審核台。";
+          reviewGate.textContent = t("states.reviewGate");
           reviewList.hidden = true;
           reviewEmpty.hidden = true;
           reviewList.innerHTML = "";
         }
       } catch (error) {
         console.error(error);
-        authChip.textContent = `登入中 / ${user.email || ""}`;
-        authSummary.textContent = "已登入，但目前讀取權限資料失敗，請稍後重新整理。";
-        abilitySummary.textContent = "暫時無法判斷你的 permissionLevel。";
-        memberNotice.textContent = "讀取會員資料時發生問題，請稍後再試。";
+        authChip.textContent = `${t("states.signedInPrefix")} / ${user.email || ""}`;
+        authSummary.textContent = t("states.readPermissionFailed");
+        abilitySummary.textContent = t("states.levelUnknown");
+        memberNotice.textContent = t("states.memberReadFailed");
         navMemberState.hidden = false;
-        navMemberState.textContent = `${user.email || "Signed in"}`;
+        navMemberState.textContent = `${user.email || t("states.signedInPrefix")}`;
         navLoginLink.hidden = true;
         navLogoutBtn.hidden = false;
         accessLoginCta.hidden = true;
         registerCta.hidden = false;
         uploadCta.hidden = true;
-        reviewGate.textContent = "目前無法載入審核權限資訊。";
+        reviewGate.textContent = t("states.reviewPermissionUnknown");
       }
     });
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        applyLanguage(button.dataset.lang);
+        if (!auth.currentUser) {
+          setGuestState();
+        }
+      });
+    });
+    applyLanguage(currentLang);
+    setGuestState();
   </script>
 </body>
 </html>
