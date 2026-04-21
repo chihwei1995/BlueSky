@@ -174,6 +174,16 @@
       white-space: nowrap;
     }
 
+    .member-chip-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 240px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .anchor-panel {
       position: fixed;
       right: 18px;
@@ -632,8 +642,11 @@
 
       <div class="header-actions">
         <a class="ghost-btn nav-link-btn" href="blueskyreturns/countries-regions-hope-crisis.html" data-i18n="header.call">Countries & Regions</a>
-        <a class="ghost-btn nav-link-btn" href="blueskyreturns/climate-action-form.html" data-i18n="header.form">Climate Action Form</a>
-        <a class="ghost-btn nav-link-btn" href="blueskyreturns/climate-action-form.html?auth=login" data-i18n="header.signIn">Sign In</a>
+        <a class="ghost-btn nav-link-btn" href="blueskyreturns/green-action-7day.html" data-i18n="header.proposal">7-Day Green Proposal</a>
+        <a class="ghost-btn nav-link-btn" href="blueskyreturns/climate-action-form.html" data-i18n="header.form">Take One Step</a>
+        <a id="headerSignInLink" class="ghost-btn nav-link-btn" href="blueskyreturns/member-center.html" data-i18n="header.signIn">Sign In</a>
+        <a id="headerMemberLink" class="ghost-btn member-chip-nav" href="blueskyreturns/member-center.html" hidden></a>
+        <button id="headerLogoutBtn" class="ghost-btn" type="button" hidden>Sign Out</button>
         <button class="ghost-btn" id="anchorToggle" type="button" data-i18n="header.timeline">📌 Timeline</button>
         <div class="toggle-container" data-i18n-aria-label="aria.modeToggle">
           <button class="toggle-btn active" data-mode="crisis" id="btn-crisis" data-i18n="mode.crisis">⚠️ CRISIS</button>
@@ -712,6 +725,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
 
     const firebaseConfig = {
@@ -724,7 +738,42 @@
       measurementId: "G-FQ0114S8CQ"
     };
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const FIRESTORE_REST_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
+    const headerSignInLink = document.getElementById('headerSignInLink');
+    const headerMemberLink = document.getElementById('headerMemberLink');
+    const headerLogoutBtn = document.getElementById('headerLogoutBtn');
+
+    const getUserDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || 'Signed in';
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        headerSignInLink.hidden = false;
+        headerMemberLink.hidden = true;
+        headerLogoutBtn.hidden = true;
+        headerMemberLink.textContent = '';
+        headerMemberLink.title = '';
+        return;
+      }
+
+      const label = getUserDisplayName(user);
+      headerSignInLink.hidden = true;
+      headerMemberLink.hidden = false;
+      headerLogoutBtn.hidden = false;
+      headerMemberLink.textContent = label;
+      headerMemberLink.title = user.email || label;
+    });
+
+    headerLogoutBtn.addEventListener('click', async () => {
+      headerLogoutBtn.disabled = true;
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error('Sign out failed:', error);
+      } finally {
+        headerLogoutBtn.disabled = false;
+      }
+    });
 
     isSupported()
       .then((supported) => {
@@ -754,7 +803,8 @@
           about: 'About',
           timeline: '📌 Timeline',
           call: 'Countries & Regions',
-          form: 'Climate Action Form',
+          proposal: '7-Day Green Proposal',
+          form: 'Take One Step',
           signIn: 'Sign In'
         },
         mode: {
@@ -814,7 +864,8 @@
           about: '關於',
           timeline: '📌 時間線',
           call: '各國與區域',
-          form: '氣候行動表單',
+          proposal: '7 日綠色提案',
+          form: '邁出一步',
           signIn: '登入'
         },
         mode: {

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7-Day Green Proposal | 自定義 7 日綠色提案</title>
+  <style>
+    :root {
+      --bg: #eef7f1;
+      --surface: rgba(255, 255, 255, 0.9);
+      --surface-strong: #ffffff;
+      --ink: #113127;
+      --muted: #4f6b61;
+      --line: #d2e4d8;
+      --green: #1f8f58;
+      --green-deep: #145c3a;
+      --lime: #8cc63f;
+      --leaf: #dff5d1;
+      --shadow: 0 20px 40px rgba(17, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at top left, rgba(140, 198, 63, 0.22), transparent 22%),
+        radial-gradient(circle at top right, rgba(31, 143, 88, 0.16), transparent 24%),
+        linear-gradient(180deg, #f7fcf8 0%, #eef7f1 42%, #f4fbf6 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(247, 252, 248, 0.92);
+      border-bottom: 1px solid rgba(210, 228, 216, 0.95);
+    }
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: grid;
+      gap: 2px;
+    }
+    .brand strong {
+      color: var(--green-deep);
+      font-size: 0.98rem;
+      letter-spacing: 0.03em;
+    }
+    .brand span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+      color: var(--green-deep);
+      padding: 10px 14px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .pill:hover {
+      transform: translateY(-1px);
+      border-color: rgba(31, 143, 88, 0.4);
+      box-shadow: 0 10px 24px rgba(31, 143, 88, 0.12);
+    }
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-strong);
+    }
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--green), var(--lime));
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(31, 143, 88, 0.18);
+    }
+    main { padding: 28px 0 70px; }
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .side-nav {
+      position: sticky;
+      top: 86px;
+      display: grid;
+      gap: 14px;
+    }
+    .side-card,
+    .panel {
+      border: 1px solid rgba(210, 228, 216, 0.95);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      border-radius: 26px;
+    }
+    .side-card { padding: 18px; }
+    .side-card h2,
+    .side-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+    .side-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .side-links {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .side-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(252, 255, 252, 0.92);
+      color: var(--green-deep);
+      font-weight: 700;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+    .side-link:hover {
+      transform: translateX(2px);
+      border-color: rgba(31, 143, 88, 0.35);
+      background: rgba(223, 245, 209, 0.85);
+    }
+    .side-link span {
+      display: grid;
+      gap: 1px;
+    }
+    .side-link small {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .mobile-side-nav {
+      display: none;
+      margin-bottom: 18px;
+    }
+    .mobile-nav-card { padding: 14px; }
+    .mobile-nav-card summary {
+      list-style: none;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--green-deep);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .mobile-nav-card summary::-webkit-details-marker { display: none; }
+    .mobile-nav-links {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .stack { display: grid; gap: 22px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.95fr);
+      gap: 24px;
+      padding: 30px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 30%),
+        linear-gradient(135deg, rgba(20, 92, 58, 0.98), rgba(31, 143, 88, 0.94) 52%, rgba(140, 198, 63, 0.88));
+      color: #fff;
+    }
+    .hero-copy {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4.3vw, 3.8rem);
+      line-height: 1.06;
+    }
+    .hero p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 1rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+    .button.primary {
+      background: #fff;
+      color: var(--green-deep);
+      border-color: transparent;
+    }
+    .hero-art {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+    .poster-frame {
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .poster-note {
+      display: grid;
+      gap: 8px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .poster-note strong { font-size: 1rem; }
+    .panel { padding: 26px; }
+    .section-head {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: 1.6rem;
+      color: var(--green-deep);
+    }
+    .section-head p,
+    .panel p,
+    .panel li { color: var(--muted); }
+    .concept-grid,
+    .why-grid,
+    .flow-grid,
+    .cta-grid,
+    .task-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .concept-card,
+    .why-card,
+    .flow-card,
+    .cta-card,
+    .task-card,
+    .dimension-card {
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.82);
+      padding: 20px;
+    }
+    .concept-card h3,
+    .why-card h3,
+    .flow-card h3,
+    .cta-card h3,
+    .task-card h3,
+    .dimension-card h3 {
+      margin: 0 0 8px;
+      color: var(--green-deep);
+    }
+    .concept-card ul,
+    .flow-card ul,
+    .cta-card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+    .dimension-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .dimension-card {
+      display: grid;
+      gap: 12px;
+      min-height: 100%;
+    }
+    .dimension-tag {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--leaf);
+      color: var(--green-deep);
+      font-weight: 800;
+      font-size: 0.88rem;
+    }
+    .dimension-card p { margin: 0; }
+    .highlight-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(223, 245, 209, 0.85);
+      border: 1px solid rgba(140, 198, 63, 0.45);
+      color: var(--green-deep);
+      font-weight: 700;
+    }
+
+    .task-auth {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(31, 143, 88, 0.08);
+      border: 1px solid rgba(31, 143, 88, 0.18);
+      color: var(--green-deep);
+      font-weight: 700;
+    }
+
+    .task-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .task-form label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--green-deep);
+    }
+
+    .task-form input[type="text"],
+    .task-form input[type="date"],
+    .task-form textarea,
+    .task-form input[type="file"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #c8d9cb;
+      font: inherit;
+      background: #fff;
+    }
+
+    .task-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.86);
+      color: var(--muted);
+    }
+
+    .checkbox-item input {
+      margin-top: 4px;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .task-status {
+      font-weight: 700;
+    }
+
+    .task-status.ok { color: #15803d; }
+    .task-status.error { color: #b91c1c; }
+    .task-status.warn { color: #b45309; }
+
+    .submission-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .submission-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .submission-item img {
+      width: 100%;
+      max-width: 220px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .submission-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .submission-empty {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(20, 92, 58, 0.05);
+      border: 1px solid rgba(20, 92, 58, 0.12);
+      color: var(--muted);
+    }
+    .footer {
+      text-align: center;
+      padding: 0 20px 34px;
+      color: #5f746a;
+      font-size: 0.92rem;
+    }
+    @media (max-width: 1100px) {
+      .layout { grid-template-columns: 1fr; }
+      .side-nav { display: none; }
+      .mobile-side-nav { display: block; }
+      .dimension-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; }
+      .concept-grid,
+      .why-grid,
+      .flow-grid,
+      .cta-grid,
+      .task-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .shell { padding: 0 16px; }
+      .nav { padding: 12px 0; }
+      .panel,
+      .hero {
+        padding: 22px 18px;
+        border-radius: 24px;
+      }
+      .dimension-grid { grid-template-columns: 1fr; }
+      .checkbox-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <strong data-i18n="header.title">Blue Sky Returns</strong>
+        <span data-i18n="header.subtitle">7-Day flexible green challenge</span>
+      </div>
+      <div class="nav-actions">
+        <a class="pill" href="../index.html" data-i18n="nav.back">← Back to Main</a>
+        <a class="pill" href="./index.html" data-i18n="nav.about">About</a>
+        <a class="pill" href="./countries-regions-hope-crisis.html" data-i18n="nav.call">Countries &amp; Regions</a>
+        <a class="pill" href="./member-center.html" data-i18n="nav.member">Member Center</a>
+        <a class="pill" href="./climate-action-form.html" data-i18n="nav.form">Take One Step</a>
+        <a class="pill" href="./member-center.html" data-i18n="nav.signIn">Sign In</a>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="shell">
+      <div class="mobile-side-nav">
+        <details class="mobile-nav-card side-card">
+          <summary data-i18n="mobileNav.title">Quick Navigation</summary>
+          <div class="mobile-nav-links">
+            <a class="side-link" href="#concept"><span><span data-i18n="mobileNav.concept">Concept</span><small data-i18n="mobileNav.conceptSub">Why this format works</small></span></a>
+            <a class="side-link" href="#dimensions"><span><span data-i18n="mobileNav.dimensions">Five Dimensions</span><small data-i18n="mobileNav.dimensionsSub">Free combination in 7 days</small></span></a>
+            <a class="side-link" href="#flow"><span><span data-i18n="mobileNav.flow">7-Day Flow</span><small data-i18n="mobileNav.flowSub">How to participate</small></span></a>
+            <a class="side-link" href="#cta"><span><span data-i18n="mobileNav.cta">Next Step</span><small data-i18n="mobileNav.ctaSub">Join the action</small></span></a>
+          </div>
+        </details>
+      </div>
+      <div class="layout">
+        <aside class="side-nav">
+          <div class="side-card">
+            <h2 data-i18n="side.title">7-Day Green Proposal</h2>
+            <p data-i18n="side.body">A flexible guide page for a seven-day green rhythm.</p>
+            <div class="side-links">
+              <a class="side-link" href="#concept"><span><span data-i18n="side.linkConcept">Concept</span><small data-i18n="side.linkConceptSub">Why flexible works</small></span></a>
+              <a class="side-link" href="#dimensions"><span><span data-i18n="side.linkDimensions">Five Dimensions</span><small data-i18n="side.linkDimensionsSub">Diet, Mobility, Waste, Energy, Nature</small></span></a>
+              <a class="side-link" href="#flow"><span><span data-i18n="side.linkFlow">7-Day Flow</span><small data-i18n="side.linkFlowSub">Photo-based participation</small></span></a>
+              <a class="side-link" href="#cta"><span><span data-i18n="side.linkCta">Join</span><small data-i18n="side.linkCtaSub">Become a Climate Action Partner</small></span></a>
+            </div>
+          </div>
+          <div class="side-card">
+            <h3 data-i18n="side.tipTitle">Quick Note</h3>
+            <p data-i18n="side.tipBody">The point is not pressure. The point is to make green living easier to enter.</p>
+          </div>
+        </aside>
+        <div class="stack">
+          <section class="hero panel">
+            <div class="hero-copy">
+              <div class="eyebrow" data-i18n="hero.eyebrow">Flexible Climate Participation</div>
+              <h1 data-i18n="hero.title">自定義 7 日綠色提案</h1>
+              <p data-i18n="hero.body">我們不直接規定參與者每天要做什麼，而是提供五大綠色維度，讓大家在 7 天內自由組合、重複、交叉上傳，用更真實也更可持續的方式練習低碳生活。</p>
+              <div class="hero-actions">
+              <a class="button primary" href="./member-center.html" data-i18n="hero.primary">前往會員中心登入</a>
+              <a class="button" href="#dimensions" data-i18n="hero.secondary">查看五大維度</a>
+              </div>
+            </div>
+            <div class="hero-art">
+              <div class="poster-frame">
+                <img src="../assets/GA.png" alt="7-Day Green Proposal visual" data-i18n-alt="hero.posterAlt" />
+              </div>
+              <div class="poster-note">
+                <strong data-i18n="hero.noteTitle">7 days, your own rhythm.</strong>
+                <span data-i18n="hero.noteBody">What matters is the evidence and story behind your choices.</span>
+              </div>
+            </div>
+          </section>
+          <section id="concept" class="panel">
+            <div class="section-head">
+              <h2 data-i18n="concept.title">Concept / 概念</h2>
+              <p data-i18n="concept.body">This is not a rigid task list. It is an open framework.</p>
+            </div>
+            <div class="concept-grid">
+              <article class="concept-card">
+                <h3 data-i18n="concept.card1Title">Not prescriptive</h3>
+                <p data-i18n="concept.card1Body">Participants start from their own pace and context.</p>
+              </article>
+              <article class="concept-card">
+                <h3 data-i18n="concept.card2Title">Photo-first participation</h3>
+                <p data-i18n="concept.card2Body">One photo can capture one conscious choice.</p>
+              </article>
+            </div>
+            <div class="highlight-strip">
+              <span class="highlight" data-i18n="concept.highlight1">🍀 Any order</span>
+              <span class="highlight" data-i18n="concept.highlight2">📷 Repeat dimensions</span>
+              <span class="highlight" data-i18n="concept.highlight3">🧩 Mix and overlap</span>
+              <span class="highlight" data-i18n="concept.highlight4">🌍 Rooted in real life</span>
+            </div>
+          </section>
+          <section id="dimensions" class="panel">
+            <div class="section-head">
+              <h2 data-i18n="dimensions.title">The Green Dimensions / 五大維度</h2>
+              <p data-i18n="dimensions.body">Any photo that fits one dimension can count toward the 7-day proposal.</p>
+            </div>
+            <div class="dimension-grid">
+              <article class="dimension-card">
+                <span class="dimension-tag" data-i18n="dimensions.dietTag">Green Diet</span>
+                <h3 data-i18n="dimensions.dietTitle">Plant-forward food choices</h3>
+                <p data-i18n-html="dimensions.dietBody"><strong>Examples:</strong> meat-free meals, home-cooked vegetables, reducing food waste.</p>
+              </article>
+              <article class="dimension-card">
+                <span class="dimension-tag" data-i18n="dimensions.mobilityTag">Low-carbon Mobility</span>
+                <h3 data-i18n="dimensions.mobilityTitle">Move with less carbon</h3>
+                <p data-i18n-html="dimensions.mobilityBody"><strong>Examples:</strong> walking, cycling, buses, metro, or choosing not to drive.</p>
+              </article>
+              <article class="dimension-card">
+                <span class="dimension-tag" data-i18n="dimensions.wasteTag">Waste Reduction</span>
+                <h3 data-i18n="dimensions.wasteTitle">Reduce and reuse</h3>
+                <p data-i18n-html="dimensions.wasteBody"><strong>Examples:</strong> reusable containers, repairs, recycling, refusing single-use plastic.</p>
+              </article>
+              <article class="dimension-card">
+                <span class="dimension-tag" data-i18n="dimensions.energyTag">Energy Saving</span>
+                <h3 data-i18n="dimensions.energyTitle">Save energy and trim digital waste</h3>
+                <p data-i18n-html="dimensions.energyBody"><strong>Examples:</strong> natural light, unplugging devices, deleting expired emails.</p>
+              </article>
+              <article class="dimension-card">
+                <span class="dimension-tag" data-i18n="dimensions.natureTag">City / Nature Connection</span>
+                <h3 data-i18n="dimensions.natureTitle">Reconnect urban life with nature</h3>
+                <p data-i18n-html="dimensions.natureBody"><strong>Examples:</strong> green infrastructure, community parks, indoor plants, Green Hunt stops.</p>
+              </article>
+            </div>
+          </section>
+          <section id="flow" class="panel">
+            <div class="section-head">
+              <h2 data-i18n="flow.title">7-Day Flow / 7 天參與節奏</h2>
+              <p data-i18n="flow.body">A light participation rhythm with lots of creative room.</p>
+            </div>
+            <div class="flow-grid">
+              <article class="flow-card">
+                <h3 data-i18n="flow.card1Title">Day 1–7: capture what feels real</h3>
+                <ul>
+                  <li data-i18n="flow.card1Point1">Find one moment each day that fits one of the five dimensions.</li>
+                  <li data-i18n="flow.card1Point2">If a day gets busy, you can make it up the next day.</li>
+                  <li data-i18n="flow.card1Point3">The same dimension can appear multiple times.</li>
+                </ul>
+              </article>
+              <article class="flow-card">
+                <h3 data-i18n="flow.card2Title">Upload with a short caption</h3>
+                <ul>
+                  <li data-i18n="flow.card2Point1">Each photo can include one short line explaining what happened.</li>
+                  <li data-i18n="flow.card2Point2">You can label the matching dimensions.</li>
+                  <li data-i18n="flow.card2Point3">You can also share the reason or challenge behind it.</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="section-head">
+              <h2 data-i18n="why.title">Why This Works / 為什麼這樣設計</h2>
+              <p data-i18n="why.body">An open format is easier to adopt across different cities, ages, and lifestyles.</p>
+            </div>
+            <div class="why-grid">
+              <article class="why-card">
+                <h3 data-i18n="why.card1Title">Lower pressure, higher participation</h3>
+                <p data-i18n="why.card1Body">People are less likely to quit after missing one day.</p>
+              </article>
+              <article class="why-card">
+                <h3 data-i18n="why.card2Title">Better for storytelling</h3>
+                <p data-i18n="why.card2Body">The five dimensions naturally become content categories for posts, exhibits, or an e-book.</p>
+              </article>
+            </div>
+          </section>
+          <section id="task" class="panel">
+            <div class="section-head">
+              <h2>Task Submission / 任務提交</h2>
+              <p>登入後，你可以在這裡填寫今天完成的 7-Day Green Proposal 內容，並上傳圖片作為任務紀錄。</p>
+            </div>
+            <div id="taskAuthState" class="task-auth">請先到會員中心登入，才可提交任務與查看自己的紀錄。</div>
+            <div class="task-grid">
+              <article class="task-card">
+                <h3>提交今天的綠色任務</h3>
+                <form id="proposalTaskForm" class="task-form">
+                  <div>
+                    <label for="taskTitle">任務標題 / Task Title</label>
+                    <input id="taskTitle" name="taskTitle" type="text" placeholder="例：今天步行上班並自備水瓶" />
+                  </div>
+                  <div>
+                    <label for="taskDate">日期 / Date</label>
+                    <input id="taskDate" name="taskDate" type="date" />
+                  </div>
+                  <div>
+                    <label>對應維度 / Dimensions</label>
+                    <div class="checkbox-grid">
+                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="素 Green Diet" />素 Green Diet</label>
+                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="行 Low-carbon Mobility" />行 Low-carbon Mobility</label>
+                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="減 Waste Reduction" />減 Waste Reduction</label>
+                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="能 Energy Saving" />能 Energy Saving</label>
+                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="森 City / Nature Connection" />森 City / Nature Connection</label>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="taskCaption">任務內容 / Caption</label>
+                    <textarea id="taskCaption" name="taskCaption" placeholder="簡短描述你今天做了什麼，以及這件事為什麼重要。"></textarea>
+                  </div>
+                  <div>
+                    <label for="taskReflection">心得補充（選填）/ Reflection</label>
+                    <textarea id="taskReflection" name="taskReflection" placeholder="例如：最難的地方、最意外的發現、想延續的習慣。"></textarea>
+                  </div>
+                  <div>
+                    <label for="taskImage">任務照片 / Upload Image</label>
+                    <input id="taskImage" name="taskImage" type="file" accept="image/*" />
+                  </div>
+                  <div class="task-actions">
+                    <button id="taskSubmitBtn" class="pill primary" type="submit">提交任務 / Submit</button>
+                    <a class="pill" href="./member-center.html">打開會員中心 / Open Member Center</a>
+                    <span id="taskStatus" class="task-status" aria-live="polite"></span>
+                  </div>
+                </form>
+              </article>
+              <article class="task-card">
+                <h3>我的任務紀錄 / My Recent Submissions</h3>
+                <div id="proposalSubmissionEmpty" class="submission-empty">登入後，這裡會顯示你最近提交的 7-Day 任務。</div>
+                <div id="proposalSubmissionList" class="submission-list" hidden></div>
+              </article>
+            </div>
+          </section>
+          <section id="cta" class="panel">
+            <div class="section-head">
+              <h2 data-i18n="cta.title">Next Step / 下一步</h2>
+              <p data-i18n="cta.body">Start from the existing Blue Sky Returns registration and navigation flow.</p>
+            </div>
+            <div class="cta-grid">
+              <article class="cta-card">
+                <h3 data-i18n="cta.card1Title">Become a Climate Action Partner</h3>
+                <p data-i18n="cta.card1Body">Register, sign in, and complete the basic profile first.</p>
+                <a class="pill" href="./climate-action-form.html" data-i18n="cta.card1Link">Open Climate Action Form</a>
+              </article>
+              <article class="cta-card">
+                <h3 data-i18n="cta.card2Title">View the participation journey</h3>
+                <p data-i18n="cta.card2Body">See the broader project structure, upload permissions, and review logic.</p>
+                <a class="pill" href="./countries-regions-hope-crisis.html" data-i18n="cta.card2Link">Open Countries &amp; Regions</a>
+              </article>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer" data-i18n="footer">Blue Sky Returns • 7-Day Green Proposal • 2026</footer>
+  <script>
+    const LANG_STORAGE_KEY = "bsr_lang";
+    const I18N = {
+      zh: {
+        page: { title: "自定義 7 日綠色提案 | Blue Sky Returns" },
+        header: { title: "Blue Sky Returns", subtitle: "自定義 7 日綠色提案" },
+        nav: { back: "← 回到主頁", about: "About", call: "各國與區域導覽", member: "會員中心", form: "邁出一步", signIn: "登入" },
+        mobileNav: {
+          title: "快速導覽", concept: "概念", conceptSub: "為什麼這樣設計", dimensions: "五大維度", dimensionsSub: "素・行・減・能・森", flow: "7 天節奏", flowSub: "如何參與", cta: "下一步", ctaSub: "開始加入"
+        },
+        side: {
+          title: "7 日綠色提案", body: "一個不規定每天做什麼，而是讓參與者自己定義 7 天綠色行動節奏的導覽頁。", linkConcept: "概念", linkConceptSub: "自由組合的玩法", linkDimensions: "五大維度", linkDimensionsSub: "素・行・減・能・森", linkFlow: "7 天節奏", linkFlowSub: "上傳照片的節奏", linkCta: "加入流程", linkCtaSub: "開始成為氣候行動者", tipTitle: "快速提醒", tipBody: "重點不是打卡壓力，而是把綠色生活拆成五個入口，讓每個人都能用自己的方式參與。"
+        },
+        hero: {
+          eyebrow: "Flexible Climate Participation", title: "自定義 7 日綠色提案", body: "我們不直接規定參與者每天要做什麼，而是提供五大綠色維度，讓大家在 7 天內自由組合、重複、交叉上傳，用更真實也更可持續的方式練習低碳生活。", primary: "前往會員中心登入", secondary: "查看五大維度", posterAlt: "7 日綠色提案主視覺", noteTitle: "7 天，用你自己的節奏。", noteBody: "可以一天做一件，也可以某幾天集中發力；重要的是留下你選擇的綠色證據與故事。"
+        },
+        concept: {
+          title: "Concept / 概念", body: "這不是一份僵硬的每日任務表，而是一個開放式參與框架。五大維度像五扇門，參與者只要在 7 天內，上傳任何符合其中一個維度的照片，就算完成當天的綠色提案紀錄。", card1Title: "不預設標準答案", card1Body: "不由主辦方替每個人決定行程，而是鼓勵大家從自己的生活節奏、城市條件、家庭習慣出發，找到做得到的行動。", card2Title: "照片優先的參與方式", card2Body: "上傳一張照片就能記錄一個選擇。影像比勾選題更有溫度，也更容易成為日後展覽、社群或電子書的素材。", highlight1: "🍀 不限順序", highlight2: "📷 可重複維度", highlight3: "🧩 可交叉混搭", highlight4: "🌍 更貼近真實生活"
+        },
+        dimensions: {
+          title: "The Green Dimensions / 五大維度", body: "只要照片內容符合以下任一維度，就能列入你的 7 日綠色提案。不限先後、可重複、也可以同一天同時命中多個維度。", dietTag: "素 Green Diet", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食、重新利用冰箱食材。", mobilityTag: "行 Low-carbon Mobility", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵、共乘，或今天選擇不開車的證明。", wasteTag: "減 Waste Reduction", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、修補舊物、垃圾分類、拒絕一次性塑膠用品。", energyTag: "能 Energy Saving", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、使用自然光、減少冷氣時間、刪除過期郵件或雲端垃圾。", natureTag: "森 City / Nature Connection", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>城市綠化設施、社區小公園、室內植栽、親近自然、Green Hunt 目標打卡。"
+        },
+        flow: {
+          title: "7-Day Flow / 7 天參與節奏", body: "我們把玩法做得很輕巧，你可以用最少壓力開始，卻保留很高的創造空間。", card1Title: "Day 1–7：先拍下真實發生的綠色瞬間", card1Point1: "每天找到一個符合五大維度的瞬間即可。", card1Point2: "如果某天很忙，也可以隔天補上，整體仍以 7 天為一個提案週期。", card1Point3: "同一維度可連續出現，不必追求每天不同。", card2Title: "上傳時加一句簡短說明", card2Point1: "每張照片可附一句簡短說明，描述你做了什麼。", card2Point2: "可標註對應維度，例如今天是行加減。", card2Point3: "如果願意，也可分享背後原因或遇到的挑戰。"
+        },
+        why: {
+          title: "Why This Works / 為什麼這樣設計", body: "比起硬性的任務清單，這種開放式框架更容易被不同城市、不同年齡、不同生活條件的人採用。", card1Title: "壓力更低，參與率更高", card1Body: "參與者不會因為某天失敗就想放棄，因為整個提案允許回彈、補位與重新開始。", card2Title: "更適合後續敘事與展示", card2Body: "五大維度天然形成敘事分類，後續可整理成社群貼文、展覽牆、電子書章節或學校工作坊素材。"
+        },
+        cta: {
+          title: "Next Step / 下一步", body: "如果你想把這個 7 日綠色提案接進現有 Blue Sky Returns 流程，現在就能先從會員中心登入與邁出一步資料更新開始。", card1Title: "先更新邁出一步", card1Body: "先完成註冊、登入與基本資料填寫，後續才能串接更多上傳與權限流程。", card1Link: "打開邁出一步", card2Title: "查看完整參與路徑", card2Body: "如果你要先看整體專案路徑、上傳權限與審核邏輯，可回到 Countries & Regions 導覽頁。", card2Link: "打開 Countries & Regions"
+        },
+        footer: "Blue Sky Returns • 自定義 7 日綠色提案 • 2026"
+      },
+      en: {
+        page: { title: "7-Day Green Proposal | Blue Sky Returns" },
+        header: { title: "Blue Sky Returns", subtitle: "7-Day Green Proposal" },
+        nav: { back: "← Back to Main", about: "About", call: "Countries & Regions", member: "Member Center", form: "Take One Step", signIn: "Sign In" },
+        mobileNav: {
+          title: "Quick Navigation", concept: "Concept", conceptSub: "Why this format works", dimensions: "Five Dimensions", dimensionsSub: "Diet, Mobility, Waste, Energy, Nature", flow: "7-Day Flow", flowSub: "How to participate", cta: "Next Step", ctaSub: "Join the action"
+        },
+        side: {
+          title: "7-Day Green Proposal", body: "A guide page that gives participants a flexible seven-day green rhythm instead of prescribing the exact task for every day.", linkConcept: "Concept", linkConceptSub: "Why flexible works", linkDimensions: "Five Dimensions", linkDimensionsSub: "Diet, Mobility, Waste, Energy, Nature", linkFlow: "7-Day Flow", linkFlowSub: "Photo-based participation", linkCta: "Join", linkCtaSub: "Become a Climate Action Partner", tipTitle: "Quick Note", tipBody: "The point is not pressure or perfect streaks. The point is to turn green living into approachable entry points."
+        },
+        hero: {
+          eyebrow: "Flexible Climate Participation", title: "Build Your Own 7-Day Green Proposal", body: "Instead of telling participants exactly what to do, we offer five green dimensions and let them freely combine, repeat, and remix actions across seven days in a way that feels real and sustainable.", primary: "Open Member Center", secondary: "See the five dimensions", posterAlt: "7-Day Green Proposal key visual", noteTitle: "7 days, your own rhythm.", noteBody: "One action a day works. A concentrated burst over a few days also works. What matters is the evidence and story behind your choices."
+        },
+        concept: {
+          title: "Concept", body: "This is not a rigid daily checklist. It is an open participation framework. Think of the five dimensions as five doors: if a participant uploads a photo that matches any one of them within seven days, it counts as part of the proposal.", card1Title: "Not prescriptive", card1Body: "The organizer does not dictate everyone's schedule. Participants start from their own pace, city context, family routines, and real constraints.", card2Title: "Photo-first participation", card2Body: "One photo can capture one conscious choice. That makes participation warmer, easier to share, and more reusable for exhibitions, social posts, or an e-book.", highlight1: "🍀 Any order", highlight2: "📷 Repeat dimensions", highlight3: "🧩 Mix and overlap", highlight4: "🌍 Rooted in real life"
+        },
+        dimensions: {
+          title: "The Green Dimensions", body: "Any photo that fits one of the following dimensions can be part of the seven-day proposal. Order does not matter. Repetition is allowed. One day can even fit more than one dimension.", dietTag: "Green Diet", dietTitle: "Plant-forward food choices", dietBody: "<strong>Examples:</strong> meat-free meals, home-cooked vegetables, reducing food waste, or using ingredients already in the fridge.", mobilityTag: "Low-carbon Mobility", mobilityTitle: "Move with less carbon", mobilityBody: "<strong>Examples:</strong> walking, cycling, buses, metro, carpooling, or proof that you chose not to drive today.", wasteTag: "Waste Reduction", wasteTitle: "Reduce and reuse", wasteBody: "<strong>Examples:</strong> reusable containers, repair habits, sorting recyclables, or refusing single-use plastic.", energyTag: "Energy Saving", energyTitle: "Save energy and trim digital waste", energyBody: "<strong>Examples:</strong> turning off lights, unplugging devices, using natural light, reducing air-conditioning time, or deleting expired emails.", natureTag: "City / Nature Connection", natureTitle: "Reconnect urban life with nature", natureBody: "<strong>Examples:</strong> green infrastructure in the city, community parks, indoor plants, nature walks, or a Green Hunt stop."
+        },
+        flow: {
+          title: "7-Day Flow", body: "The participation rhythm is intentionally light. It lowers pressure but keeps creative range wide open.", card1Title: "Day 1–7: capture what feels real", card1Point1: "Find one moment each day that fits one of the five dimensions.", card1Point2: "If a day gets busy, you can make it up the next day and still stay within the seven-day proposal.", card1Point3: "The same dimension can appear on multiple days. Variety is welcome, but not required.", card2Title: "Upload with a short caption", card2Point1: "Each photo can include one short line explaining what happened.", card2Point2: "You can label the matching dimensions, such as Mobility plus Waste.", card2Point3: "If you want, share the reason behind the action or a challenge you faced."
+        },
+        why: {
+          title: "Why This Works", body: "Compared with a rigid task list, an open framework is easier to adopt across different cities, ages, and living conditions.", card1Title: "Lower pressure, higher participation", card1Body: "People are less likely to quit after missing one day because the whole structure allows bounce-back and re-entry.", card2Title: "Better for storytelling", card2Body: "The five dimensions naturally become content categories for social posts, exhibition walls, e-book chapters, or school workshops."
+        },
+        cta: {
+          title: "Next Step", body: "If you want to connect this seven-day proposal to the current Blue Sky Returns flow, start with the member center sign-in and your Take One Step profile update.", card1Title: "Update Take One Step", card1Body: "Register, sign in, and complete the basic profile first so future upload and permission flows can connect smoothly.", card1Link: "Open Take One Step", card2Title: "View the participation journey", card2Body: "If you want to see the broader project structure, upload permissions, and review logic first, go back to the Countries & Regions guide.", card2Link: "Open Countries & Regions"
+        },
+        footer: "Blue Sky Returns • 7-Day Green Proposal • 2026"
+      }
+    };
+    function applyLanguage(lang) {
+      const dict = I18N[lang] || I18N.zh;
+      document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+      document.title = dict.page.title;
+      const update = (prefix, value) => {
+        Object.entries(value).forEach(([key, nested]) => {
+          const next = prefix ? `${prefix}.${key}` : key;
+          if (nested && typeof nested === "object" && !Array.isArray(nested)) {
+            update(next, nested);
+            return;
+          }
+          document.querySelectorAll(`[data-i18n="${next}"]`).forEach((node) => {
+            node.textContent = nested;
+          });
+          document.querySelectorAll(`[data-i18n-html="${next}"]`).forEach((node) => {
+            node.innerHTML = nested;
+          });
+          document.querySelectorAll(`[data-i18n-alt="${next}"]`).forEach((node) => {
+            node.setAttribute("alt", nested);
+          });
+        });
+      };
+      update("", dict);
+      document.querySelectorAll(".lang-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === lang);
+      });
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+    }
+    applyLanguage(localStorage.getItem(LANG_STORAGE_KEY) || "zh");
+    document.querySelectorAll(".lang-btn").forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+  </script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+    const storage = getStorage(app);
+
+    const taskAuthState = document.getElementById("taskAuthState");
+    const taskForm = document.getElementById("proposalTaskForm");
+    const taskSubmitBtn = document.getElementById("taskSubmitBtn");
+    const taskStatus = document.getElementById("taskStatus");
+    const submissionList = document.getElementById("proposalSubmissionList");
+    const submissionEmpty = document.getElementById("proposalSubmissionEmpty");
+
+    const setTaskStatus = (type, message) => {
+      taskStatus.className = "task-status";
+      if (type) taskStatus.classList.add(type);
+      taskStatus.textContent = message;
+    };
+
+    const renderSubmission = (submission) => {
+      const article = document.createElement("article");
+      article.className = "submission-item";
+
+      const title = document.createElement("h3");
+      title.textContent = submission.title || "未命名任務";
+      article.appendChild(title);
+
+      const tagWrap = document.createElement("div");
+      tagWrap.className = "submission-tags";
+      (submission.dimensions || []).forEach((dimension) => {
+        const badge = document.createElement("span");
+        badge.className = "highlight";
+        badge.textContent = dimension;
+        tagWrap.appendChild(badge);
+      });
+      article.appendChild(tagWrap);
+
+      const caption = document.createElement("p");
+      caption.textContent = submission.caption || "沒有補充內容。";
+      article.appendChild(caption);
+
+      if (submission.reflection) {
+        const reflection = document.createElement("p");
+        reflection.textContent = `心得：${submission.reflection}`;
+        article.appendChild(reflection);
+      }
+
+      if (submission.image?.downloadURL) {
+        const img = document.createElement("img");
+        img.src = submission.image.downloadURL;
+        img.alt = submission.title || "7-Day submission image";
+        article.appendChild(img);
+      }
+
+      return article;
+    };
+
+    const loadMySubmissions = async (uid) => {
+      submissionList.innerHTML = "";
+      submissionList.hidden = true;
+      submissionEmpty.hidden = false;
+
+      const snapshot = await getDocs(collection(db, "greenProposalSubmissions"));
+      const submissions = snapshot.docs
+        .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+        .filter((item) => item.uid === uid)
+        .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+
+      if (!submissions.length) {
+        submissionEmpty.textContent = "你目前還沒有提交任何 7-Day 任務。";
+        return;
+      }
+
+      submissions.forEach((submission) => submissionList.appendChild(renderSubmission(submission)));
+      submissionEmpty.hidden = true;
+      submissionList.hidden = false;
+    };
+
+    const uploadTaskImage = async (uid, file) => {
+      if (!file || !file.name) return null;
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const fileRef = ref(storage, `green-proposal-submissions/${uid}/${Date.now()}-${safeName}`);
+      const snapshot = await uploadBytes(fileRef, file, { contentType: file.type || "application/octet-stream" });
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      return {
+        name: file.name,
+        type: file.type || "",
+        size: file.size,
+        path: snapshot.metadata.fullPath,
+        downloadURL
+      };
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        taskAuthState.textContent = "請先到會員中心登入，才可提交任務與查看自己的紀錄。";
+        taskForm.querySelectorAll("input, textarea, button").forEach((el) => {
+          if (el.id !== "taskSubmitBtn") el.disabled = true;
+        });
+        taskSubmitBtn.disabled = true;
+        submissionList.hidden = true;
+        submissionEmpty.hidden = false;
+        submissionEmpty.textContent = "登入後，這裡會顯示你最近提交的 7-Day 任務。";
+        return;
+      }
+
+      taskAuthState.textContent = `已登入 ${user.displayName || user.email}，現在可以提交今天的 7-Day 任務。`;
+      taskForm.querySelectorAll("input, textarea, button").forEach((el) => {
+        el.disabled = false;
+      });
+      await loadMySubmissions(user.uid);
+    });
+
+    taskForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const user = auth.currentUser;
+      if (!user) {
+        setTaskStatus("error", "請先登入會員中心。");
+        return;
+      }
+
+      const formData = new FormData(taskForm);
+      const dimensions = formData.getAll("dimensions");
+      if (!dimensions.length) {
+        setTaskStatus("error", "請至少選擇一個綠色維度。");
+        return;
+      }
+
+      taskSubmitBtn.disabled = true;
+      setTaskStatus("warn", "正在上傳任務資料...");
+
+      try {
+        const image = await uploadTaskImage(user.uid, formData.get("taskImage"));
+        await addDoc(collection(db, "greenProposalSubmissions"), {
+          uid: user.uid,
+          email: user.email || "",
+          memberName: user.displayName || "",
+          title: String(formData.get("taskTitle") || "").trim(),
+          taskDate: String(formData.get("taskDate") || ""),
+          dimensions,
+          caption: String(formData.get("taskCaption") || "").trim(),
+          reflection: String(formData.get("taskReflection") || "").trim(),
+          image,
+          createdAt: new Date().toISOString()
+        });
+
+        taskForm.reset();
+        setTaskStatus("ok", "7-Day 任務已成功提交。");
+        await loadMySubmissions(user.uid);
+      } catch (error) {
+        console.error(error);
+        setTaskStatus("error", "提交失敗，請稍後再試。");
+      } finally {
+        taskSubmitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

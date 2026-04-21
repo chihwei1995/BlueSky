@@ -29,6 +29,16 @@ service cloud.firestore {
       allow read, write: if hasPermissionLevel(3);
     }
 
+    match /greenProposalSubmissions/{submissionId} {
+      allow create: if isSignedIn() &&
+        request.resource.data.uid == request.auth.uid;
+      allow read: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow update: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow delete: if false;
+    }
+
     match /members/{userId} {
       allow read, create, update: if isOwner(userId) || hasPermissionLevel(3);
       allow delete: if false;

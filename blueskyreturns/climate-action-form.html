@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blue Sky Returns 氣侯行動者註冊與氣候行動問卷</title>
+  <title>Blue Sky Returns 邁出一步</title>
   <style>
     :root {
       --bg: #f4f8fb;
@@ -156,11 +156,6 @@
       color: var(--muted);
       font-size: 0.92rem;
       margin-top: 8px;
-    }
-
-    .helper.warning {
-      color: var(--warning);
-      font-weight: 700;
     }
 
     .member-chip {
@@ -320,21 +315,20 @@
 <body>
   <main class="container">
     <div class="topbar">
-      <h1>Blue Sky Returns 氣侯行動者註冊與氣候行動問卷<br>Blue Sky Returns Climate Action Partner Registration & Climate Action Quiz</h1>
+      <h1>Blue Sky Returns 邁出一步<br>Blue Sky Returns Take One Step</h1>
       <div class="topbar-actions">
-        <button type="button" id="openLoginBtn" class="secondary-btn">氣侯行動者登入 / Sign In</button>
         <button type="button" id="logoutBtn" class="secondary-btn" hidden>登出 / Sign Out</button>
-        <a class="back-link" href="./index.html">← 返回 Blue Sky Returns / Back to Blue Sky Returns</a>
+        <a class="back-link" href="./member-center.html">← 返回會員中心 / Back to Member Center</a>
       </div>
     </div>
     <p class="subtitle">
-      使用 Email 建立氣侯行動者帳號，完成問卷後會立即獲得你的雙語角色分析，並把資料儲存到 Firebase。<br>
-      Create your climate action partner account with email, receive your bilingual result instantly, and save your submission to Firebase.
+      用這一步更新你的氣候行動者資料與問卷內容；第一次填寫會建立帳號，之後可直接回來修改。<br>
+      Use this step to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.
     </p>
 
     <form id="climateForm">
       <section class="card">
-        <h2>第一部分：氣侯行動者註冊與基本資料<br>Part 1: Climate Action Partner Registration & Contact Details</h2>
+        <h2>第一部分：邁出一步與基本資料<br>Part 1: Take One Step & Contact Details</h2>
         <p class="helper">第一次填寫會建立氣侯行動者帳號；若你已登入相同 Email，系統會直接更新你的問卷資料。</p>
         <div id="memberState" class="member-chip" hidden></div>
 
@@ -498,11 +492,10 @@
         </fieldset>
 
         <div class="actions">
-          <button type="submit" id="submitBtn">註冊氣侯行動者並儲存問卷 / Register & Save</button>
+          <button type="submit" id="submitBtn">儲存邁出一步資料 / Save Take One Step</button>
           <button type="button" id="shareCampaignBtn" class="secondary-btn">分享表單給他人 / Share This Form</button>
           <span id="submitStatus" class="status" aria-live="polite"></span>
         </div>
-        <p class="helper warning">部署前請先在 Firebase Console 啟用 Authentication 的 Email/Password 與 Firestore Database。</p>
       </section>
     </form>
   </main>
@@ -527,34 +520,12 @@
     </div>
   </section>
 
-  <section id="loginModal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <h3 class="role-title">氣侯行動者登入 / Climate Action Partner Sign In</h3>
-      <p class="small-note">登入後可直接更新你的問卷資料，不需要再重新註冊。</p>
-      <div class="auth-row">
-        <label class="required" for="loginEmail">電子郵件 Email</label>
-        <input id="loginEmail" type="email" autocomplete="email" />
-
-        <label class="required" for="loginPassword">密碼 Password</label>
-        <input id="loginPassword" type="password" autocomplete="current-password" />
-      </div>
-      <div class="actions">
-        <button type="button" id="loginSubmitBtn">登入 / Sign In</button>
-        <button type="button" id="forgotPasswordBtn" class="secondary-btn">忘記密碼 / Reset Password</button>
-        <button type="button" id="closeLoginModal" class="secondary-btn">取消 / Cancel</button>
-      </div>
-      <p class="small-note" id="loginStatus" aria-live="polite"></p>
-    </div>
-  </section>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import {
       getAuth,
       createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
       signOut,
-      sendPasswordResetEmail,
       sendEmailVerification,
       updateProfile,
       onAuthStateChanged,
@@ -651,20 +622,12 @@
     const confirmPasswordInput = document.getElementById("confirmPassword");
     const statusEl = document.getElementById("submitStatus");
     const modal = document.getElementById("resultModal");
-    const loginModal = document.getElementById("loginModal");
     const shareStatusEl = document.getElementById("shareStatus");
-    const loginStatusEl = document.getElementById("loginStatus");
     const shareCampaignBtn = document.getElementById("shareCampaignBtn");
     const shareResultBtn = document.getElementById("shareResultBtn");
     const shareImageBtn = document.getElementById("shareImageBtn");
     const downloadResultBtn = document.getElementById("downloadResultBtn");
-    const openLoginBtn = document.getElementById("openLoginBtn");
-    const closeLoginModalBtn = document.getElementById("closeLoginModal");
-    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
-    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
     const logoutBtn = document.getElementById("logoutBtn");
-    const loginEmailInput = document.getElementById("loginEmail");
-    const loginPasswordInput = document.getElementById("loginPassword");
     const roleImageEl = document.getElementById("roleImage");
     const memberStateEl = document.getElementById("memberState");
     const organizationStorageStatusEl = document.getElementById("organizationStorageStatus");
@@ -673,8 +636,8 @@
     let storageAvailability = location.hostname === "localhost" || location.hostname === "127.0.0.1" ? "ready" : "checking";
 
     const sharePayload = {
-      title: "Blue Sky Returns 氣侯行動者註冊與氣候行動問卷",
-      text: "一起完成 Blue Sky Returns 氣候行動問卷並加入氣侯行動者！",
+      title: "Blue Sky Returns 邁出一步",
+      text: "一起完成 Blue Sky Returns 邁出一步並加入氣侯行動者！",
       url: window.location.href
     };
 
@@ -809,6 +772,8 @@
         emailInput.readOnly = false;
       }
     };
+
+    const getMemberDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || "氣侯行動者";
 
     const calculateResult = (data) => {
       const score = ["q1", "q2", "q3", "q4", "q5"].reduce(
@@ -970,21 +935,6 @@
       return "角色卡已產生，但 Firebase 寫入失敗，請稍後重試。";
     };
 
-    const openLoginModal = () => {
-      loginStatusEl.textContent = "";
-      loginPasswordInput.value = "";
-      if (emailInput.value && !loginEmailInput.value) {
-        loginEmailInput.value = emailInput.value;
-      }
-      loginModal.classList.add("open");
-      loginModal.setAttribute("aria-hidden", "false");
-    };
-
-    const closeLoginModal = () => {
-      loginModal.classList.remove("open");
-      loginModal.setAttribute("aria-hidden", "true");
-    };
-
     const uploadOrganizationFile = async ({ userId, file, kind }) => {
       if (!file || !file.name || file.size === 0) return null;
 
@@ -1117,31 +1067,10 @@
     setPartnerTypeFields("general");
     checkStorageAvailability();
 
-    if (new URLSearchParams(window.location.search).get("auth") === "login") {
-      openLoginModal();
-    }
-
     shareCampaignBtn.addEventListener("click", () => shareFormLink("campaign"));
     shareResultBtn.addEventListener("click", () => shareFormLink("result"));
     shareImageBtn.addEventListener("click", shareRoleCardWithLink);
     downloadResultBtn.addEventListener("click", downloadRoleCard);
-    openLoginBtn.addEventListener("click", openLoginModal);
-    closeLoginModalBtn.addEventListener("click", closeLoginModal);
-    forgotPasswordBtn.addEventListener("click", async () => {
-      loginStatusEl.textContent = "";
-      forgotPasswordBtn.disabled = true;
-
-      try {
-        const email = loginEmailInput.value.trim() || emailInput.value.trim();
-        await sendPasswordResetEmail(auth, email);
-        loginStatusEl.textContent = `重設密碼信已寄到 ${email}，請檢查收件匣。`;
-      } catch (error) {
-        console.error(error);
-        loginStatusEl.textContent = getAuthErrorMessage(error.code);
-      } finally {
-        forgotPasswordBtn.disabled = false;
-      }
-    });
     logoutBtn.addEventListener("click", async () => {
       setStatus("", "");
       await signOut(auth);
@@ -1153,49 +1082,20 @@
       modal.setAttribute("aria-hidden", "true");
     });
 
-    loginModal.addEventListener("click", (event) => {
-      if (event.target === loginModal) {
-        closeLoginModal();
-      }
-    });
-
-    loginSubmitBtn.addEventListener("click", async () => {
-      loginStatusEl.textContent = "";
-      loginSubmitBtn.disabled = true;
-
-      try {
-        const credential = await signInWithEmailAndPassword(
-          auth,
-          loginEmailInput.value.trim(),
-          loginPasswordInput.value
-        );
-        emailInput.value = credential.user.email || "";
-        closeLoginModal();
-        setStatus("ok", "氣侯行動者登入成功，現在可以直接更新問卷。");
-      } catch (error) {
-        console.error(error);
-        loginStatusEl.textContent = getAuthErrorMessage(error.code);
-      } finally {
-        loginSubmitBtn.disabled = false;
-      }
-    });
-
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         memberStateEl.hidden = true;
         setPasswordMode(false);
-        openLoginBtn.hidden = false;
         logoutBtn.hidden = true;
         return;
       }
 
       memberStateEl.hidden = false;
       setPasswordMode(true);
-      openLoginBtn.hidden = true;
       logoutBtn.hidden = false;
       memberStateEl.textContent = user.emailVerified ?
-        `已登入氣侯行動者 ${user.email}，Email 已驗證` :
-        `已登入氣侯行動者 ${user.email}，請留意驗證信`;
+        `已登入氣侯行動者 ${getMemberDisplayName(user)}，Email 已驗證` :
+        `已登入氣侯行動者 ${getMemberDisplayName(user)}，請留意驗證信`;
 
       if (!emailInput.value) {
         emailInput.value = user.email || "";

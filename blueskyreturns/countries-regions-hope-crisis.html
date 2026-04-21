@@ -4,277 +4,1197 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Countries & Regions: Hope and Crisis | 一步・藍天：希望與危機</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
+      --bg: #f3f7fb;
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-strong: #ffffff;
       --ink: #0f172a;
-      --muted: #475569;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --border: #dbe3ef;
+      --muted: #4b5563;
+      --line: #d7e3ef;
+      --blue: #0b5cab;
+      --blue-deep: #09366d;
+      --teal: #13b5b1;
+      --gold: #f59e0b;
+      --hope: #16a34a;
       --crisis: #ef4444;
-      --hope: #0ea5e9;
-      --hope-soft: #16a34a;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 12% 10%, rgba(14, 165, 233, 0.12), transparent 35%),
-        radial-gradient(circle at 85% 0%, rgba(239, 68, 68, 0.13), transparent 30%),
-        var(--bg);
-      line-height: 1.75;
+        radial-gradient(circle at top left, rgba(11, 92, 171, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(19, 181, 177, 0.16), transparent 22%),
+        linear-gradient(180deg, #eef6ff 0%, #f8fbff 34%, #f4f8fb 100%);
+      line-height: 1.7;
     }
 
-    a { color: inherit; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
     header {
       position: sticky;
       top: 0;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      background: rgba(248, 250, 252, 0.9);
-      border-bottom: 1px solid var(--border);
+      z-index: 30;
+      backdrop-filter: blur(14px);
+      background: rgba(243, 247, 251, 0.9);
+      border-bottom: 1px solid rgba(215, 227, 239, 0.95);
     }
 
-    .header-inner {
-      max-width: 1080px;
+    .shell {
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 14px 22px;
+      padding: 0 20px;
+    }
+
+    .nav {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 0;
       flex-wrap: wrap;
     }
 
-    .badge {
-      font-weight: 700;
-      color: #0c4a6e;
-      letter-spacing: 0.3px;
+    .brand {
+      display: grid;
+      gap: 2px;
     }
 
-    .top-link {
+    .brand strong {
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
+      color: var(--blue-deep);
+    }
+
+    .brand span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-member {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
+      gap: 8px;
+      padding: 10px 14px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      text-decoration: none;
-      font-weight: 600;
-      color: #0369a1;
-      background: #fff;
+      background: rgba(11, 92, 171, 0.08);
+      border: 1px solid rgba(11, 92, 171, 0.14);
+      color: var(--blue-deep);
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .pill,
+    .button,
+    button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 15px;
+      background: var(--surface-strong);
+      color: var(--blue-deep);
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .button.primary,
+    button.primary {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .button.soft,
+    button.soft {
+      background: rgba(255, 255, 255, 0.75);
     }
 
     main {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 36px 22px 64px;
+      padding: 28px 0 68px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 86px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .side-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(215, 227, 239, 0.95);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .side-card h2,
+    .side-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .side-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .side-links {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .side-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(248, 250, 252, 0.92);
+      color: var(--blue-deep);
+      font-weight: 700;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .side-link:hover {
+      transform: translateX(2px);
+      border-color: rgba(11, 92, 171, 0.35);
+      background: rgba(219, 234, 254, 0.7);
+    }
+
+    .side-link span {
+      display: grid;
+      gap: 1px;
+    }
+
+    .side-link small {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .mobile-side-nav {
+      display: none;
+      margin-bottom: 18px;
+    }
+
+    .mobile-nav-card {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(215, 227, 239, 0.95);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .mobile-nav-card summary {
+      list-style: none;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--blue-deep);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .mobile-nav-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-nav-links {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .stack {
       display: grid;
       gap: 22px;
     }
 
-    section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 26px;
-      box-shadow: 0 10px 25px rgba(2, 6, 23, 0.05);
+    .panel {
+      background: var(--surface);
+      border: 1px solid rgba(215, 227, 239, 0.95);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
 
     .hero {
-      background: linear-gradient(135deg, rgba(14, 165, 233, 0.13), rgba(22, 163, 74, 0.1));
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.9fr);
+      gap: 24px;
+      padding: 30px;
+      background:
+        linear-gradient(135deg, rgba(9, 54, 109, 0.98), rgba(11, 92, 171, 0.94) 48%, rgba(19, 181, 177, 0.9)),
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.12), transparent 45%);
+      color: #fff;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .hero h1 {
       margin: 0;
-      font-size: clamp(30px, 4vw, 46px);
-      line-height: 1.2;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      line-height: 1.04;
     }
 
-    .hero h2 {
-      margin: 10px 0 0;
-      font-size: clamp(17px, 2.5vw, 24px);
-      color: #0c4a6e;
+    .hero p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 1.02rem;
     }
 
-    h3 {
-      margin: 0 0 12px;
-      font-size: clamp(22px, 3vw, 30px);
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .cn { font-weight: 700; color: #0f172a; }
-    .en { color: var(--muted); margin-top: 8px; }
+    .hero-actions .button {
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
 
-    .split-title {
+    .hero-actions .button.primary {
+      background: linear-gradient(135deg, #f8fafc, #dbeafe);
+      color: var(--blue-deep);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .status-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .status-card h2 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .status-chip {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 10px;
+      padding: 7px 12px;
       border-radius: 999px;
-      padding: 4px 10px;
-    }
-
-    .crisis { color: #991b1b; background: rgba(239, 68, 68, 0.12); }
-    .hope { color: #075985; background: rgba(14, 165, 233, 0.12); }
-
-    ul {
-      margin: 10px 0 0;
-      padding-left: 20px;
-    }
-
-    li { margin: 8px 0; }
-
-    .cta {
-      border: 1px solid rgba(14, 165, 233, 0.4);
-      background: linear-gradient(140deg, rgba(14, 165, 233, 0.1), rgba(22, 163, 74, 0.08));
-    }
-
-    .cta-link {
-      display: inline-flex;
-      margin-top: 14px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      text-decoration: none;
+      background: rgba(255, 255, 255, 0.14);
       font-weight: 700;
-      color: #fff;
-      background: linear-gradient(120deg, #0284c7, #16a34a);
+      font-size: 0.92rem;
     }
 
+    .status-text,
+    .helper-text {
+      margin: 10px 0 0;
+      font-size: 0.93rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
 
+    .intro {
+      padding: 28px 30px;
+    }
 
-    .poster-grid {
+    .intro-grid,
+    .journey-grid,
+    .info-grid,
+    .review-grid {
       display: grid;
       gap: 18px;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
 
-    figure {
+    .intro-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .journey-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .feature-visual {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+      align-items: center;
+    }
+
+    .feature-visual-copy {
+      display: grid;
+      gap: 12px;
+    }
+
+    .feature-visual-copy p {
       margin: 0;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px;
-      box-shadow: 0 10px 20px rgba(2, 6, 23, 0.06);
-    }
-
-    figure img {
-      display: block;
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      object-fit: cover;
-    }
-
-    figcaption {
-      margin-top: 8px;
       color: var(--muted);
-      font-size: 0.92rem;
     }
 
-    footer {
+    .feature-visual figure {
+      margin: 0;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(215, 227, 239, 0.95);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-visual img {
+      width: 100%;
+      display: block;
+    }
+
+    .feature-visual figcaption {
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: rgba(248, 250, 252, 0.95);
+    }
+
+    .card {
+      padding: 22px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .card h3,
+    .card h4 {
+      margin: 0 0 10px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow.hope {
+      color: #0f5d2d;
+      background: rgba(22, 163, 74, 0.12);
+    }
+
+    .eyebrow.crisis {
+      color: #991b1b;
+      background: rgba(239, 68, 68, 0.12);
+    }
+
+    .eyebrow.level {
+      color: #8a4b00;
+      background: rgba(245, 158, 11, 0.16);
+    }
+
+    .eyebrow.review {
+      color: #0c4a6e;
+      background: rgba(14, 165, 233, 0.12);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .roadmap {
+      padding: 28px 30px 30px;
+    }
+
+    .roadmap-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+
+    .roadmap-head h2,
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+    }
+
+    .roadmap-head p,
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .step {
+      position: relative;
+      padding-top: 52px;
+      min-height: 100%;
+    }
+
+    .step-number {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--gold), #f97316);
+      box-shadow: 0 10px 20px rgba(249, 115, 22, 0.22);
+    }
+
+    .step ul,
+    .review-item ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .step li,
+    .review-item li {
+      margin: 6px 0;
+    }
+
+    .callout {
+      padding: 28px 30px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .actions-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .auth-note {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(11, 92, 171, 0.07);
+      border: 1px solid rgba(11, 92, 171, 0.16);
+      color: var(--blue-deep);
+      font-weight: 700;
+    }
+
+    .info-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 0 30px 30px;
+    }
+
+    .permission-box {
+      padding: 22px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(243, 248, 255, 0.96));
+    }
+
+    .permission-box strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .permission-box p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .review-panel {
+      padding: 28px 30px 30px;
+    }
+
+    .review-grid {
+      margin-top: 18px;
+    }
+
+    .review-item {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .review-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: start;
+    }
+
+    .review-top h3 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    .review-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      background: rgba(15, 23, 42, 0.06);
+      color: var(--ink);
+    }
+
+    .tag.pending { background: rgba(245, 158, 11, 0.14); color: #92400e; }
+    .tag.approved { background: rgba(22, 163, 74, 0.14); color: #166534; }
+    .tag.rejected { background: rgba(239, 68, 68, 0.14); color: #991b1b; }
+    .tag.hope { background: rgba(22, 163, 74, 0.12); color: #166534; }
+    .tag.crisis { background: rgba(239, 68, 68, 0.12); color: #991b1b; }
+
+    .review-copy {
+      color: var(--muted);
+    }
+
+    .review-copy p {
+      margin: 0;
+    }
+
+    .review-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .review-empty {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.04);
+      color: var(--muted);
+    }
+
+    .status-inline {
+      margin-top: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--blue-deep);
+    }
+
+    .footer {
+      padding: 0 20px 40px;
       text-align: center;
-      padding: 0 18px 40px;
       color: #64748b;
       font-size: 0.92rem;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .side-nav {
+        display: none;
+      }
+
+      .mobile-side-nav {
+        display: block;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .intro-grid,
+      .journey-grid,
+      .info-grid,
+      .feature-visual {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 24px;
+      }
+
+      .intro,
+      .roadmap,
+      .callout,
+      .review-panel {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      .info-grid {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        padding: 0 14px;
+      }
+
+      .hero-actions,
+      .actions-row,
+      .review-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-actions .button,
+      .actions-row .button,
+      .actions-row button,
+      .review-actions button {
+        text-align: center;
+        justify-content: center;
+      }
+
+      .panel {
+        border-radius: 22px;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-inner">
-      <div class="badge">JCI IA × UN SDGs | 2026 Blue Sky Returns</div>
-      <a class="top-link" href="./index.html">← Back to One Step Blue Sky Returns</a>
+    <div class="shell nav">
+      <div class="brand">
+        <strong>Blue Sky Returns | Countries & Regions</strong>
+        <span>一步・藍天：希望與危機 導覽頁</span>
+      </div>
+      <div class="nav-actions">
+        <a class="pill" href="./index.html">返回首頁 / Back</a>
+        <div id="navMemberState" class="nav-member" hidden>尚未登入 / Signed out</div>
+        <a id="navLoginLink" class="pill" href="./member-center.html">登入 / Sign In</a>
+        <button id="navLogoutBtn" type="button" class="pill" hidden>登出 / Sign Out</button>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <h1>Blue Sky Returns: Hope and Crisis<br>一步・藍天：希望與危機</h1>
-      <h2>2026 Global Green Initiative / 2026 全球綠色倡議</h2>
-    </section>
+  <main class="shell">
+    <div class="mobile-side-nav">
+      <details class="mobile-nav-card">
+        <summary>
+          <span>頁面導覽 / Quick Navigation</span>
+          <span>+</span>
+        </summary>
+        <div class="mobile-nav-links">
+          <a class="side-link" href="#heroSection"><span>專案首頁<small>Hero</small></span></a>
+          <a class="side-link" href="#introSection"><span>專案簡介<small>Project Brief</small></span></a>
+          <a class="side-link" href="#journey"><span>合作等級<small>Participation Journey</small></span></a>
+          <a class="side-link" href="#accessSection"><span>權限導覽<small>Access Navigator</small></span></a>
+          <a class="side-link" href="#reviewPanel"><span>審核台<small>Reviewer Desk</small></span></a>
+        </div>
+      </details>
+    </div>
 
-    <section>
-      <h3>Project Visual / 專案視覺</h3>
-      <div class="poster-grid">
-        <figure>
-          <img src="./assets/Gemini_Generated_Image_xle34wxle34wxle3.svg" alt="Blue Sky Returns: Hope and Crisis 2026 Global Green Initiative poster (English)" />
-          <figcaption>English campaign poster: Blue Sky Returns: Hope and Crisis.</figcaption>
-        </figure>
-        <figure>
-          <img src="./assets/Gemini_Generated_Image_1fldee1fldee1fld.svg" alt="一步・藍天：希望與危機 2026 全球綠色倡議海報（中文）" />
-          <figcaption>中文宣傳海報：一步・藍天：希望與危機。</figcaption>
-        </figure>
+    <div class="layout">
+      <aside class="side-nav" aria-label="Page navigation">
+        <div class="side-card">
+          <h2>頁面導覽</h2>
+          <p>快速跳到你想看的段落，桌機版會固定在左側，方便一路查看介紹、權限與審核區。</p>
+          <div class="side-links">
+            <a class="side-link" href="#heroSection"><span>專案首頁<small>Hero</small></span></a>
+            <a class="side-link" href="#introSection"><span>專案簡介<small>Project Brief</small></span></a>
+            <a class="side-link" href="#journey"><span>合作等級<small>Participation Journey</small></span></a>
+            <a class="side-link" href="#accessSection"><span>權限導覽<small>Access Navigator</small></span></a>
+            <a class="side-link" href="#reviewPanel"><span>審核台<small>Reviewer Desk</small></span></a>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <h3>快速判斷</h3>
+          <p>Level 1 看介紹，Level 2/3 可上傳，Level 3 可審核。</p>
+        </div>
+      </aside>
+
+      <div class="stack">
+      <section id="heroSection" class="panel hero">
+        <div class="hero-copy">
+          <div class="hero-kicker">JCI Peninsula • SDG 13 • Global E-book</div>
+          <h1>Countries & Regions:<br>Hope and Crisis</h1>
+          <p>
+            這一頁是 Blue Sky Returns 的專案導覽中心。你可以先理解整個合作旅程，再依照你的氣候行動者等級進入對應任務：
+            Level 2 與 Level 3 可上傳地方資料，Level 3 可審核投稿內容。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="./climate-action-form.html">前往註冊 / Join as Climate Action Partner</a>
+            <a class="button" href="#journey">查看合作等級 / View Journey</a>
+            <a class="button" href="#reviewPanel">審核區 / Review Desk</a>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <div class="status-card">
+            <h2>登入與權限 / Access Status</h2>
+            <div id="authChip" class="status-chip">尚未登入 / Signed out</div>
+            <p id="authSummary" class="status-text">請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或進入審核。</p>
+          </div>
+          <div class="status-card">
+            <h2>目前功能 / What You Can Do</h2>
+            <p id="abilitySummary" class="helper-text">一般訪客目前可閱讀導覽、了解資料需求與專案流程。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="introSection" class="panel intro">
+        <div class="roadmap-head">
+          <div>
+            <h2>Project Brief / 專案導覽</h2>
+            <p>先看懂 Blue Sky Returns 想蒐集什麼、為什麼重要，再決定你要以哪一種方式參與這本國際環境電子書。</p>
+          </div>
+        </div>
+        <div class="intro-grid">
+          <article class="card">
+            <div class="eyebrow crisis">Crisis</div>
+            <h3>Local climate impacts<br>地方氣候危機</h3>
+            <p>整理 2024–2026 的極端高溫、暴雨、淹水、乾旱、海岸倒灌或其他在地氣候衝擊，用照片、短片與文字把「危機已經發生」說清楚。</p>
+          </article>
+          <article class="card">
+            <div class="eyebrow hope">Hope</div>
+            <h3>Local green solutions<br>地方希望解方</h3>
+            <p>拍下太陽能、風能、節能建築、社區綠電、韌性基礎建設或政策成果，讓不同國家都能看到「轉型正在發生」。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="journey" class="panel roadmap">
+        <div class="roadmap-head">
+          <div>
+            <h2>Participation Journey / 參與等級導覽</h2>
+            <p>以下整理成更清楚的合作路徑。你提供的圖片概念，我把它轉成適合網站操作的三層導覽。</p>
+          </div>
+        </div>
+        <div class="journey-grid">
+          <article class="card step">
+            <div class="step-number">1</div>
+            <div class="eyebrow level">Level 1</div>
+            <h3>Co-Promote / 共同推廣</h3>
+            <p>先完成氣候行動問卷、建立帳號、理解 Blue Sky Returns 的方向，再協助分享給分會、學校與在地夥伴。</p>
+            <ul>
+              <li>完成問卷與角色卡</li>
+              <li>分享專案連結與招募資訊</li>
+              <li>引導更多夥伴加入</li>
+            </ul>
+          </article>
+          <article class="card step">
+            <div class="step-number">2</div>
+            <div class="eyebrow level">Level 2</div>
+            <h3>Co-Create Local Data / 共創地方資料</h3>
+            <p>Level 2 開始進入核心貢獻。你可以上傳地方希望與危機資料，提供電子書內容的第一手案例。</p>
+            <ul>
+              <li>上傳地方 Hope 與 Crisis</li>
+              <li>可附短片、照片與簡短文字</li>
+              <li>內容會進入待審核佇列</li>
+            </ul>
+          </article>
+          <article class="card step">
+            <div class="step-number">3</div>
+            <div class="eyebrow level">Level 3</div>
+            <h3>Review & Educational Outreach / 審核與教育推廣</h3>
+            <p>Level 3 具有審核權限，可檢視投稿品質、調整狀態，並為後續教材整理與教育應用把關。</p>
+            <ul>
+              <li>查看 `globeEventReviews` 待審資料</li>
+              <li>將投稿標記為 Approved 或 Rejected</li>
+              <li>協助電子書內容品質控管</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel roadmap">
+        <div class="section-head">
+          <h2>Collaboration Visual / 區域與合作示意</h2>
+          <p>這張合作圖把專案裡的推廣、共創、教育與延伸合作整體串起來，讓使用者能在文字導覽之外，也用視覺方式理解 Blue Sky Returns 的合作架構。</p>
+        </div>
+        <div class="feature-visual">
+          <div class="feature-visual-copy">
+            <p>在這個頁面裡，它扮演的是「導覽圖」角色，幫助使用者快速看懂自己現在位於哪個參與階段，接下來又能往哪一段走。</p>
+            <p>對第一次進站的人來說，這比單看權限說明更容易建立全貌，也更適合在手機上快速滑看。</p>
+          </div>
+          <figure>
+            <img src="../assets/合作.jpeg" alt="Blue Sky Returns collaboration visual">
+            <figcaption>Blue Sky Returns collaboration roadmap and participation model.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="accessSection" class="panel callout">
+        <div class="section-head">
+          <h2>Access Navigator / 權限導覽</h2>
+          <p>這裡會根據你登入帳號的 `permissionLevel` 自動顯示能做的事。一般為 1，組織為 2，審核者為 3。</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="permission-box">
+            <strong>Level 1 / permissionLevel = 1</strong>
+            <p>可閱讀介紹、理解資料規格、完成註冊與問卷，但不能直接提交地方希望 / 危機資料。</p>
+          </div>
+          <div class="permission-box">
+            <strong>Level 2 / permissionLevel = 2</strong>
+            <p>可前往上傳表單提交地方希望與危機內容，適合組織型氣候行動者、地方合作核心夥伴。</p>
+          </div>
+          <div class="permission-box">
+            <strong>Level 3 / permissionLevel = 3</strong>
+            <p>可上傳資料，也可在本頁審核 `globeEventReviews` 佇列，進行基本狀態管理。</p>
+          </div>
+          <div class="permission-box">
+            <strong>Upload Flow / 上傳流程</strong>
+            <p>目前上傳入口仍使用氣候行動者表單。你登入後若為 Level 2 或 3，系統會開放你進入上傳入口。</p>
+          </div>
+        </div>
+
+        <div class="auth-note" id="memberNotice">
+          尚未登入氣候行動者帳號。請先登入後查看你的權限與可執行任務。
+        </div>
+
+        <div class="actions-row">
+          <a id="accessLoginCta" class="button primary" href="./member-center.html">登入查看權限 / Sign In</a>
+          <a id="registerCta" class="button soft" href="./climate-action-form.html">註冊氣候行動者 / Register</a>
+          <a id="uploadCta" class="button" href="./climate-action-form.html" hidden>前往上傳資料 / Submit Local Data</a>
+        </div>
+      </section>
+
+      <section id="reviewPanel" class="panel review-panel">
+        <div class="section-head">
+          <h2>Reviewer Desk / 審核台</h2>
+          <p>只有 `permissionLevel = 3` 的帳號會看到待審資料並可改變狀態。這裡先提供基本審核：`pending`、`approved`、`rejected`。</p>
+        </div>
+
+        <div id="reviewGate" class="auth-note">
+          目前尚未取得審核權限。
+        </div>
+
+        <div id="reviewList" class="review-grid" hidden></div>
+        <div id="reviewEmpty" class="review-empty" hidden>目前沒有待顯示的審核資料。</div>
+      </section>
       </div>
-    </section>
-
-    <section>
-      <h3>2. Introduction: The Urgency and The Opportunity<br>專案簡介：迫切與轉機</h3>
-      <p class="cn">2026 年，我們站在關鍵轉折點：危機已經抵達社區，解方也正在各地萌芽。JCI 夥伴的跨國協作，不只是分享故事，而是共同建立可複製、可教育、可行動的綠色路徑，讓「希望」成為下一代真正看得見的未來。</p>
-      <p class="en">In 2026, we stand at a decisive turning point: the crisis is already impacting our communities, while solutions are emerging locally. Through JCI cross-border collaboration, we are not only sharing stories—we are building replicable, educational, and actionable green pathways so that “Hope” becomes a visible future for the next generation.</p>
-    </section>
-
-    <section>
-      <div class="split-title crisis">3. Crisis</div>
-      <h3>The Crisis: Climate Impacts (2024-2026)<br>危機：氣候影響</h3>
-      <p class="cn">這就是我們各地正在面對的現實（以下為模擬案例，實際資料將由夥伴蒐集）：北方城市在非典型季節出現突發降雪，沿海地區遭遇更頻繁的滿潮倒灌與局部淹水，內陸都會則在夏季承受長時間熱浪與夜間高溫不退，農業區面臨乾旱與短時強降雨交替衝擊。危機不再是遠方新聞，而是每一個地區共同的現在進行式。</p>
-      <p class="en">This is what our regions are facing (simulated examples; real data will be collected by partners): sudden out-of-season snowfall in northern cities, more frequent tidal backflow and localized flooding in coastal communities, prolonged heatwaves and elevated nighttime temperatures in inland urban zones, and alternating drought and intense short-duration rainfall in agricultural areas. The crisis is no longer distant news—it is a shared present across all regions.</p>
-    </section>
-
-    <section>
-      <div class="split-title hope">4. Hope</div>
-      <h3>The Hope: Green Facilities<br>希望：綠能設施</h3>
-      <p class="cn">這就是我們希望你們捕捉的「希望」（以下為模擬案例）：校園與社區屋頂太陽能系統穩定供電，社區型微型風場支持公共設施減碳，綠建築透過通風、遮陽與節能設備降低能耗，再生能源站與儲能系統提升在地韌性。每一個可見的設施，都是讓公眾理解「轉型正在發生」的最佳教材。</p>
-      <p class="en">This is the “Hope” we want you to capture (simulated examples): rooftop solar systems on schools and community facilities providing stable power, community-scale wind projects supporting low-carbon public services, green buildings reducing energy use through passive ventilation and efficient design, and renewable energy plants with storage systems strengthening local resilience. Every visible facility becomes practical proof that the transition is already happening.</p>
-    </section>
-
-    <section>
-      <h3>5. Call for Collaboration: Participate in Hope and Crisis<br>合作徵件：參與希望與危機</h3>
-      <p class="cn">我們誠邀各國姊妹會、分會與合作夥伴，以行動加入 2026 Blue Sky Returns 全球綠色倡議：</p>
-      <p class="en">We invite sister chapters, local chapters, and partners worldwide to join the 2026 Blue Sky Returns Global Green Initiative through action:</p>
-      <ul>
-        <li>
-          <strong>Film Green Facilities｜拍攝綠能設施：</strong>
-          <span class="cn">製作 90–120 秒短片，呈現你所在地區最具代表性的綠色科技與減碳場景。</span>
-          <span class="en">Create a 90–120 second video showcasing representative green technologies and decarbonization scenes in your region.</span>
-        </li>
-        <li>
-          <strong>Collect Climate Data｜整理氣候數據：</strong>
-          <span class="cn">彙整 2024–2026 年具體氣候衝擊紀錄（溫度、降雨、海平面、災害影響等）。</span>
-          <span class="en">Share specific climate impact records from 2024–2026 (temperature, rainfall, sea-level effects, and disaster impacts).</span>
-        </li>
-        <li>
-          <strong>Timeline｜時程：</strong>
-          <span class="cn">專案啟動日為 2026 年 4 月 15 日，資料與影片提交截止為 2026 年 6 月。</span>
-          <span class="en">Project launch: April 15, 2026. Submission deadline for data and videos: June 2026.</span>
-        </li>
-        <li>
-          <strong>Join Collaboration｜加入聯合宣傳：</strong>
-          <span class="cn">透過 Instagram Collab 發布成果，擴大全球青年與社區影響力。</span>
-          <span class="en">Use Instagram Collab to co-publish outcomes and amplify global youth and community impact.</span>
-        </li>
-      </ul>
-      <p class="cn"><strong>專案目標：</strong>所有影片與資料將整合為《Countries & Regions: Hope and Crisis》國際電子書，並發送至各地中小學，作為環境與氣候教育教材，讓學生看見危機、理解解方、啟動行動。</p>
-      <p class="en"><strong>Project Goal:</strong> All submitted videos and data will be compiled into the international e-book, <em>Countries & Regions: Hope and Crisis</em>, and delivered to local primary and secondary schools as environmental education material—helping students recognize the crisis, understand solutions, and take action.</p>
-    </section>
-
-    <section class="cta">
-      <h3>6. Integration: Connect to Form<br>串接：表單</h3>
-      <p class="cn">準備好把「希望」帶到你的城市與國家了嗎？請在下方填寫你的聯絡資料與合作意向，我們將立即發送完整徵件指南與提交流程。</p>
-      <p class="en">Ready to bring Hope to your city and region? Leave your contact details and collaboration intent below, and we will send you the full submission guide and workflow immediately.</p>
-      <a class="cta-link" href="https://www.blue-sky-returns.online/blueskyreturns/climate-action-form.html" aria-label="Go to sign-up form">Go to Sign-up Form / 前往報名表單</a>
-    </section>
+    </div>
   </main>
 
-  <footer>Blue Sky Returns: Hope and Crisis • 2026 Global Green Initiative</footer>
+  <footer class="footer">Blue Sky Returns: Countries & Regions • Hope and Crisis • 2026</footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      getDocs,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+
+    const authChip = document.getElementById("authChip");
+    const authSummary = document.getElementById("authSummary");
+    const abilitySummary = document.getElementById("abilitySummary");
+    const memberNotice = document.getElementById("memberNotice");
+    const uploadCta = document.getElementById("uploadCta");
+    const accessLoginCta = document.getElementById("accessLoginCta");
+    const registerCta = document.getElementById("registerCta");
+    const reviewGate = document.getElementById("reviewGate");
+    const reviewList = document.getElementById("reviewList");
+    const reviewEmpty = document.getElementById("reviewEmpty");
+    const navMemberState = document.getElementById("navMemberState");
+    const navLoginLink = document.getElementById("navLoginLink");
+    const navLogoutBtn = document.getElementById("navLogoutBtn");
+
+    const getPermissionLabel = (level) => {
+      if (level === 3) return "Level 3 Reviewer / 審核者";
+      if (level === 2) return "Level 2 Contributor / 核心上傳者";
+      if (level === 1) return "Level 1 Partner / 一般氣候行動者";
+      return "Guest / 訪客";
+    };
+
+    const formatMode = (mode) => mode === "hope" ? "Hope / 希望" : "Crisis / 危機";
+
+    const formatStatus = (status) => {
+      if (status === "approved") return "Approved / 已通過";
+      if (status === "rejected") return "Rejected / 已退回";
+      return "Pending / 待審核";
+    };
+
+    const setGuestState = () => {
+      authChip.textContent = "尚未登入 / Signed out";
+      authSummary.textContent = "請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或進入審核。";
+      abilitySummary.textContent = "一般訪客目前可閱讀導覽、了解資料需求與專案流程。";
+      memberNotice.textContent = "尚未登入氣候行動者帳號。請先登入後查看你的權限與可執行任務。";
+      navMemberState.hidden = true;
+      navMemberState.textContent = "尚未登入 / Signed out";
+      navLoginLink.hidden = false;
+      navLogoutBtn.hidden = true;
+      accessLoginCta.hidden = false;
+      registerCta.hidden = false;
+      uploadCta.hidden = true;
+      reviewGate.textContent = "只有 Level 3 帳號可進入審核台。";
+      reviewList.hidden = true;
+      reviewEmpty.hidden = true;
+      reviewList.innerHTML = "";
+    };
+
+    navLogoutBtn.addEventListener("click", async () => {
+      navLogoutBtn.disabled = true;
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        navLogoutBtn.disabled = false;
+      }
+    });
+
+    const createReviewItem = (review) => {
+      const item = document.createElement("article");
+      item.className = "review-item";
+
+      const top = document.createElement("div");
+      top.className = "review-top";
+
+      const titleWrap = document.createElement("div");
+      const title = document.createElement("h3");
+      title.textContent = review.title || "Untitled Submission";
+      const source = document.createElement("div");
+      source.className = "status-inline";
+      source.textContent = `${review.organizationName || review.submitterName || "Unknown"} • ${review.region || "Unknown Region"}`;
+      titleWrap.append(title, source);
+
+      const meta = document.createElement("div");
+      meta.className = "review-meta";
+      const modeTag = document.createElement("span");
+      modeTag.className = `tag ${review.mode === "hope" ? "hope" : "crisis"}`;
+      modeTag.textContent = formatMode(review.mode);
+      const statusTag = document.createElement("span");
+      statusTag.className = `tag ${review.status || "pending"}`;
+      statusTag.textContent = formatStatus(review.status);
+      meta.append(modeTag, statusTag);
+
+      top.append(titleWrap, meta);
+
+      const copy = document.createElement("div");
+      copy.className = "review-copy";
+      const desc = document.createElement("p");
+      desc.textContent = review.description || "No description provided.";
+      copy.appendChild(desc);
+
+      const details = document.createElement("ul");
+      const submitterItem = document.createElement("li");
+      submitterItem.textContent = `Submitter: ${review.submitterEmail || "N/A"}`;
+      const permissionItem = document.createElement("li");
+      permissionItem.textContent = `Permission Level: ${review.permissionLevel || "N/A"}`;
+      details.append(submitterItem, permissionItem);
+
+      const actions = document.createElement("div");
+      actions.className = "review-actions";
+
+      const approveBtn = document.createElement("button");
+      approveBtn.type = "button";
+      approveBtn.className = "primary";
+      approveBtn.textContent = "Approve / 通過";
+
+      const rejectBtn = document.createElement("button");
+      rejectBtn.type = "button";
+      rejectBtn.className = "soft";
+      rejectBtn.textContent = "Reject / 退回";
+
+      const statusText = document.createElement("div");
+      statusText.className = "status-inline";
+      statusText.textContent = review.status ? `Current: ${formatStatus(review.status)}` : "Current: Pending / 待審核";
+
+      const setReviewStatus = async (nextStatus) => {
+        approveBtn.disabled = true;
+        rejectBtn.disabled = true;
+        statusText.textContent = "Updating status...";
+
+        try {
+          await updateDoc(doc(db, "globeEventReviews", review.reviewId), {
+            status: nextStatus,
+            reviewedAt: new Date().toISOString()
+          });
+          statusText.textContent = `Current: ${formatStatus(nextStatus)}`;
+          statusTag.className = `tag ${nextStatus}`;
+          statusTag.textContent = formatStatus(nextStatus);
+        } catch (error) {
+          console.error(error);
+          statusText.textContent = "更新失敗，請稍後再試。";
+        } finally {
+          approveBtn.disabled = false;
+          rejectBtn.disabled = false;
+        }
+      };
+
+      approveBtn.addEventListener("click", () => setReviewStatus("approved"));
+      rejectBtn.addEventListener("click", () => setReviewStatus("rejected"));
+
+      actions.append(approveBtn, rejectBtn);
+      item.append(top, copy, details, actions, statusText);
+      return item;
+    };
+
+    const loadReviewQueue = async () => {
+      reviewList.innerHTML = "";
+      reviewEmpty.hidden = true;
+
+      try {
+        const snapshot = await getDocs(collection(db, "globeEventReviews"));
+        const reviews = snapshot.docs
+          .map((docSnap) => ({
+            reviewId: docSnap.id,
+            ...docSnap.data()
+          }))
+          .filter((review) => (review.status || "pending") === "pending")
+          .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
+          .slice(0, 12);
+
+        if (reviews.length === 0) {
+          reviewList.hidden = true;
+          reviewEmpty.hidden = false;
+          return;
+        }
+
+        reviews.forEach((review) => {
+          reviewList.appendChild(createReviewItem(review));
+        });
+
+        reviewList.hidden = false;
+      } catch (error) {
+        console.error(error);
+        reviewGate.textContent = "讀取審核資料失敗，請確認目前帳號仍具有 Level 3 權限。";
+        reviewList.hidden = true;
+      }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setGuestState();
+        return;
+      }
+
+      try {
+        const memberSnap = await getDoc(doc(db, "members", user.uid));
+        const memberData = memberSnap.exists() ? memberSnap.data() : {};
+        const permissionLevel = Number(memberData.permissionLevel || 1);
+
+        authChip.textContent = `${getPermissionLabel(permissionLevel)} • ${user.email || ""}`;
+        authSummary.textContent = `目前登入帳號：${user.email || "Unknown"}，權限等級為 ${permissionLevel}。`;
+        navMemberState.hidden = false;
+        navMemberState.textContent = `${getPermissionLabel(permissionLevel)} • ${user.email || ""}`;
+        navLoginLink.hidden = true;
+        navLogoutBtn.hidden = false;
+        accessLoginCta.hidden = true;
+        registerCta.hidden = true;
+
+        if (permissionLevel >= 2) {
+          uploadCta.hidden = false;
+          uploadCta.href = "./climate-action-form.html";
+          memberNotice.textContent = "你的帳號可提交地方 Hope / Crisis 資料。請前往上傳入口完成內容填寫與附件上傳。";
+          abilitySummary.textContent = permissionLevel === 3
+            ? "你可以上傳地方資料，也可以在本頁審核投稿內容。"
+            : "你可以上傳地方 Hope / Crisis 資料，提交後會進入 Level 3 審核流程。";
+        } else {
+          uploadCta.hidden = true;
+          memberNotice.textContent = "你目前是 Level 1。若要上傳地方資料，請由後台將你的 permissionLevel 提升到 2 或 3。";
+          abilitySummary.textContent = "你目前可閱讀專案導覽與準備資料，但尚未開放提交地方內容。";
+        }
+
+        if (permissionLevel === 3) {
+          reviewGate.textContent = "你目前具有 Level 3 權限，可直接審核待處理投稿。";
+          await loadReviewQueue();
+        } else {
+          reviewGate.textContent = "只有 Level 3 帳號可進入審核台。";
+          reviewList.hidden = true;
+          reviewEmpty.hidden = true;
+          reviewList.innerHTML = "";
+        }
+      } catch (error) {
+        console.error(error);
+        authChip.textContent = `登入中 / ${user.email || ""}`;
+        authSummary.textContent = "已登入，但目前讀取權限資料失敗，請稍後重新整理。";
+        abilitySummary.textContent = "暫時無法判斷你的 permissionLevel。";
+        memberNotice.textContent = "讀取會員資料時發生問題，請稍後再試。";
+        navMemberState.hidden = false;
+        navMemberState.textContent = `${user.email || "Signed in"}`;
+        navLoginLink.hidden = true;
+        navLogoutBtn.hidden = false;
+        accessLoginCta.hidden = true;
+        registerCta.hidden = false;
+        uploadCta.hidden = true;
+        reviewGate.textContent = "目前無法載入審核權限資訊。";
+      }
+    });
+  </script>
 </body>
 </html>

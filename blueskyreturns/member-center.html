@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>會員中心 | Blue Sky Returns</title>
+  <style>
+    :root {
+      --bg: #eff5fb;
+      --card: #ffffff;
+      --ink: #102236;
+      --muted: #546274;
+      --line: #d7e3ef;
+      --blue: #0b5cab;
+      --teal: #14b8a6;
+      --soft: #eef6ff;
+      --shadow: 0 18px 40px rgba(16, 34, 54, 0.08);
+      --ok: #15803d;
+      --warn: #b45309;
+      --danger: #b91c1c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(11, 92, 171, 0.14), transparent 24%),
+        linear-gradient(180deg, #f7fbff 0%, #eff5fb 42%, #f4f8fc 100%);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(247, 251, 255, 0.92);
+      border-bottom: 1px solid rgba(215, 227, 239, 0.95);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand strong {
+      color: var(--blue);
+      font-size: 1rem;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill,
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 15px;
+      background: var(--card);
+      color: var(--blue);
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.94rem;
+    }
+
+    .pill.primary,
+    button.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+    }
+
+    main {
+      padding: 28px 0 70px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero,
+    .panel {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(215, 227, 239, 0.95);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 22px;
+      padding: 28px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 30%),
+        linear-gradient(135deg, rgba(11, 92, 171, 0.98), rgba(20, 184, 166, 0.9));
+      color: #fff;
+    }
+
+    .hero h1,
+    .panel h2,
+    .panel h3 {
+      margin: 0;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .hero-copy p,
+    .hero-side p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .hero-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .hero-card strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .panel {
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-head {
+      display: grid;
+      gap: 6px;
+    }
+
+    .section-head p,
+    .muted,
+    .task-list p,
+    .summary-list p,
+    .submission-card p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .summary-card,
+    .task-card,
+    .submission-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-list,
+    .task-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      background: var(--soft);
+      color: var(--blue);
+    }
+
+    .status {
+      font-weight: 700;
+    }
+
+    .status.ok { color: var(--ok); }
+    .status.warn { color: var(--warn); }
+    .status.error { color: var(--danger); }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .submission-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .submission-card img {
+      width: 100%;
+      max-width: 220px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .submission-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .empty-box {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(11, 92, 171, 0.06);
+      border: 1px solid rgba(11, 92, 171, 0.12);
+      color: var(--muted);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 100;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(460px, 100%);
+      background: #fff;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      padding: 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .modal-card label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .modal-card input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font: inherit;
+    }
+
+    .foot {
+      text-align: center;
+      padding: 0 20px 34px;
+      color: #64748b;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .grid.two {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 0 16px;
+      }
+
+      .hero,
+      .panel {
+        padding: 20px 18px;
+        border-radius: 24px;
+      }
+
+      .actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <strong>Blue Sky Returns</strong>
+        <span>會員中心 / Member Center</span>
+      </div>
+      <div class="nav-actions">
+        <a class="pill" href="../index.html">← Main</a>
+        <a class="pill" href="./index.html">About</a>
+        <a class="pill" href="./countries-regions-hope-crisis.html">Countries & Regions</a>
+        <a class="pill" href="./green-action-7day.html">7-Day Green Proposal</a>
+        <button id="openLoginBtn" class="pill primary" type="button">登入 / Sign In</button>
+        <button id="logoutBtn" class="pill" type="button" hidden>登出 / Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell stack">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="badge">Member Dashboard</span>
+          <h1>氣候行動者會員中心</h1>
+          <p>登入後，你可以看到自己的氣候行動者資料、邁出一步問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。</p>
+          <div class="actions">
+            <a class="pill primary" href="./green-action-7day.html">前往 7-Day Green Proposal</a>
+            <a class="pill" href="./climate-action-form.html">修改邁出一步</a>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="hero-card">
+            <strong>目前登入狀態</strong>
+            <div id="memberState" class="status">尚未登入</div>
+          </div>
+          <div class="hero-card">
+            <strong>目前可做的事</strong>
+            <p id="abilitySummary">請先登入以查看你目前能使用的功能。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2>帳號摘要 / Member Summary</h2>
+          <p>這裡會顯示你目前的基本資訊、權限等級與問卷結果。</p>
+        </div>
+        <div class="grid two">
+          <article class="summary-card">
+            <h3>基本資料</h3>
+            <div class="summary-list">
+              <p id="summaryName">姓名 / 單位：-</p>
+              <p id="summaryEmail">Email：-</p>
+              <p id="summaryPartnerType">類型：-</p>
+              <p id="summaryPermission">權限：-</p>
+            </div>
+          </article>
+          <article class="summary-card">
+            <h3>邁出一步結果</h3>
+            <div class="summary-list">
+              <p id="summaryRole">角色卡：-</p>
+              <p id="summaryScore">總分：-</p>
+              <p id="summaryRegion">地區 / 分會：-</p>
+              <p id="summaryUpdatedAt">更新時間：-</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2>目前功能 / What You Have</h2>
+          <p>依照你的權限，會員中心會整理目前可以直接進行的任務。</p>
+        </div>
+        <div class="grid two" id="taskCards">
+          <article class="task-card">
+            <h3>邁出一步</h3>
+            <p>建立或更新你的氣候行動者資料，並重跑問卷結果。</p>
+            <a class="pill" href="./climate-action-form.html">前往修改</a>
+          </article>
+          <article class="task-card">
+            <h3>7-Day Green Proposal</h3>
+            <p>填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。</p>
+            <a class="pill" href="./green-action-7day.html">開始任務</a>
+          </article>
+        </div>
+        <div id="reviewerCardWrap" hidden>
+          <article class="task-card">
+            <h3>審核者入口</h3>
+            <p>你目前具有 Level 3 權限，可進入審核區查看待處理資料。</p>
+            <a class="pill" href="./countries-regions-hope-crisis.html#reviewPanel">前往審核台</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2>7-Day 任務紀錄 / Proposal Submissions</h2>
+          <p>最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。</p>
+        </div>
+        <div id="submissionEmpty" class="empty-box">尚未登入，或你目前還沒有提交任何 7-Day 任務。</div>
+        <div id="submissionList" class="submission-list" hidden></div>
+      </section>
+    </div>
+  </main>
+
+  <section id="loginModal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <h3>會員登入 / Member Sign In</h3>
+      <div>
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" autocomplete="email" />
+      </div>
+      <div>
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" />
+      </div>
+      <div class="actions">
+        <button id="loginSubmitBtn" class="primary" type="button">登入 / Sign In</button>
+        <button id="forgotPasswordBtn" type="button">忘記密碼 / Reset Password</button>
+        <button id="closeLoginModal" type="button">取消 / Cancel</button>
+      </div>
+      <div id="loginStatus" class="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <footer class="foot">Blue Sky Returns • Member Center • 2026</footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const loginModal = document.getElementById("loginModal");
+    const closeLoginModalBtn = document.getElementById("closeLoginModal");
+    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const loginEmailInput = document.getElementById("loginEmail");
+    const loginPasswordInput = document.getElementById("loginPassword");
+    const loginStatusEl = document.getElementById("loginStatus");
+    const memberStateEl = document.getElementById("memberState");
+    const abilitySummaryEl = document.getElementById("abilitySummary");
+    const reviewerCardWrap = document.getElementById("reviewerCardWrap");
+    const submissionList = document.getElementById("submissionList");
+    const submissionEmpty = document.getElementById("submissionEmpty");
+
+    const summaryName = document.getElementById("summaryName");
+    const summaryEmail = document.getElementById("summaryEmail");
+    const summaryPartnerType = document.getElementById("summaryPartnerType");
+    const summaryPermission = document.getElementById("summaryPermission");
+    const summaryRole = document.getElementById("summaryRole");
+    const summaryScore = document.getElementById("summaryScore");
+    const summaryRegion = document.getElementById("summaryRegion");
+    const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
+
+    const getDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || "氣候行動者";
+    const getPermissionLabel = (level) => {
+      if (level === 3) return "Level 3 Reviewer / 審核者";
+      if (level === 2) return "Level 2 Organization / 組織";
+      return "Level 1 General / 一般";
+    };
+    const getPartnerLabel = (type) => type === "organization" ? "組織 / Organization" : "一般 / General";
+    const formatDate = (value) => {
+      if (!value) return "-";
+      if (typeof value === "string") return value;
+      return "-";
+    };
+
+    const openLoginModal = () => {
+      loginStatusEl.textContent = "";
+      loginModal.classList.add("open");
+      loginModal.setAttribute("aria-hidden", "false");
+    };
+
+    const closeLoginModal = () => {
+      loginModal.classList.remove("open");
+      loginModal.setAttribute("aria-hidden", "true");
+    };
+
+    const resetSummary = () => {
+      summaryName.textContent = "姓名 / 單位：-";
+      summaryEmail.textContent = "Email：-";
+      summaryPartnerType.textContent = "類型：-";
+      summaryPermission.textContent = "權限：-";
+      summaryRole.textContent = "角色卡：-";
+      summaryScore.textContent = "總分：-";
+      summaryRegion.textContent = "地區 / 分會：-";
+      summaryUpdatedAt.textContent = "更新時間：-";
+      submissionList.innerHTML = "";
+      submissionList.hidden = true;
+      submissionEmpty.hidden = false;
+      reviewerCardWrap.hidden = true;
+    };
+
+    const renderGuestState = () => {
+      memberStateEl.textContent = "尚未登入";
+      memberStateEl.className = "status";
+      abilitySummaryEl.textContent = "請先登入以查看你的會員資料、7-Day 任務紀錄與可用功能。";
+      openLoginBtn.hidden = false;
+      logoutBtn.hidden = true;
+      resetSummary();
+    };
+
+    const createSubmissionCard = (submission) => {
+      const article = document.createElement("article");
+      article.className = "submission-card";
+
+      const title = document.createElement("h3");
+      title.textContent = submission.title || "未命名任務";
+
+      const meta = document.createElement("div");
+      meta.className = "submission-meta";
+      (submission.dimensions || []).forEach((dimension) => {
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = dimension;
+        meta.appendChild(badge);
+      });
+
+      const caption = document.createElement("p");
+      caption.textContent = submission.caption || "沒有補充說明。";
+
+      article.append(title, meta, caption);
+
+      if (submission.image?.downloadURL) {
+        const img = document.createElement("img");
+        img.src = submission.image.downloadURL;
+        img.alt = submission.title || "7-Day Green Proposal submission";
+        article.appendChild(img);
+      }
+
+      return article;
+    };
+
+    const loadSubmissions = async (uid) => {
+      submissionList.innerHTML = "";
+      submissionEmpty.hidden = false;
+      submissionList.hidden = true;
+
+      const snapshot = await getDocs(collection(db, "greenProposalSubmissions"));
+      const submissions = snapshot.docs
+        .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+        .filter((item) => item.uid === uid)
+        .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+
+      if (!submissions.length) {
+        submissionEmpty.textContent = "你目前還沒有提交任何 7-Day 任務。";
+        return;
+      }
+
+      submissions.forEach((submission) => submissionList.appendChild(createSubmissionCard(submission)));
+      submissionEmpty.hidden = true;
+      submissionList.hidden = false;
+    };
+
+    openLoginBtn.addEventListener("click", openLoginModal);
+    closeLoginModalBtn.addEventListener("click", closeLoginModal);
+    loginModal.addEventListener("click", (event) => {
+      if (event.target === loginModal) closeLoginModal();
+    });
+
+    loginSubmitBtn.addEventListener("click", async () => {
+      loginStatusEl.textContent = "";
+      loginSubmitBtn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, loginEmailInput.value.trim(), loginPasswordInput.value);
+        closeLoginModal();
+      } catch (error) {
+        console.error(error);
+        loginStatusEl.textContent = "登入失敗，請重新確認 Email 與密碼。";
+        loginStatusEl.className = "status error";
+      } finally {
+        loginSubmitBtn.disabled = false;
+      }
+    });
+
+    forgotPasswordBtn.addEventListener("click", async () => {
+      loginStatusEl.textContent = "";
+      forgotPasswordBtn.disabled = true;
+      try {
+        await sendPasswordResetEmail(auth, loginEmailInput.value.trim());
+        loginStatusEl.textContent = "重設密碼信已寄出。";
+        loginStatusEl.className = "status ok";
+      } catch (error) {
+        console.error(error);
+        loginStatusEl.textContent = "寄送失敗，請先輸入正確 Email。";
+        loginStatusEl.className = "status error";
+      } finally {
+        forgotPasswordBtn.disabled = false;
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        renderGuestState();
+        return;
+      }
+
+      openLoginBtn.hidden = true;
+      logoutBtn.hidden = false;
+      memberStateEl.textContent = `已登入：${getDisplayName(user)}`;
+      memberStateEl.className = "status ok";
+
+      try {
+        const memberSnap = await getDoc(doc(db, "members", user.uid));
+        const member = memberSnap.exists() ? memberSnap.data() : {};
+        const permissionLevel = Number(member.permissionLevel || 1);
+
+        summaryName.textContent = `姓名 / 單位：${member.name || getDisplayName(user)}`;
+        summaryEmail.textContent = `Email：${user.email || "-"}`;
+        summaryPartnerType.textContent = `類型：${getPartnerLabel(member.partnerType)}`;
+        summaryPermission.textContent = `權限：${getPermissionLabel(permissionLevel)}`;
+        summaryRole.textContent = `角色卡：${member.resultRole || "-"}`;
+        summaryScore.textContent = `總分：${member.totalScore ?? "-"}`;
+        summaryRegion.textContent = `地區 / 分會：${member.region || "-"}${member.chapter ? ` / ${member.chapter}` : ""}`;
+        summaryUpdatedAt.textContent = `更新時間：${formatDate(member.updatedAt?.toDate?.()?.toISOString?.() || member.updatedAt)}`;
+
+        abilitySummaryEl.textContent = permissionLevel >= 3
+          ? "你可以修改邁出一步、提交 7-Day 任務，也可以前往審核台。"
+          : permissionLevel >= 2
+            ? "你可以修改邁出一步，並提交 7-Day Green Proposal 與其他上傳內容。"
+            : "你可以修改邁出一步，並提交 7-Day Green Proposal 任務。";
+
+        reviewerCardWrap.hidden = permissionLevel !== 3;
+        await loadSubmissions(user.uid);
+      } catch (error) {
+        console.error(error);
+        abilitySummaryEl.textContent = "讀取會員資料時發生問題，請稍後再試。";
+        resetSummary();
+      }
+    });
+  </script>
+</body>
+</html>
