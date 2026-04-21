@@ -590,7 +590,7 @@
     <div id="modeOverlay" aria-hidden="true"></div>
   </div>
 
-  <div class="ui-layer">
+  <div class="ui-layer" id="ui-layer">
     <header>
       
         <div class="logo-area">
@@ -615,10 +615,11 @@
       </div>
     </header>
 
-    <div class="glass-panel">
+    <div class="glass-panel" id="infoPanel">
       <h1 class="hero-text">A living atlas of crisis and hope.</h1>
       <p class="subtext">Explore our planet in full 3D without texture downloads. Toggle between climate crisis and regenerative hope themes while the globe streams real Natural Earth polygons.</p>
       <div class="control-row">
+        <span class="tag crisis" id="infoTag" data-i18n="labels.crisis">CRISIS</span>
         <div class="legend">
           <span class="legend-dot" id="legendLand" style="background:#5c2222;"></span>
           <span>Landmass polygons (real GeoJSON)</span>
@@ -633,6 +634,7 @@
         <h2 id="infoTitle" data-i18n="info.loading">Loading...</h2>
         <div class="subtitle" id="infoSubtitle">---</div>
         <p id="infoDesc">---</p>
+        <div class="date-line" id="infoDate">--</div>
         <div class="stats" id="statList"></div>
         <div class="media-area" id="mediaContainer"></div>
       </div>
