@@ -1,0 +1,29 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function hasPermissionLevel(level) {
+      return isSignedIn() &&
+        firestore.get(
+          /databases/(default)/documents/members/$(request.auth.uid)
+        ).data.permissionLevel == level;
+    }
+
+    match /organization-uploads/{userId}/{allPaths=**} {
+      allow read: if isOwner(userId) || hasPermissionLevel(3);
+      allow write: if isOwner(userId);
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

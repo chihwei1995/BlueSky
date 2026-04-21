@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JCI 氣候行動互動表單 | JCI Climate Action Interactive Form</title>
+  <title>Blue Sky Returns 氣侯行動者註冊與氣候行動問卷</title>
   <style>
     :root {
       --bg: #f4f8fb;
-      --card: #fff;
+      --card: #ffffff;
       --ink: #0f172a;
       --muted: #475569;
       --primary: #0284c7;
@@ -15,8 +15,11 @@
       --border: #dbe7f2;
       --ok: #15803d;
       --danger: #b91c1c;
+      --warning: #b45309;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, "Noto Sans TC", sans-serif;
@@ -24,11 +27,13 @@
       color: var(--ink);
       line-height: 1.6;
     }
+
     .container {
       max-width: 920px;
       margin: 32px auto;
       padding: 0 16px 48px;
     }
+
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -37,16 +42,30 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
+
     .back-link {
       color: var(--primary-dark);
       text-decoration: none;
       font-weight: 700;
     }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     h1 {
       margin: 0;
       font-size: clamp(26px, 3.4vw, 34px);
     }
-    .subtitle { color: var(--muted); margin: 4px 0 24px; }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 4px 0 24px;
+    }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -55,27 +74,61 @@
       margin-bottom: 18px;
       box-shadow: 0 10px 24px rgba(2, 132, 199, 0.08);
     }
-    h2 { margin: 0 0 12px; font-size: 1.2rem; }
-    label { display: block; font-weight: 700; margin: 12px 0 6px; }
-    .required::after { content: ' *'; color: #dc2626; }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 12px 0 6px;
+    }
+
+    .required::after {
+      content: " *";
+      color: #dc2626;
+    }
+
     input[type="text"],
-    input[type="email"] {
+    input[type="email"],
+    input[type="password"] {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
       font-size: 0.98rem;
     }
+
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.98rem;
+      font-family: inherit;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
     fieldset {
       border: none;
       padding: 0;
       margin: 0;
     }
+
     .options {
       display: grid;
       gap: 8px;
       margin-top: 6px;
     }
+
     .option {
       display: flex;
       gap: 8px;
@@ -85,9 +138,51 @@
       border-radius: 10px;
       background: #f8fbff;
     }
-    .option input { margin-top: 3px; }
-    #jciDetails[hidden] { display: none; }
-    .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+
+    .option input {
+      margin-top: 3px;
+    }
+
+    #jciDetails[hidden] {
+      display: none;
+    }
+
+    #organizationDetails[hidden] {
+      display: none;
+    }
+
+    .helper,
+    .small-note {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 8px;
+    }
+
+    .helper.warning {
+      color: var(--warning);
+      font-weight: 700;
+    }
+
+    .member-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #075985;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
     button {
       border: none;
       background: var(--primary);
@@ -98,17 +193,40 @@
       font-weight: 700;
       cursor: pointer;
     }
-    button:hover { background: var(--primary-dark); }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
     .secondary-btn {
       background: #e2e8f0;
       color: #0f172a;
     }
+
     .secondary-btn:hover {
       background: #cbd5e1;
     }
-    .status { font-weight: 700; }
-    .status.ok { color: var(--ok); }
-    .status.error { color: var(--danger); }
+
+    .status {
+      font-weight: 700;
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .status.warn {
+      color: var(--warning);
+    }
 
     .modal {
       position: fixed;
@@ -120,7 +238,11 @@
       padding: 18px;
       z-index: 99;
     }
-    .modal.open { display: flex; }
+
+    .modal.open {
+      display: flex;
+    }
+
     .modal-card {
       width: min(660px, 100%);
       max-height: calc(100dvh - 36px);
@@ -131,10 +253,21 @@
       padding: 20px;
       -webkit-overflow-scrolling: touch;
     }
-    .role-title { margin: 0 0 4px; }
-    .role-range { color: var(--primary-dark); font-weight: 700; margin: 0 0 12px; }
-    .small-note { color: var(--muted); margin-top: 10px; }
-    .role-image-wrap { margin: 12px 0; }
+
+    .role-title {
+      margin: 0 0 4px;
+    }
+
+    .role-range {
+      color: var(--primary-dark);
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+
+    .role-image-wrap {
+      margin: 12px 0;
+    }
+
     .role-image {
       width: 100%;
       max-width: 420px;
@@ -154,6 +287,11 @@
 
     #resultModal .actions button {
       width: 100%;
+    }
+
+    .auth-row {
+      display: grid;
+      gap: 10px;
     }
 
     @media (max-width: 640px) {
@@ -182,20 +320,65 @@
 <body>
   <main class="container">
     <div class="topbar">
-      <h1>你是哪一種類型的氣候行動者？<br>What Type of Climate Action Partner Are You?</h1>
-      <a class="back-link" href="./index.html">← 返回 Blue Sky Returns / Back to Blue Sky Returns</a>
+      <h1>Blue Sky Returns 氣侯行動者註冊與氣候行動問卷<br>Blue Sky Returns Climate Action Partner Registration & Climate Action Quiz</h1>
+      <div class="topbar-actions">
+        <button type="button" id="openLoginBtn" class="secondary-btn">氣侯行動者登入 / Sign In</button>
+        <button type="button" id="logoutBtn" class="secondary-btn" hidden>登出 / Sign Out</button>
+        <a class="back-link" href="./index.html">← 返回 Blue Sky Returns / Back to Blue Sky Returns</a>
+      </div>
     </div>
-    <p class="subtitle">填寫以下表單，完成後會立即獲得你的雙語角色分析，並同步提交至 Google Apps Script。<br>Complete the form below to receive your bilingual role result instantly; your submission will also be sent to Google Apps Script.</p>
+    <p class="subtitle">
+      使用 Email 建立氣侯行動者帳號，完成問卷後會立即獲得你的雙語角色分析，並把資料儲存到 Firebase。<br>
+      Create your climate action partner account with email, receive your bilingual result instantly, and save your submission to Firebase.
+    </p>
 
     <form id="climateForm">
       <section class="card">
-        <h2>第一部分：基本聯絡與 JCI 身分資料<br>Part 1: Contact Details and JCI Affiliation</h2>
+        <h2>第一部分：氣侯行動者註冊與基本資料<br>Part 1: Climate Action Partner Registration & Contact Details</h2>
+        <p class="helper">第一次填寫會建立氣侯行動者帳號；若你已登入相同 Email，系統會直接更新你的問卷資料。</p>
+        <div id="memberState" class="member-chip" hidden></div>
 
         <label class="required" for="name">姓名 / 單位名稱 (Name / Organization)</label>
-        <input id="name" name="name" type="text" required />
+        <input id="name" name="name" type="text" autocomplete="name" required />
 
-        <label class="required" for="email">電子郵件 Email（用於發送相關資訊）(Email for sending related information)</label>
-        <input id="email" name="email" type="email" required />
+        <fieldset>
+          <label class="required">氣侯行動者類型 (Climate Action Partner Type)</label>
+          <div class="options">
+            <label class="option">
+              <input type="radio" name="partner_type" value="general" required />
+              一般 General
+            </label>
+            <label class="option">
+              <input type="radio" name="partner_type" value="organization" />
+              組織 Organization
+            </label>
+          </div>
+        </fieldset>
+        <p class="helper">預設參數：一般為 1，組織為 2。你後台之後仍可再調整。</p>
+
+        <label class="required" for="email">電子郵件 Email（氣侯行動者帳號 / Email for your climate action partner account）</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+
+        <label class="required" for="password">氣侯行動者密碼 Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+        />
+        <p class="helper">至少 6 個字元。Firebase Email/Password 會使用這組氣侯行動者密碼。</p>
+
+        <label class="required" for="confirmPassword">確認密碼 Confirm Password</label>
+        <input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+        />
 
         <label class="required" for="whatsapp_line">WhatsApp 或 Line 聯絡方式 (WhatsApp or Line Contact)</label>
         <input
@@ -220,6 +403,35 @@
 
           <label class="required" for="chapter">所屬分會 (LOM / Chapter)</label>
           <input id="chapter" name="chapter" type="text" placeholder="例：Peninsula" />
+        </div>
+
+        <div id="organizationDetails" hidden>
+          <label class="required" for="hopeTitle">組織希望主題 (Hope Title)</label>
+          <input id="hopeTitle" name="hopeTitle" type="text" placeholder="例：社區太陽能 / Community Solar" />
+
+          <label class="required" for="hopeDescription">希望內容說明 (Hope Description)</label>
+          <textarea
+            id="hopeDescription"
+            name="hopeDescription"
+            placeholder="請描述組織想上傳的希望案例、專案或成果。"
+          ></textarea>
+
+          <label for="hopeFile">希望附件 (Hope File)</label>
+          <input id="hopeFile" name="hopeFile" type="file" accept="image/*,.pdf,.doc,.docx" />
+
+          <label class="required" for="threatTitle">組織威脅主題 (Threat Title)</label>
+          <input id="threatTitle" name="threatTitle" type="text" placeholder="例：沿海洪災 / Coastal Flood Risk" />
+
+          <label class="required" for="threatDescription">威脅內容說明 (Threat Description)</label>
+          <textarea
+            id="threatDescription"
+            name="threatDescription"
+            placeholder="請描述組織觀察到的威脅、危機或風險。"
+          ></textarea>
+
+          <label for="threatFile">威脅附件 (Threat File)</label>
+          <input id="threatFile" name="threatFile" type="file" accept="image/*,.pdf,.doc,.docx" />
+          <p class="helper">只有組織類型可上傳希望與威脅。附件會儲存到 Firebase Storage。</p>
         </div>
       </section>
 
@@ -277,10 +489,11 @@
         </fieldset>
 
         <div class="actions">
-          <button type="submit">送出表單並查看結果 / Submit & View Result</button>
+          <button type="submit" id="submitBtn">註冊氣侯行動者並儲存問卷 / Register & Save</button>
           <button type="button" id="shareCampaignBtn" class="secondary-btn">分享表單給他人 / Share This Form</button>
           <span id="submitStatus" class="status" aria-live="polite"></span>
         </div>
+        <p class="helper warning">部署前請先在 Firebase Console 啟用 Authentication 的 Email/Password 與 Firestore Database。</p>
       </section>
     </form>
   </main>
@@ -305,67 +518,270 @@
     </div>
   </section>
 
-  <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9sWfvyp6Xhdz-lN40oCGvjNquGKj9Tp0yZDeNWEC8dA3N-L_oU6pBPd8Sfi-GHgzU/exec';
+  <section id="loginModal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <h3 class="role-title">氣侯行動者登入 / Climate Action Partner Sign In</h3>
+      <p class="small-note">登入後可直接更新你的問卷資料，不需要再重新註冊。</p>
+      <div class="auth-row">
+        <label class="required" for="loginEmail">電子郵件 Email</label>
+        <input id="loginEmail" type="email" autocomplete="email" />
+
+        <label class="required" for="loginPassword">密碼 Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" />
+      </div>
+      <div class="actions">
+        <button type="button" id="loginSubmitBtn">登入 / Sign In</button>
+        <button type="button" id="forgotPasswordBtn" class="secondary-btn">忘記密碼 / Reset Password</button>
+        <button type="button" id="closeLoginModal" class="secondary-btn">取消 / Cancel</button>
+      </div>
+      <p class="small-note" id="loginStatus" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      sendPasswordResetEmail,
+      sendEmailVerification,
+      updateProfile,
+      onAuthStateChanged,
+      connectAuthEmulator
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp,
+      connectFirestoreEmulator
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import {
+      getStorage,
+      ref,
+      uploadBytes,
+      getDownloadURL,
+      connectStorageEmulator
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    if (
+      location.hostname === "localhost" ||
+      location.hostname === "127.0.0.1"
+    ) {
+      connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
+      connectFirestoreEmulator(db, "127.0.0.1", 8080);
+      connectStorageEmulator(storage, "127.0.0.1", 9199);
+    }
 
     const roleRules = [
       {
         min: 5,
         max: 8,
-        title: '環境學習者 / Environmental Learner',
-        image: '../assets/p1.png',
-        descZh: '對環境充滿好奇與熱情，正處於建立知識基礎的階段。這個專案將為你打開一扇窗，了解全球氣候挑戰與解決方案。',
-        descEn: 'You are curious and passionate about the environment, and currently building your foundation. This project helps you explore global climate challenges and solutions.'
+        title: "環境學習者 / Environmental Learner",
+        image: "../assets/p1.png",
+        descZh: "對環境充滿好奇與熱情，正處於建立知識基礎的階段。這個專案將為你打開一扇窗，了解全球氣候挑戰與解決方案。",
+        descEn: "You are curious and passionate about the environment, and currently building your foundation. This project helps you explore global climate challenges and solutions."
       },
       {
         min: 9,
         max: 12,
-        title: '社區綠色大使 / Community Green Ambassador',
-        image: '../assets/p2.png',
-        descZh: '你是一位實踐者，相信改變可以從自身做起。樂於參與具體行動，非常適合擔任當地綠能設施拍攝小組的關鍵成員。',
-        descEn: 'You are a practical doer who believes change begins with yourself. You are ideal for joining local green-energy documentation and engagement teams.'
+        title: "社區綠色大使 / Community Green Ambassador",
+        image: "../assets/p2.png",
+        descZh: "你是一位實踐者，相信改變可以從自身做起。樂於參與具體行動，非常適合擔任當地綠能設施拍攝小組的關鍵成員。",
+        descEn: "You are a practical doer who believes change begins with yourself. You are ideal for joining local green-energy documentation and engagement teams."
       },
       {
         min: 13,
         max: 16,
-        title: '青商全球影響力催化劑 / JCI Global Impact Catalyst',
-        image: '../assets/p3.png',
-        descZh: '你具有國際視野，深知團結與合作的力量。是推動跨國姐妹會合作、將「希望與危機」傳遞給全球的重要力量。',
-        descEn: 'You hold a global perspective and value collaboration. You can catalyze cross-border JCI sister chapter cooperation and spread the message of hope and crisis worldwide.'
+        title: "青商全球影響力催化劑 / JCI Global Impact Catalyst",
+        image: "../assets/p3.png",
+        descZh: "你具有國際視野，深知團結與合作的力量。是推動跨國姐妹會合作、將「希望與危機」傳遞給全球的重要力量。",
+        descEn: "You hold a global perspective and value collaboration. You can catalyze cross-border JCI sister chapter cooperation and spread the message of hope and crisis worldwide."
       },
       {
         min: 17,
         max: 20,
-        title: '氣候行動倡議者 / Climate Action Advocate',
-        image: '../assets/p4.png',
-        descZh: '你是充滿熱情的領導者，致力推動系統性變革。準備好將專案成果傳遞給中小學與國際論壇，是引領可持續未來的先鋒。',
-        descEn: 'You are a passionate leader driving systemic change. You are ready to bring project outcomes to schools and global forums to champion a sustainable future.'
+        title: "氣候行動倡議者 / Climate Action Advocate",
+        image: "../assets/p4.png",
+        descZh: "你是充滿熱情的領導者，致力推動系統性變革。準備好將專案成果傳遞給中小學與國際論壇，是引領可持續未來的先鋒。",
+        descEn: "You are a passionate leader driving systemic change. You are ready to bring project outcomes to schools and global forums to champion a sustainable future."
       }
     ];
 
-    const form = document.getElementById('climateForm');
-    const jciDetails = document.getElementById('jciDetails');
-    const regionInput = document.getElementById('region');
-    const chapterInput = document.getElementById('chapter');
-    const statusEl = document.getElementById('submitStatus');
-    const modal = document.getElementById('resultModal');
-    const shareStatusEl = document.getElementById('shareStatus');
-    const shareCampaignBtn = document.getElementById('shareCampaignBtn');
-    const shareResultBtn = document.getElementById('shareResultBtn');
-    const shareImageBtn = document.getElementById('shareImageBtn');
-    const downloadResultBtn = document.getElementById('downloadResultBtn');
-    const roleImageEl = document.getElementById('roleImage');
+    const form = document.getElementById("climateForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const jciDetails = document.getElementById("jciDetails");
+    const organizationDetails = document.getElementById("organizationDetails");
+    const regionInput = document.getElementById("region");
+    const chapterInput = document.getElementById("chapter");
+    const hopeTitleInput = document.getElementById("hopeTitle");
+    const hopeDescriptionInput = document.getElementById("hopeDescription");
+    const hopeFileInput = document.getElementById("hopeFile");
+    const threatTitleInput = document.getElementById("threatTitle");
+    const threatDescriptionInput = document.getElementById("threatDescription");
+    const threatFileInput = document.getElementById("threatFile");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const statusEl = document.getElementById("submitStatus");
+    const modal = document.getElementById("resultModal");
+    const loginModal = document.getElementById("loginModal");
+    const shareStatusEl = document.getElementById("shareStatus");
+    const loginStatusEl = document.getElementById("loginStatus");
+    const shareCampaignBtn = document.getElementById("shareCampaignBtn");
+    const shareResultBtn = document.getElementById("shareResultBtn");
+    const shareImageBtn = document.getElementById("shareImageBtn");
+    const downloadResultBtn = document.getElementById("downloadResultBtn");
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const closeLoginModalBtn = document.getElementById("closeLoginModal");
+    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const loginEmailInput = document.getElementById("loginEmail");
+    const loginPasswordInput = document.getElementById("loginPassword");
+    const roleImageEl = document.getElementById("roleImage");
+    const memberStateEl = document.getElementById("memberState");
+
     let currentRole = null;
 
     const sharePayload = {
-      title: 'JCI 氣候行動互動測驗',
-      text: '一起測測你是哪一種類型的氣候行動者，並加入氣候行動！',
+      title: "Blue Sky Returns 氣侯行動者註冊與氣候行動問卷",
+      text: "一起完成 Blue Sky Returns 氣候行動問卷並加入氣侯行動者！",
       url: window.location.href
     };
 
+    const setStatus = (type, message) => {
+      statusEl.className = "status";
+      if (type) {
+        statusEl.classList.add(type);
+      }
+      statusEl.textContent = message;
+    };
+
+    const setJciFields = (isJci) => {
+      const show = isJci === "是";
+      jciDetails.hidden = !show;
+      regionInput.required = show;
+      chapterInput.required = show;
+      if (!show) {
+        regionInput.value = "";
+        chapterInput.value = "";
+      }
+    };
+
+    const setPartnerTypeFields = (partnerType) => {
+      const isOrganization = partnerType === "organization";
+      organizationDetails.hidden = !isOrganization;
+      hopeTitleInput.required = isOrganization;
+      hopeDescriptionInput.required = isOrganization;
+      threatTitleInput.required = isOrganization;
+      threatDescriptionInput.required = isOrganization;
+
+      if (!isOrganization) {
+        hopeTitleInput.value = "";
+        hopeDescriptionInput.value = "";
+        hopeFileInput.value = "";
+        threatTitleInput.value = "";
+        threatDescriptionInput.value = "";
+        threatFileInput.value = "";
+      }
+    };
+
+    const setPasswordMode = (signedIn) => {
+      passwordInput.required = !signedIn;
+      confirmPasswordInput.required = !signedIn;
+      passwordInput.disabled = signedIn;
+      confirmPasswordInput.disabled = signedIn;
+      if (signedIn) {
+        passwordInput.value = "";
+        confirmPasswordInput.value = "";
+        passwordInput.placeholder = "已登入氣侯行動者，不需再次輸入";
+        confirmPasswordInput.placeholder = "已登入氣侯行動者，不需再次輸入";
+        emailInput.readOnly = true;
+      } else {
+        passwordInput.placeholder = "";
+        confirmPasswordInput.placeholder = "";
+        emailInput.readOnly = false;
+      }
+    };
+
+    const calculateResult = (data) => {
+      const score = ["q1", "q2", "q3", "q4", "q5"].reduce(
+        (sum, key) => sum + Number(data.get(key) || 0),
+        0
+      );
+      const role = roleRules.find((rule) => score >= rule.min && score <= rule.max);
+      return { score, role };
+    };
+
+    const openResultModal = ({ score, role }) => {
+      currentRole = role;
+      document.getElementById("roleTitle").textContent = role.title;
+      document.getElementById("roleRange").textContent = `分數區間 Score Range: ${role.min}-${role.max}`;
+      document.getElementById("roleDescZh").textContent = `中文分析：${role.descZh}`;
+      document.getElementById("roleDescEn").textContent = `English Analysis: ${role.descEn}`;
+      roleImageEl.src = role.image;
+      roleImageEl.alt = `${role.title} 角色卡 / role card`;
+      document.getElementById("scoreText").textContent = `你的總分 Your Total Score: ${score}`;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+    };
+
+    const getRoleCardFileName = (role) => {
+      const base = role?.title?.split("/")[0]?.trim() || "climate-role-card";
+      return `${base.replace(/[\\/:*?"<>|]/g, "_")}.png`;
+    };
+
+    const fetchRoleImageBlob = async () => {
+      if (!currentRole?.image) {
+        throw new Error("No role image selected");
+      }
+      const response = await fetch(currentRole.image);
+      if (!response.ok) {
+        throw new Error("Failed to load role image");
+      }
+      return response.blob();
+    };
+
+    const downloadRoleCard = async () => {
+      shareStatusEl.textContent = "";
+      try {
+        const blob = await fetchRoleImageBlob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = getRoleCardFileName(currentRole);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        shareStatusEl.textContent = "角色卡已開始下載。";
+      } catch (error) {
+        shareStatusEl.textContent = "下載失敗，請稍後重試。";
+        console.error(error);
+      }
+    };
+
     const shareFormLink = async (trigger) => {
-      const source = trigger === 'result' ? '分享結果' : '分享表單';
-      shareStatusEl.textContent = '';
+      const source = trigger === "result" ? "分享結果" : "分享表單";
+      shareStatusEl.textContent = "";
       try {
         if (navigator.share) {
           await navigator.share(sharePayload);
@@ -379,173 +795,337 @@
           return;
         }
 
-        const tempInput = document.createElement('input');
-        tempInput.value = sharePayload.url;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        shareStatusEl.textContent = `已複製連結：${sharePayload.url}`;
+        shareStatusEl.textContent = `請手動複製連結：${sharePayload.url}`;
       } catch (error) {
         shareStatusEl.textContent = `分享失敗，請手動複製：${sharePayload.url}`;
         console.error(error);
       }
     };
 
-    const setJciFields = (isJci) => {
-      const show = isJci === '是';
-      jciDetails.hidden = !show;
-      regionInput.required = show;
-      chapterInput.required = show;
-      if (!show) {
-        regionInput.value = '';
-        chapterInput.value = '';
-      }
-    };
-
-    const calculateResult = (data) => {
-      const score = ['q1', 'q2', 'q3', 'q4', 'q5'].reduce((sum, key) => sum + Number(data.get(key) || 0), 0);
-      const role = roleRules.find(rule => score >= rule.min && score <= rule.max);
-      return { score, role };
-    };
-
-    const openResultModal = ({ score, role }) => {
-      currentRole = role;
-      document.getElementById('roleTitle').textContent = role.title;
-      document.getElementById('roleRange').textContent = `分數區間 Score Range: ${role.min}-${role.max}`;
-      document.getElementById('roleDescZh').textContent = `中文分析：${role.descZh}`;
-      document.getElementById('roleDescEn').textContent = `English Analysis: ${role.descEn}`;
-      roleImageEl.src = role.image;
-      roleImageEl.alt = `${role.title} 角色卡 / role card`;
-      document.getElementById('scoreText').textContent = `你的總分 Your Total Score: ${score}`;
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden', 'false');
-    };
-
-    const getRoleCardFileName = (role) => {
-      const base = role?.title?.split('/')[0]?.trim() || 'climate-role-card';
-      return `${base.replace(/[\\/:*?"<>|]/g, '_')}.png`;
-    };
-
-    const fetchRoleImageBlob = async () => {
-      if (!currentRole?.image) {
-        throw new Error('No role image selected');
-      }
-      const response = await fetch(currentRole.image);
-      if (!response.ok) {
-        throw new Error('Failed to load role image');
-      }
-      return response.blob();
-    };
-
-    const downloadRoleCard = async () => {
-      shareStatusEl.textContent = '';
-      try {
-        const blob = await fetchRoleImageBlob();
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = getRoleCardFileName(currentRole);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(url);
-        shareStatusEl.textContent = '角色卡已開始下載。';
-      } catch (error) {
-        shareStatusEl.textContent = '下載失敗，請稍後重試。';
-        console.error(error);
-      }
-    };
-
     const shareRoleCardWithLink = async () => {
-      shareStatusEl.textContent = '';
+      shareStatusEl.textContent = "";
       if (!currentRole) {
-        shareStatusEl.textContent = '請先完成測驗取得角色卡。';
+        shareStatusEl.textContent = "請先完成測驗取得角色卡。";
         return;
       }
 
       try {
         const blob = await fetchRoleImageBlob();
         const fileName = getRoleCardFileName(currentRole);
-        const file = new File([blob], fileName, { type: blob.type || 'image/png' });
+        const file = new File([blob], fileName, { type: blob.type || "image/png" });
         const payload = {
           title: `我的氣候角色：${currentRole.title}`,
-          text: `我在 JCI 氣候行動測驗的結果是：${currentRole.title}`,
+          text: `我在 Blue Sky Returns 測驗的結果是：${currentRole.title}`,
           url: window.location.href,
           files: [file]
         };
 
         if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
           await navigator.share(payload);
-          shareStatusEl.textContent = '已分享圖片與連結，感謝你的擴散！';
+          shareStatusEl.textContent = "已分享圖片與連結，感謝你的擴散！";
           return;
         }
 
         await downloadRoleCard();
         if (navigator.clipboard?.writeText) {
           await navigator.clipboard.writeText(window.location.href);
-          shareStatusEl.textContent = '已下載角色卡，並複製表單連結可貼到社群分享。';
+          shareStatusEl.textContent = "已下載角色卡，並複製表單連結可貼到社群分享。";
         } else {
           shareStatusEl.textContent = `已下載角色卡，請手動分享連結：${window.location.href}`;
         }
       } catch (error) {
-        shareStatusEl.textContent = '分享失敗，請改用下載後手動上傳。';
+        shareStatusEl.textContent = "分享失敗，請改用下載後手動上傳。";
         console.error(error);
       }
     };
 
+    const getAuthErrorMessage = (code) => {
+      const messages = {
+        "auth/email-already-in-use": "這個 Email 已經註冊過，請改用登入視窗或換一個 Email。",
+        "auth/invalid-email": "Email 格式不正確，請重新確認。",
+        "auth/weak-password": "密碼強度不足，請至少使用 6 個字元。",
+        "auth/operation-not-allowed": "Firebase 尚未啟用 Email/Password 登入。",
+        "auth/network-request-failed": "網路連線失敗，請稍後再試。",
+        "auth/user-not-found": "找不到這個氣侯行動者帳號。",
+        "auth/wrong-password": "密碼錯誤，請重新輸入。",
+        "auth/invalid-credential": "登入資訊不正確，請重新確認 Email 與密碼。",
+        "auth/missing-email": "請先輸入 Email，再寄送重設密碼信。",
+        "auth/too-many-requests": "操作太頻繁，請稍後再試。"
+      };
+      return messages[code] || `操作失敗：${code}`;
+    };
+
+    const openLoginModal = () => {
+      loginStatusEl.textContent = "";
+      loginPasswordInput.value = "";
+      if (emailInput.value && !loginEmailInput.value) {
+        loginEmailInput.value = emailInput.value;
+      }
+      loginModal.classList.add("open");
+      loginModal.setAttribute("aria-hidden", "false");
+    };
+
+    const closeLoginModal = () => {
+      loginModal.classList.remove("open");
+      loginModal.setAttribute("aria-hidden", "true");
+    };
+
+    const uploadOrganizationFile = async ({ userId, file, kind }) => {
+      if (!file || !file.name || file.size === 0) return null;
+
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const fileRef = ref(
+        storage,
+        `organization-uploads/${userId}/${kind}/${Date.now()}-${safeName}`
+      );
+      const snapshot = await uploadBytes(fileRef, file, {
+        contentType: file.type || "application/octet-stream"
+      });
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      return {
+        name: file.name,
+        type: file.type || "",
+        size: file.size,
+        path: snapshot.metadata.fullPath,
+        downloadURL
+      };
+    };
+
+    const persistSubmission = async ({ user, formData, score, role }) => {
+      const isJci = formData.get("is_jci") || "否";
+      const partnerType = formData.get("partner_type") || "general";
+      const partnerMultiplier = partnerType === "organization" ? 2 : 1;
+      const hopeUpload = await uploadOrganizationFile({
+        userId: user.uid,
+        file: formData.get("hopeFile"),
+        kind: "hope"
+      });
+      const threatUpload = await uploadOrganizationFile({
+        userId: user.uid,
+        file: formData.get("threatFile"),
+        kind: "threat"
+      });
+      const payload = {
+        uid: user.uid,
+        email: user.email,
+        name: formData.get("name") || "",
+        partnerType,
+        partnerMultiplier,
+        permissionLevel: partnerMultiplier,
+        whatsappLine: formData.get("whatsapp_line") || "",
+        isJci,
+        region: isJci === "是" ? (formData.get("region") || "") : "",
+        chapter: isJci === "是" ? (formData.get("chapter") || "") : "",
+        organizationContribution: partnerType === "organization" ? {
+          hope: {
+            title: formData.get("hopeTitle") || "",
+            description: formData.get("hopeDescription") || "",
+            file: hopeUpload
+          },
+          threat: {
+            title: formData.get("threatTitle") || "",
+            description: formData.get("threatDescription") || "",
+            file: threatUpload
+          }
+        } : null,
+        answers: {
+          q1: Number(formData.get("q1")),
+          q2: Number(formData.get("q2")),
+          q3: Number(formData.get("q3")),
+          q4: Number(formData.get("q4")),
+          q5: Number(formData.get("q5"))
+        },
+        resultRole: role.title,
+        totalScore: score,
+        emailVerified: user.emailVerified,
+        submittedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+
+      await setDoc(doc(db, "members", user.uid), payload, { merge: true });
+    };
+
+    const resolveMemberAccount = async (email, password, name) => {
+      if (auth.currentUser) {
+        if (auth.currentUser.email !== email) {
+          throw new Error("signed-in-with-different-email");
+        }
+        if (!auth.currentUser.displayName && name) {
+          await updateProfile(auth.currentUser, { displayName: name });
+        }
+        return { user: auth.currentUser, created: false };
+      }
+
+      const credential = await createUserWithEmailAndPassword(auth, email, password);
+      if (name) {
+        await updateProfile(credential.user, { displayName: name });
+      }
+      try {
+        await sendEmailVerification(credential.user);
+      } catch (error) {
+        console.error("Email verification send failed", error);
+      }
+      return { user: credential.user, created: true };
+    };
+
     document.querySelectorAll('input[name="is_jci"]').forEach((radio) => {
-      radio.addEventListener('change', () => setJciFields(radio.value));
+      radio.addEventListener("change", () => setJciFields(radio.value));
+    });
+    document.querySelectorAll('input[name="partner_type"]').forEach((radio) => {
+      radio.addEventListener("change", () => setPartnerTypeFields(radio.value));
+    });
+    setPartnerTypeFields("");
+
+    shareCampaignBtn.addEventListener("click", () => shareFormLink("campaign"));
+    shareResultBtn.addEventListener("click", () => shareFormLink("result"));
+    shareImageBtn.addEventListener("click", shareRoleCardWithLink);
+    downloadResultBtn.addEventListener("click", downloadRoleCard);
+    openLoginBtn.addEventListener("click", openLoginModal);
+    closeLoginModalBtn.addEventListener("click", closeLoginModal);
+    forgotPasswordBtn.addEventListener("click", async () => {
+      loginStatusEl.textContent = "";
+      forgotPasswordBtn.disabled = true;
+
+      try {
+        const email = loginEmailInput.value.trim() || emailInput.value.trim();
+        await sendPasswordResetEmail(auth, email);
+        loginStatusEl.textContent = `重設密碼信已寄到 ${email}，請檢查收件匣。`;
+      } catch (error) {
+        console.error(error);
+        loginStatusEl.textContent = getAuthErrorMessage(error.code);
+      } finally {
+        forgotPasswordBtn.disabled = false;
+      }
+    });
+    logoutBtn.addEventListener("click", async () => {
+      setStatus("", "");
+      await signOut(auth);
+      setStatus("ok", "已登出氣侯行動者帳號。");
     });
 
-    shareCampaignBtn.addEventListener('click', () => shareFormLink('campaign'));
-    shareResultBtn.addEventListener('click', () => shareFormLink('result'));
-    shareImageBtn.addEventListener('click', shareRoleCardWithLink);
-    downloadResultBtn.addEventListener('click', downloadRoleCard);
-
-    document.getElementById('closeModal').addEventListener('click', () => {
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
+    document.getElementById("closeModal").addEventListener("click", () => {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
     });
 
-    form.addEventListener('submit', async (event) => {
+    loginModal.addEventListener("click", (event) => {
+      if (event.target === loginModal) {
+        closeLoginModal();
+      }
+    });
+
+    loginSubmitBtn.addEventListener("click", async () => {
+      loginStatusEl.textContent = "";
+      loginSubmitBtn.disabled = true;
+
+      try {
+        const credential = await signInWithEmailAndPassword(
+          auth,
+          loginEmailInput.value.trim(),
+          loginPasswordInput.value
+        );
+        emailInput.value = credential.user.email || "";
+        closeLoginModal();
+        setStatus("ok", "氣侯行動者登入成功，現在可以直接更新問卷。");
+      } catch (error) {
+        console.error(error);
+        loginStatusEl.textContent = getAuthErrorMessage(error.code);
+      } finally {
+        loginSubmitBtn.disabled = false;
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        memberStateEl.hidden = true;
+        setPasswordMode(false);
+        openLoginBtn.hidden = false;
+        logoutBtn.hidden = true;
+        return;
+      }
+
+      memberStateEl.hidden = false;
+      setPasswordMode(true);
+      openLoginBtn.hidden = true;
+      logoutBtn.hidden = false;
+      memberStateEl.textContent = user.emailVerified ?
+        `已登入氣侯行動者 ${user.email}，Email 已驗證` :
+        `已登入氣侯行動者 ${user.email}，請留意驗證信`;
+
+      if (!emailInput.value) {
+        emailInput.value = user.email || "";
+      }
+      if (!document.getElementById("name").value && user.displayName) {
+        document.getElementById("name").value = user.displayName;
+      }
+    });
+
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      statusEl.className = 'status';
-      statusEl.textContent = '';
+      setStatus("", "");
+      submitBtn.disabled = true;
 
       const formData = new FormData(form);
+      const password = String(formData.get("password") || "");
+      const confirmPassword = String(formData.get("confirmPassword") || "");
+      const email = String(formData.get("email") || "").trim();
+      const name = String(formData.get("name") || "").trim();
+      const partnerType = String(formData.get("partner_type") || "");
       const { score, role } = calculateResult(formData);
 
       if (!role) {
-        statusEl.classList.add('error');
-        statusEl.textContent = '分數計算異常，請檢查填答。';
+        setStatus("error", "分數計算異常，請檢查填答。");
+        submitBtn.disabled = false;
+        return;
+      }
+
+      if (!partnerType) {
+        setStatus("error", "請先選擇氣侯行動者類型。");
+        submitBtn.disabled = false;
+        return;
+      }
+
+      if (!auth.currentUser && password !== confirmPassword) {
+        setStatus("error", "兩次輸入的密碼不一致。");
+        submitBtn.disabled = false;
+        return;
+      }
+
+      if (!auth.currentUser && password.length < 6) {
+        setStatus("error", "密碼至少需要 6 個字元。");
+        submitBtn.disabled = false;
         return;
       }
 
       openResultModal({ score, role });
-
-      // 將表單資料改為 URLSearchParams，提升 Google Apps Script 端 e.parameter 的解析成功率
-      formData.set('result_role', role.title);
-      formData.set('totalScore', String(score));
-      formData.set('submittedAt', new Date().toISOString());
+      setStatus("warn", "正在建立氣侯行動者帳號並儲存問卷...");
 
       try {
-        // Google Apps Script Web App 常見不回傳 CORS header。
-        // 以 no-cors 送出可避免瀏覽器因 CORS 擋下請求（response 會是 opaque，無法讀取內容）。
-        await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: new URLSearchParams(formData)
-        });
+        const { user, created } = await resolveMemberAccount(email, password, name);
+        await persistSubmission({ user, formData, score, role });
 
-        statusEl.classList.add('ok');
-        statusEl.textContent = '已送出！若網路正常，資料會寫入 Google 試算表。';
-        form.reset();
-        setJciFields('否');
+        setStatus(
+          "ok",
+          created ?
+            "氣侯行動者已建立，問卷已儲存到 Firebase，驗證信已寄出。" :
+            "問卷資料已更新並儲存到 Firebase。"
+        );
+
+        passwordInput.value = "";
+        confirmPasswordInput.value = "";
       } catch (error) {
-        statusEl.classList.add('error');
-        statusEl.textContent = '角色卡已產生，但資料提交失敗，請稍後重試。';
         console.error(error);
+
+        if (error.message === "signed-in-with-different-email") {
+          setStatus("error", "目前瀏覽器已登入另一個氣侯行動者 Email，請先登出或改用相同 Email。");
+        } else if (error.code) {
+          setStatus("error", getAuthErrorMessage(error.code));
+        } else {
+          setStatus("error", "角色卡已產生，但 Firebase 寫入失敗，請稍後重試。");
+        }
+      } finally {
+        submitBtn.disabled = false;
       }
     });
   </script>

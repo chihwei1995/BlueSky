@@ -703,7 +703,37 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    isSupported()
+      .then((supported) => {
+        if (supported) getAnalytics(app);
+      })
+      .catch((error) => {
+        console.warn('Analytics initialization skipped:', error);
+      });
+
     const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
     const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
     const LANG_STORAGE_KEY = 'bsr_lang';
@@ -1366,6 +1396,40 @@
       return res.json();
     };
 
+    const fetchGlobeEventsFromFirestore = async () => {
+      // Public globe data is loaded from Firestore so updates do not require redeploying the site.
+      const [eventsSnap, configSnap] = await Promise.all([
+        getDocs(collection(db, 'globeEvents')),
+        getDoc(doc(db, 'siteConfig', 'globe'))
+      ]);
+
+      const events = eventsSnap.docs.map((snapshot) => {
+        const event = snapshot.data();
+        return {
+          ...event,
+          id: event.id ?? snapshot.id
+        };
+      });
+
+      if (!events.length) {
+        throw new Error('Firestore collection globeEvents is empty');
+      }
+
+      return {
+        config: configSnap.exists() ? configSnap.data() : undefined,
+        events
+      };
+    };
+
+    const loadEventsData = async () => {
+      try {
+        return await fetchGlobeEventsFromFirestore();
+      } catch (error) {
+        console.warn('Falling back to local data.json:', error);
+        return fetchJSON('data.json');
+      }
+    };
+
     const preloadImage = (url) => new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => resolve(url);
@@ -1899,7 +1963,17 @@
       }).filter(ev =>
         Number.isFinite(ev.lat) && Number.isFinite(ev.lng) &&
         Number.isFinite(ev.year) && Number.isFinite(ev.month)
-      );
+      ).sort((a, b) => {
+        const aTime = a.date ? Date.parse(a.date) : NaN;
+        const bTime = b.date ? Date.parse(b.date) : NaN;
+
+        if (Number.isFinite(aTime) && Number.isFinite(bTime) && aTime !== bTime) {
+          return aTime - bTime;
+        }
+        if (a.year !== b.year) return a.year - b.year;
+        if (a.month !== b.month) return a.month - b.month;
+        return String(a.id).localeCompare(String(b.id));
+      });
 
       if (data.config?.initial_view) state.initialView = data.config.initial_view;
     };
@@ -1917,7 +1991,7 @@
       const initialLang = savedLang === 'zh' ? 'zh' : 'en';
       applyLanguage(initialLang);
 
-      const data = await fetchJSON('data.json');
+      const data = await loadEventsData();
       prepareData(data);
 
       await preloadImage(TEXTURE.day);
@@ -2005,26 +2079,6 @@
       console.error(err);
       alert(`${getI18n('misc.initFail')}: ${err.message}`);
     });
-  </script>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-    import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
-      authDomain: "blueskyreturns.firebaseapp.com",
-      projectId: "blueskyreturns",
-      storageBucket: "blueskyreturns.firebasestorage.app",
-      messagingSenderId: "782333389987",
-      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
-      measurementId: "G-FQ0114S8CQ"
-    };
-
-    const app = initializeApp(firebaseConfig);
-
-    if (await isSupported()) {
-      getAnalytics(app);
-    }
   </script>
 </body>
 </html>
