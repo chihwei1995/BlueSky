@@ -30,14 +30,16 @@
     }
 
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
       overflow: hidden;
-      background: radial-gradient(circle at 20% 20%, rgba(0, 210, 255, 0.15), transparent 35%),
-                  radial-gradient(circle at 80% 10%, rgba(255, 77, 77, 0.25), transparent 30%),
-                  #030712;
-      color: #f6f7fb;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 20% 30%, rgba(255, 77, 77, 0.2), transparent 35%),
+                  radial-gradient(circle at 80% 10%, rgba(0, 195, 255, 0.18), transparent 32%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
     }
     a { color: inherit; text-decoration: none; }
 
@@ -80,6 +82,9 @@
       padding: 12px 16px;
       background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));
       border-radius: 16px;
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+      backdrop-filter: blur(14px);
+      box-shadow: var(--button-shadow);
       pointer-events: auto;
       flex-wrap: wrap;
     }
@@ -301,29 +306,31 @@
 
     .qr-card .tiny-btn { width: 100%; justify-content: center; margin-top: 12px; }
 
-    .toggle-container {
+    .mode-toggle {
       display: inline-flex;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      align-items: center;
+      padding: 6px;
       border-radius: 999px;
-      padding: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       gap: 6px;
-      box-shadow: var(--panel-shadow);
+      box-shadow: var(--button-shadow);
     }
     .toggle-btn {
       border: none;
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-radius: 999px;
+      font-weight: 700;
+      color: var(--text);
       cursor: pointer;
-      color: #d6d8e2;
       background: transparent;
-      font-weight: 600;
-      transition: all 0.3s ease;
+      transition: all 0.35s ease;
     }
     .toggle-btn.active[data-mode="crisis"] {
       background: radial-gradient(circle at 20% 20%, rgba(255,77,77,0.9), rgba(255,77,77,0.7));
       box-shadow: 0 10px 25px rgba(255,77,77,0.35);
       color: #fff;
+      box-shadow: 0 10px 30px rgba(255, 77, 77, 0.35);
     }
     .toggle-btn.active[data-mode="hope"] {
       background: linear-gradient(120deg, var(--color-hope), var(--color-hope-alt));
@@ -479,6 +486,8 @@
       filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
     }
 
+    .footer-note strong { letter-spacing: 0.5px; }
+
     @media (max-width: 768px) {
       #ui-layer{
         /* ✅ iOS safe-area */
@@ -583,7 +592,7 @@
     <div id="modeOverlay" aria-hidden="true"></div>
   </div>
 
-  <div id="ui-layer">
+  <div class="ui-layer">
     <header>
       
         <div class="logo-area">
@@ -608,11 +617,17 @@
       </div>
     </header>
 
-    <div class="info-card" id="infoPanel" aria-live="polite">
-      <div class="info-header">
-        <div class="info-header-left">
-          <span class="tag crisis" id="infoTag">CRISIS</span>
-          <span class="badge" id="infoDate">--</span>
+    <div class="glass-panel">
+      <h1 class="hero-text">A living atlas of crisis and hope.</h1>
+      <p class="subtext">Explore our planet in full 3D without texture downloads. Toggle between climate crisis and regenerative hope themes while the globe streams real Natural Earth polygons.</p>
+      <div class="control-row">
+        <div class="legend">
+          <span class="legend-dot" id="legendLand" style="background:#5c2222;"></span>
+          <span>Landmass polygons (real GeoJSON)</span>
+        </div>
+        <div class="legend">
+          <span class="legend-dot" id="legendStroke" style="background:#ff4d4d;"></span>
+          <span>Country borders</span>
         </div>
         <button class="collapse-btn" id="infoCollapseBtn" type="button" aria-expanded="true" data-i18n="info.collapse">Collapse info</button>
       </div>
@@ -1824,10 +1839,9 @@
       });
     };
 
-    const configureControls = () => {
-      const controls = state.world.controls();
+      const controls = globe.controls();
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.8;
+      controls.autoRotateSpeed = 0.4;
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
       controls.enablePan = true;
@@ -1841,9 +1855,10 @@
         clearTimeout(resumeHandle);
         resumeHandle = setTimeout(() => { controls.autoRotate = true; }, 2500);
       };
+      window.addEventListener('resize', resizer);
+      resizer();
 
-      controls.addEventListener('start', pauseRotate);
-      controls.addEventListener('end', resumeRotate);
+      state.globe = globe;
     };
 
     const prepareData = (data) => {
@@ -1982,7 +1997,10 @@
       }
     };
 
-    bootstrap().catch(err => {
+    document.getElementById('btn-crisis').addEventListener('click', () => applyTheme('crisis'));
+    document.getElementById('btn-hope').addEventListener('click', () => applyTheme('hope'));
+
+    bootstrap().catch((err) => {
       console.error(err);
       alert(`${getI18n('misc.initFail')}: ${err.message}`);
     });
