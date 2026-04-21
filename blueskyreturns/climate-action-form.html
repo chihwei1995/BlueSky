@@ -380,13 +380,20 @@
           required
         />
 
-        <label class="required" for="whatsapp_line">WhatsApp 或 Line 聯絡方式 (WhatsApp or Line Contact)</label>
+        <label for="whatsapp_line">WhatsApp 或 Line 聯絡方式（選填 / Optional）(WhatsApp or Line Contact)</label>
         <input
           id="whatsapp_line"
           name="whatsapp_line"
           type="text"
           placeholder="格式：WhatsApp：+886912345678 或 Line：your_line_id"
-          required
+        />
+
+        <label for="instagram">Instagram（選填 / Optional）</label>
+        <input
+          id="instagram"
+          name="instagram"
+          type="text"
+          placeholder="例：@your_handle 或 instagram.com/your_handle"
         />
 
         <fieldset>
@@ -553,9 +560,6 @@
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import {
       getFirestore,
-      doc,
-      setDoc,
-      serverTimestamp,
       connectFirestoreEmulator
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
     import {
@@ -580,6 +584,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const storage = getStorage(app);
+    const firestoreBaseUrl = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
 
     if (
       location.hostname === "localhost" ||
@@ -673,6 +678,96 @@
         statusEl.classList.add(type);
       }
       statusEl.textContent = message;
+    };
+
+    const withTimeout = async (promise, ms, message) => {
+      let timeoutId;
+      const timeoutPromise = new Promise((_, reject) => {
+        timeoutId = window.setTimeout(() => {
+          reject(new Error(message));
+        }, ms);
+      });
+
+      try {
+        return await Promise.race([promise, timeoutPromise]);
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
+    };
+
+    const toFirestoreValue = (value) => {
+      if (value === null) {
+        return { nullValue: null };
+      }
+
+      if (Array.isArray(value)) {
+        return {
+          arrayValue: {
+            values: value.map((item) => toFirestoreValue(item))
+          }
+        };
+      }
+
+      if (value instanceof Date) {
+        return { timestampValue: value.toISOString() };
+      }
+
+      switch (typeof value) {
+        case "string":
+          return { stringValue: value };
+        case "boolean":
+          return { booleanValue: value };
+        case "number":
+          return Number.isInteger(value) ? { integerValue: String(value) } : { doubleValue: value };
+        case "object": {
+          const fields = {};
+          Object.entries(value).forEach(([key, nestedValue]) => {
+            if (typeof nestedValue === "undefined") return;
+            fields[key] = toFirestoreValue(nestedValue);
+          });
+          return { mapValue: { fields } };
+        }
+        default:
+          return { stringValue: String(value) };
+      }
+    };
+
+    const getTopLevelFieldPaths = (payload) => Object.keys(payload);
+
+    const writeMemberDocument = async ({ user, payload }) => {
+      const token = await withTimeout(
+        user.getIdToken(true),
+        10000,
+        "取得登入憑證逾時，請重新登入後再試一次。"
+      );
+      const endpoint = `${firestoreBaseUrl}/members/${encodeURIComponent(user.uid)}`;
+      const fieldPaths = getTopLevelFieldPaths(payload);
+      const params = new URLSearchParams();
+      fieldPaths.forEach((fieldPath) => {
+        params.append("updateMask.fieldPaths", fieldPath);
+      });
+
+      const response = await withTimeout(
+        fetch(`${endpoint}?${params.toString()}`, {
+          method: "PATCH",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            fields: Object.fromEntries(
+              Object.entries(payload).map(([key, value]) => [key, toFirestoreValue(value)])
+            )
+          })
+        }),
+        15000,
+        "寫入問卷資料逾時，請稍後再試一次。"
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`firestore-write-failed:${response.status}:${errorText}`);
+      }
     };
 
     const setJciFields = (isJci) => {
@@ -855,6 +950,28 @@
       return messages[code] || `操作失敗：${code}`;
     };
 
+    const getSubmissionErrorMessage = (error) => {
+      const message = error?.message || "";
+
+      if (message.includes("逾時")) {
+        return message;
+      }
+
+      if (message.startsWith("firestore-write-failed:403")) {
+        return "Firebase 已登入，但 Firestore 權限拒絕寫入，請檢查 Firestore Rules。";
+      }
+
+      if (message.startsWith("firestore-write-failed:401")) {
+        return "登入憑證已失效，請重新登入後再試一次。";
+      }
+
+      if (message.startsWith("firestore-write-failed:")) {
+        return "Firebase Auth 已成功，但 Firestore 寫入失敗，請稍後再試。";
+      }
+
+      return "角色卡已產生，但 Firebase 寫入失敗，請稍後重試。";
+    };
+
     const openLoginModal = () => {
       loginStatusEl.textContent = "";
       loginPasswordInput.value = "";
@@ -878,10 +995,18 @@
         storage,
         `organization-uploads/${userId}/${kind}/${Date.now()}-${safeName}`
       );
-      const snapshot = await uploadBytes(fileRef, file, {
-        contentType: file.type || "application/octet-stream"
-      });
-      const downloadURL = await getDownloadURL(snapshot.ref);
+      const snapshot = await withTimeout(
+        uploadBytes(fileRef, file, {
+          contentType: file.type || "application/octet-stream"
+        }),
+        20000,
+        `${kind === "hope" ? "希望" : "威脅"}附件上傳逾時，請稍後再試一次。`
+      );
+      const downloadURL = await withTimeout(
+        getDownloadURL(snapshot.ref),
+        10000,
+        `${kind === "hope" ? "希望" : "威脅"}附件連結取得逾時，請稍後再試一次。`
+      );
 
       return {
         name: file.name,
@@ -892,10 +1017,18 @@
       };
     };
 
-    const persistSubmission = async ({ user, formData, score, role }) => {
+    const persistSubmission = async ({ user, formData, score, role, created }) => {
       const isJci = formData.get("is_jci") || "否";
       const partnerType = formData.get("partner_type") || "general";
       const partnerMultiplier = partnerType === "organization" ? 2 : 1;
+      const now = new Date();
+
+      if (partnerType === "organization") {
+        setStatus("warn", "正在上傳組織的希望與威脅附件...");
+      } else {
+        setStatus("warn", "正在儲存氣侯行動者問卷資料...");
+      }
+
       const hopeUpload = await uploadOrganizationFile({
         userId: user.uid,
         file: formData.get("hopeFile"),
@@ -914,6 +1047,7 @@
         partnerMultiplier,
         permissionLevel: partnerMultiplier,
         whatsappLine: formData.get("whatsapp_line") || "",
+        instagram: formData.get("instagram") || "",
         isJci,
         region: isJci === "是" ? (formData.get("region") || "") : "",
         chapter: isJci === "是" ? (formData.get("chapter") || "") : "",
@@ -939,11 +1073,15 @@
         resultRole: role.title,
         totalScore: score,
         emailVerified: user.emailVerified,
-        submittedAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: now.toISOString()
       };
 
-      await setDoc(doc(db, "members", user.uid), payload, { merge: true });
+      if (created) {
+        payload.submittedAt = now.toISOString();
+      }
+
+      setStatus("warn", "正在寫入氣侯行動者資料到 Firebase...");
+      await writeMemberDocument({ user, payload });
     };
 
     const resolveMemberAccount = async (email, password, name) => {
@@ -1107,7 +1245,7 @@
 
       try {
         const { user, created } = await resolveMemberAccount(email, password, name);
-        await persistSubmission({ user, formData, score, role });
+        await persistSubmission({ user, formData, score, role, created });
 
         setStatus(
           "ok",
@@ -1126,7 +1264,7 @@
         } else if (error.code) {
           setStatus("error", getAuthErrorMessage(error.code));
         } else {
-          setStatus("error", "角色卡已產生，但 Firebase 寫入失敗，請稍後重試。");
+          setStatus("error", getSubmissionErrorMessage(error));
         }
       } finally {
         submitBtn.disabled = false;
