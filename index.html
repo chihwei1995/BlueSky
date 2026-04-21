@@ -4,22 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blue Sky Returns</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- ✅ 先載 THREE（只載一次） -->
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/globe.gl@4.6.8/dist/globe.gl.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- ✅ 再載 globe.gl -->
+  <script src="https://unpkg.com/globe.gl"></script>
+
+  <!-- IG embed（可選） -->
+  <script async src="//www.instagram.com/embed.js"></script>
+
   <style>
     :root {
-      --bg1: #070911;
-      --bg2: #040712;
-      --glass: rgba(255, 255, 255, 0.06);
-      --text: #e8ecff;
-      --accent: #ff4d4d;
-      --accent-secondary: #5c2222;
-      --stroke: #ff4d4d;
-      --button-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+      --color-crisis: #FF4D4D;
+      --color-hope: #00D2FF;
+      --color-hope-alt: #2ECC40;
+      --bg-glass: rgba(15, 20, 30, 0.7);
+      --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+      /* ✅ 手機底部資訊列預留高度（避免上方面板擠下去時撞到底部） */
+      --mobile-info-reserve: 120px;
+      --mobile-ui-padding: 8px;
+      --mobile-header-height: 120px;
+      --mobile-header-gap: 10px;
     }
 
     * { box-sizing: border-box; }
@@ -34,97 +42,270 @@
       color: var(--text);
       min-height: 100vh;
     }
+    a { color: inherit; text-decoration: none; }
 
-    #globe-container {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(160deg, #04060d 0%, #050915 45%, #01030a 100%);
-    }
+    #globe-container { position: fixed; inset: 0; pointer-events: auto; }
+    #globeViz { width: 100vw; height: 100vh; }
 
-    #globe {
-      width: 100vw;
-      height: 100vh;
-    }
-
-    .atmosphere-overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.08), transparent 55%);
+    #modeOverlay{
+      position: fixed; inset: 0; pointer-events: none;
+      opacity: 0.0;
+      transition: opacity 0.6s ease, background 0.6s ease, filter 0.6s ease;
       mix-blend-mode: screen;
-      transition: background 0.6s ease;
+      filter: saturate(1.05) contrast(1.05);
+      z-index: 1;
+    }
+    body[data-mode="crisis"] #modeOverlay{
+      opacity: 0.28;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,77,77,0.55), transparent 42%),
+        radial-gradient(circle at 80% 20%, rgba(255,140,0,0.22), transparent 40%),
+        radial-gradient(circle at 50% 70%, rgba(255,77,77,0.12), transparent 55%);
+    }
+    body[data-mode="hope"] #modeOverlay{
+      opacity: 0.22;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(0,210,255,0.55), transparent 45%),
+        radial-gradient(circle at 75% 30%, rgba(46,204,64,0.22), transparent 40%),
+        radial-gradient(circle at 50% 75%, rgba(0,210,255,0.10), transparent 55%);
     }
 
-    .ui-layer {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 16px;
+    #ui-layer {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column; justify-content: space-between;
       pointer-events: none;
+      padding: 16px;
+      z-index: 2;
     }
 
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px 16px;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));
       border-radius: 16px;
       background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
       backdrop-filter: blur(14px);
       box-shadow: var(--button-shadow);
       pointer-events: auto;
+      flex-wrap: wrap;
     }
 
-    .logo {
+    .header-actions {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
+      flex-wrap: wrap;
     }
 
-    .logo-mark {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(255, 77, 77, 0.7), rgba(0, 210, 255, 0.7));
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-    }
-
-    .glass-panel {
-      position: relative;
+       /* 點擊 logo 仍維持像標題，不要底線 */
+    .logo { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      font-weight: 700; 
+      letter-spacing: 1px; 
       pointer-events: auto;
-      padding: 18px 20px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(14px);
-      box-shadow: var(--button-shadow);
+      text-decoration: none;
     }
-
-    .hero-text {
-      font-size: clamp(24px, 3vw, 32px);
-      font-weight: 700;
-      margin: 0 0 6px;
-      letter-spacing: 0.5px;
+    
+    /* ✅ Blue Sky Returns 改白字 */
+    .logo .logo-text { 
+      color: #ffffff; 
     }
-
-    .subtext { margin: 0; opacity: 0.8; line-height: 1.5; max-width: 620px; }
-
-    .control-row {
+    
+    .logo-area {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-top: 12px;
     }
+
+    /* PJC logo 圖樣大小（可自行調） */
+    .pjc-logo{
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .logo-divider {
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 600;
+    }
+
+    .about-link {
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      padding: 4px 6px;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .about-link:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+    
+    /* hover 小效果（可選） */
+    .logo:hover { opacity: 0.92; }
+
+
+    .ghost-btn {
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.05);
+      color: #e5e7f2;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--panel-shadow);
+    }
+
+    .ghost-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.10); }
+
+    .anchor-panel {
+      position: fixed;
+      right: 18px;
+      top: 100px;
+      width: 380px;
+      max-height: calc(100vh - 140px);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-glass);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 4;
+    }
+
+    .anchor-panel.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .anchor-panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .anchor-panel-title {
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      margin: 0;
+    }
+
+    .anchor-panel-sub {
+      margin: 4px 0 0 0;
+      color: #a8b2d8;
+      font-size: 0.9rem;
+    }
+
+    .anchor-list {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      max-height: calc(100% - 42px);
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 4px;
+    }
+
+    .anchor-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      transition: border 0.2s ease, transform 0.2s ease;
+    }
+
+    .anchor-card:hover { border-color: rgba(255,255,255,0.16); transform: translateY(-1px); }
+
+    .anchor-heading { margin: 0; font-size: 1rem; }
+    .anchor-meta { color: #9aa2c3; font-size: 0.9rem; margin: 4px 0; }
+    .anchor-points { margin: 0; color: #dfe4ff; font-size: 0.92rem; line-height: 1.45; }
+    .anchor-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .anchor-ig-section { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+    .anchor-ig-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+    .anchor-ig-card { flex: 0 0 320px; max-width: 320px; }
+    .anchor-ig-card.hidden { display: none; }
+    .anchor-ig-toggle { align-self: flex-start; }
+
+    .tiny-btn {
+      background: rgba(255,255,255,0.08);
+      color: #e5e7f2;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tiny-btn:hover { background: rgba(255,255,255,0.14); }
+
+    .qr-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 6;
+      padding: 20px;
+    }
+
+    .qr-modal.show { opacity: 1; pointer-events: auto; }
+
+    .qr-card {
+      background: #0a0f1c;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px;
+      max-width: 360px;
+      text-align: center;
+      color: #e5e7f2;
+      box-shadow: var(--panel-shadow);
+    }
+
+    .qr-card img {
+      width: 240px;
+      height: 240px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px;
+      box-shadow: inset 0 1px 0 rgba(0,0,0,0.1);
+    }
+
+    .qr-card .tiny-btn { width: 100%; justify-content: center; margin-top: 12px; }
 
     .mode-toggle {
       display: inline-flex;
@@ -136,8 +317,7 @@
       gap: 6px;
       box-shadow: var(--button-shadow);
     }
-
-    .mode-btn {
+    .toggle-btn {
       border: none;
       padding: 10px 14px;
       border-radius: 999px;
@@ -147,115 +327,294 @@
       background: transparent;
       transition: all 0.35s ease;
     }
-
-    .mode-btn.active[data-mode="crisis"] {
-      background: linear-gradient(120deg, #ff4d4d, #7c1a1a);
+    .toggle-btn.active[data-mode="crisis"] {
+      background: radial-gradient(circle at 20% 20%, rgba(255,77,77,0.9), rgba(255,77,77,0.7));
+      box-shadow: 0 10px 25px rgba(255,77,77,0.35);
       color: #fff;
       box-shadow: 0 10px 30px rgba(255, 77, 77, 0.35);
     }
-
-    .mode-btn.active[data-mode="hope"] {
-      background: linear-gradient(120deg, #14cba8, #0f4c3a);
-      color: #e9fff9;
-      box-shadow: 0 10px 30px rgba(46, 204, 113, 0.35);
+    .toggle-btn.active[data-mode="hope"] {
+      background: linear-gradient(120deg, var(--color-hope), var(--color-hope-alt));
+      box-shadow: 0 10px 25px rgba(0,210,255,0.35);
+      color: #0b1020;
     }
 
-    .legend {
+    .lang-toggle {
       display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 6px;
+      box-shadow: var(--panel-shadow);
     }
 
-    .legend-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.06);
-    }
-
-    .loading {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
+    .lang-btn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: #d6d8e2;
+      background: transparent;
       font-weight: 600;
-      letter-spacing: 0.6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: var(--button-shadow);
+      transition: all 0.25s ease;
+    }
+
+    .lang-btn.active {
+      background: rgba(255,255,255,0.9);
+      color: #0b1020;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+
+    .info-card {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 360px;
+      background: var(--bg-glass);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--panel-shadow);
+      opacity: 0;
       pointer-events: none;
-      z-index: 10;
+      transition: transform 0.45s ease, opacity 0.45s ease;
+      backdrop-filter: blur(16px);
+      z-index: 4;
+    }
+    .info-card.show { opacity: 1; pointer-events: auto; transform: translateY(-50%) translateY(0); }
+    .info-card.collapsed { padding: 14px 16px; }
+    .info-card.collapsed .info-body { display: none; }
+
+    .info-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .info-header-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .tag { padding: 6px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+    .tag.crisis { background: rgba(255,77,77,0.2); color: var(--color-crisis); }
+    .tag.hope { background: rgba(0,210,255,0.2); color: var(--color-hope); }
+
+    h2 { margin: 10px 0 6px 0; font-size: 1.35rem; }
+    .subtitle { color: #9aa2c3; font-size: 0.9rem; margin-bottom: 8px; }
+    p { margin: 0 0 12px 0; color: #e7e9f4; line-height: 1.5; }
+
+    .collapse-btn {
+      background: rgba(255,255,255,0.06);
+      color: #d6d8e2;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      pointer-events: auto;
+      white-space: nowrap;
     }
 
-    .dot-pulse {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      position: relative;
-      box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.6);
-      animation: pulse 1.8s infinite;
+    .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0; }
+    .stat-pill { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px; font-size: 0.85rem; }
+    .stat-label { opacity: 0.7; font-size: 0.78rem; }
+    .media-area { border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.35); min-height: 150px; }
+    .media-area img { width: 100%; display: block; object-fit: cover; }
+
+    .timeline-container {
+      pointer-events: auto;
+      background: linear-gradient(to top, rgba(3,7,18,0.92), transparent);
+      padding: 30px 12px 10px;
+      border-radius: 18px 18px 12px 12px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+      z-index: 3;
+    }
+    .timeline-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .timeline-label { text-align: center; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; color: #dce2ff; }
+    .year-select {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #dce2ff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-weight: 600;
+      min-width: 140px;
+      cursor: pointer;
     }
 
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.6); }
-      70% { box-shadow: 0 0 0 14px rgba(255, 77, 77, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
-    }
+    /* ✅ 收合時只藏內容列，不影響標題列 */
+    .timeline-container.collapsed .timeline { display: none; }
+    .timeline-container.collapsed .timeline-label { margin-bottom: 0; }
 
-    .footer-note {
+    .timeline { display: flex; justify-content: flex-start; gap: 10px; overflow-x: auto; padding-top: 8px; }
+    .pill-btn {
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #cbd3f6;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      cursor: pointer;
+      min-width: 68px;
+      text-align: center;
+      transition: all 0.25s ease;
+      flex: 0 0 auto;
+      user-select: none;
+    }
+    .pill-btn.active {
+      color: #fff;
+      font-weight: 700;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+    }
+    .pill-btn[data-mode="crisis"].active { background: rgba(255,77,77,0.18); }
+    .pill-btn[data-mode="hope"].active { background: rgba(0,210,255,0.18); }
+
+    .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); }
+
+    #entryOverlay {
+      position: fixed;
+      inset: 0;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      pointer-events: auto;
-      font-size: 14px;
-      align-self: flex-start;
+      justify-content: center;
+      background: radial-gradient(circle at 40% 30%, rgba(0,210,255,0.12), transparent 45%), rgba(3,7,18,0.92);
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 8;
+      pointer-events: none;
+    }
+    #entryOverlay.show { opacity: 1; }
+    #entryOverlay.fade-out { opacity: 0; }
+    #entryOverlay img {
+      width: min(380px, 80vw);
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
     }
 
     .footer-note strong { letter-spacing: 0.5px; }
 
     @media (max-width: 768px) {
-      .ui-layer { padding: 10px; }
-      header { flex-direction: column; align-items: flex-start; }
-      .glass-panel { padding: 16px; }
+      #ui-layer{
+        /* ✅ iOS safe-area */
+        padding:
+          calc(var(--mobile-ui-padding) + env(safe-area-inset-top))
+          calc(var(--mobile-ui-padding) + env(safe-area-inset-right))
+          calc(var(--mobile-ui-padding) + env(safe-area-inset-bottom))
+          calc(var(--mobile-ui-padding) + env(safe-area-inset-left));
+      }
+
+      header { flex-direction: column; align-items: flex-start; width: 100%; gap: 10px; }
+      .header-actions { width: 100%; }
+
+      /* ✅ 手機：時間表固定上方，但「高度受限」且內容可滾動 → 不再撞到底部資訊 */
+      .timeline-container {
+        position: fixed;
+        left: calc(8px + env(safe-area-inset-left));
+        right: calc(8px + env(safe-area-inset-right));
+        top: calc(
+          var(--mobile-ui-padding)
+          + env(safe-area-inset-top)
+          + var(--mobile-header-height)
+          + var(--mobile-header-gap)
+        );
+        bottom: auto;
+        z-index: 3;
+        padding: 12px 10px 10px;
+        border-radius: 16px;
+
+        /* 關鍵：最大高度 = 畫面 - (header top) - 底部預留 */
+        max-height: calc(
+          100vh
+          - (var(--mobile-ui-padding) + env(safe-area-inset-top) + var(--mobile-header-height) + var(--mobile-header-gap))
+          - (var(--mobile-info-reserve) + env(safe-area-inset-bottom))
+          - 14px
+        );
+
+        overflow: hidden;
+      }
+
+      /* ✅ 讓面板內容區可垂直滾動（避免面板變高去撞底部） */
+      .timeline-scroll {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+      }
+
+      .timeline-container.collapsed {
+        max-height: 58px;
+      }
+
+      /* ✅ 手機：info 固定下方 */
+      .info-card {
+        position: fixed;
+        left: calc(8px + env(safe-area-inset-left));
+        right: calc(8px + env(safe-area-inset-right));
+        top: auto;
+        bottom: calc(8px + env(safe-area-inset-bottom));
+        width: auto;
+        transform: translateY(120%);
+        border-radius: 18px 18px 12px 12px;
+        max-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 4;
+      }
+      .info-card.show { transform: translateY(0); }
+      .info-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding-right: 4px;
+        margin-top: 8px;
+      }
+
+      .stats { grid-template-columns: 1fr; }
+      #globe-container { transform: translateY(-12%); }
+      header { border-radius: 14px; }
+
+      .anchor-panel {
+        position: fixed;
+        top: auto;
+        bottom: calc(14px + env(safe-area-inset-bottom));
+        right: calc(8px + env(safe-area-inset-right));
+        left: calc(8px + env(safe-area-inset-left));
+        width: auto;
+        max-height: 48vh;
+        z-index: 5;
+      }
+
+      .qr-card img { width: 200px; height: 200px; }
     }
   </style>
 </head>
-<body>
+
+<body data-mode="crisis">
+  <div id="entryOverlay" aria-hidden="true">
+    <img src="Enter.PNG" alt="Enter illustration">
+  </div>
   <div id="globe-container">
-    <div id="globe"></div>
-    <div class="atmosphere-overlay" id="atmosphereOverlay"></div>
-    <div class="loading" id="loading">
-      <div class="dot-pulse"></div>
-      Loading real-world geography...
-    </div>
+    <div id="globeViz"></div>
+    <div id="modeOverlay" aria-hidden="true"></div>
   </div>
 
   <div class="ui-layer">
     <header>
-      <div class="logo">
-        <span class="logo-mark">🌌</span>
-        <div>
-          <div style="font-size:14px; opacity:0.7;">Blue Sky Returns</div>
-          <div style="font-weight:700;">Interactive Earth</div>
+      
+        <div class="logo-area">
+          <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" data-i18n-aria-label="aria.pjcSite">
+            <img src="PJC_LOGO.PNG" alt="PJC logo" class="pjc-logo" />
+            <span class="logo-text">Blue Sky Returns</span>
+          </a>
+          <span class="logo-divider" aria-hidden="true">｜</span>
+          <a class="about-link" href="blueskyreturns/index.html" data-i18n="header.about" data-i18n-aria-label="aria.about">About</a>
         </div>
-      </div>
-      <div class="mode-toggle" aria-label="Toggle Crisis or Hope mode">
-        <button class="mode-btn active" data-mode="crisis" id="btn-crisis">⚠️ Crisis</button>
-        <button class="mode-btn" data-mode="hope" id="btn-hope">🌿 Hope</button>
+
+      <div class="header-actions">
+        <button class="ghost-btn" id="anchorToggle" type="button" data-i18n="header.timeline">📌 Timeline</button>
+        <div class="toggle-container" data-i18n-aria-label="aria.modeToggle">
+          <button class="toggle-btn active" data-mode="crisis" id="btn-crisis" data-i18n="mode.crisis">⚠️ CRISIS</button>
+          <button class="toggle-btn" data-mode="hope" id="btn-hope" data-i18n="mode.hope">🌏 HOPE</button>
+        </div>
+        <div class="lang-toggle" role="group" data-i18n-aria-label="aria.languageToggle">
+          <button class="lang-btn active" data-lang="en" type="button">EN</button>
+          <button class="lang-btn" data-lang="zh" type="button">中文</button>
+        </div>
       </div>
     </header>
 
@@ -271,130 +630,1231 @@
           <span class="legend-dot" id="legendStroke" style="background:#ff4d4d;"></span>
           <span>Country borders</span>
         </div>
+        <button class="collapse-btn" id="infoCollapseBtn" type="button" aria-expanded="true" data-i18n="info.collapse">Collapse info</button>
+      </div>
+      <div class="info-body" id="infoBody">
+        <h2 id="infoTitle" data-i18n="info.loading">Loading...</h2>
+        <div class="subtitle" id="infoSubtitle">---</div>
+        <p id="infoDesc">---</p>
+        <div class="stats" id="statList"></div>
+        <div class="media-area" id="mediaContainer"></div>
       </div>
     </div>
 
-    <div class="footer-note">
-      <strong>Data:</strong> Natural Earth Admin 0 · Polygons rendered at altitude 0.005 with hover highlight.
+    <div class="timeline-container" id="timelineContainer">
+      <div class="timeline-label-row">
+
+        <!-- ✅ 只保留年份下拉（移除年份按鈕列） -->
+        <select class="year-select" id="yearSelect" data-i18n-aria-label="aria.selectYear">
+          <option value="" data-i18n="timeline.selectYear">Select year</option>
+        </select>
+
+        <button class="collapse-btn" id="timelineCollapseBtn" type="button" aria-expanded="true" data-i18n="timeline.collapse">Collapse timeline</button>
+      </div>
+
+      <!-- ✅ 內容區做成可滾動容器（手機避免面板過高撞到底部） -->
+      <div class="timeline-scroll" id="timelineScroll">
+        <div class="timeline" id="monthRow"></div>
+        <div class="timeline" id="eventRow"></div>
+      </div>
+    </div>
+
+    <div class="anchor-panel" id="anchorPanel" aria-live="polite">
+      <div class="anchor-panel-header">
+        <div>
+          <p class="anchor-panel-title" data-i18n="anchor.title">One Step Blue Sky | Timeline</p>
+          <p class="anchor-panel-sub" data-i18n="anchor.subtitle">Scan the QR code to open each timeline item with photos and posts. Scroll to explore.</p>
+        </div>
+        <button class="tiny-btn" id="anchorCloseBtn" type="button" data-i18n="anchor.close">✕</button>
+      </div>
+      <div class="anchor-list" id="anchorList"></div>
+    </div>
+  </div>
+
+  <div class="qr-modal" id="qrModal" role="dialog" aria-modal="true" data-i18n-aria-label="aria.qrDialog">
+    <div class="qr-card">
+      <h3 id="qrTitle" style="margin-top:0;margin-bottom:6px;" data-i18n="qr.title">Timeline QR</h3>
+      <div id="qrSubtitle" style="color:#a8b2d8;margin-bottom:10px;"></div>
+      <img id="qrImage" src="" alt="QRcode for anchor link">
+      <button class="tiny-btn" id="qrCloseBtn" type="button" data-i18n="qr.close">Close</button>
     </div>
   </div>
 
   <script>
-    const GEOJSON_URL = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson';
+    if (!window.THREE) {
+      alert('THREE failed to load. Please confirm three.min.js can load and is not blocked.');
+      throw new Error('THREE is undefined');
+    }
+    const THREE = window.THREE;
 
-    const THEMES = {
-      crisis: {
-        ocean: '#1a0505',
-        land: '#5c2222',
-        stroke: '#ff4d4d',
-        atmosphere: '#c54141',
-        background: ['#0b0303', '#120202'],
-        overlay: 'radial-gradient(circle at 50% 50%, rgba(197, 65, 65, 0.15), transparent 60%)'
+    const QUALITY = window.innerWidth < 768 ? 'mobile' : 'desktop';
+    const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
+    const LANG_STORAGE_KEY = 'bsr_lang';
+
+    const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const I18N = {
+      en: {
+        aria: {
+          pjcSite: 'Visit the PJC website',
+          about: 'About Blue Sky Returns',
+          modeToggle: 'Toggle mode',
+          languageToggle: 'Switch language',
+          selectYear: 'Select year',
+          qrDialog: 'Timeline QR code'
+        },
+        header: {
+          about: 'About',
+          timeline: '📌 Timeline'
+        },
+        mode: {
+          crisis: '⚠️ CRISIS',
+          hope: '🌏 HOPE'
+        },
+        labels: {
+          crisis: 'CRISIS',
+          hope: 'HOPE'
+        },
+        info: {
+          collapse: 'Collapse info',
+          expand: 'Expand info',
+          loading: 'Loading...',
+          subtitle: {
+            disaster: 'Crisis event',
+            solution: 'Hope action'
+          }
+        },
+        timeline: {
+          selectYear: 'Select year',
+          collapse: 'Collapse timeline',
+          expand: 'Expand timeline'
+        },
+        anchor: {
+          title: 'One Step Blue Sky | Timeline',
+          subtitle: 'Scan the QR code to open each timeline item with photos and posts. Scroll to explore.',
+          close: '✕',
+          qr: 'QR code',
+          locate: 'Locate',
+          showMore: 'Show more',
+          showLess: 'Show less'
+        },
+        qr: {
+          title: 'Timeline QR',
+          close: 'Close'
+        },
+        misc: {
+          noMedia: 'No media available',
+          fetchFail: 'Unable to load data file',
+          initFail: 'Initialization failed'
+        },
+        page: {
+          title: 'Blue Sky Returns'
+        }
       },
-      hope: {
-        ocean: '#061836',
-        land: '#0f4c3a',
-        stroke: '#2ecc71',
-        atmosphere: '#2cb6ff',
-        background: ['#031022', '#020810'],
-        overlay: 'radial-gradient(circle at 50% 50%, rgba(44, 182, 255, 0.18), transparent 60%)'
+      zh: {
+        aria: {
+          pjcSite: '前往 PJC 網站',
+          about: '關於 Blue Sky Returns',
+          modeToggle: '切換模式',
+          languageToggle: '切換語言',
+          selectYear: '選擇年份',
+          qrDialog: '時間線 QRcode'
+        },
+        header: {
+          about: '關於',
+          timeline: '📌 時間線'
+        },
+        mode: {
+          crisis: '⚠️ 危機',
+          hope: '🌏 希望'
+        },
+        labels: {
+          crisis: '危機',
+          hope: '希望'
+        },
+        info: {
+          collapse: '收合資訊',
+          expand: '展開資訊',
+          loading: '載入中...',
+          subtitle: {
+            disaster: '危機事件',
+            solution: '解方行動'
+          }
+        },
+        timeline: {
+          selectYear: '選擇年份',
+          collapse: '收合時間表',
+          expand: '展開時間表'
+        },
+        anchor: {
+          title: '一步．藍天｜時間線',
+          subtitle: '掃 QRcode 可直接打開時間點、照片與貼文頁面，滑動查看',
+          close: '✕',
+          qr: 'QRcode',
+          locate: '定位',
+          showMore: '展開更多',
+          showLess: '收合'
+        },
+        qr: {
+          title: '時間點 QR',
+          close: '關閉'
+        },
+        misc: {
+          noMedia: '無媒體資料',
+          fetchFail: '無法載入資料檔案',
+          initFail: '初始化失敗'
+        },
+        page: {
+          title: '一步・藍天 BLUE SKY RETURNS'
+        }
       }
     };
+
+    const STAT_LABELS_EN = {
+      '降雨量': 'Rainfall',
+      '持續時間': 'Duration',
+      '燃燒面積': 'Burned area',
+      '影響城市': 'Affected cities',
+      '面積': 'Area',
+      '較 1981-2010': 'vs 1981–2010',
+      '最高氣溫': 'Peak temperature',
+      '估計死亡人數': 'Estimated deaths',
+      '受影響人口': 'Affected population',
+      '淹水面積': 'Flooded area',
+      '地表溫度': 'Surface temperature',
+      '撤離人數': 'Evacuations',
+      '最大風速': 'Max wind speed',
+      '最高雨量': 'Peak rainfall',
+      '種植樹木': 'Trees planted',
+      '參與人數': 'Participants',
+      '裝置容量': 'Installed capacity',
+      '可供家庭': 'Homes powered',
+      '重災區': 'Hardest-hit areas',
+      '衝擊': 'Impact',
+      '關注焦點': 'Focus',
+      '連動': 'Linkages',
+      '特徵': 'Key trait',
+      '風險': 'Risk',
+      '影響': 'Impact',
+      '型態': 'Pattern',
+      '地形': 'Terrain',
+      '焦點': 'Focus',
+      '應對': 'Response',
+      '功能': 'Function',
+      '效益': 'Benefit',
+      '措施': 'Measures',
+      '預估節電': 'Estimated savings',
+      '模式': 'Model',
+      '受益': 'Benefit',
+      '回收量': 'Recovered volume',
+      '再生用途': 'Reuse outputs',
+      '覆蓋': 'Coverage',
+      '目標': 'Goal',
+      '形式': 'Format',
+      '目的': 'Purpose'
+    };
+
+    const STAT_VALUES_EN = {
+      '三分之一國土': 'One-third of the country',
+      '沿岸城市': 'Coastal cities',
+      '交通 / 供電': 'Transport / power',
+      '煙霾 / 森林退化': 'Haze / forest degradation',
+      '乾季延長': 'Longer dry season',
+      '極端溫度峰值': 'Extreme temperature spike',
+      '融冰加速': 'Accelerated ice melt',
+      '空品惡化': 'Air quality decline',
+      '高溫 / 乾旱': 'Heat / drought',
+      '短延時強降雨': 'Short-duration intense rainfall',
+      '河川暴漲': 'Rapid river rise',
+      '坡地 / 河谷': 'Slopes / valleys',
+      '落石 / 崩塌': 'Rockfall / landslide',
+      '電網 / 健康': 'Grid / health',
+      '提前到來': 'Earlier onset',
+      '多季降雨不足': 'Multi-season rainfall deficit',
+      '糧食 / 牧場': 'Food / pasture',
+      '珊瑚 / 漁業': 'Coral / fisheries',
+      '持續偏暖': 'Persistently warm',
+      '排水 / 地勢': 'Drainage / terrain',
+      '滯洪 / 海綿城市': 'Retention / sponge city',
+      '季節偏移': 'Seasonal shift',
+      '病媒 / 生態': 'Vectors / ecology',
+      '鋒面滯留': 'Stalled front',
+      '淹水 / 交通': 'Flooding / transport',
+      '短時雨強大': 'Intense short-duration rain',
+      '樹倒 / 積水': 'Fallen trees / pooling',
+      '調蓄 / 降溫': 'Retention / cooling',
+      '降低內澇風險': 'Lower pluvial flood risk',
+      'LED / 智慧空調': 'LED / smart HVAC',
+      '共享 / 虛擬電廠': 'Sharing / virtual power plant',
+      '用電成本下降': 'Lower electricity costs',
+      '每月 12t（示例）': '12t per month (example)',
+      '建材 / 織品': 'Construction / textiles',
+      '多語通知': 'Multilingual alerts',
+      '縮短應變時間': 'Shorter response time',
+      '單車 / 地板': 'Bikes / floors',
+      '教育 / 參與': 'Education / participation'
+    };
+
+    const EVENT_TRANSLATIONS_EN = {
+      evt_001: {
+        title: 'Dubai Extreme Rainfall',
+        description: 'A desert city faced unprecedented rainfall, putting urban drainage systems under massive strain.'
+      },
+      evt_002: {
+        title: 'Australia Black Summer Bushfires',
+        description: 'Heat and drought-driven fires blanketed major cities in smoke and affected millions.'
+      },
+      evt_003: {
+        title: 'Arctic Sea Ice Hits New Low',
+        description: 'Satellite data showed sea ice area at a record low, reflecting high-latitude warming trends.'
+      },
+      evt_004: {
+        title: 'Western Canada Heat Dome',
+        description: 'A heat dome pushed temperatures to record highs, triggering health crises and infrastructure failures.'
+      },
+      evt_005: {
+        title: 'Pakistan Monsoon Floods',
+        description: 'Exceptionally strong monsoons and glacial melt caused widespread flooding, damaging infrastructure and agriculture.'
+      },
+      evt_006: {
+        title: 'Southern Europe Heatwave & Wildfires',
+        description: 'Sustained heat and drought sparked wildfires across Mediterranean countries, impacting air quality and tourism.'
+      },
+      evt_007: {
+        title: 'Super Typhoon Saola Strikes South China Again',
+        description: 'Record winds and rain battered the Pearl River Delta and Hong Kong–Macau, testing flood protection and transport.'
+      },
+      sol_001: {
+        title: 'Amazon Rainforest Restoration Hub',
+        description: 'A reforestation program with Indigenous partners to boost biodiversity and carbon sequestration.'
+      },
+      sol_002: {
+        title: 'Taiwan Offshore Wind Farm',
+        description: 'New offshore turbines came online, delivering stable green power to support energy transition.'
+      },
+      evt_008: {
+        title: 'Cyclone Idai in Mozambique (Coastal Flooding)',
+        description: 'A tropical cyclone brought heavy rain and storm surge, flooding coastal areas and disrupting infrastructure.'
+      },
+      evt_009: {
+        title: 'Amazon Rainforest Fires (Smoke Haze Spread)',
+        description: 'Fires and land clearing spread haze, highlighting the combined risks of land use and climate conditions.'
+      },
+      evt_010: {
+        title: 'Antarctic Temperature Anomaly (Short-Term Extreme)',
+        description: 'A short-lived temperature spike became a signal of extreme warming conditions.'
+      },
+      evt_011: {
+        title: 'US West Coast Fire Season (Smoke Coverage)',
+        description: 'Fire season combined with heat and drought, degrading air quality and visibility and impacting health.'
+      },
+      evt_012: {
+        title: 'Western Europe Floods',
+        description: 'Extreme rain rapidly swelled rivers and flooded towns, underscoring risk governance and early warning.'
+      },
+      evt_013: {
+        title: 'Extreme Rainfall Triggers Landslides (Example)',
+        description: 'Continuous rain saturated slopes, increasing landslide and rockfall risks and affecting transport and settlements.'
+      },
+      evt_014: {
+        title: 'India–Pakistan Early Spring Heatwave (Example)',
+        description: 'An early, prolonged heatwave strained power demand, outdoor labor, and public health.'
+      },
+      evt_015: {
+        title: 'Horn of Africa Prolonged Drought (Example)',
+        description: 'Multi-season rainfall deficits intensified water and food insecurity, hurting pastoral livelihoods.'
+      },
+      evt_016: {
+        title: 'Marine Heatwave Expansion (Example)',
+        description: 'Persistently warm sea surface temperatures stressed corals and marine ecosystems.'
+      },
+      evt_017: {
+        title: 'Frequent Urban Flooding (Example)',
+        description: 'Short, intense rainfall over dense urban areas raised pluvial flood risk, testing drainage and retention systems.'
+      },
+      evt_018: {
+        title: 'Unseasonal Winter Warmth (Example)',
+        description: 'Warmer winters disrupted ecosystems and disease vectors, affecting energy demand and public health.'
+      },
+      evt_019: {
+        title: 'East Asian Mei-Yu Front Extreme Rainfall (Example)',
+        description: 'A stalled frontal system brought continuous heavy rain, stressing transport and drainage with low-lying inundation.'
+      },
+      evt_020: {
+        title: 'Late Autumn Downpours & Severe Convection (Example)',
+        description: 'Out-of-season severe storms and intense rain elevated urban damage and transport delays.'
+      },
+      sol_003: {
+        title: 'Urban Detention Park (Sponge City Example)',
+        description: 'Detention parks and permeable paving increase stormwater storage while cooling cities and providing public space.'
+      },
+      sol_004: {
+        title: 'Campus Energy Retrofit (Example)',
+        description: 'Lighting and HVAC upgrades cut peak demand, with dashboards enabling campus participation.'
+      },
+      sol_005: {
+        title: 'Community Solar Sharing (Example)',
+        description: 'Shared solar and bill credits let residents benefit and join the energy transition.'
+      },
+      sol_006: {
+        title: 'Plastic Recycling Circular Chain (Example)',
+        description: 'Local sorting–washing–reprocessing improves purity and usability of recycled materials.'
+      },
+      sol_007: {
+        title: 'Community Disaster Drills & Alert System (Example)',
+        description: 'Integrates alerts, evacuation routes, and drills to boost resilience during extreme weather.'
+      },
+      sol_008: {
+        title: 'Kinetic Power Experience Station (Example: Bikes/Floors)',
+        description: 'Interactive kinetic power demos turn action → electricity → carbon reduction into public education.'
+      }
+    };
+
+    const ANCHORS = {
+      en: [
+        {
+          id: 'anchor-2024-observation',
+          title: '2024 | Monitoring & Documentation',
+          meta: 'Single-event focus with data and impact tracking',
+          points: [
+            'Launch One Step Blue Sky with a focus on individual extreme weather events',
+            'Build climate observation records through data, visuals, and impacts',
+            'Document each case as a public-facing climate log'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C-C2Ao8vq8P/',
+            'https://www.instagram.com/p/C9wIiMIhwY-/',
+            'https://www.instagram.com/p/C9ZiOZ-NNR2/',
+            'https://www.instagram.com/p/C8_yyagv87R/',
+            'https://www.instagram.com/p/C8WlkFMB--7/',
+            'https://www.instagram.com/p/C7JF2sOPAnv/',
+            'https://www.instagram.com/p/C63WPmMPh6O/',
+            'https://www.instagram.com/p/C6BQzMdtcVW/'
+          ]
+        },
+        {
+          id: 'anchor-2024-awareness',
+          title: '2024 | Public Awareness & Engagement',
+          meta: 'Connect climate trends with daily life in Hong Kong',
+          points: [
+            'Publish climate logs and cultural media to spark everyday connections',
+            'Link global climate signals to local routines and public warnings',
+            'Invite reflection on how extreme weather shapes daily life'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C7REEP3vwe-/',
+            'https://www.instagram.com/p/C6nVBzQvsLm/',
+            'https://www.instagram.com/p/C6OHdsfvejs/',
+            'https://www.instagram.com/p/C6I91dUBsF9/',
+            'https://www.instagram.com/p/C5k6sjUPWZr/',
+            'https://www.instagram.com/p/C5TMOz-PwnH/',
+            'https://www.instagram.com/p/C5A2sRrvLTC/'
+          ]
+        },
+        {
+          id: 'anchor-2025-review',
+          title: '2025 | Annual Review Release',
+          meta: 'Release of the 2024 extreme weather report',
+          points: [
+            'Systematically review 2024 climate data for an annual report',
+            'Publish the official 2024 extreme weather review',
+            'Keep related 2025 series posts in the extended archive'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DFmNIOwPthe/'
+          ]
+        },
+        {
+          id: 'anchor-2025-exhibition',
+          title: '2025 | Exhibition & Community Education',
+          meta: 'On-site exhibition and education initiatives',
+          points: [
+            'Translate climate data into actionable knowledge through exhibitions',
+            'Support community learning with visual stories and education programs',
+            'Highlight climate solutions alongside documentation outcomes'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DL9qBMOPf1L/',
+            'https://www.instagram.com/p/DLznY8lPiTu/',
+            'https://www.instagram.com/p/DLeHQbFvCbg/',
+            'https://www.instagram.com/p/DJ6cm_jqvgd/',
+            'https://www.instagram.com/p/DIwC9DSPqs2/'
+          ]
+        },
+        {
+          id: 'anchor-2025-international',
+          title: '2025 | International Exchange & Closure',
+          meta: 'UN exchange and youth collaboration outcomes',
+          points: [
+            'Facilitate international dialogue and climate policy simulations',
+            'Showcase youth collaboration across regions and institutions',
+            'Conclude the phase with shared insights and collective outcomes'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DNkpy4BPspK/',
+            'https://www.instagram.com/p/DNu-Al5XijM/',
+            'https://www.instagram.com/p/DNM1eG1Tpfa/',
+            'https://www.instagram.com/p/DHasIQjvYHk/',
+            'https://www.instagram.com/p/DGM3X2fPwvE/'
+          ]
+        },
+        {
+          id: 'anchor-2026-energy',
+          title: '2026 | Transforming into Energy',
+          meta: 'Kinetic energy to clean power',
+          points: [
+            'Combine sports and green technology to generate clean electricity',
+            'Turn human kinetic energy into tangible low-carbon action',
+            'Prepare for upcoming demonstrations and installations'
+          ],
+          igPosts: []
+        }
+      ],
+      zh: [
+        {
+          id: 'anchor-2024-observation',
+          title: '2024｜觀察與記錄 Monitoring & Documentation',
+          meta: '聚焦單一事件，以數據與影響建立觀察檔案',
+          points: [
+            '啟動「一步．藍天」計畫，聚焦個別極端氣候事件',
+            '以數據、影像與影響建立氣候觀察檔案',
+            '把每個事件整理成可公開分享的氣候天氣簿'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C-C2Ao8vq8P/',
+            'https://www.instagram.com/p/C9wIiMIhwY-/',
+            'https://www.instagram.com/p/C9ZiOZ-NNR2/',
+            'https://www.instagram.com/p/C8_yyagv87R/',
+            'https://www.instagram.com/p/C8WlkFMB--7/',
+            'https://www.instagram.com/p/C7JF2sOPAnv/',
+            'https://www.instagram.com/p/C63WPmMPh6O/',
+            'https://www.instagram.com/p/C6BQzMdtcVW/'
+          ]
+        },
+        {
+          id: 'anchor-2024-awareness',
+          title: '2024｜議題連結日常 Public Awareness & Engagement',
+          meta: '把全球氣候變化連結至香港日常生活',
+          points: [
+            '透過氣候天氣簿與文化媒介推進公眾參與',
+            '將全球極端趨勢連結至本地日常與公共警報',
+            '引導公眾思考極端氣候對日常的影響'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C7REEP3vwe-/',
+            'https://www.instagram.com/p/C6nVBzQvsLm/',
+            'https://www.instagram.com/p/C6OHdsfvejs/',
+            'https://www.instagram.com/p/C6I91dUBsF9/',
+            'https://www.instagram.com/p/C5k6sjUPWZr/',
+            'https://www.instagram.com/p/C5TMOz-PwnH/',
+            'https://www.instagram.com/p/C5A2sRrvLTC/'
+          ]
+        },
+        {
+          id: 'anchor-2025-review',
+          title: '2025｜年度回顧發布 Annual Review Release',
+          meta: '發布《2024 年度極端氣候回顧》',
+          points: [
+            '系統性整理 2024 全年資料並完成報告',
+            '正式發布《2024 年度極端氣候回顧》',
+            '其餘 2025 系列貼文可置於資料庫延伸閱讀'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DNkpy4BPspK/',
+            'https://www.instagram.com/p/DFmNIOwPthe/'
+          ]
+        },
+        {
+          id: 'anchor-2025-exhibition',
+          title: '2025｜實體展覽與社區教育 Exhibition & Community Education',
+          meta: '以展覽與教育把數據轉化為可行動的知識',
+          points: [
+            '透過實體展覽呈現氣候數據與案例',
+            '以社區教育推動可行動的氣候知識',
+            '強調資料視覺化與生活應用'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DL9qBMOPf1L/',
+            'https://www.instagram.com/p/DLznY8lPiTu/',
+            'https://www.instagram.com/p/DLeHQbFvCbg/',
+            'https://www.instagram.com/p/DJ6cm_jqvgd/',
+            'https://www.instagram.com/p/DIwC9DSPqs2/'
+          ]
+        },
+        {
+          id: 'anchor-2025-international',
+          title: '2025｜國際交流與總結 International Exchange & Closure',
+          meta: '國際交流與氣候政策模擬',
+          points: [
+            '於聯合國場域進行國際交流與政策模擬',
+            '展現青年跨地域合作與成果',
+            '整理交流成果作為階段性總結'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DNu-Al5XijM/',
+            'https://www.instagram.com/p/DNM1eG1Tpfa/',
+            'https://www.instagram.com/p/DHasIQjvYHk/',
+            'https://www.instagram.com/p/DGM3X2fPwvE/'
+          ]
+        },
+        {
+          id: 'anchor-2026-energy',
+          title: '2026｜轉化為能 Transforming into Energy',
+          meta: '以動能轉化為清潔電力',
+          points: [
+            '結合運動與綠能科技把動能轉為電力',
+            '實踐零碳行動與可視化教育',
+            '作為下一階段即將展開的項目'
+          ],
+          igPosts: []
+        }
+      ]
+    };
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const clamp01 = (x) => Math.max(0, Math.min(1, x));
+
+    const playEntryOverlay = () => {
+      const overlay = document.getElementById('entryOverlay');
+      if (!overlay) return;
+
+      requestAnimationFrame(() => {
+        overlay.classList.add('show');
+        setTimeout(() => {
+          overlay.classList.add('fade-out');
+          overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+          setTimeout(() => overlay.remove(), 2200);
+        }, 1200);
+      });
+    };
+
+    const ASSET_BASE = './assets/';
+    const TEXTURE = {
+      day: `${ASSET_BASE}earth_day.jpg`,
+      bump: `${ASSET_BASE}earth_bump.jpg`,
+      specular: `${ASSET_BASE}earth_specular.jpg`
+    };
+
+    const COLORS = { crisis: '#FF4D4D', hope: '#00D2FF', hopeAlt: '#2ECC40' };
 
     const state = {
-      mode: 'crisis',
-      globe: null,
-      polygons: [],
-      hoverPolygon: null,
-      textures: {}
+      events: [],
+      filtered: [],
+      currentMode: 'crisis',
+      world: null,
+      initialView: { lat: 23.5, lng: 121.0, altitude: 2.5 },
+      currentYear: null,
+      currentMonth: null,
+      currentEventId: null,
+      infoCollapsed: false,
+      timelineCollapsed: false,
+      anchorOpen: false,
+      language: 'en'
     };
 
-    const createSolidTexture = (color) => {
-      const canvas = document.createElement('canvas');
-      canvas.width = canvas.height = 2;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = color;
-      ctx.fillRect(0, 0, 2, 2);
-      return canvas.toDataURL('image/png');
+    const getI18n = (path) => {
+      const keys = path.split('.');
+      let value = I18N[state.language] ?? I18N.en;
+      for (const key of keys) {
+        if (value && typeof value === 'object' && key in value) {
+          value = value[key];
+        } else {
+          return '';
+        }
+      }
+      return value;
     };
 
-    const prepareTextures = () => {
-      state.textures.crisis = createSolidTexture(THEMES.crisis.ocean);
-      state.textures.hope = createSolidTexture(THEMES.hope.ocean);
+    const getEventTranslation = (event) => {
+      if (state.language !== 'en') return event;
+      const translated = EVENT_TRANSLATIONS_EN[event.id];
+      if (!translated) return event;
+      return {
+        ...event,
+        title: translated.title ?? event.title,
+        description: translated.description ?? event.description
+      };
     };
 
-    const applyTheme = (mode) => {
-      state.mode = mode;
-      const theme = THEMES[mode];
-      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
-      document.getElementById('legendLand').style.background = theme.land;
-      document.getElementById('legendStroke').style.background = theme.stroke;
+    const translateStatLabel = (label) => (
+      state.language === 'en' ? (STAT_LABELS_EN[label] ?? label) : label
+    );
 
-      gsap.to(':root', {
-        duration: 0.8,
-        '--bg1': theme.background[0],
-        '--bg2': theme.background[1],
-        '--accent': theme.stroke,
-        '--accent-secondary': theme.land,
-        '--stroke': theme.stroke,
-        ease: 'power2.out'
+    const translateStatValue = (value) => (
+      state.language === 'en' ? (STAT_VALUES_EN[value] ?? value) : value
+    );
+
+    const getMonthLabel = (month) => (
+      state.language === 'en' ? (MONTHS_EN[month - 1] ?? month) : `${month}月`
+    );
+
+    const applyTranslations = () => {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        const text = getI18n(key);
+        if (text) el.textContent = text;
       });
 
-      const overlay = document.getElementById('atmosphereOverlay');
-      overlay.style.background = theme.overlay;
+      document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        const key = el.dataset.i18nAriaLabel;
+        const text = getI18n(key);
+        if (text) el.setAttribute('aria-label', text);
+      });
 
-      if (state.globe) {
-        state.globe.globeImageUrl(state.textures[mode]);
-        state.globe.atmosphereColor(theme.atmosphere);
-        state.globe.polygonStrokeColor(() => theme.stroke);
-        state.globe.polygonCapColor((poly) => poly === state.hoverPolygon ? new THREE.Color(theme.stroke).offsetHSL(0, 0.1, 0.1) : theme.land);
+      document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.dataset.i18nTitle;
+        const text = getI18n(key);
+        if (text) el.setAttribute('title', text);
+      });
+
+      document.documentElement.lang = state.language === 'en' ? 'en' : 'zh-Hant';
+    };
+
+    const updateMobileLayoutVars = () => {
+      if (!window.matchMedia('(max-width: 768px)').matches) return;
+      const header = document.querySelector('header');
+      if (!header) return;
+      const height = header.offsetHeight;
+      if (height) {
+        document.documentElement.style.setProperty('--mobile-header-height', `${height}px`);
       }
     };
 
-    const handleHover = (polygon) => {
-      state.hoverPolygon = polygon;
-      const theme = THEMES[state.mode];
-      state.globe.polygonCapColor((poly) => poly === state.hoverPolygon ? new THREE.Color(theme.stroke).offsetHSL(0, 0.15, 0.15) : theme.land);
+    const applyLanguage = (lang) => {
+      state.language = lang === 'zh' ? 'zh' : 'en';
+      localStorage.setItem(LANG_STORAGE_KEY, state.language);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === state.language);
+      });
+      applyTranslations();
+      document.title = getI18n('page.title') || document.title;
+      buildAnchorList();
+      refreshFiltersUI();
+      setInfoCollapsed(state.infoCollapsed);
+      setTimelineCollapsed(state.timelineCollapsed);
+      if (state.world) {
+        renderPoints();
+        if (state.currentEventId) {
+          const current = state.events.find(ev => ev.id === state.currentEventId);
+          if (current) showInfo(current);
+        }
+      }
+      updateYearSelect(getYears());
+      updateMobileLayoutVars();
     };
 
-    const initGlobe = async () => {
-      const globe = Globe()(document.getElementById('globe'))
-        .backgroundColor('rgba(0,0,0,0)')
-        .atmosphereAltitude(0.18)
-        .polygonsTransitionDuration(400)
-        .polygonAltitude(() => 0.005)
-        .polygonSideColor(() => 'rgba(255,255,255,0.06)')
-        .polygonCapColor(() => THEMES[state.mode].land)
-        .polygonStrokeColor(() => THEMES[state.mode].stroke)
-        .onPolygonHover(handleHover)
-        .onPolygonClick((polygon) => {
-          if (!polygon || !polygon.properties) return;
-          const name = polygon.properties.ADMIN || polygon.properties.name || 'Unknown';
-          const region = polygon.properties.CONTINENT || 'Earth';
-          const title = `${name}, ${region}`;
-          gsap.to(globe.pointOfView(), {
-            duration: 1.2,
-            lat: polygon.center ? polygon.center.lat : 0,
-            lng: polygon.center ? polygon.center.lng : 0,
-            altitude: 1.8,
-            onUpdate: function () {
-              globe.pointOfView({ lat: this.targets().lat, lng: this.targets().lng, altitude: this.targets().altitude });
-            },
-            ease: 'power2.out'
-          });
-          const note = document.querySelector('.hero-text');
-          note.textContent = `Viewing ${title}`;
+    const fetchJSON = async (path) => {
+      const res = await fetch(path, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`${getI18n('misc.fetchFail')}: ${path} (${res.status})`);
+      return res.json();
+    };
+
+    const preloadImage = (url) => new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(url);
+      img.onerror = () => reject(new Error('Image failed to load: ' + url));
+      img.src = url;
+    });
+
+    // ===== 資料工具（year/month 以 date 推導）
+    const getYears = () =>
+      Array.from(new Set(state.filtered.map(e => e.year))).sort((a,b)=>a-b);
+
+    const getMonthsByYear = (year) =>
+      Array.from(new Set(state.filtered.filter(e => e.year === year).map(e => e.month)))
+        .sort((a,b)=>a-b);
+
+    const getEventsByYearMonth = (year, month) =>
+      state.filtered
+        .filter(e => e.year === year && e.month === month)
+        .sort((a,b)=> (a.date || '').localeCompare(b.date || ''));
+
+    const updateYearSelect = (years) => {
+      const select = document.getElementById('yearSelect');
+      select.innerHTML = '';
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = getI18n('timeline.selectYear');
+      select.appendChild(placeholder);
+      years.forEach(year => {
+        const opt = document.createElement('option');
+        opt.value = year;
+        opt.textContent = year;
+        select.appendChild(opt);
+      });
+      select.disabled = years.length === 0;
+      if (state.currentYear != null) select.value = String(state.currentYear);
+    };
+
+    const highlightMonth = (month) => {
+      document.querySelectorAll('#monthRow .pill-btn').forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.month) === Number(month));
+        btn.dataset.mode = state.currentMode;
+      });
+    };
+
+    const highlightEvent = (eventId) => {
+      document.querySelectorAll('#eventRow .pill-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.eventId === String(eventId));
+        btn.dataset.mode = state.currentMode;
+      });
+    };
+
+    const renderMonths = (year) => {
+      const row = document.getElementById('monthRow');
+      row.innerHTML = '';
+      const months = getMonthsByYear(year);
+
+      months.forEach(m => {
+        const btn = document.createElement('button');
+        btn.className = 'pill-btn';
+        btn.textContent = getMonthLabel(m);
+        btn.dataset.month = m;
+        btn.dataset.mode = state.currentMode;
+        btn.classList.toggle('active', Number(m) === Number(state.currentMonth));
+        btn.addEventListener('click', () => jumpToMonth(year, m));
+        row.appendChild(btn);
+      });
+
+      if (months.length === 0) document.getElementById('eventRow').innerHTML = '';
+    };
+
+    const renderEvents = (year, month) => {
+      const row = document.getElementById('eventRow');
+      row.innerHTML = '';
+      const items = getEventsByYearMonth(year, month);
+
+      items.forEach((ev) => {
+        const translated = getEventTranslation(ev);
+        const btn = document.createElement('button');
+        btn.className = 'pill-btn';
+        btn.style.minWidth = '160px';
+        btn.textContent = translated.title;
+        btn.dataset.eventId = ev.id;
+        btn.dataset.mode = state.currentMode;
+        btn.classList.toggle('active', ev.id === state.currentEventId);
+        btn.addEventListener('click', () => {
+          state.currentEventId = ev.id;
+          showInfo(ev);
+          highlightEvent(ev.id);
         });
+        row.appendChild(btn);
+      });
+    };
+
+    const renderPoints = () => {
+      state.filtered = state.events.filter(ev => ev.mode === state.currentMode);
+      state.world.pointsData(state.filtered);
+    };
+
+    const refreshFiltersUI = () => {
+      const years = getYears();
+      updateYearSelect(years);
+
+      const y = state.currentYear ?? years[0];
+      if (!y) return;
+
+      state.currentYear = Number(y);
+      document.getElementById('yearSelect').value = String(state.currentYear);
+
+      const months = getMonthsByYear(state.currentYear);
+      state.currentMonth = (state.currentMonth && months.includes(state.currentMonth))
+        ? state.currentMonth
+        : (months[0] ?? null);
+
+      renderMonths(state.currentYear);
+      highlightMonth(state.currentMonth);
+
+      if (state.currentMonth != null) {
+        renderEvents(state.currentYear, state.currentMonth);
+        const first = getEventsByYearMonth(state.currentYear, state.currentMonth)[0];
+        if (first) {
+          state.currentEventId = first.id;
+          highlightEvent(first.id);
+        }
+      } else {
+        document.getElementById('eventRow').innerHTML = '';
+      }
+    };
+
+    const buildPointObject = (d) => {
+      const color = d.mode === 'crisis' ? COLORS.crisis : COLORS.hope;
+      const glow = new THREE.Mesh(
+        new THREE.SphereGeometry(0.6, 16, 16),
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.25 })
+      );
+      const core = new THREE.Mesh(
+        new THREE.SphereGeometry(0.28, 12, 12),
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9 })
+      );
+      glow.add(core);
+      return glow;
+    };
+
+    const createPulse = () => {
+      const loop = () => {
+        const t = Date.now() * 0.004;
+        state.filtered.forEach(d => {
+          const obj = d.__threeObj;
+          if (!obj) return;
+          const scale = 0.85 + 0.25 * Math.sin(t + d.lat);
+          obj.scale.setScalar(scale);
+          const mat = obj.children?.[0]?.material || obj.material;
+          if (mat) mat.opacity = 0.8 + 0.2 * Math.sin(t + d.lng);
+        });
+        requestAnimationFrame(loop);
+      };
+      loop();
+    };
+
+    const animateMaterialTint = (mode) => {
+      const mat = state.world?.globeMaterial?.();
+      if (!mat) return;
+
+      if (!mat.color || typeof mat.color.setRGB !== 'function') mat.color = new THREE.Color('#ffffff');
+      if (!mat.emissive || typeof mat.emissive.setRGB !== 'function') mat.emissive = new THREE.Color('#000000');
+
+      const target = (mode === 'crisis')
+        ? { c: { r: 1.05, g: 0.90, b: 0.90 }, e: { r: 0.10, g: 0.03, b: 0.03 } }
+        : { c: { r: 0.92, g: 1.02, b: 1.05 }, e: { r: 0.02, g: 0.08, b: 0.10 } };
+
+      const start = {
+        c: { r: mat.color.r, g: mat.color.g, b: mat.color.b },
+        e: { r: mat.emissive.r, g: mat.emissive.g, b: mat.emissive.b }
+      };
+
+      const duration = 450;
+      const t0 = performance.now();
+
+      const step = (now) => {
+        const t = clamp01((now - t0) / duration);
+        const ease = t * (2 - t);
+
+        mat.color.setRGB(
+          lerp(start.c.r, target.c.r, ease),
+          lerp(start.c.g, target.c.g, ease),
+          lerp(start.c.b, target.c.b, ease)
+        );
+        mat.emissive.setRGB(
+          lerp(start.e.r, target.e.r, ease),
+          lerp(start.e.g, target.e.g, ease),
+          lerp(start.e.b, target.e.b, ease)
+        );
+
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    const applyMode = (mode) => {
+      state.currentMode = mode;
+      document.body.dataset.mode = mode;
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+
+      animateMaterialTint(mode);
+      renderPoints();
+
+      // mode 切換後：重建下拉/月份/事件
+      state.currentYear = null;
+      state.currentMonth = null;
+      state.currentEventId = null;
+
+      refreshFiltersUI();
+
+      // 自動顯示第一個事件
+      const first = state.filtered[0];
+      if (first) {
+        state.currentYear = first.year;
+        state.currentMonth = first.month;
+        state.currentEventId = first.id;
+        refreshFiltersUI();
+        showInfo(first);
+      } else {
+        document.getElementById('infoPanel').classList.remove('show');
+      }
+    };
+
+    const showInfo = (data) => {
+      if (!data) return;
+
+      // ✅ 手機：點事件就收合時間表（避免干擾/重疊）
+      if (IS_MOBILE) setTimelineCollapsed(true);
+
+      state.world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
+
+      const translated = getEventTranslation(data);
+      const card = document.getElementById('infoPanel');
+      const tag = document.getElementById('infoTag');
+      tag.className = `tag ${data.mode}`;
+      tag.textContent = data.mode === 'crisis' ? getI18n('labels.crisis') : getI18n('labels.hope');
+
+      document.getElementById('infoTitle').textContent = `${data.year} · ${translated.title}`;
+      document.getElementById('infoSubtitle').textContent = data.category === 'disaster'
+        ? getI18n('info.subtitle.disaster')
+        : getI18n('info.subtitle.solution');
+      document.getElementById('infoDesc').textContent = translated.description || '';
+      document.getElementById('infoDate').textContent = data.date || '--';
+
+      const statList = document.getElementById('statList');
+      statList.innerHTML = '';
+      (data.stats || []).forEach(item => {
+        const block = document.createElement('div');
+        block.className = 'stat-pill';
+        const label = translateStatLabel(item.label);
+        const value = translateStatValue(item.value);
+        block.innerHTML = `<div class="stat-label">${label}</div><div><strong>${value}</strong></div>`;
+        statList.appendChild(block);
+      });
+
+      const mediaContainer = document.getElementById('mediaContainer');
+      mediaContainer.innerHTML = '';
+      if (data.media?.type === 'instagram' && data.media.url) {
+        const blockquote = document.createElement('blockquote');
+        blockquote.className = 'instagram-media';
+        blockquote.setAttribute('data-instgrm-permalink', data.media.url);
+        blockquote.setAttribute('data-instgrm-version', '14');
+        blockquote.style.margin = '0 auto';
+        mediaContainer.appendChild(blockquote);
+        setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
+      } else if (data.media?.type === 'image' && data.media.url) {
+        const img = document.createElement('img');
+        img.src = data.media.url;
+        img.alt = data.title || 'image';
+        mediaContainer.appendChild(img);
+      } else {
+        mediaContainer.innerHTML = `<div style="padding:16px;opacity:0.7;">${getI18n('misc.noMedia')}</div>`;
+      }
+
+      card.classList.add('show');
+    };
+
+    const jumpToYear = (year) => {
+      state.currentYear = Number(year);
+
+      const months = getMonthsByYear(state.currentYear);
+      state.currentMonth = months[0] ?? null;
+      state.currentEventId = null;
+
+      renderMonths(state.currentYear);
+      highlightMonth(state.currentMonth);
+
+      if (state.currentMonth != null) {
+        renderEvents(state.currentYear, state.currentMonth);
+        const first = getEventsByYearMonth(state.currentYear, state.currentMonth)[0];
+        if (first) {
+          state.currentEventId = first.id;
+          highlightEvent(first.id);
+          showInfo(first);
+        }
+      } else {
+        document.getElementById('infoPanel').classList.remove('show');
+        document.getElementById('eventRow').innerHTML = '';
+      }
+    };
+
+    const jumpToMonth = (year, month) => {
+      state.currentYear = Number(year);
+      state.currentMonth = Number(month);
+      state.currentEventId = null;
+
+      document.getElementById('yearSelect').value = String(state.currentYear);
+
+      renderMonths(state.currentYear);
+      highlightMonth(state.currentMonth);
+
+      renderEvents(state.currentYear, state.currentMonth);
+
+      const first = getEventsByYearMonth(state.currentYear, state.currentMonth)[0];
+      if (first) {
+        state.currentEventId = first.id;
+        highlightEvent(first.id);
+        showInfo(first);
+      }
+    };
+
+    const setInfoCollapsed = (collapsed) => {
+      state.infoCollapsed = collapsed;
+      const panel = document.getElementById('infoPanel');
+      panel.classList.toggle('collapsed', collapsed);
+      document.getElementById('infoCollapseBtn').textContent = collapsed
+        ? getI18n('info.expand')
+        : getI18n('info.collapse');
+      document.getElementById('infoCollapseBtn').setAttribute('aria-expanded', String(!collapsed));
+      document.getElementById('infoBody').setAttribute('aria-hidden', String(collapsed));
+    };
+
+    const setTimelineCollapsed = (collapsed) => {
+      state.timelineCollapsed = collapsed;
+      const container = document.getElementById('timelineContainer');
+      container.classList.toggle('collapsed', collapsed);
+      document.getElementById('timelineCollapseBtn').textContent = collapsed
+        ? getI18n('timeline.expand')
+        : getI18n('timeline.collapse');
+      document.getElementById('timelineCollapseBtn').setAttribute('aria-expanded', String(!collapsed));
+    };
+
+    const openAnchorPanel = () => {
+      state.anchorOpen = true;
+      document.getElementById('anchorPanel').classList.add('show');
+    };
+
+    const closeAnchorPanel = () => {
+      state.anchorOpen = false;
+      document.getElementById('anchorPanel').classList.remove('show');
+    };
+
+    const toggleAnchorPanel = () => {
+      if (state.anchorOpen) closeAnchorPanel(); else openAnchorPanel();
+    };
+
+    const getAnchorItems = () => ANCHORS[state.language] ?? ANCHORS.en;
+    const IG_PREVIEW_COUNT = 4;
+
+    const createIgEmbed = (url, hidden = false) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = `anchor-ig-card${hidden ? ' hidden' : ''}`;
+      const blockquote = document.createElement('blockquote');
+      blockquote.className = 'instagram-media';
+      blockquote.setAttribute('data-instgrm-permalink', url);
+      blockquote.setAttribute('data-instgrm-version', '14');
+      blockquote.style.margin = '0';
+      wrapper.appendChild(blockquote);
+      return wrapper;
+    };
+
+    function buildAnchorList() {
+      const anchors = getAnchorItems();
+
+      const list = document.getElementById('anchorList');
+      list.innerHTML = '';
+
+      anchors.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'anchor-card';
+        card.id = item.id;
+
+        const left = document.createElement('div');
+        const title = document.createElement('h4');
+        title.className = 'anchor-heading';
+        title.textContent = item.title;
+        const meta = document.createElement('div');
+        meta.className = 'anchor-meta';
+        meta.textContent = item.meta;
+        const points = document.createElement('p');
+        points.className = 'anchor-points';
+        points.innerHTML = item.points.map(p => `• ${p}`).join('<br>');
+        left.append(title, meta, points);
+
+        const actions = document.createElement('div');
+        actions.className = 'anchor-actions';
+        const qrBtn = document.createElement('button');
+        qrBtn.className = 'tiny-btn';
+        qrBtn.type = 'button';
+        qrBtn.textContent = getI18n('anchor.qr');
+        qrBtn.addEventListener('click', () => showQRModal(item));
+        const linkBtn = document.createElement('a');
+        linkBtn.className = 'tiny-btn';
+        linkBtn.href = `#${item.id}`;
+        linkBtn.textContent = getI18n('anchor.locate');
+        linkBtn.addEventListener('click', () => {
+          openAnchorPanel();
+          setTimeout(() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
+        });
+        actions.append(qrBtn, linkBtn);
+
+        card.append(left, actions);
+
+        if (Array.isArray(item.igPosts) && item.igPosts.length) {
+          const section = document.createElement('div');
+          section.className = 'anchor-ig-section';
+          const scroll = document.createElement('div');
+          scroll.className = 'anchor-ig-scroll';
+          item.igPosts.forEach((url, index) => {
+            scroll.appendChild(createIgEmbed(url, index >= IG_PREVIEW_COUNT));
+          });
+          section.appendChild(scroll);
+
+          if (item.igPosts.length > IG_PREVIEW_COUNT) {
+            const toggleBtn = document.createElement('button');
+            toggleBtn.type = 'button';
+            toggleBtn.className = 'tiny-btn anchor-ig-toggle';
+            toggleBtn.textContent = getI18n('anchor.showMore');
+            toggleBtn.addEventListener('click', () => {
+              const hiddenCards = scroll.querySelectorAll('.anchor-ig-card.hidden');
+              const isExpanded = hiddenCards.length === 0;
+              scroll.querySelectorAll('.anchor-ig-card').forEach((card, idx) => {
+                card.classList.toggle('hidden', isExpanded && idx >= IG_PREVIEW_COUNT);
+              });
+              toggleBtn.textContent = isExpanded ? getI18n('anchor.showMore') : getI18n('anchor.showLess');
+              setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
+            });
+            section.appendChild(toggleBtn);
+          }
+
+          card.appendChild(section);
+        }
+
+        list.appendChild(card);
+      });
+
+      setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
+    }
+
+    const showQRModal = (item) => {
+      const base = window.location.href.split('#')[0];
+      const targetUrl = `${base}#${item.id}`;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=340x340&data=${encodeURIComponent(targetUrl)}`;
+      document.getElementById('qrTitle').textContent = getI18n('qr.title');
+      document.getElementById('qrSubtitle').textContent = item.title;
+      document.getElementById('qrImage').src = qrUrl;
+      document.getElementById('qrModal').classList.add('show');
+    };
+
+    const closeQRModal = () => {
+      document.getElementById('qrModal').classList.remove('show');
+    };
+
+    const attachUIEvents = () => {
+      document.getElementById('btn-crisis').addEventListener('click', () => applyMode('crisis'));
+      document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
+
+      document.getElementById('infoCollapseBtn').addEventListener('click', () => setInfoCollapsed(!state.infoCollapsed));
+      document.getElementById('timelineCollapseBtn').addEventListener('click', () => setTimelineCollapsed(!state.timelineCollapsed));
+
+      document.getElementById('yearSelect').addEventListener('change', (e) => {
+        const y = Number(e.target.value);
+        if (y) jumpToYear(y);
+      });
+
+      document.getElementById('anchorToggle').addEventListener('click', toggleAnchorPanel);
+      document.getElementById('anchorCloseBtn').addEventListener('click', closeAnchorPanel);
+      document.getElementById('qrCloseBtn').addEventListener('click', closeQRModal);
+      document.getElementById('qrModal').addEventListener('click', (e) => {
+        if (e.target.id === 'qrModal') closeQRModal();
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+      });
+    };
 
       const controls = globe.controls();
       controls.autoRotate = true;
       controls.autoRotateSpeed = 0.4;
       controls.enableDamping = true;
-      controls.dampingFactor = 0.04;
+      controls.dampingFactor = 0.05;
+      controls.enablePan = true;
+      controls.enableZoom = true;
+      controls.enableRotate = true;
+      controls.rotateSpeed = 0.8;
 
-      const resizer = () => {
-        globe.width(window.innerWidth);
-        globe.height(window.innerHeight);
+      let resumeHandle;
+      const pauseRotate = () => { controls.autoRotate = false; clearTimeout(resumeHandle); };
+      const resumeRotate = () => {
+        clearTimeout(resumeHandle);
+        resumeHandle = setTimeout(() => { controls.autoRotate = true; }, 2500);
       };
       window.addEventListener('resize', resizer);
       resizer();
@@ -402,37 +1862,140 @@
       state.globe = globe;
     };
 
-    const enrichPolygons = (features) => {
-      return features.map((feature) => {
-        const coords = feature?.properties?.LABEL_Y || feature?.properties?.LAT || 0;
-        const lng = feature?.properties?.LABEL_X || feature?.properties?.LONG || 0;
-        const center = { lat: Number(coords) || 0, lng: Number(lng) || 0 };
-        return { ...feature, center };
-      });
+    const prepareData = (data) => {
+      state.events = (data.events || []).map((ev, idx) => {
+        const dt = ev.date ? new Date(ev.date) : null;
+        const year = ev.year ?? (dt ? dt.getFullYear() : null);
+        const month = ev.month ?? (dt ? (dt.getMonth() + 1) : null);
+
+        return {
+          id: ev.id ?? `${ev.mode}-${year}-${month}-${idx}`,
+          ...ev,
+          year,
+          month,
+          lat: ev.coordinates?.lat,
+          lng: ev.coordinates?.lng
+        };
+      }).filter(ev =>
+        Number.isFinite(ev.lat) && Number.isFinite(ev.lng) &&
+        Number.isFinite(ev.year) && Number.isFinite(ev.month)
+      );
+
+      if (data.config?.initial_view) state.initialView = data.config.initial_view;
     };
 
-    const loadGeoData = async () => {
-      const response = await fetch(GEOJSON_URL);
-      if (!response.ok) throw new Error('Failed to load GeoJSON.');
-      const data = await response.json();
-      const features = data.features || [];
-      return enrichPolygons(features);
-    };
+    window.addEventListener('resize', updateMobileLayoutVars);
+    window.addEventListener('orientationchange', updateMobileLayoutVars);
 
     const bootstrap = async () => {
-      prepareTextures();
-      await initGlobe();
-      applyTheme('crisis');
+      const uiLayer = document.getElementById('ui-layer');
+      uiLayer.style.pointerEvents = 'none';
 
-      const polygons = await loadGeoData();
-      state.polygons = polygons;
-      state.globe
-        .globeImageUrl(state.textures[state.mode])
-        .atmosphereColor(THEMES[state.mode].atmosphere)
-        .polygonsData(polygons)
-        .polygonLabel((d) => `${d.properties.ADMIN || d.properties.name}`);
+      playEntryOverlay();
 
-      document.getElementById('loading').style.display = 'none';
+      const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
+      const initialLang = savedLang === 'zh' ? 'zh' : 'en';
+      applyLanguage(initialLang);
+
+      const data = await fetchJSON('data.json');
+      prepareData(data);
+
+      await preloadImage(TEXTURE.day);
+      await preloadImage(TEXTURE.bump).catch(() => {});
+      await preloadImage(TEXTURE.specular).catch(() => {});
+
+      state.world = Globe()(document.getElementById('globeViz'));
+      state.world
+        .globeImageUrl(TEXTURE.day)
+        .backgroundColor('#000000')
+        .pointAltitude(0.02)
+        .pointRadius(0.6)
+        .pointLabel(d => {
+          const translated = getEventTranslation(d);
+          return `<div style="padding:6px 8px;">${translated.title || ''}</div>`;
+        })
+        .pointColor(d => d.mode === 'crisis' ? COLORS.crisis : COLORS.hope)
+        .onPointClick((d) => {
+          // ✅ 點地球點位：同步年份下拉/月份/事件
+          state.currentYear = d.year;
+          state.currentMonth = d.month;
+          state.currentEventId = d.id;
+
+          document.getElementById('yearSelect').value = String(d.year);
+
+          renderMonths(d.year);
+          highlightMonth(d.month);
+
+          renderEvents(d.year, d.month);
+          highlightEvent(d.id);
+
+          showInfo(d);
+        })
+        .onGlobeClick(() => {
+          document.getElementById('infoPanel').classList.remove('show');
+          if (IS_MOBILE) setTimelineCollapsed(false);
+        });
+
+      if (typeof state.world.pointThreeObject === 'function') {
+        state.world.pointThreeObject(buildPointObject).pointThreeObjectExtend(true);
+      }
+
+      configureControls();
+
+      const mat = state.world.globeMaterial();
+      mat.emissive = new THREE.Color('#000000');
+
+      const texLoader = new THREE.TextureLoader();
+
+      texLoader.load(TEXTURE.bump, (bumpTex) => {
+        mat.bumpMap = bumpTex;
+        mat.bumpScale = 0.08;
+        mat.needsUpdate = true;
+      }, undefined, () => {});
+
+      texLoader.load(TEXTURE.specular, (specTex) => {
+        mat.specularMap = specTex;
+        mat.specular = new THREE.Color('#888888');
+        mat.shininess = 6;
+        mat.needsUpdate = true;
+      }, undefined, () => {});
+
+      attachUIEvents();
+      createPulse();
+
+      state.world.pointOfView({
+        lat: state.initialView.lat,
+        lng: state.initialView.lng,
+        altitude: (QUALITY === 'mobile') ? state.initialView.altitude + 0.6 : state.initialView.altitude
+      }, 0);
+
+      renderPoints();
+      refreshFiltersUI();
+
+      const first = state.filtered[0];
+      if (first) {
+        state.currentYear = first.year;
+        state.currentMonth = first.month;
+        state.currentEventId = first.id;
+        refreshFiltersUI();
+        showInfo(first);
+      }
+
+      setInfoCollapsed(IS_MOBILE);
+      setTimelineCollapsed(IS_MOBILE);
+
+      applyMode(state.currentMode);
+
+      uiLayer.style.pointerEvents = 'auto';
+
+      if (window.location.hash) {
+        const targetId = window.location.hash.replace('#', '');
+        const el = document.getElementById(targetId);
+        if (el) {
+          openAnchorPanel();
+          setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+        }
+      }
     };
 
     document.getElementById('btn-crisis').addEventListener('click', () => applyTheme('crisis'));
@@ -440,7 +2003,7 @@
 
     bootstrap().catch((err) => {
       console.error(err);
-      document.getElementById('loading').textContent = err.message;
+      alert(`${getI18n('misc.initFail')}: ${err.message}`);
     });
   </script>
 </body>
