@@ -413,6 +413,8 @@
         </div>
 
         <div id="organizationDetails" hidden>
+          <p id="organizationStorageStatus" class="helper warning" hidden></p>
+
           <label class="required" for="hopeTitle">組織希望主題 (Hope Title)</label>
           <input id="hopeTitle" name="hopeTitle" type="text" placeholder="例：社區太陽能 / Community Solar" />
 
@@ -560,8 +562,11 @@
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import {
       getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp,
       connectFirestoreEmulator
-    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import {
       getStorage,
       ref,
@@ -582,9 +587,8 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
+    const db = getFirestore(app, "default");
     const storage = getStorage(app);
-    const firestoreBaseUrl = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
 
     if (
       location.hostname === "localhost" ||
@@ -663,8 +667,10 @@
     const loginPasswordInput = document.getElementById("loginPassword");
     const roleImageEl = document.getElementById("roleImage");
     const memberStateEl = document.getElementById("memberState");
+    const organizationStorageStatusEl = document.getElementById("organizationStorageStatus");
 
     let currentRole = null;
+    let storageAvailability = location.hostname === "localhost" || location.hostname === "127.0.0.1" ? "ready" : "checking";
 
     const sharePayload = {
       title: "Blue Sky Returns 氣侯行動者註冊與氣候行動問卷",
@@ -680,6 +686,63 @@
       statusEl.textContent = message;
     };
 
+    const setOrganizationUploadsEnabled = (enabled) => {
+      hopeFileInput.disabled = !enabled;
+      threatFileInput.disabled = !enabled;
+    };
+
+    const renderOrganizationStorageNotice = () => {
+      if (storageAvailability === "ready") {
+        organizationStorageStatusEl.hidden = true;
+        organizationStorageStatusEl.textContent = "";
+        setOrganizationUploadsEnabled(true);
+        return;
+      }
+
+      organizationStorageStatusEl.hidden = false;
+      setOrganizationUploadsEnabled(false);
+
+      if (storageAvailability === "checking") {
+        organizationStorageStatusEl.textContent = "正在檢查組織附件上傳功能是否可用...";
+        return;
+      }
+
+      if (storageAvailability === "disabled") {
+        organizationStorageStatusEl.textContent = "目前 Firebase Storage 尚未啟用，組織附件暫時無法上傳。請先到 Firebase Console > Storage 按下 Get started，再回來使用組織上傳。";
+        return;
+      }
+
+      organizationStorageStatusEl.textContent = "目前無法確認 Firebase Storage 狀態。若你需要上傳組織附件，請先確認 Console 的 Storage 已啟用。";
+    };
+
+    const checkStorageAvailability = async () => {
+      if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+        storageAvailability = "ready";
+        renderOrganizationStorageNotice();
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `https://storage.googleapis.com/storage/v1/b/${encodeURIComponent(firebaseConfig.storageBucket)}`,
+          { method: "GET", cache: "no-store" }
+        );
+
+        if (response.ok) {
+          storageAvailability = "ready";
+        } else if (response.status === 404) {
+          storageAvailability = "disabled";
+        } else {
+          storageAvailability = "unknown";
+        }
+      } catch (error) {
+        console.error("Storage availability check failed", error);
+        storageAvailability = "unknown";
+      }
+
+      renderOrganizationStorageNotice();
+    };
+
     const withTimeout = async (promise, ms, message) => {
       let timeoutId;
       const timeoutPromise = new Promise((_, reject) => {
@@ -692,81 +755,6 @@
         return await Promise.race([promise, timeoutPromise]);
       } finally {
         window.clearTimeout(timeoutId);
-      }
-    };
-
-    const toFirestoreValue = (value) => {
-      if (value === null) {
-        return { nullValue: null };
-      }
-
-      if (Array.isArray(value)) {
-        return {
-          arrayValue: {
-            values: value.map((item) => toFirestoreValue(item))
-          }
-        };
-      }
-
-      if (value instanceof Date) {
-        return { timestampValue: value.toISOString() };
-      }
-
-      switch (typeof value) {
-        case "string":
-          return { stringValue: value };
-        case "boolean":
-          return { booleanValue: value };
-        case "number":
-          return Number.isInteger(value) ? { integerValue: String(value) } : { doubleValue: value };
-        case "object": {
-          const fields = {};
-          Object.entries(value).forEach(([key, nestedValue]) => {
-            if (typeof nestedValue === "undefined") return;
-            fields[key] = toFirestoreValue(nestedValue);
-          });
-          return { mapValue: { fields } };
-        }
-        default:
-          return { stringValue: String(value) };
-      }
-    };
-
-    const getTopLevelFieldPaths = (payload) => Object.keys(payload);
-
-    const writeMemberDocument = async ({ user, payload }) => {
-      const token = await withTimeout(
-        user.getIdToken(true),
-        10000,
-        "取得登入憑證逾時，請重新登入後再試一次。"
-      );
-      const endpoint = `${firestoreBaseUrl}/members/${encodeURIComponent(user.uid)}`;
-      const fieldPaths = getTopLevelFieldPaths(payload);
-      const params = new URLSearchParams();
-      fieldPaths.forEach((fieldPath) => {
-        params.append("updateMask.fieldPaths", fieldPath);
-      });
-
-      const response = await withTimeout(
-        fetch(`${endpoint}?${params.toString()}`, {
-          method: "PATCH",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            fields: Object.fromEntries(
-              Object.entries(payload).map(([key, value]) => [key, toFirestoreValue(value)])
-            )
-          })
-        }),
-        15000,
-        "寫入問卷資料逾時，請稍後再試一次。"
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`firestore-write-failed:${response.status}:${errorText}`);
       }
     };
 
@@ -789,6 +777,10 @@
       threatTitleInput.required = isOrganization;
       threatDescriptionInput.required = isOrganization;
 
+      if (isOrganization) {
+        renderOrganizationStorageNotice();
+      }
+
       if (!isOrganization) {
         hopeTitleInput.value = "";
         hopeDescriptionInput.value = "";
@@ -796,6 +788,7 @@
         threatTitleInput.value = "";
         threatDescriptionInput.value = "";
         threatFileInput.value = "";
+        organizationStorageStatusEl.hidden = true;
       }
     };
 
@@ -952,21 +945,26 @@
 
     const getSubmissionErrorMessage = (error) => {
       const message = error?.message || "";
+      const code = error?.code || "";
 
       if (message.includes("逾時")) {
         return message;
       }
 
-      if (message.startsWith("firestore-write-failed:403")) {
+      if (code === "permission-denied") {
         return "Firebase 已登入，但 Firestore 權限拒絕寫入，請檢查 Firestore Rules。";
       }
 
-      if (message.startsWith("firestore-write-failed:401")) {
+      if (code === "unauthenticated") {
         return "登入憑證已失效，請重新登入後再試一次。";
       }
 
-      if (message.startsWith("firestore-write-failed:")) {
-        return "Firebase Auth 已成功，但 Firestore 寫入失敗，請稍後再試。";
+      if (code === "unavailable" || code === "deadline-exceeded") {
+        return "目前無法連到 Firestore，請稍後再試。";
+      }
+
+      if (code === "failed-precondition") {
+        return "Firestore Database 可能尚未建立完成，請先到 Firebase Console 檢查資料庫狀態。";
       }
 
       return "角色卡已產生，但 Firebase 寫入失敗，請稍後重試。";
@@ -1021,7 +1019,6 @@
       const isJci = formData.get("is_jci") || "否";
       const partnerType = formData.get("partner_type") || "general";
       const partnerMultiplier = partnerType === "organization" ? 2 : 1;
-      const now = new Date();
 
       if (partnerType === "organization") {
         setStatus("warn", "正在上傳組織的希望與威脅附件...");
@@ -1073,15 +1070,19 @@
         resultRole: role.title,
         totalScore: score,
         emailVerified: user.emailVerified,
-        updatedAt: now.toISOString()
+        updatedAt: serverTimestamp()
       };
 
       if (created) {
-        payload.submittedAt = now.toISOString();
+        payload.submittedAt = serverTimestamp();
       }
 
       setStatus("warn", "正在寫入氣侯行動者資料到 Firebase...");
-      await writeMemberDocument({ user, payload });
+      await withTimeout(
+        setDoc(doc(db, "members", user.uid), payload, { merge: true }),
+        15000,
+        "寫入問卷資料逾時，請稍後再試一次。"
+      );
     };
 
     const resolveMemberAccount = async (email, password, name) => {
@@ -1114,6 +1115,7 @@
       radio.addEventListener("change", () => setPartnerTypeFields(radio.value));
     });
     setPartnerTypeFields("general");
+    checkStorageAvailability();
 
     if (new URLSearchParams(window.location.search).get("auth") === "login") {
       openLoginModal();
@@ -1228,6 +1230,12 @@
         return;
       }
 
+      if (partnerType === "organization" && storageAvailability !== "ready") {
+        setStatus("error", "目前 Firebase Storage 尚未啟用完成，請先完成 Storage 設定後再送出組織上傳。");
+        submitBtn.disabled = false;
+        return;
+      }
+
       if (!auth.currentUser && password !== confirmPassword) {
         setStatus("error", "兩次輸入的密碼不一致。");
         submitBtn.disabled = false;
@@ -1261,7 +1269,7 @@
 
         if (error.message === "signed-in-with-different-email") {
           setStatus("error", "目前瀏覽器已登入另一個氣侯行動者 Email，請先登出或改用相同 Email。");
-        } else if (error.code) {
+        } else if (error.code?.startsWith("auth/")) {
           setStatus("error", getAuthErrorMessage(error.code));
         } else {
           setStatus("error", getSubmissionErrorMessage(error));

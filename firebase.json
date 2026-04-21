@@ -4,9 +4,12 @@
       "emailPassword": true
     }
   },
-  "firestore": {
-    "rules": "firestore.rules"
-  },
+  "firestore": [
+    {
+      "database": "default",
+      "rules": "firestore.rules"
+    }
+  ],
   "functions": [
     {
       "source": "functions",
@@ -24,6 +27,26 @@
       ]
     }
   ],
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "README.md",
+      "firestore.rules",
+      "storage.rules",
+      "skills-lock.json",
+      ".git",
+      ".git/**",
+      ".agents",
+      ".agents/**",
+      "**/.*",
+      "**/node_modules/**",
+      "functions/**",
+      "firebase-debug.log",
+      "firebase-debug.*.log"
+    ]
+  },
   "storage": {
     "rules": "storage.rules"
   }
