@@ -19,6 +19,10 @@
       --color-hope-alt: #2ECC40;
       --bg-glass: rgba(15, 20, 30, 0.7);
       --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      --button-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+      --bg1: #060b16;
+      --bg2: #0f172a;
+      --text: #f8fbff;
 
       /* ✅ 手機底部資訊列預留高度（避免上方面板擠下去時撞到底部） */
       --mobile-info-reserve: 120px;
@@ -304,7 +308,8 @@
 
     .qr-card .tiny-btn { width: 100%; justify-content: center; margin-top: 12px; }
 
-    .mode-toggle {
+    .mode-toggle,
+    .toggle-container {
       display: inline-flex;
       align-items: center;
       padding: 6px;
@@ -497,7 +502,14 @@
       }
 
       header { flex-direction: column; align-items: flex-start; width: 100%; gap: 10px; }
-      .header-actions { width: 100%; }
+      .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .header-actions > * {
+        max-width: 100%;
+      }
 
       /* ✅ 手機：時間表固定上方，但「高度受限」且內容可滾動 → 不再撞到底部資訊 */
       .timeline-container {
@@ -615,7 +627,7 @@
       </div>
     </header>
 
-    <div class="glass-panel" id="infoPanel">
+    <div class="info-card" id="infoPanel">
       <h1 class="hero-text">A living atlas of crisis and hope.</h1>
       <p class="subtext">Explore our planet in full 3D without texture downloads. Toggle between climate crisis and regenerative hope themes while the globe streams real Natural Earth polygons.</p>
       <div class="control-row">
