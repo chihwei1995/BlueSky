@@ -49,6 +49,51 @@
       font-weight: 700;
     }
 
+    .nav-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--primary-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .nav-chip.active {
+      background: linear-gradient(135deg, var(--primary), #38bdf8);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(2, 132, 199, 0.18);
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--primary), #38bdf8);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(2, 132, 199, 0.18);
+    }
+
     .topbar-actions {
       display: flex;
       align-items: center;
@@ -315,13 +360,22 @@
 <body>
   <main class="container">
     <div class="topbar">
-      <h1>Blue Sky Returns 邁出一步<br>Blue Sky Returns Take One Step</h1>
+      <h1 id="pageTitle">Blue Sky Returns 邁出一步<br>Blue Sky Returns Take One Step</h1>
       <div class="topbar-actions">
+        <a class="nav-chip" href="../index.html">主地球首頁 / Main Globe</a>
+        <a class="nav-chip" href="./index.html">項目介紹 / About</a>
+        <a class="nav-chip" href="./countries-regions-hope-crisis.html">各國與區域 / Countries & Regions</a>
+        <a class="nav-chip" href="./green-action-7day.html">7 日綠色提案 / 7-Day</a>
+        <a class="nav-chip" href="./member-center.html">會員中心 / Member Center</a>
+        <a class="nav-chip active" href="./climate-action-form.html">邁出一步 / Take One Step</a>
         <button type="button" id="logoutBtn" class="secondary-btn" hidden>登出 / Sign Out</button>
-        <a class="back-link" href="./member-center.html">← 返回會員中心 / Back to Member Center</a>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
       </div>
     </div>
-    <p class="subtitle">
+    <p id="pageSubtitle" class="subtitle">
       用這一步更新你的氣候行動者資料與問卷內容；第一次填寫會建立帳號，之後可直接回來修改。<br>
       Use this step to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.
     </p>
@@ -560,6 +614,54 @@
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
     const storage = getStorage(app);
+    const LANG_STORAGE_KEY = "bsr_lang";
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
+    const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
+    const I18N = {
+      zh: {
+        pageTitle: "Blue Sky Returns 邁出一步",
+        heading: "Blue Sky Returns 邁出一步<br>Blue Sky Returns Take One Step",
+        subtitle: "用這一步更新你的氣候行動者資料與問卷內容；第一次填寫會建立帳號，之後可直接回來修改。<br>Use this step to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
+        submit: "儲存邁出一步資料 / Save Take One Step",
+        shareForm: "分享表單給他人 / Share This Form",
+        download: "下載角色卡 / Download Card",
+        shareImage: "分享圖片＋連結 / Share Image + Link",
+        shareQuiz: "分享這個測驗 / Share This Quiz",
+        close: "關閉 / Close",
+        signOut: "登出 / Sign Out",
+        member: "氣侯行動者"
+      },
+      en: {
+        pageTitle: "Take One Step | Blue Sky Returns",
+        heading: "Blue Sky Returns Take One Step",
+        subtitle: "Use this page to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
+        submit: "Save Take One Step",
+        shareForm: "Share This Form",
+        download: "Download Card",
+        shareImage: "Share Image + Link",
+        shareQuiz: "Share This Quiz",
+        close: "Close",
+        signOut: "Sign Out",
+        member: "Climate Action Partner"
+      }
+    };
+    const t = (key) => I18N[currentLang]?.[key] || "";
+    const applyLanguage = (lang) => {
+      currentLang = lang;
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+      document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+      document.title = t("pageTitle");
+      document.getElementById("pageTitle").innerHTML = t("heading");
+      document.getElementById("pageSubtitle").innerHTML = t("subtitle");
+      submitBtn.textContent = t("submit");
+      shareCampaignBtn.textContent = t("shareForm");
+      downloadResultBtn.textContent = t("download");
+      shareImageBtn.textContent = t("shareImage");
+      shareResultBtn.textContent = t("shareQuiz");
+      document.getElementById("closeModal").textContent = t("close");
+      logoutBtn.textContent = t("signOut");
+      langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
+    };
 
     if (
       location.hostname === "localhost" ||
@@ -773,7 +875,7 @@
       }
     };
 
-    const getMemberDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || "氣侯行動者";
+    const getMemberDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || t("member");
 
     const calculateResult = (data) => {
       const score = ["q1", "q2", "q3", "q4", "q5"].reduce(
@@ -1178,6 +1280,11 @@
         submitBtn.disabled = false;
       }
     });
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+    applyLanguage(currentLang);
   </script>
 </body>
 </html>

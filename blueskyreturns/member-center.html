@@ -83,6 +83,32 @@
       flex-wrap: wrap;
     }
 
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--card);
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(11, 92, 171, 0.18);
+    }
+
     .pill,
     button {
       display: inline-flex;
@@ -97,6 +123,13 @@
       font-weight: 700;
       cursor: pointer;
       font-size: 0.94rem;
+    }
+
+    .pill.active {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(11, 92, 171, 0.18);
     }
 
     .pill.primary,
@@ -386,16 +419,22 @@
   <header>
     <div class="shell nav">
       <div class="brand">
-        <strong>Blue Sky Returns</strong>
-        <span>會員中心 / Member Center</span>
+        <strong id="brandTitle">Blue Sky Returns</strong>
+        <span id="brandSubtitle">會員中心 / Member Center</span>
       </div>
       <div class="nav-actions">
-        <a class="pill" href="../index.html">← Main</a>
-        <a class="pill" href="./index.html">About</a>
-        <a class="pill" href="./countries-regions-hope-crisis.html">Countries & Regions</a>
-        <a class="pill" href="./green-action-7day.html">7-Day Green Proposal</a>
+        <a id="navMain" class="pill" href="../index.html">Main Globe</a>
+        <a id="navAbout" class="pill" href="./index.html">About</a>
+        <a id="navRegions" class="pill" href="./countries-regions-hope-crisis.html">Countries & Regions</a>
+        <a id="navProposal" class="pill" href="./green-action-7day.html">7-Day Green Proposal</a>
+        <a id="navStep" class="pill" href="./climate-action-form.html">Take One Step</a>
+        <a id="navMember" class="pill active" href="./member-center.html">Member Center</a>
         <button id="openLoginBtn" class="pill primary" type="button">登入 / Sign In</button>
         <button id="logoutBtn" class="pill" type="button" hidden>登出 / Sign Out</button>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
       </div>
     </div>
   </header>
@@ -404,21 +443,21 @@
     <div class="shell stack">
       <section class="hero">
         <div class="hero-copy">
-          <span class="badge">Member Dashboard</span>
-          <h1>氣候行動者會員中心</h1>
-          <p>登入後，你可以看到自己的氣候行動者資料、邁出一步問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。</p>
+          <span id="heroBadge" class="badge">Member Dashboard</span>
+          <h1 id="heroTitle">氣候行動者會員中心</h1>
+          <p id="heroBody">登入後，你可以看到自己的氣候行動者資料、邁出一步問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。</p>
           <div class="actions">
-            <a class="pill primary" href="./green-action-7day.html">前往 7-Day Green Proposal</a>
-            <a class="pill" href="./climate-action-form.html">修改邁出一步</a>
+            <a id="heroActionProposal" class="pill primary" href="./green-action-7day.html">前往 7-Day Green Proposal</a>
+            <a id="heroActionStep" class="pill" href="./climate-action-form.html">修改邁出一步</a>
           </div>
         </div>
         <div class="hero-side">
           <div class="hero-card">
-            <strong>目前登入狀態</strong>
+            <strong id="stateCardTitle">目前登入狀態</strong>
             <div id="memberState" class="status">尚未登入</div>
           </div>
           <div class="hero-card">
-            <strong>目前可做的事</strong>
+            <strong id="abilityCardTitle">目前可做的事</strong>
             <p id="abilitySummary">請先登入以查看你目前能使用的功能。</p>
           </div>
         </div>
@@ -426,12 +465,12 @@
 
       <section class="panel">
         <div class="section-head">
-          <h2>帳號摘要 / Member Summary</h2>
-          <p>這裡會顯示你目前的基本資訊、權限等級與問卷結果。</p>
+          <h2 id="summarySectionTitle">帳號摘要 / Member Summary</h2>
+          <p id="summarySectionBody">這裡會顯示你目前的基本資訊、權限等級與問卷結果。</p>
         </div>
         <div class="grid two">
           <article class="summary-card">
-            <h3>基本資料</h3>
+            <h3 id="basicCardTitle">基本資料</h3>
             <div class="summary-list">
               <p id="summaryName">姓名 / 單位：-</p>
               <p id="summaryEmail">Email：-</p>
@@ -440,7 +479,7 @@
             </div>
           </article>
           <article class="summary-card">
-            <h3>邁出一步結果</h3>
+            <h3 id="stepResultCardTitle">邁出一步結果</h3>
             <div class="summary-list">
               <p id="summaryRole">角色卡：-</p>
               <p id="summaryScore">總分：-</p>
@@ -453,50 +492,50 @@
 
       <section class="panel">
         <div class="section-head">
-          <h2>目前功能 / What You Have</h2>
-          <p>依照你的權限，會員中心會整理目前可以直接進行的任務。</p>
+          <h2 id="tasksSectionTitle">目前功能 / What You Have</h2>
+          <p id="tasksSectionBody">依照你的權限，會員中心會整理目前可以直接進行的任務。</p>
         </div>
         <div class="grid two" id="taskCards">
           <article class="task-card">
-            <h3>邁出一步</h3>
-            <p>建立或更新你的氣候行動者資料，並重跑問卷結果。</p>
-            <a class="pill" href="./climate-action-form.html">前往修改</a>
+            <h3 id="taskStepTitle">邁出一步</h3>
+            <p id="taskStepBody">建立或更新你的氣候行動者資料，並重跑問卷結果。</p>
+            <a id="taskStepLink" class="pill" href="./climate-action-form.html">前往修改</a>
           </article>
           <article class="task-card">
-            <h3>7-Day Green Proposal</h3>
-            <p>填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。</p>
-            <a class="pill" href="./green-action-7day.html">開始任務</a>
+            <h3 id="taskProposalTitle">7-Day Green Proposal</h3>
+            <p id="taskProposalBody">填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。</p>
+            <a id="taskProposalLink" class="pill" href="./green-action-7day.html">開始任務</a>
           </article>
         </div>
         <div id="reviewerCardWrap" hidden>
           <article class="task-card">
-            <h3>審核者入口</h3>
-            <p>你目前具有 Level 3 權限，可進入審核區查看待處理資料。</p>
-            <a class="pill" href="./countries-regions-hope-crisis.html#reviewPanel">前往審核台</a>
+            <h3 id="reviewerCardTitle">審核者入口</h3>
+            <p id="reviewerCardBody">你目前具有 Level 3 權限，可進入審核區查看待處理資料。</p>
+            <a id="reviewerCardLink" class="pill" href="./countries-regions-hope-crisis.html#reviewPanel">前往審核台</a>
           </article>
         </div>
       </section>
 
       <section class="panel">
         <div class="section-head">
-          <h2>7-Day 任務紀錄 / Proposal Submissions</h2>
-          <p>最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。</p>
+          <h2 id="proposalSectionTitle">7-Day 任務紀錄 / Proposal Submissions</h2>
+          <p id="proposalSectionBody">最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。</p>
         </div>
         <div class="stats-strip">
           <div class="stat-box">
-            <span>完成天數 / Days Completed</span>
+            <span id="statDaysLabel">完成天數 / Days Completed</span>
             <strong id="statCompletedDays">0</strong>
-            <p>以不同日期計算，方便看目前完成了幾天。</p>
+            <p id="statDaysBody">以不同日期計算，方便看目前完成了幾天。</p>
           </div>
           <div class="stat-box">
-            <span>任務總數 / Total Tasks</span>
+            <span id="statTasksLabel">任務總數 / Total Tasks</span>
             <strong id="statTotalTasks">0</strong>
-            <p>包含所有已提交的 7-Day Green Proposal 紀錄。</p>
+            <p id="statTasksBody">包含所有已提交的 7-Day Green Proposal 紀錄。</p>
           </div>
           <div class="stat-box">
-            <span>最近提交 / Latest Submission</span>
+            <span id="statLatestLabel">最近提交 / Latest Submission</span>
             <strong id="statLatestDate">-</strong>
-            <p>最後一次提交任務的日期。</p>
+            <p id="statLatestBody">最後一次提交任務的日期。</p>
           </div>
         </div>
         <div id="submissionEmpty" class="empty-box">尚未登入，或你目前還沒有提交任何 7-Day 任務。</div>
@@ -505,8 +544,8 @@
 
       <section id="reviewerSubmissionPanel" class="panel" hidden>
         <div class="section-head">
-          <h2>Level 3 投稿總覽 / Global 7-Day Review List</h2>
-          <p>Level 3 可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。</p>
+          <h2 id="reviewSectionTitle">Level 3 投稿總覽 / Global 7-Day Review List</h2>
+          <p id="reviewSectionBody">Level 3 可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。</p>
         </div>
         <div id="reviewerSubmissionEmpty" class="empty-box">目前沒有可顯示的 7-Day 投稿。</div>
         <div id="reviewerSubmissionList" class="review-list" hidden></div>
@@ -516,13 +555,13 @@
 
   <section id="loginModal" class="modal" aria-hidden="true">
     <div class="modal-card">
-      <h3>會員登入 / Member Sign In</h3>
+      <h3 id="loginModalTitle">會員登入 / Member Sign In</h3>
       <div>
-        <label for="loginEmail">Email</label>
+        <label id="loginEmailLabel" for="loginEmail">Email</label>
         <input id="loginEmail" type="email" autocomplete="email" />
       </div>
       <div>
-        <label for="loginPassword">Password</label>
+        <label id="loginPasswordLabel" for="loginPassword">Password</label>
         <input id="loginPassword" type="password" autocomplete="current-password" />
       </div>
       <div class="actions">
@@ -534,7 +573,7 @@
     </div>
   </section>
 
-  <footer class="foot">Blue Sky Returns • Member Center • 2026</footer>
+  <footer id="pageFooter" class="foot">Blue Sky Returns • Member Center • 2026</footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
@@ -566,6 +605,133 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
+    const LANG_STORAGE_KEY = "bsr_lang";
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
+    const I18N = {
+      zh: {
+        pageTitle: "會員中心 | Blue Sky Returns",
+        brandSubtitle: "會員中心 / Member Center",
+        nav: { main: "主地球首頁", about: "項目介紹", regions: "各國與區域", proposal: "7 日綠色提案", step: "邁出一步", member: "會員中心", signIn: "登入 / Sign In", signOut: "登出 / Sign Out" },
+        hero: { badge: "Member Dashboard", title: "氣候行動者會員中心", body: "登入後，你可以看到自己的氣候行動者資料、邁出一步問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。", proposal: "前往 7-Day Green Proposal", step: "修改邁出一步" },
+        stateCardTitle: "目前登入狀態",
+        abilityCardTitle: "目前可做的事",
+        sections: {
+          summaryTitle: "帳號摘要 / Member Summary",
+          summaryBody: "這裡會顯示你目前的基本資訊、權限等級與問卷結果。",
+          basicCard: "基本資料",
+          resultCard: "邁出一步結果",
+          tasksTitle: "目前功能 / What You Have",
+          tasksBody: "依照你的權限，會員中心會整理目前可以直接進行的任務。",
+          proposalTitle: "7-Day 任務紀錄 / Proposal Submissions",
+          proposalBody: "最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。",
+          reviewTitle: "Level 3 投稿總覽 / Global 7-Day Review List",
+          reviewBody: "Level 3 可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。"
+        },
+        tasks: {
+          stepTitle: "邁出一步",
+          stepBody: "建立或更新你的氣候行動者資料，並重跑問卷結果。",
+          stepLink: "前往修改",
+          proposalTitle: "7-Day Green Proposal",
+          proposalBody: "填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。",
+          proposalLink: "開始任務",
+          reviewerTitle: "審核者入口",
+          reviewerBody: "你目前具有 Level 3 權限，可進入審核區查看待處理資料。",
+          reviewerLink: "前往審核台"
+        },
+        stats: {
+          daysLabel: "完成天數 / Days Completed",
+          daysBody: "以不同日期計算，方便看目前完成了幾天。",
+          tasksLabel: "任務總數 / Total Tasks",
+          tasksBody: "包含所有已提交的 7-Day Green Proposal 紀錄。",
+          latestLabel: "最近提交 / Latest Submission",
+          latestBody: "最後一次提交任務的日期。"
+        },
+        loginModal: { title: "會員登入 / Member Sign In", email: "Email", password: "Password", submit: "登入 / Sign In", forgot: "忘記密碼 / Reset Password", cancel: "取消 / Cancel" },
+        footer: "Blue Sky Returns • Member Center • 2026",
+        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", role: "角色卡：", score: "總分：", region: "地區 / 分會：", updatedAt: "更新時間：" },
+        states: {
+          guest: "尚未登入",
+          guestAbility: "請先登入以查看你的會員資料、7-Day 任務紀錄與可用功能。",
+          guestSubmissions: "尚未登入，或你目前還沒有提交任何 7-Day 任務。",
+          noSubmissions: "你目前還沒有提交任何 7-Day 任務。",
+          noReviewerSubmissions: "目前沒有可顯示的 7-Day 投稿。",
+          signedInPrefix: "已登入：",
+          dashboard: {
+            level3: "你可以修改邁出一步、提交 7-Day 任務，也可以前往審核台。",
+            level2: "你可以修改邁出一步，並提交 7-Day Green Proposal 與其他上傳內容。",
+            level1: "你可以修改邁出一步，並提交 7-Day Green Proposal 任務。"
+          },
+          readError: "讀取會員資料時發生問題，請稍後再試。",
+          loginFailed: "登入失敗，請重新確認 Email 與密碼。",
+          resetSent: "重設密碼信已寄出。",
+          resetFailed: "寄送失敗，請先輸入正確 Email。"
+        },
+        partner: { organization: "組織 / Organization", general: "一般 / General" },
+        permission: { level1: "Level 1 General / 一般", level2: "Level 2 Organization / 組織", level3: "Level 3 Reviewer / 審核者" }
+      },
+      en: {
+        pageTitle: "Member Center | Blue Sky Returns",
+        brandSubtitle: "Member Center",
+        nav: { main: "Main Globe", about: "About", regions: "Countries & Regions", proposal: "7-Day Green Proposal", step: "Take One Step", member: "Member Center", signIn: "Sign In", signOut: "Sign Out" },
+        hero: { badge: "Member Dashboard", title: "Climate Action Partner Center", body: "After signing in, you can view your climate action partner profile, Take One Step results, 7-Day Green Proposal records, and the features currently available to you.", proposal: "Open 7-Day Green Proposal", step: "Edit Take One Step" },
+        stateCardTitle: "Current Sign-In Status",
+        abilityCardTitle: "What You Can Do Now",
+        sections: {
+          summaryTitle: "Member Summary",
+          summaryBody: "This section shows your current profile, permission level, and questionnaire result.",
+          basicCard: "Profile Basics",
+          resultCard: "Take One Step Result",
+          tasksTitle: "Current Features",
+          tasksBody: "The member center organizes the actions you can take based on your current permission level.",
+          proposalTitle: "7-Day Task Records",
+          proposalBody: "Your recent 7-Day Green Proposal uploads appear here so you can review what you have completed so far.",
+          reviewTitle: "Level 3 Global 7-Day Review List",
+          reviewBody: "Level 3 accounts can review recent 7-Day Green Proposal submissions across the site directly from the member center."
+        },
+        tasks: {
+          stepTitle: "Take One Step",
+          stepBody: "Create or update your climate action partner profile and refresh your questionnaire result.",
+          stepLink: "Edit Now",
+          proposalTitle: "7-Day Green Proposal",
+          proposalBody: "Log today's green action and upload a photo as part of your task record.",
+          proposalLink: "Start Task",
+          reviewerTitle: "Reviewer Access",
+          reviewerBody: "Your Level 3 permission lets you open the reviewer desk and inspect pending items.",
+          reviewerLink: "Open Reviewer Desk"
+        },
+        stats: {
+          daysLabel: "Days Completed",
+          daysBody: "Counted by unique dates so you can see how many days are already completed.",
+          tasksLabel: "Total Tasks",
+          tasksBody: "Includes every submitted 7-Day Green Proposal entry.",
+          latestLabel: "Latest Submission",
+          latestBody: "The date of your most recent task submission."
+        },
+        loginModal: { title: "Member Sign In", email: "Email", password: "Password", submit: "Sign In", forgot: "Reset Password", cancel: "Cancel" },
+        footer: "Blue Sky Returns • Member Center • 2026",
+        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", role: "Role Card: ", score: "Score: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
+        states: {
+          guest: "Signed out",
+          guestAbility: "Sign in first to view your profile, 7-Day task history, and available actions.",
+          guestSubmissions: "You are not signed in yet, or you have not submitted any 7-Day tasks.",
+          noSubmissions: "You have not submitted any 7-Day tasks yet.",
+          noReviewerSubmissions: "There are no 7-Day submissions to display right now.",
+          signedInPrefix: "Signed in: ",
+          dashboard: {
+            level3: "You can edit Take One Step, submit 7-Day tasks, and open the reviewer desk.",
+            level2: "You can edit Take One Step and submit 7-Day Green Proposal tasks and other uploads.",
+            level1: "You can edit Take One Step and submit 7-Day Green Proposal tasks."
+          },
+          readError: "There was a problem loading member data. Please try again later.",
+          loginFailed: "Sign-in failed. Please check your email and password.",
+          resetSent: "Password reset email sent.",
+          resetFailed: "Sending failed. Please enter a valid email first."
+        },
+        partner: { organization: "Organization", general: "General" },
+        permission: { level1: "Level 1 General", level2: "Level 2 Organization", level3: "Level 3 Reviewer" }
+      }
+    };
+    const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
 
     const openLoginBtn = document.getElementById("openLoginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
@@ -596,18 +762,75 @@
     const statCompletedDays = document.getElementById("statCompletedDays");
     const statTotalTasks = document.getElementById("statTotalTasks");
     const statLatestDate = document.getElementById("statLatestDate");
+    const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
 
-    const getDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || "氣候行動者";
+    const getDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || (currentLang === "zh" ? "氣候行動者" : "Climate Action Partner");
     const getPermissionLabel = (level) => {
-      if (level === 3) return "Level 3 Reviewer / 審核者";
-      if (level === 2) return "Level 2 Organization / 組織";
-      return "Level 1 General / 一般";
+      if (level === 3) return t("permission.level3");
+      if (level === 2) return t("permission.level2");
+      return t("permission.level1");
     };
-    const getPartnerLabel = (type) => type === "organization" ? "組織 / Organization" : "一般 / General";
+    const getPartnerLabel = (type) => type === "organization" ? t("partner.organization") : t("partner.general");
     const formatDate = (value) => {
       if (!value) return "-";
       if (typeof value === "string") return value;
       return "-";
+    };
+    const formatSummaryLine = (key, value) => `${t(`summaryLabels.${key}`)}${value}`;
+    const applyLanguage = (lang) => {
+      currentLang = lang;
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+      document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+      document.title = t("pageTitle");
+      document.getElementById("brandSubtitle").textContent = t("brandSubtitle");
+      document.getElementById("navMain").textContent = t("nav.main");
+      document.getElementById("navAbout").textContent = t("nav.about");
+      document.getElementById("navRegions").textContent = t("nav.regions");
+      document.getElementById("navProposal").textContent = t("nav.proposal");
+      document.getElementById("navStep").textContent = t("nav.step");
+      document.getElementById("navMember").textContent = t("nav.member");
+      openLoginBtn.textContent = t("nav.signIn");
+      logoutBtn.textContent = t("nav.signOut");
+      document.getElementById("heroBadge").textContent = t("hero.badge");
+      document.getElementById("heroTitle").textContent = t("hero.title");
+      document.getElementById("heroBody").textContent = t("hero.body");
+      document.getElementById("heroActionProposal").textContent = t("hero.proposal");
+      document.getElementById("heroActionStep").textContent = t("hero.step");
+      document.getElementById("stateCardTitle").textContent = t("stateCardTitle");
+      document.getElementById("abilityCardTitle").textContent = t("abilityCardTitle");
+      document.getElementById("summarySectionTitle").textContent = t("sections.summaryTitle");
+      document.getElementById("summarySectionBody").textContent = t("sections.summaryBody");
+      document.getElementById("basicCardTitle").textContent = t("sections.basicCard");
+      document.getElementById("stepResultCardTitle").textContent = t("sections.resultCard");
+      document.getElementById("tasksSectionTitle").textContent = t("sections.tasksTitle");
+      document.getElementById("tasksSectionBody").textContent = t("sections.tasksBody");
+      document.getElementById("taskStepTitle").textContent = t("tasks.stepTitle");
+      document.getElementById("taskStepBody").textContent = t("tasks.stepBody");
+      document.getElementById("taskStepLink").textContent = t("tasks.stepLink");
+      document.getElementById("taskProposalTitle").textContent = t("tasks.proposalTitle");
+      document.getElementById("taskProposalBody").textContent = t("tasks.proposalBody");
+      document.getElementById("taskProposalLink").textContent = t("tasks.proposalLink");
+      document.getElementById("reviewerCardTitle").textContent = t("tasks.reviewerTitle");
+      document.getElementById("reviewerCardBody").textContent = t("tasks.reviewerBody");
+      document.getElementById("reviewerCardLink").textContent = t("tasks.reviewerLink");
+      document.getElementById("proposalSectionTitle").textContent = t("sections.proposalTitle");
+      document.getElementById("proposalSectionBody").textContent = t("sections.proposalBody");
+      document.getElementById("statDaysLabel").textContent = t("stats.daysLabel");
+      document.getElementById("statDaysBody").textContent = t("stats.daysBody");
+      document.getElementById("statTasksLabel").textContent = t("stats.tasksLabel");
+      document.getElementById("statTasksBody").textContent = t("stats.tasksBody");
+      document.getElementById("statLatestLabel").textContent = t("stats.latestLabel");
+      document.getElementById("statLatestBody").textContent = t("stats.latestBody");
+      document.getElementById("reviewSectionTitle").textContent = t("sections.reviewTitle");
+      document.getElementById("reviewSectionBody").textContent = t("sections.reviewBody");
+      document.getElementById("loginModalTitle").textContent = t("loginModal.title");
+      document.getElementById("loginEmailLabel").textContent = t("loginModal.email");
+      document.getElementById("loginPasswordLabel").textContent = t("loginModal.password");
+      loginSubmitBtn.textContent = t("loginModal.submit");
+      forgotPasswordBtn.textContent = t("loginModal.forgot");
+      closeLoginModalBtn.textContent = t("loginModal.cancel");
+      document.getElementById("pageFooter").textContent = t("footer");
+      langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
     };
 
     const openLoginModal = () => {
@@ -622,14 +845,14 @@
     };
 
     const resetSummary = () => {
-      summaryName.textContent = "姓名 / 單位：-";
-      summaryEmail.textContent = "Email：-";
-      summaryPartnerType.textContent = "類型：-";
-      summaryPermission.textContent = "權限：-";
-      summaryRole.textContent = "角色卡：-";
-      summaryScore.textContent = "總分：-";
-      summaryRegion.textContent = "地區 / 分會：-";
-      summaryUpdatedAt.textContent = "更新時間：-";
+      summaryName.textContent = formatSummaryLine("name", "-");
+      summaryEmail.textContent = formatSummaryLine("email", "-");
+      summaryPartnerType.textContent = formatSummaryLine("partnerType", "-");
+      summaryPermission.textContent = formatSummaryLine("permission", "-");
+      summaryRole.textContent = formatSummaryLine("role", "-");
+      summaryScore.textContent = formatSummaryLine("score", "-");
+      summaryRegion.textContent = formatSummaryLine("region", "-");
+      summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", "-");
       submissionList.innerHTML = "";
       submissionList.hidden = true;
       submissionEmpty.hidden = false;
@@ -641,12 +864,14 @@
       statCompletedDays.textContent = "0";
       statTotalTasks.textContent = "0";
       statLatestDate.textContent = "-";
+      submissionEmpty.textContent = t("states.guestSubmissions");
+      reviewerSubmissionEmpty.textContent = t("states.noReviewerSubmissions");
     };
 
     const renderGuestState = () => {
-      memberStateEl.textContent = "尚未登入";
+      memberStateEl.textContent = t("states.guest");
       memberStateEl.className = "status";
-      abilitySummaryEl.textContent = "請先登入以查看你的會員資料、7-Day 任務紀錄與可用功能。";
+      abilitySummaryEl.textContent = t("states.guestAbility");
       openLoginBtn.hidden = false;
       logoutBtn.hidden = true;
       resetSummary();
@@ -725,7 +950,7 @@
       statLatestDate.textContent = submissions[0]?.taskDate || "-";
 
       if (!submissions.length) {
-        submissionEmpty.textContent = "你目前還沒有提交任何 7-Day 任務。";
+        submissionEmpty.textContent = t("states.noSubmissions");
         return;
       }
 
@@ -746,7 +971,7 @@
         .slice(0, 20);
 
       if (!submissions.length) {
-        reviewerSubmissionEmpty.textContent = "目前沒有可顯示的 7-Day 投稿。";
+        reviewerSubmissionEmpty.textContent = t("states.noReviewerSubmissions");
         return;
       }
 
@@ -769,7 +994,7 @@
         closeLoginModal();
       } catch (error) {
         console.error(error);
-        loginStatusEl.textContent = "登入失敗，請重新確認 Email 與密碼。";
+        loginStatusEl.textContent = t("states.loginFailed");
         loginStatusEl.className = "status error";
       } finally {
         loginSubmitBtn.disabled = false;
@@ -781,11 +1006,11 @@
       forgotPasswordBtn.disabled = true;
       try {
         await sendPasswordResetEmail(auth, loginEmailInput.value.trim());
-        loginStatusEl.textContent = "重設密碼信已寄出。";
+        loginStatusEl.textContent = t("states.resetSent");
         loginStatusEl.className = "status ok";
       } catch (error) {
         console.error(error);
-        loginStatusEl.textContent = "寄送失敗，請先輸入正確 Email。";
+        loginStatusEl.textContent = t("states.resetFailed");
         loginStatusEl.className = "status error";
       } finally {
         forgotPasswordBtn.disabled = false;
@@ -804,7 +1029,7 @@
 
       openLoginBtn.hidden = true;
       logoutBtn.hidden = false;
-      memberStateEl.textContent = `已登入：${getDisplayName(user)}`;
+      memberStateEl.textContent = `${t("states.signedInPrefix")}${getDisplayName(user)}`;
       memberStateEl.className = "status ok";
 
       try {
@@ -812,20 +1037,20 @@
         const member = memberSnap.exists() ? memberSnap.data() : {};
         const permissionLevel = Number(member.permissionLevel || 1);
 
-        summaryName.textContent = `姓名 / 單位：${member.name || getDisplayName(user)}`;
-        summaryEmail.textContent = `Email：${user.email || "-"}`;
-        summaryPartnerType.textContent = `類型：${getPartnerLabel(member.partnerType)}`;
-        summaryPermission.textContent = `權限：${getPermissionLabel(permissionLevel)}`;
-        summaryRole.textContent = `角色卡：${member.resultRole || "-"}`;
-        summaryScore.textContent = `總分：${member.totalScore ?? "-"}`;
-        summaryRegion.textContent = `地區 / 分會：${member.region || "-"}${member.chapter ? ` / ${member.chapter}` : ""}`;
-        summaryUpdatedAt.textContent = `更新時間：${formatDate(member.updatedAt?.toDate?.()?.toISOString?.() || member.updatedAt)}`;
+        summaryName.textContent = formatSummaryLine("name", member.name || getDisplayName(user));
+        summaryEmail.textContent = formatSummaryLine("email", user.email || "-");
+        summaryPartnerType.textContent = formatSummaryLine("partnerType", getPartnerLabel(member.partnerType));
+        summaryPermission.textContent = formatSummaryLine("permission", getPermissionLabel(permissionLevel));
+        summaryRole.textContent = formatSummaryLine("role", member.resultRole || "-");
+        summaryScore.textContent = formatSummaryLine("score", member.totalScore ?? "-");
+        summaryRegion.textContent = formatSummaryLine("region", `${member.region || "-"}${member.chapter ? ` / ${member.chapter}` : ""}`);
+        summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", formatDate(member.updatedAt?.toDate?.()?.toISOString?.() || member.updatedAt));
 
         abilitySummaryEl.textContent = permissionLevel >= 3
-          ? "你可以修改邁出一步、提交 7-Day 任務，也可以前往審核台。"
+          ? t("states.dashboard.level3")
           : permissionLevel >= 2
-            ? "你可以修改邁出一步，並提交 7-Day Green Proposal 與其他上傳內容。"
-            : "你可以修改邁出一步，並提交 7-Day Green Proposal 任務。";
+            ? t("states.dashboard.level2")
+            : t("states.dashboard.level1");
 
         reviewerCardWrap.hidden = permissionLevel !== 3;
         await loadSubmissions(user.uid);
@@ -837,10 +1062,22 @@
         }
       } catch (error) {
         console.error(error);
-        abilitySummaryEl.textContent = "讀取會員資料時發生問題，請稍後再試。";
+        abilitySummaryEl.textContent = t("states.readError");
         resetSummary();
       }
     });
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        applyLanguage(button.dataset.lang);
+        if (!auth.currentUser) {
+          renderGuestState();
+        }
+      });
+    });
+
+    applyLanguage(currentLang);
+    renderGuestState();
   </script>
 </body>
 </html>

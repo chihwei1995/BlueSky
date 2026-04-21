@@ -90,6 +90,12 @@
       border-color: rgba(31, 143, 88, 0.4);
       box-shadow: 0 10px 24px rgba(31, 143, 88, 0.12);
     }
+    .pill.active {
+      background: linear-gradient(135deg, var(--green), var(--lime));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(31, 143, 88, 0.18);
+    }
     .lang-toggle {
       display: inline-flex;
       gap: 6px;
@@ -524,12 +530,12 @@
         <span data-i18n="header.subtitle">7-Day flexible green challenge</span>
       </div>
       <div class="nav-actions">
-        <a class="pill" href="../index.html" data-i18n="nav.back">← Back to Main</a>
+        <a class="pill" href="../index.html" data-i18n="nav.main">Main Globe</a>
         <a class="pill" href="./index.html" data-i18n="nav.about">About</a>
         <a class="pill" href="./countries-regions-hope-crisis.html" data-i18n="nav.call">Countries &amp; Regions</a>
-        <a class="pill" href="./member-center.html" data-i18n="nav.member">Member Center</a>
+        <a class="pill active" href="./green-action-7day.html" data-i18n="nav.proposal">7-Day Green Proposal</a>
         <a class="pill" href="./climate-action-form.html" data-i18n="nav.form">Take One Step</a>
-        <a class="pill" href="./member-center.html" data-i18n="nav.signIn">Sign In</a>
+        <a class="pill" href="./member-center.html" data-i18n="nav.member">Member Center</a>
         <div class="lang-toggle" role="group" aria-label="Language switcher">
           <button class="lang-btn active" type="button" data-lang="zh">中文</button>
           <button class="lang-btn" type="button" data-lang="en">EN</button>
@@ -766,7 +772,7 @@
       zh: {
         page: { title: "自定義 7 日綠色提案 | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "自定義 7 日綠色提案" },
-        nav: { back: "← 回到主頁", about: "About", call: "各國與區域導覽", member: "會員中心", form: "邁出一步", signIn: "登入" },
+        nav: { main: "主地球首頁", about: "項目介紹", call: "各國與區域", proposal: "7 日綠色提案", member: "會員中心", form: "邁出一步" },
         mobileNav: {
           title: "快速導覽", concept: "概念", conceptSub: "為什麼這樣設計", dimensions: "五大維度", dimensionsSub: "素・行・減・能・森", flow: "7 天節奏", flowSub: "如何參與", cta: "下一步", ctaSub: "開始加入"
         },
@@ -796,7 +802,7 @@
       en: {
         page: { title: "7-Day Green Proposal | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "7-Day Green Proposal" },
-        nav: { back: "← Back to Main", about: "About", call: "Countries & Regions", member: "Member Center", form: "Take One Step", signIn: "Sign In" },
+        nav: { main: "Main Globe", about: "About", call: "Countries & Regions", proposal: "7-Day Green Proposal", member: "Member Center", form: "Take One Step" },
         mobileNav: {
           title: "Quick Navigation", concept: "Concept", conceptSub: "Why this format works", dimensions: "Five Dimensions", dimensionsSub: "Diet, Mobility, Waste, Energy, Nature", flow: "7-Day Flow", flowSub: "How to participate", cta: "Next Step", ctaSub: "Join the action"
         },

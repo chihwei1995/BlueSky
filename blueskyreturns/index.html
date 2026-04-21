@@ -91,6 +91,13 @@
       transform: translateY(-1px);
     }
 
+    .nav-link.active {
+      background: linear-gradient(135deg, var(--accent), #38bdf8);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(14, 165, 233, 0.22);
+    }
+
     .lang-toggle {
       display: inline-flex;
       border: 1px solid var(--border);
@@ -223,11 +230,12 @@
         <span data-i18n="header.title">One Step Blue Sky Returns</span>
       </a>
       <div class="header-actions">
-        <a class="nav-link" href="../index.html" data-i18n="nav.back">← Back to Main</a>
-        <a class="nav-link" href="./countries-regions-hope-crisis.html" data-i18n="nav.call">Countries & Regions Call</a>
+        <a class="nav-link" href="../index.html" data-i18n="nav.main">Main Globe</a>
+        <a class="nav-link active" href="./index.html" data-i18n="nav.about">About</a>
+        <a class="nav-link" href="./countries-regions-hope-crisis.html" data-i18n="nav.call">Countries & Regions</a>
         <a class="nav-link" href="./green-action-7day.html" data-i18n="nav.proposal">7-Day Green Proposal</a>
         <a class="nav-link" href="./climate-action-form.html" data-i18n="nav.form">Take One Step</a>
-        <a class="nav-link" href="./member-center.html" data-i18n="nav.signIn">Sign In</a>
+        <a class="nav-link" href="./member-center.html" data-i18n="nav.member">Member Center</a>
         <div class="lang-toggle" role="group" data-i18n-aria-label="aria.languageToggle">
           <button class="lang-btn active" data-lang="en" type="button">EN</button>
           <button class="lang-btn" data-lang="zh" type="button">中文</button>
@@ -329,11 +337,12 @@
           title: 'One Step Blue Sky Returns'
         },
         nav: {
-          back: '← Back to Main',
-          call: 'Countries & Regions Call',
+          main: 'Main Globe',
+          about: 'About',
+          call: 'Countries & Regions',
           proposal: '7-Day Green Proposal',
           form: 'Take One Step',
-          signIn: 'Sign In'
+          member: 'Member Center'
         },
         hero: {
           title: 'International Affairs | One Step Blue Sky Returns',
@@ -390,11 +399,12 @@
           title: '一步・藍天 BLUE SKY RETURNS'
         },
         nav: {
-          back: '← 回到主頁',
-          call: '各國與區域徵件頁',
+          main: '主地球首頁',
+          about: '項目介紹',
+          call: '各國與區域',
           proposal: '7 日綠色提案',
           form: '邁出一步',
-          signIn: '登入'
+          member: '會員中心'
         },
         hero: {
           title: '國際事務組｜一步・藍天 BLUE SKY RETURNS',
