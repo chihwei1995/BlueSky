@@ -255,6 +255,47 @@
       border: 1px solid var(--line);
     }
 
+    .stats-strip {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .stat-box {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(238,246,255,0.92));
+      display: grid;
+      gap: 6px;
+    }
+
+    .stat-box strong {
+      font-size: 1.8rem;
+      color: var(--blue);
+      line-height: 1;
+    }
+
+    .review-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .review-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.9);
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .review-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .submission-meta {
       display: flex;
       gap: 8px;
@@ -317,7 +358,8 @@
 
     @media (max-width: 860px) {
       .hero,
-      .grid.two {
+      .grid.two,
+      .stats-strip {
         grid-template-columns: 1fr;
       }
     }
@@ -440,8 +482,34 @@
           <h2>7-Day 任務紀錄 / Proposal Submissions</h2>
           <p>最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。</p>
         </div>
+        <div class="stats-strip">
+          <div class="stat-box">
+            <span>完成天數 / Days Completed</span>
+            <strong id="statCompletedDays">0</strong>
+            <p>以不同日期計算，方便看目前完成了幾天。</p>
+          </div>
+          <div class="stat-box">
+            <span>任務總數 / Total Tasks</span>
+            <strong id="statTotalTasks">0</strong>
+            <p>包含所有已提交的 7-Day Green Proposal 紀錄。</p>
+          </div>
+          <div class="stat-box">
+            <span>最近提交 / Latest Submission</span>
+            <strong id="statLatestDate">-</strong>
+            <p>最後一次提交任務的日期。</p>
+          </div>
+        </div>
         <div id="submissionEmpty" class="empty-box">尚未登入，或你目前還沒有提交任何 7-Day 任務。</div>
         <div id="submissionList" class="submission-list" hidden></div>
+      </section>
+
+      <section id="reviewerSubmissionPanel" class="panel" hidden>
+        <div class="section-head">
+          <h2>Level 3 投稿總覽 / Global 7-Day Review List</h2>
+          <p>Level 3 可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。</p>
+        </div>
+        <div id="reviewerSubmissionEmpty" class="empty-box">目前沒有可顯示的 7-Day 投稿。</div>
+        <div id="reviewerSubmissionList" class="review-list" hidden></div>
       </section>
     </div>
   </main>
@@ -513,6 +581,9 @@
     const reviewerCardWrap = document.getElementById("reviewerCardWrap");
     const submissionList = document.getElementById("submissionList");
     const submissionEmpty = document.getElementById("submissionEmpty");
+    const reviewerSubmissionPanel = document.getElementById("reviewerSubmissionPanel");
+    const reviewerSubmissionEmpty = document.getElementById("reviewerSubmissionEmpty");
+    const reviewerSubmissionList = document.getElementById("reviewerSubmissionList");
 
     const summaryName = document.getElementById("summaryName");
     const summaryEmail = document.getElementById("summaryEmail");
@@ -522,6 +593,9 @@
     const summaryScore = document.getElementById("summaryScore");
     const summaryRegion = document.getElementById("summaryRegion");
     const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
+    const statCompletedDays = document.getElementById("statCompletedDays");
+    const statTotalTasks = document.getElementById("statTotalTasks");
+    const statLatestDate = document.getElementById("statLatestDate");
 
     const getDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || "氣候行動者";
     const getPermissionLabel = (level) => {
@@ -560,6 +634,13 @@
       submissionList.hidden = true;
       submissionEmpty.hidden = false;
       reviewerCardWrap.hidden = true;
+      reviewerSubmissionPanel.hidden = true;
+      reviewerSubmissionList.innerHTML = "";
+      reviewerSubmissionList.hidden = true;
+      reviewerSubmissionEmpty.hidden = false;
+      statCompletedDays.textContent = "0";
+      statTotalTasks.textContent = "0";
+      statLatestDate.textContent = "-";
     };
 
     const renderGuestState = () => {
@@ -602,6 +683,31 @@
       return article;
     };
 
+    const createReviewerSubmissionCard = (submission) => {
+      const article = document.createElement("article");
+      article.className = "review-item";
+
+      const title = document.createElement("h3");
+      title.textContent = submission.title || "未命名任務";
+      article.appendChild(title);
+
+      const meta = document.createElement("div");
+      meta.className = "review-meta";
+      [submission.memberName || submission.email || "Unknown", submission.taskDate || "-", ...(submission.dimensions || [])].forEach((value) => {
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = value;
+        meta.appendChild(badge);
+      });
+      article.appendChild(meta);
+
+      const caption = document.createElement("p");
+      caption.textContent = submission.caption || "沒有補充說明。";
+      article.appendChild(caption);
+
+      return article;
+    };
+
     const loadSubmissions = async (uid) => {
       submissionList.innerHTML = "";
       submissionEmpty.hidden = false;
@@ -613,6 +719,11 @@
         .filter((item) => item.uid === uid)
         .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
 
+      statTotalTasks.textContent = String(submissions.length);
+      const uniqueDays = new Set(submissions.map((item) => item.taskDate || "").filter(Boolean));
+      statCompletedDays.textContent = String(uniqueDays.size);
+      statLatestDate.textContent = submissions[0]?.taskDate || "-";
+
       if (!submissions.length) {
         submissionEmpty.textContent = "你目前還沒有提交任何 7-Day 任務。";
         return;
@@ -621,6 +732,27 @@
       submissions.forEach((submission) => submissionList.appendChild(createSubmissionCard(submission)));
       submissionEmpty.hidden = true;
       submissionList.hidden = false;
+    };
+
+    const loadReviewerSubmissions = async () => {
+      reviewerSubmissionList.innerHTML = "";
+      reviewerSubmissionList.hidden = true;
+      reviewerSubmissionEmpty.hidden = false;
+
+      const snapshot = await getDocs(collection(db, "greenProposalSubmissions"));
+      const submissions = snapshot.docs
+        .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+        .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
+        .slice(0, 20);
+
+      if (!submissions.length) {
+        reviewerSubmissionEmpty.textContent = "目前沒有可顯示的 7-Day 投稿。";
+        return;
+      }
+
+      submissions.forEach((submission) => reviewerSubmissionList.appendChild(createReviewerSubmissionCard(submission)));
+      reviewerSubmissionEmpty.hidden = true;
+      reviewerSubmissionList.hidden = false;
     };
 
     openLoginBtn.addEventListener("click", openLoginModal);
@@ -697,6 +829,12 @@
 
         reviewerCardWrap.hidden = permissionLevel !== 3;
         await loadSubmissions(user.uid);
+        if (permissionLevel === 3) {
+          reviewerSubmissionPanel.hidden = false;
+          await loadReviewerSubmissions();
+        } else {
+          reviewerSubmissionPanel.hidden = true;
+        }
       } catch (error) {
         console.error(error);
         abilitySummaryEl.textContent = "讀取會員資料時發生問題，請稍後再試。";

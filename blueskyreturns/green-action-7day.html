@@ -456,6 +456,12 @@
       gap: 10px;
     }
 
+    .submission-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .submission-item img {
       width: 100%;
       max-width: 220px;
@@ -854,8 +860,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-    import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -878,11 +884,35 @@
     const taskStatus = document.getElementById("taskStatus");
     const submissionList = document.getElementById("proposalSubmissionList");
     const submissionEmpty = document.getElementById("proposalSubmissionEmpty");
+    let editingSubmissionId = null;
+    let editingSubmissionData = null;
 
     const setTaskStatus = (type, message) => {
       taskStatus.className = "task-status";
       if (type) taskStatus.classList.add(type);
       taskStatus.textContent = message;
+    };
+
+    const populateFormForEdit = (submission) => {
+      editingSubmissionId = submission.id;
+      editingSubmissionData = submission;
+      document.getElementById("taskTitle").value = submission.title || "";
+      document.getElementById("taskDate").value = submission.taskDate || "";
+      document.getElementById("taskCaption").value = submission.caption || "";
+      document.getElementById("taskReflection").value = submission.reflection || "";
+      Array.from(taskForm.querySelectorAll('input[name="dimensions"]')).forEach((checkbox) => {
+        checkbox.checked = (submission.dimensions || []).includes(checkbox.value);
+      });
+      setTaskStatus("warn", "目前正在編輯既有任務，重新送出會更新原內容。");
+      taskSubmitBtn.textContent = "更新任務 / Update";
+      window.scrollTo({ top: taskForm.offsetTop - 120, behavior: "smooth" });
+    };
+
+    const resetTaskForm = () => {
+      editingSubmissionId = null;
+      editingSubmissionData = null;
+      taskForm.reset();
+      taskSubmitBtn.textContent = "提交任務 / Submit";
     };
 
     const renderSubmission = (submission) => {
@@ -919,6 +949,39 @@
         img.alt = submission.title || "7-Day submission image";
         article.appendChild(img);
       }
+
+      const actions = document.createElement("div");
+      actions.className = "submission-actions";
+
+      const editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "pill";
+      editBtn.textContent = "編輯 / Edit";
+      editBtn.addEventListener("click", () => populateFormForEdit(submission));
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.className = "pill";
+      deleteBtn.textContent = "刪除 / Delete";
+      deleteBtn.addEventListener("click", async () => {
+        if (!confirm("確定要刪除這筆 7-Day 任務嗎？")) return;
+        try {
+          setTaskStatus("warn", "正在刪除任務與圖片...");
+          await deleteTaskImage(submission.image);
+          await deleteDoc(doc(db, "greenProposalSubmissions", submission.id));
+          if (editingSubmissionId === submission.id) {
+            resetTaskForm();
+          }
+          setTaskStatus("ok", "任務已刪除。");
+          await loadMySubmissions(auth.currentUser.uid);
+        } catch (error) {
+          console.error(error);
+          setTaskStatus("error", "刪除失敗，請稍後再試。");
+        }
+      });
+
+      actions.append(editBtn, deleteBtn);
+      article.appendChild(actions);
 
       return article;
     };
@@ -957,6 +1020,16 @@
         path: snapshot.metadata.fullPath,
         downloadURL
       };
+    };
+
+    const deleteTaskImage = async (image) => {
+      if (!image?.path) return;
+      try {
+        await deleteObject(ref(storage, image.path));
+      } catch (error) {
+        if (error?.code === "storage/object-not-found") return;
+        throw error;
+      }
     };
 
     onAuthStateChanged(auth, async (user) => {
@@ -998,8 +1071,9 @@
       setTaskStatus("warn", "正在上傳任務資料...");
 
       try {
-        const image = await uploadTaskImage(user.uid, formData.get("taskImage"));
-        await addDoc(collection(db, "greenProposalSubmissions"), {
+        const uploadedImage = await uploadTaskImage(user.uid, formData.get("taskImage"));
+        const image = uploadedImage || editingSubmissionData?.image || null;
+        const payload = {
           uid: user.uid,
           email: user.email || "",
           memberName: user.displayName || "",
@@ -1009,11 +1083,22 @@
           caption: String(formData.get("taskCaption") || "").trim(),
           reflection: String(formData.get("taskReflection") || "").trim(),
           image,
-          createdAt: new Date().toISOString()
-        });
+          createdAt: editingSubmissionData?.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
 
-        taskForm.reset();
-        setTaskStatus("ok", "7-Day 任務已成功提交。");
+        if (editingSubmissionId) {
+          if (uploadedImage && editingSubmissionData?.image?.path && editingSubmissionData.image.path !== uploadedImage.path) {
+            await deleteTaskImage(editingSubmissionData.image);
+          }
+          await updateDoc(doc(db, "greenProposalSubmissions", editingSubmissionId), payload);
+          setTaskStatus("ok", "7-Day 任務已更新。");
+        } else {
+          await addDoc(collection(db, "greenProposalSubmissions"), payload);
+          setTaskStatus("ok", "7-Day 任務已成功提交。");
+        }
+
+        resetTaskForm();
         await loadMySubmissions(user.uid);
       } catch (error) {
         console.error(error);

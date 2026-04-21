@@ -36,7 +36,8 @@ service cloud.firestore {
         (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
       allow update: if isSignedIn() &&
         (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
-      allow delete: if false;
+      allow delete: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
     }
 
     match /members/{userId} {
