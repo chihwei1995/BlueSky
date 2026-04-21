@@ -170,6 +170,10 @@
 
     .ghost-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.10); }
 
+    .ghost-btn.nav-link-btn {
+      white-space: nowrap;
+    }
+
     .anchor-panel {
       position: fixed;
       right: 18px;
@@ -627,6 +631,9 @@
         </div>
 
       <div class="header-actions">
+        <a class="ghost-btn nav-link-btn" href="blueskyreturns/countries-regions-hope-crisis.html" data-i18n="header.call">Countries & Regions</a>
+        <a class="ghost-btn nav-link-btn" href="blueskyreturns/climate-action-form.html" data-i18n="header.form">Climate Action Form</a>
+        <a class="ghost-btn nav-link-btn" href="blueskyreturns/climate-action-form.html?auth=login" data-i18n="header.signIn">Sign In</a>
         <button class="ghost-btn" id="anchorToggle" type="button" data-i18n="header.timeline">📌 Timeline</button>
         <div class="toggle-container" data-i18n-aria-label="aria.modeToggle">
           <button class="toggle-btn active" data-mode="crisis" id="btn-crisis" data-i18n="mode.crisis">⚠️ CRISIS</button>
@@ -706,13 +713,6 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -724,7 +724,7 @@
       measurementId: "G-FQ0114S8CQ"
     };
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const FIRESTORE_REST_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
 
     isSupported()
       .then((supported) => {
@@ -752,7 +752,10 @@
         },
         header: {
           about: 'About',
-          timeline: '📌 Timeline'
+          timeline: '📌 Timeline',
+          call: 'Countries & Regions',
+          form: 'Climate Action Form',
+          signIn: 'Sign In'
         },
         mode: {
           crisis: '⚠️ CRISIS',
@@ -809,7 +812,10 @@
         },
         header: {
           about: '關於',
-          timeline: '📌 時間線'
+          timeline: '📌 時間線',
+          call: '各國與區域',
+          form: '氣候行動表單',
+          signIn: '登入'
         },
         mode: {
           crisis: '⚠️ 危機',
@@ -1296,7 +1302,8 @@
       infoCollapsed: false,
       timelineCollapsed: false,
       anchorOpen: false,
-      language: 'en'
+      language: 'en',
+      uiEventsAttached: false
     };
 
     const getI18n = (path) => {
@@ -1396,27 +1403,65 @@
       return res.json();
     };
 
-    const fetchGlobeEventsFromFirestore = async () => {
-      // Public globe data is loaded from Firestore so updates do not require redeploying the site.
-      const [eventsSnap, configSnap] = await Promise.all([
-        getDocs(collection(db, 'globeEvents')),
-        getDoc(doc(db, 'siteConfig', 'globe'))
-      ]);
+    const decodeFirestoreValue = (value) => {
+      if (!value || typeof value !== 'object') return null;
+      if ('stringValue' in value) return value.stringValue;
+      if ('integerValue' in value) return Number(value.integerValue);
+      if ('doubleValue' in value) return Number(value.doubleValue);
+      if ('booleanValue' in value) return Boolean(value.booleanValue);
+      if ('nullValue' in value) return null;
+      if ('timestampValue' in value) return value.timestampValue;
+      if ('mapValue' in value) {
+        const fields = value.mapValue.fields || {};
+        return Object.fromEntries(
+          Object.entries(fields).map(([key, nestedValue]) => [key, decodeFirestoreValue(nestedValue)])
+        );
+      }
+      if ('arrayValue' in value) {
+        return (value.arrayValue.values || []).map(decodeFirestoreValue);
+      }
+      return null;
+    };
 
-      const events = eventsSnap.docs.map((snapshot) => {
-        const event = snapshot.data();
-        return {
-          ...event,
-          id: event.id ?? snapshot.id
-        };
-      });
+    const decodeFirestoreDocument = (document) => {
+      const fields = document?.fields || {};
+      const decoded = Object.fromEntries(
+        Object.entries(fields).map(([key, value]) => [key, decodeFirestoreValue(value)])
+      );
+      return {
+        ...decoded,
+        id: decoded.id || document.name?.split('/').pop()
+      };
+    };
+
+    const fetchFirestoreDocument = async (docPath) => {
+      const res = await fetch(`${FIRESTORE_REST_BASE}/${docPath}`, { cache: 'no-store' });
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error(`Firestore REST fetch failed: ${docPath} (${res.status})`);
+      const document = await res.json();
+      return decodeFirestoreDocument(document);
+    };
+
+    const fetchFirestoreCollection = async (collectionPath) => {
+      const res = await fetch(`${FIRESTORE_REST_BASE}/${collectionPath}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`Firestore REST fetch failed: ${collectionPath} (${res.status})`);
+      const payload = await res.json();
+      return (payload.documents || []).map(decodeFirestoreDocument);
+    };
+
+    const fetchGlobeEventsFromFirestore = async () => {
+      // Public globe data is loaded through Firestore REST to avoid SDK listen-channel blockers.
+      const [events, config] = await Promise.all([
+        fetchFirestoreCollection('globeEvents'),
+        fetchFirestoreDocument('siteConfig/globe')
+      ]);
 
       if (!events.length) {
         throw new Error('Firestore collection globeEvents is empty');
       }
 
       return {
-        config: configSnap.exists() ? configSnap.data() : undefined,
+        config: config || undefined,
         events
       };
     };
@@ -1525,6 +1570,7 @@
 
     const renderPoints = () => {
       state.filtered = state.events.filter(ev => ev.mode === state.currentMode);
+      if (!state.world?.pointsData) return;
       state.world.pointsData(state.filtered);
     };
 
@@ -1594,6 +1640,16 @@
       const t0 = performance.now();
 
       const step = (now) => {
+        if (
+          !mat ||
+          !mat.color ||
+          typeof mat.color.setRGB !== 'function' ||
+          !mat.emissive ||
+          typeof mat.emissive.setRGB !== 'function'
+        ) {
+          return;
+        }
+
         const t = clamp01((now - t0) / duration);
         const ease = t * (2 - t);
 
@@ -1649,7 +1705,7 @@
       // ✅ 手機：點事件就收合時間表（避免干擾/重疊）
       if (IS_MOBILE) setTimelineCollapsed(true);
 
-      state.world.pointOfView({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
+      state.world?.pointOfView?.({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
 
       const translated = getEventTranslation(data);
       const card = document.getElementById('infoPanel');
@@ -1884,6 +1940,9 @@
     };
 
     const attachUIEvents = () => {
+      if (state.uiEventsAttached) return;
+      state.uiEventsAttached = true;
+
       document.getElementById('btn-crisis').addEventListener('click', () => applyMode('crisis'));
       document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
 
@@ -1982,10 +2041,8 @@
     window.addEventListener('orientationchange', updateMobileLayoutVars);
 
     const bootstrap = async () => {
-      const uiLayer = document.getElementById('ui-layer');
-      uiLayer.style.pointerEvents = 'none';
-
       playEntryOverlay();
+      attachUIEvents();
 
       const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
       const initialLang = savedLang === 'zh' ? 'zh' : 'en';
@@ -2037,7 +2094,6 @@
         mat.emissive.setRGB(0, 0, 0);
       }
 
-      attachUIEvents();
       createPulse();
 
       state.world.pointOfView({
@@ -2062,8 +2118,6 @@
       setTimelineCollapsed(IS_MOBILE);
 
       applyMode(state.currentMode);
-
-      uiLayer.style.pointerEvents = 'auto';
 
       if (window.location.hash) {
         const targetId = window.location.hash.replace('#', '');

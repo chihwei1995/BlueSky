@@ -345,7 +345,7 @@
           <label class="required">氣侯行動者類型 (Climate Action Partner Type)</label>
           <div class="options">
             <label class="option">
-              <input type="radio" name="partner_type" value="general" required />
+              <input type="radio" name="partner_type" value="general" checked />
               一般 General
             </label>
             <label class="option">
@@ -354,7 +354,7 @@
             </label>
           </div>
         </fieldset>
-        <p class="helper">預設參數：一般為 1，組織為 2。你後台之後仍可再調整。</p>
+        <p class="helper">預設為一般。若你代表組織，再切換成組織即可。預設參數：一般為 1，組織為 2；你後台之後仍可再調整。</p>
 
         <label class="required" for="email">電子郵件 Email（氣侯行動者帳號 / Email for your climate action partner account）</label>
         <input id="email" name="email" type="email" autocomplete="email" required />
@@ -975,7 +975,11 @@
     document.querySelectorAll('input[name="partner_type"]').forEach((radio) => {
       radio.addEventListener("change", () => setPartnerTypeFields(radio.value));
     });
-    setPartnerTypeFields("");
+    setPartnerTypeFields("general");
+
+    if (new URLSearchParams(window.location.search).get("auth") === "login") {
+      openLoginModal();
+    }
 
     shareCampaignBtn.addEventListener("click", () => shareFormLink("campaign"));
     shareResultBtn.addEventListener("click", () => shareFormLink("result"));
