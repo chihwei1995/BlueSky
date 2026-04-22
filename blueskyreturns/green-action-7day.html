@@ -4,6 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>7-Day Green Proposal | 自定義 7 日綠色提案</title>
+  <meta name="description" content="Join the 7-Day Green Proposal challenge and document flexible daily green actions across diet, mobility, waste, energy, and nature connection." />
+  <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/green-action-7day.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Blue Sky Returns" />
+  <meta property="og:title" content="7-Day Green Proposal | Blue Sky Returns" />
+  <meta property="og:description" content="Take on a flexible 7-day green challenge and share your climate-friendly daily actions with photos and reflections." />
+  <meta property="og:url" content="https://www.blue-sky-returns.online/blueskyreturns/green-action-7day.html" />
+  <meta property="og:image" content="https://www.blue-sky-returns.online/assets/GA.png" />
+  <meta property="og:image:alt" content="7-Day Green Proposal cover image" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="7-Day Green Proposal | Blue Sky Returns" />
+  <meta name="twitter:description" content="Take on a flexible 7-day green challenge and share your climate-friendly daily actions with photos and reflections." />
+  <meta name="twitter:image" content="https://www.blue-sky-returns.online/assets/GA.png" />
   <style>
     :root {
       --bg: #eef7f1;
@@ -54,6 +67,23 @@
       flex-wrap: wrap;
     }
     .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #fff;
+      padding: 4px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .brand-copy {
       display: grid;
       gap: 2px;
     }
@@ -526,8 +556,11 @@
   <header>
     <div class="shell nav">
       <div class="brand">
-        <strong data-i18n="header.title">Blue Sky Returns</strong>
-        <span data-i18n="header.subtitle">7-Day flexible green challenge</span>
+        <img src="../PJC_LOGO.PNG" alt="JCI Peninsula logo" />
+        <div class="brand-copy">
+          <strong data-i18n="header.title">Blue Sky Returns</strong>
+          <span data-i18n="header.subtitle">7-Day flexible green challenge</span>
+        </div>
       </div>
       <div class="nav-actions">
         <a class="pill" href="../index.html" data-i18n="nav.main">Main Globe</a>

@@ -4,7 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>One Step Blue Sky Returns</title>
+  <meta name="description" content="Learn about Blue Sky Returns, an international climate co-creation initiative by JCI Peninsula, with project brief, timeline, infographic, and global climate education goals." />
+  <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/index.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Blue Sky Returns" />
+  <meta property="og:title" content="One Step Blue Sky Returns" />
+  <meta property="og:description" content="Discover the Blue Sky Returns project brief, educational timeline, and international climate collaboration vision." />
+  <meta property="og:url" content="https://www.blue-sky-returns.online/blueskyreturns/index.html" />
+  <meta property="og:image" content="https://www.blue-sky-returns.online/assets/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png" />
+  <meta property="og:image:alt" content="Blue Sky Returns project infographic" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="One Step Blue Sky Returns" />
+  <meta name="twitter:description" content="Discover the Blue Sky Returns project brief, educational timeline, and international climate collaboration vision." />
+  <meta name="twitter:image" content="https://www.blue-sky-returns.online/assets/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script async src="//www.instagram.com/embed.js"></script>
   <style>
     :root {
       --ink: #0f172a;
@@ -231,8 +245,6 @@
     }
 
     .timeline-item {
-      display: grid;
-      grid-template-columns: 108px 1fr;
       gap: 18px;
       border: 1px solid var(--border);
       border-radius: 18px;
@@ -240,74 +252,81 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.92));
     }
 
-    .timeline-date {
-      display: grid;
-      gap: 6px;
-      align-content: start;
-      text-align: center;
-      padding: 14px 10px;
+    .timeline-item-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-year {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      padding: 10px 14px;
       border-radius: 14px;
       background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(56, 189, 248, 0.2));
       border: 1px solid rgba(14, 165, 233, 0.18);
-      font-weight: 700;
+      font-weight: 800;
       color: var(--accent-dark);
     }
 
-    .timeline-date small {
-      font-size: 0.82rem;
-      color: var(--ink-soft);
-      font-weight: 600;
+    .timeline-item h3 {
+      margin: 0;
     }
 
-    .timeline-item h3 {
-      margin: 0 0 8px;
+    .timeline-copy {
+      display: grid;
+      gap: 10px;
     }
 
     .timeline-meta {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
+      color: var(--ink-soft);
+      font-weight: 600;
+      margin: 0;
     }
 
-    .timeline-chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      background: rgba(148, 163, 184, 0.12);
+    .timeline-points {
+      margin: 0;
+      padding-left: 18px;
       color: var(--ink-soft);
     }
 
-    .timeline-chip.crisis {
-      background: rgba(220, 38, 38, 0.1);
-      color: #b91c1c;
+    .timeline-points li {
+      margin-bottom: 8px;
     }
 
-    .timeline-chip.hope {
-      background: rgba(22, 163, 74, 0.1);
-      color: #15803d;
+    .timeline-ig-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 4px;
     }
 
-    .timeline-media {
-      margin-top: 14px;
-    }
-
-    .timeline-media img {
-      width: 100%;
-      max-height: 320px;
-      object-fit: cover;
-      border-radius: 14px;
+    .timeline-ig-card {
       border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #fff;
+      padding: 10px;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
     }
 
-    .timeline-credit {
-      margin-top: 8px;
-      color: #64748b;
-      font-size: 0.9rem;
+    .timeline-toggle {
+      justify-self: start;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #fff;
+      color: var(--accent-dark);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .timeline-ig-card.hidden {
+      display: none;
     }
 
     .timeline-empty {
@@ -345,8 +364,7 @@
       .header-inner { flex-direction: column; align-items: flex-start; }
       .hero { padding: 24px; }
       main { padding: 32px 20px 56px; }
-      .timeline-item { grid-template-columns: 1fr; }
-      .timeline-date { text-align: left; }
+      .timeline-item-header { flex-direction: column; }
     }
   </style>
 </head>
@@ -360,6 +378,7 @@
       <div class="header-actions">
         <a class="nav-link" href="../index.html" data-i18n="nav.main">Main Globe</a>
         <a class="nav-link active" href="./index.html" data-i18n="nav.about">About</a>
+        <a class="nav-link" href="./countries-regions-hope-crisis.html" data-i18n="nav.call">Collaboration & Vision</a>
         <a class="nav-link" href="./member-center.html" data-i18n="nav.member">Member Center</a>
         <div class="lang-toggle" role="group" data-i18n-aria-label="aria.languageToggle">
           <button class="lang-btn active" data-lang="en" type="button">EN</button>
@@ -511,13 +530,12 @@
         },
         timeline: {
           title: 'Project Timeline',
-          subtitle: 'Browse key crisis and hope moments from the Blue Sky Returns global archive.',
+          subtitle: 'Browse the original JCI Peninsula Instagram milestones behind One Step Blue Sky Returns.',
           selectLabel: 'Select a year from the project timeline',
           allYears: 'All years',
-          dateUnknown: 'Date TBD',
-          crisis: 'Crisis',
-          hope: 'Hope',
-          noItems: 'No timeline entries are available for this year yet.'
+          noItems: 'No timeline entries are available for this year yet.',
+          showMore: 'Show more posts',
+          showLess: 'Show fewer posts'
         },
         support: {
           title: 'How to Support Our Project',
@@ -584,13 +602,12 @@
         },
         timeline: {
           title: '項目時間線',
-          subtitle: '瀏覽 Blue Sky Returns 全球資料庫中關於危機與希望的重要時間節點。',
+          subtitle: '這裡展示的是 JCI Peninsula 原本在 Instagram 上發布的時間線內容，不是氣候資料庫事件。',
           selectLabel: '從項目時間線選擇年份',
           allYears: '所有年份',
-          dateUnknown: '日期待定',
-          crisis: '危機',
-          hope: '希望',
-          noItems: '這個年份目前還沒有時間線資料。'
+          noItems: '這個年份目前還沒有時間線內容。',
+          showMore: '展開更多貼文',
+          showLess: '收合貼文'
         },
         support: {
           title: '如何支持我們的項目',
@@ -610,7 +627,220 @@
     };
 
     const state = { language: 'en' };
-    const timelineState = { events: [], year: 'all' };
+    const timelineState = { year: 'all' };
+    const IG_PREVIEW_COUNT = 4;
+    const ANCHORS = {
+      en: [
+        {
+          id: 'anchor-2024-observation',
+          year: 2024,
+          title: '2024 | Monitoring & Documentation',
+          meta: 'Single-event focus with data and impact tracking',
+          points: [
+            'Launch One Step Blue Sky with a focus on individual extreme weather events',
+            'Build climate observation records through data, visuals, and impacts',
+            'Document each case as a public-facing climate log'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C-C2Ao8vq8P/',
+            'https://www.instagram.com/p/C9wIiMIhwY-/',
+            'https://www.instagram.com/p/C9ZiOZ-NNR2/',
+            'https://www.instagram.com/p/C8_yyagv87R/',
+            'https://www.instagram.com/p/C8WlkFMB--7/',
+            'https://www.instagram.com/p/C7JF2sOPAnv/',
+            'https://www.instagram.com/p/C63WPmMPh6O/',
+            'https://www.instagram.com/p/C6BQzMdtcVW/'
+          ]
+        },
+        {
+          id: 'anchor-2024-awareness',
+          year: 2024,
+          title: '2024 | Public Awareness & Engagement',
+          meta: 'Connect climate trends with daily life in Hong Kong',
+          points: [
+            'Publish climate logs and cultural media to spark everyday connections',
+            'Link global climate signals to local routines and public warnings',
+            'Invite reflection on how extreme weather shapes daily life'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C7REEP3vwe-/',
+            'https://www.instagram.com/p/C6nVBzQvsLm/',
+            'https://www.instagram.com/p/C6OHdsfvejs/',
+            'https://www.instagram.com/p/C6I91dUBsF9/',
+            'https://www.instagram.com/p/C5k6sjUPWZr/',
+            'https://www.instagram.com/p/C5TMOz-PwnH/',
+            'https://www.instagram.com/p/C5A2sRrvLTC/'
+          ]
+        },
+        {
+          id: 'anchor-2025-review',
+          year: 2025,
+          title: '2025 | Annual Review Release',
+          meta: 'Release of the 2024 extreme weather report',
+          points: [
+            'Systematically review 2024 climate data for an annual report',
+            'Publish the official 2024 extreme weather review',
+            'Keep related 2025 series posts in the extended archive'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DFmNIOwPthe/'
+          ]
+        },
+        {
+          id: 'anchor-2025-exhibition',
+          year: 2025,
+          title: '2025 | Exhibition & Community Education',
+          meta: 'On-site exhibition and education initiatives',
+          points: [
+            'Translate climate data into actionable knowledge through exhibitions',
+            'Support community learning with visual stories and education programs',
+            'Highlight climate solutions alongside documentation outcomes'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DL9qBMOPf1L/',
+            'https://www.instagram.com/p/DLznY8lPiTu/',
+            'https://www.instagram.com/p/DLeHQbFvCbg/',
+            'https://www.instagram.com/p/DJ6cm_jqvgd/',
+            'https://www.instagram.com/p/DIwC9DSPqs2/'
+          ]
+        },
+        {
+          id: 'anchor-2025-international',
+          year: 2025,
+          title: '2025 | International Exchange & Closure',
+          meta: 'UN exchange and youth collaboration outcomes',
+          points: [
+            'Facilitate international dialogue and climate policy simulations',
+            'Showcase youth collaboration across regions and institutions',
+            'Conclude the phase with shared insights and collective outcomes'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DNkpy4BPspK/',
+            'https://www.instagram.com/p/DNu-Al5XijM/',
+            'https://www.instagram.com/p/DNM1eG1Tpfa/',
+            'https://www.instagram.com/p/DHasIQjvYHk/',
+            'https://www.instagram.com/p/DGM3X2fPwvE/'
+          ]
+        },
+        {
+          id: 'anchor-2026-energy',
+          year: 2026,
+          title: '2026 | Transforming into Energy',
+          meta: 'Kinetic energy to clean power',
+          points: [
+            'Combine sports and green technology to generate clean electricity',
+            'Turn human kinetic energy into tangible low-carbon action',
+            'Prepare for upcoming demonstrations and installations'
+          ],
+          igPosts: []
+        }
+      ],
+      zh: [
+        {
+          id: 'anchor-2024-observation',
+          year: 2024,
+          title: '2024｜觀察與記錄 Monitoring & Documentation',
+          meta: '聚焦單一事件，以數據與影響建立觀察檔案',
+          points: [
+            '啟動「一步．藍天」計畫，聚焦個別極端氣候事件',
+            '以數據、影像與影響建立氣候觀察檔案',
+            '把每個事件整理成可公開分享的氣候天氣簿'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C-C2Ao8vq8P/',
+            'https://www.instagram.com/p/C9wIiMIhwY-/',
+            'https://www.instagram.com/p/C9ZiOZ-NNR2/',
+            'https://www.instagram.com/p/C8_yyagv87R/',
+            'https://www.instagram.com/p/C8WlkFMB--7/',
+            'https://www.instagram.com/p/C7JF2sOPAnv/',
+            'https://www.instagram.com/p/C63WPmMPh6O/',
+            'https://www.instagram.com/p/C6BQzMdtcVW/'
+          ]
+        },
+        {
+          id: 'anchor-2024-awareness',
+          year: 2024,
+          title: '2024｜議題連結日常 Public Awareness & Engagement',
+          meta: '把全球氣候變化連結至香港日常生活',
+          points: [
+            '透過氣候天氣簿與文化媒介推進公眾參與',
+            '將全球極端趨勢連結至本地日常與公共警報',
+            '引導公眾思考極端氣候對日常的影響'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/C7REEP3vwe-/',
+            'https://www.instagram.com/p/C6nVBzQvsLm/',
+            'https://www.instagram.com/p/C6OHdsfvejs/',
+            'https://www.instagram.com/p/C6I91dUBsF9/',
+            'https://www.instagram.com/p/C5k6sjUPWZr/',
+            'https://www.instagram.com/p/C5TMOz-PwnH/',
+            'https://www.instagram.com/p/C5A2sRrvLTC/'
+          ]
+        },
+        {
+          id: 'anchor-2025-review',
+          year: 2025,
+          title: '2025｜年度回顧發布 Annual Review Release',
+          meta: '發布《2024 年度極端氣候回顧》',
+          points: [
+            '系統性整理 2024 全年資料並完成報告',
+            '正式發布《2024 年度極端氣候回顧》',
+            '其餘 2025 系列貼文可置於資料庫延伸閱讀'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DNkpy4BPspK/',
+            'https://www.instagram.com/p/DFmNIOwPthe/'
+          ]
+        },
+        {
+          id: 'anchor-2025-exhibition',
+          year: 2025,
+          title: '2025｜實體展覽與社區教育 Exhibition & Community Education',
+          meta: '以展覽與教育把數據轉化為可行動的知識',
+          points: [
+            '透過實體展覽呈現氣候數據與案例',
+            '以社區教育推動可行動的氣候知識',
+            '強調資料視覺化與生活應用'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DL9qBMOPf1L/',
+            'https://www.instagram.com/p/DLznY8lPiTu/',
+            'https://www.instagram.com/p/DLeHQbFvCbg/',
+            'https://www.instagram.com/p/DJ6cm_jqvgd/',
+            'https://www.instagram.com/p/DIwC9DSPqs2/'
+          ]
+        },
+        {
+          id: 'anchor-2025-international',
+          year: 2025,
+          title: '2025｜國際交流與總結 International Exchange & Closure',
+          meta: '國際交流與氣候政策模擬',
+          points: [
+            '於聯合國場域進行國際交流與政策模擬',
+            '展現青年跨地域合作與成果',
+            '整理交流成果作為階段性總結'
+          ],
+          igPosts: [
+            'https://www.instagram.com/p/DNu-Al5XijM/',
+            'https://www.instagram.com/p/DNM1eG1Tpfa/',
+            'https://www.instagram.com/p/DHasIQjvYHk/',
+            'https://www.instagram.com/p/DGM3X2fPwvE/'
+          ]
+        },
+        {
+          id: 'anchor-2026-energy',
+          year: 2026,
+          title: '2026｜轉化為能 Transforming into Energy',
+          meta: '以動能轉化為清潔電力',
+          points: [
+            '結合運動與綠能科技把動能轉為電力',
+            '實踐零碳行動與可視化教育',
+            '作為下一階段即將展開的項目'
+          ],
+          igPosts: []
+        }
+      ]
+    };
 
     const getI18n = (path) => {
       const keys = path.split('.');
@@ -656,19 +886,9 @@
       renderTimelineList();
     };
 
-    const formatTimelineDate = (value) => {
-      if (!value) return getI18n('timeline.dateUnknown');
-      const parsed = new Date(value);
-      if (Number.isNaN(parsed.getTime())) return value;
-      return parsed.toLocaleDateString(state.language === 'zh' ? 'zh-HK' : 'en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    };
-
+    const getTimelineItems = () => ANCHORS[state.language] ?? ANCHORS.en;
     const getTimelineYears = () => (
-      Array.from(new Set(timelineState.events.map(item => item.year).filter(Boolean))).sort((a, b) => b - a)
+      Array.from(new Set(getTimelineItems().map(item => item.year).filter(Boolean))).sort((a, b) => b - a)
     );
 
     const renderTimelineYearOptions = () => {
@@ -699,7 +919,7 @@
       const container = document.getElementById('timelineList');
       if (!container) return;
 
-      const filtered = timelineState.events.filter((item) => {
+      const filtered = getTimelineItems().filter((item) => {
         if (timelineState.year === 'all') return true;
         return String(item.year) === String(timelineState.year);
       });
@@ -710,48 +930,46 @@
       }
 
       container.innerHTML = filtered.map((item) => {
-        const modeLabel = item.mode === 'hope' ? getI18n('timeline.hope') : getI18n('timeline.crisis');
-        const media = item.media?.type === 'image' && item.media?.url
-          ? `<div class="timeline-media"><img src="${item.media.url}" alt="${item.title || ''}" loading="lazy">${item.media.credit ? `<div class="timeline-credit">${item.media.credit}</div>` : ''}</div>`
+        const cards = (item.igPosts || []).map((url, index) => `
+          <div class="timeline-ig-card${index >= IG_PREVIEW_COUNT ? ' hidden' : ''}">
+            <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="margin:0;"></blockquote>
+          </div>
+        `).join('');
+        const toggle = (item.igPosts || []).length > IG_PREVIEW_COUNT
+          ? `<button class="timeline-toggle" type="button" data-toggle-posts="${item.id}">${getI18n('timeline.showMore')}</button>`
           : '';
-
         return `
-          <article class="timeline-item">
-            <div class="timeline-date">
-              <span>${item.year || ''}</span>
-              <small>${formatTimelineDate(item.date)}</small>
-            </div>
-            <div>
-              <div class="timeline-meta">
-                <span class="timeline-chip ${item.mode === 'hope' ? 'hope' : 'crisis'}">${modeLabel}</span>
-                ${item.category ? `<span class="timeline-chip">${item.category}</span>` : ''}
+          <article class="timeline-item" id="${item.id}">
+            <div class="timeline-item-header">
+              <div class="timeline-copy">
+                <h3>${item.title || ''}</h3>
+                <p class="timeline-meta">${item.meta || ''}</p>
               </div>
-              <h3>${item.title || ''}</h3>
-              <p>${item.description || ''}</p>
-              ${media}
+              <div class="timeline-year">${item.year || ''}</div>
             </div>
+            <ul class="timeline-points">
+              ${(item.points || []).map((point) => `<li>${point}</li>`).join('')}
+            </ul>
+            ${(item.igPosts || []).length ? `<div class="timeline-ig-grid" data-post-group="${item.id}">${cards}</div>${toggle}` : ''}
           </article>
         `;
       }).join('');
-    };
 
-    const loadTimelineData = async () => {
-      try {
-        const response = await fetch('../data.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error(`data.json ${response.status}`);
-        const payload = await response.json();
-        timelineState.events = (payload.events || [])
-          .slice()
-          .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-        renderTimelineYearOptions();
-        renderTimelineList();
-      } catch (error) {
-        console.error('Timeline load failed:', error);
-        const container = document.getElementById('timelineList');
-        if (container) {
-          container.innerHTML = `<div class="timeline-empty">${getI18n('timeline.noItems')}</div>`;
-        }
-      }
+      container.querySelectorAll('[data-toggle-posts]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const group = container.querySelector(`[data-post-group="${button.dataset.togglePosts}"]`);
+          if (!group) return;
+          const hiddenCards = group.querySelectorAll('.timeline-ig-card.hidden');
+          const isExpanded = hiddenCards.length === 0;
+          group.querySelectorAll('.timeline-ig-card').forEach((card, index) => {
+            card.classList.toggle('hidden', isExpanded && index >= IG_PREVIEW_COUNT);
+          });
+          button.textContent = isExpanded ? getI18n('timeline.showMore') : getI18n('timeline.showLess');
+          setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
+        });
+      });
+
+      setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
     };
 
     const applyLanguage = (lang) => {
@@ -776,8 +994,6 @@
         timelineState.year = event.target.value || 'all';
         renderTimelineList();
       });
-
-      loadTimelineData();
     });
   </script>
 </body>

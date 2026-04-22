@@ -4,6 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blue Sky Returns</title>
+  <meta name="description" content="Blue Sky Returns is a 3D globe experience that helps the public understand climate crisis and local hope through global stories, timelines, and interactive Earth exploration." />
+  <link rel="canonical" href="https://www.blue-sky-returns.online/index.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Blue Sky Returns" />
+  <meta property="og:title" content="Blue Sky Returns" />
+  <meta property="og:description" content="Explore a 3D globe of climate crisis and local hope, with interactive stories, timelines, and Earth-based learning." />
+  <meta property="og:url" content="https://www.blue-sky-returns.online/index.html" />
+  <meta property="og:image" content="https://www.blue-sky-returns.online/assets/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png" />
+  <meta property="og:image:alt" content="Blue Sky Returns climate action infographic" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Blue Sky Returns" />
+  <meta name="twitter:description" content="Explore a 3D globe of climate crisis and local hope, with interactive stories, timelines, and Earth-based learning." />
+  <meta name="twitter:image" content="https://www.blue-sky-returns.online/assets/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png" />
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -459,6 +472,7 @@
       z-index: 3;
     }
     .timeline-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .timeline-copy { display: grid; gap: 4px; }
     .timeline-label { text-align: center; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; color: #dce2ff; }
     .year-select {
       background: rgba(255,255,255,0.06);
@@ -500,7 +514,6 @@
 
     .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); }
 
-    #timelineContainer,
     #anchorPanel,
     #qrModal {
       display: none !important;
@@ -632,7 +645,6 @@
 
       .qr-card img { width: 200px; height: 200px; }
 
-      #timelineContainer,
       #anchorPanel,
       #qrModal {
         display: none !important;
@@ -660,6 +672,8 @@
           </a>
           <span class="logo-divider" aria-hidden="true">｜</span>
           <a class="about-link" href="blueskyreturns/index.html" data-i18n="header.about" data-i18n-aria-label="aria.about">About</a>
+          <span class="logo-divider" aria-hidden="true">｜</span>
+          <a class="about-link" href="blueskyreturns/countries-regions-hope-crisis.html" data-i18n="header.call">Collaboration & Vision</a>
         </div>
 
       <div class="header-actions">
@@ -677,17 +691,17 @@
     </header>
 
     <div class="info-card" id="infoPanel">
-      <h1 class="hero-text">A living atlas of crisis and hope.</h1>
-      <p class="subtext">Explore our planet in full 3D without texture downloads. Toggle between climate crisis and regenerative hope themes while the globe streams real Natural Earth polygons.</p>
+      <h1 class="hero-text" id="heroTitle" data-i18n="hero.title">A 3D globe to understand climate crisis and local hope.</h1>
+      <p class="subtext" id="heroSubtext" data-i18n="hero.body">Switch between Crisis and Hope to explore real places on Earth. The globe helps you see where climate risks are happening and where communities are building solutions.</p>
       <div class="control-row">
         <span class="tag crisis" id="infoTag" data-i18n="labels.crisis">CRISIS</span>
         <div class="legend">
           <span class="legend-dot" id="legendLand" style="background:#5c2222;"></span>
-          <span>Landmass polygons (real GeoJSON)</span>
+          <span id="legendLandLabel" data-i18n="hero.land">Real land shapes of the Earth</span>
         </div>
         <div class="legend">
           <span class="legend-dot" id="legendStroke" style="background:#ff4d4d;"></span>
-          <span>Country borders</span>
+          <span id="legendStrokeLabel" data-i18n="hero.border">Country and region borders</span>
         </div>
         <button class="collapse-btn" id="infoCollapseBtn" type="button" aria-expanded="true" data-i18n="info.collapse">Collapse info</button>
       </div>
@@ -703,6 +717,10 @@
 
     <div class="timeline-container" id="timelineContainer">
       <div class="timeline-label-row">
+        <div class="timeline-copy">
+          <div class="timeline-label" id="timelineTitle" data-i18n="timeline.title">Hope & Crisis Timeline</div>
+          <div class="subtitle" id="timelineBody" data-i18n="timeline.body">Follow the years and months to understand how different climate risks and local solutions appear across the globe.</div>
+        </div>
 
         <!-- ✅ 只保留年份下拉（移除年份按鈕列） -->
         <select class="year-select" id="yearSelect" data-i18n-aria-label="aria.selectYear">
@@ -803,6 +821,12 @@
 
     const I18N = {
       en: {
+        hero: {
+          title: 'A 3D globe to understand climate crisis and local hope.',
+          body: 'Switch between Crisis and Hope to explore real places on Earth. The globe helps you see where climate risks are happening and where communities are building solutions.',
+          land: 'Real land shapes of the Earth',
+          border: 'Country and region borders'
+        },
         aria: {
           pjcSite: 'Visit the PJC website',
           about: 'About Blue Sky Returns',
@@ -838,6 +862,8 @@
           }
         },
         timeline: {
+          title: 'Hope & Crisis Timeline',
+          body: 'Follow the years and months to understand how different climate risks and local solutions appear across the globe.',
           selectYear: 'Select year',
           collapse: 'Collapse timeline',
           expand: 'Expand timeline'
@@ -865,6 +891,12 @@
         }
       },
       zh: {
+        hero: {
+          title: '用 3D 地球理解氣候危機與在地希望。',
+          body: '切換「危機」與「希望」，看看世界各地正在發生什麼事。這個地球模型幫你理解：哪些地方正面對氣候風險，哪些地方正在形成解方。',
+          land: '真實地球陸地輪廓',
+          border: '國家與地區邊界'
+        },
         aria: {
           pjcSite: '前往 PJC 網站',
           about: '關於 Blue Sky Returns',
@@ -900,6 +932,8 @@
           }
         },
         timeline: {
+          title: '希望與危機時間線',
+          body: '沿著年份與月份查看，理解不同地區的氣候風險與在地解方如何在地球上出現。',
           selectYear: '選擇年份',
           collapse: '收合時間表',
           expand: '展開時間表'

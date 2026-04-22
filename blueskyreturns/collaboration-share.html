@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaboration & Vision Share | Blue Sky Returns</title>
+  <meta name="description" content="A share-friendly overview of Blue Sky Returns collaboration pathways, local Hope and Crisis contributions, and global climate education co-creation." />
+  <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/collaboration-share.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Blue Sky Returns" />
+  <meta property="og:title" content="Collaboration & Vision | Blue Sky Returns" />
+  <meta property="og:description" content="Invite partners to join Blue Sky Returns through local Hope and Crisis contributions, education outreach, and long-term climate collaboration." />
+  <meta property="og:url" content="https://www.blue-sky-returns.online/blueskyreturns/collaboration-share.html" />
+  <meta property="og:image" content="https://www.blue-sky-returns.online/assets/%E5%90%88%E4%BD%9C.jpeg" />
+  <meta property="og:image:alt" content="Blue Sky Returns collaboration visual" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Collaboration & Vision | Blue Sky Returns" />
+  <meta name="twitter:description" content="Invite partners to join Blue Sky Returns through local Hope and Crisis contributions, education outreach, and long-term climate collaboration." />
+  <meta name="twitter:image" content="https://www.blue-sky-returns.online/assets/%E5%90%88%E4%BD%9C.jpeg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --accent: #0b5cab;
+      --accent-soft: #14b8a6;
+      --surface: #f6fbff;
+      --card: #ffffff;
+      --line: #d8e6f2;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(11, 92, 171, 0.10), transparent 24%),
+        linear-gradient(180deg, #fbfdff 0%, #f3f8fc 48%, #edf5fb 100%);
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: rgba(246, 251, 255, 0.92);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #fff;
+      padding: 4px;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand strong {
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill,
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: #fff;
+      color: var(--accent);
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.94rem;
+    }
+
+    .pill.active,
+    .pill.primary,
+    .lang-btn.active {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(11, 92, 171, 0.16);
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    main {
+      padding: 34px 0 68px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .hero,
+    .panel {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+    }
+
+    .hero-copy {
+      padding: 34px;
+      display: grid;
+      gap: 16px;
+      align-content: center;
+    }
+
+    .hero-copy h1,
+    .panel h2,
+    .panel h3 {
+      margin: 0;
+    }
+
+    .hero-copy p,
+    .panel p,
+    .panel li {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .hero-image {
+      min-height: 100%;
+      background: linear-gradient(160deg, rgba(11, 92, 171, 0.08), rgba(20, 184, 166, 0.12));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #eaf5ff;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.84rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .panel {
+      padding: 26px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.two {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.88);
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .step-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(239,246,255,0.9));
+      padding: 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .step-label {
+      display: inline-flex;
+      width: fit-content;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eaf5ff;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.82rem;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      color: #64748b;
+      padding: 0 20px 34px;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .grid.two,
+      .step-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../PJC_LOGO.PNG" alt="JCI Peninsula logo" />
+        <div class="brand-copy">
+          <strong data-i18n="brand.title">Blue Sky Returns</strong>
+          <span data-i18n="brand.subtitle">Collaboration Share Page</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <a class="pill" href="./index.html" data-i18n="nav.about">About</a>
+        <a class="pill active" href="./collaboration-share.html" data-i18n="nav.share">Share Page</a>
+        <a class="pill" href="./countries-regions-hope-crisis.html" data-i18n="nav.full">Full Page</a>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="en">EN</button>
+          <button class="lang-btn" type="button" data-lang="zh">中文</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell stack">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow" data-i18n="hero.eyebrow">Global Climate Co-Creation</span>
+          <h1 data-i18n="hero.title">Collaboration & Vision for Blue Sky Returns</h1>
+          <p data-i18n="hero.body">Blue Sky Returns is a global climate education initiative by JCI Peninsula. We invite chapters, schools, youth groups, and community partners to contribute local stories of climate crisis and local hope, and turn them into a shared educational E-book.</p>
+          <div class="actions">
+            <a class="pill primary" href="./countries-regions-hope-crisis.html" data-i18n="hero.primary">Open Full Collaboration Page</a>
+            <a class="pill" href="./upload-hope-crisis.html" data-i18n="hero.secondary">Upload Hope & Crisis</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="../assets/合作.jpeg" alt="Blue Sky Returns collaboration visual" />
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="brief.title">Project Brief</h2>
+        <div class="grid two">
+          <div class="mini-card">
+            <h3 data-i18n="brief.block1Title">What we are building</h3>
+            <p data-i18n="brief.block1Body">We are co-creating a global environmental E-book that helps the next generation understand both the climate crisis already happening around us and the local solutions that are giving us hope.</p>
+          </div>
+          <div class="mini-card">
+            <h3 data-i18n="brief.block2Title">Why it matters</h3>
+            <p data-i18n="brief.block2Body">By connecting real stories from cities and regions, climate change becomes more local, visible, and actionable for schools, youth groups, and community partners.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="journey.title">Participation Journey</h2>
+        <div class="step-grid">
+          <article class="step">
+            <span class="step-label">Level 1</span>
+            <h3 data-i18n="journey.level1Title">Co-Promote</h3>
+            <p data-i18n="journey.level1Body">Help share the project locally and invite more youth and organizations to participate.</p>
+          </article>
+          <article class="step">
+            <span class="step-label">Level 2</span>
+            <h3 data-i18n="journey.level2Title">Co-Create Local Data</h3>
+            <p data-i18n="journey.level2Body">Upload local Hope and Crisis materials, including images or short videos and brief descriptions from your city or region.</p>
+          </article>
+          <article class="step">
+            <span class="step-label">Level 3</span>
+            <h3 data-i18n="journey.level3Title">Educational Outreach</h3>
+            <p data-i18n="journey.level3Body">After the E-book is completed, help share it with schools, youth groups, and educational partners in your city.</p>
+          </article>
+          <article class="step">
+            <span class="step-label">Level 4</span>
+            <h3 data-i18n="journey.level4Title">Deep Collaboration</h3>
+            <p data-i18n="journey.level4Body">Explore deeper partnership through online events, regional campaigns, educational collaboration, and cross-city exchange.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="cta.title">How to Continue</h2>
+        <ul>
+          <li data-i18n="cta.point1">Open the full Collaboration & Vision page for the complete structure and guidance.</li>
+          <li data-i18n="cta.point2">Eligible members can upload local Hope and Crisis materials directly from the member center.</li>
+          <li data-i18n="cta.point3">Use this share page when introducing the project to partner chapters, schools, and external collaborators.</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer data-i18n="footer">Blue Sky Returns • Collaboration Share Page • 2026</footer>
+
+  <script>
+    const LANG_STORAGE_KEY = "bsr_lang";
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "en";
+    const I18N = {
+      en: {
+        pageTitle: "Collaboration & Vision Share | Blue Sky Returns",
+        brand: { title: "Blue Sky Returns", subtitle: "Collaboration Share Page" },
+        nav: { about: "About", share: "Share Page", full: "Full Page" },
+        hero: {
+          eyebrow: "Global Climate Co-Creation",
+          title: "Collaboration & Vision for Blue Sky Returns",
+          body: "Blue Sky Returns is a global climate education initiative by JCI Peninsula. We invite chapters, schools, youth groups, and community partners to contribute local stories of climate crisis and local hope, and turn them into a shared educational E-book.",
+          primary: "Open Full Collaboration Page",
+          secondary: "Upload Hope & Crisis"
+        },
+        brief: {
+          title: "Project Brief",
+          block1Title: "What we are building",
+          block1Body: "We are co-creating a global environmental E-book that helps the next generation understand both the climate crisis already happening around us and the local solutions that are giving us hope.",
+          block2Title: "Why it matters",
+          block2Body: "By connecting real stories from cities and regions, climate change becomes more local, visible, and actionable for schools, youth groups, and community partners."
+        },
+        journey: {
+          title: "Participation Journey",
+          level1Title: "Co-Promote",
+          level1Body: "Help share the project locally and invite more youth and organizations to participate.",
+          level2Title: "Co-Create Local Data",
+          level2Body: "Upload local Hope and Crisis materials, including images or short videos and brief descriptions from your city or region.",
+          level3Title: "Educational Outreach",
+          level3Body: "After the E-book is completed, help share it with schools, youth groups, and educational partners in your city.",
+          level4Title: "Deep Collaboration",
+          level4Body: "Explore deeper partnership through online events, regional campaigns, educational collaboration, and cross-city exchange."
+        },
+        cta: {
+          title: "How to Continue",
+          point1: "Open the full Collaboration & Vision page for the complete structure and guidance.",
+          point2: "Eligible members can upload local Hope and Crisis materials directly from the member center.",
+          point3: "Use this share page when introducing the project to partner chapters, schools, and external collaborators."
+        },
+        footer: "Blue Sky Returns • Collaboration Share Page • 2026"
+      },
+      zh: {
+        pageTitle: "合作與願景分享頁 | Blue Sky Returns",
+        brand: { title: "Blue Sky Returns", subtitle: "合作與願景分享頁" },
+        nav: { about: "項目介紹", share: "分享頁", full: "完整頁面" },
+        hero: {
+          eyebrow: "全球氣候共創計畫",
+          title: "Blue Sky Returns 合作與願景",
+          body: "Blue Sky Returns 是由 JCI Peninsula 發起的全球氣候教育共創計畫。我們邀請各地分會、學校、青年組織與社區夥伴，一起提交地方上的氣候危機與在地希望故事，並共同整理成教育電子書。",
+          primary: "開啟完整合作頁",
+          secondary: "上傳 Hope & Crisis"
+        },
+        brief: {
+          title: "專案導覽",
+          block1Title: "我們正在做什麼",
+          block1Body: "我們正在共同製作一本全球環境電子書，讓下一代理解：氣候危機正在身邊發生，而世界各地也同時出現值得記錄的在地解方與希望。",
+          block2Title: "為什麼重要",
+          block2Body: "透過串連不同城市與地區的真實案例，氣候變化不再只是遙遠議題，而會成為學校、青年團體與社區夥伴都能理解與行動的現實。"
+        },
+        journey: {
+          title: "參與等級導覽",
+          level1Title: "共同推廣",
+          level1Body: "協助在地分享專案資訊，邀請更多青年與組織一起參與。",
+          level2Title: "共創地方資料",
+          level2Body: "提交你所在城市或地區的 Hope / Crisis 材料，包括圖片、短片與簡短說明。",
+          level3Title: "教育推廣",
+          level3Body: "電子書完成後，協助把成果推廣到你所在城市的學校、青年組織與教育夥伴。",
+          level4Title: "深度合作",
+          level4Body: "進一步展開線上活動、區域推廣、教育合作與跨城市交流等更深層的合作。"
+        },
+        cta: {
+          title: "接下來可以做什麼",
+          point1: "打開完整的合作與願景頁，查看完整架構與參與方式。",
+          point2: "符合資格的會員可直接從會員中心上傳地方 Hope / Crisis 資料。",
+          point3: "當你要介紹這個計畫給姐妹分會、學校或外部夥伴時，可以直接分享這個頁面。"
+        },
+        footer: "Blue Sky Returns • 合作與願景分享頁 • 2026"
+      }
+    };
+
+    const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
+    const applyLanguage = (lang) => {
+      currentLang = lang === "zh" ? "zh" : "en";
+      localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+      document.documentElement.lang = currentLang === "zh" ? "zh-Hant" : "en";
+      document.title = t("pageTitle");
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.dataset.i18n;
+        const text = t(key);
+        if (text) el.textContent = text;
+      });
+      document.querySelectorAll(".lang-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
+      });
+    };
+
+    document.querySelectorAll(".lang-btn").forEach((btn) => {
+      btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
+    });
+
+    applyLanguage(currentLang);
+  </script>
+</body>
+</html>

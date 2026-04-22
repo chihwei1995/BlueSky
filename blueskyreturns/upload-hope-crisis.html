@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Hope & Crisis | Blue Sky Returns</title>
+  <meta name="description" content="Create, edit, and manage your own local Hope and Crisis homepage submissions for Blue Sky Returns, including images, short videos, and supporting descriptions." />
+  <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/upload-hope-crisis.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Blue Sky Returns" />
+  <meta property="og:title" content="Upload Hope & Crisis | Blue Sky Returns" />
+  <meta property="og:description" content="Submit local Hope and Crisis stories with media and descriptions, and manage your own homepage candidate materials." />
+  <meta property="og:url" content="https://www.blue-sky-returns.online/blueskyreturns/upload-hope-crisis.html" />
+  <meta property="og:image" content="https://www.blue-sky-returns.online/assets/%E5%90%88%E4%BD%9C.jpeg" />
+  <meta property="og:image:alt" content="Upload Hope and Crisis cover visual" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upload Hope & Crisis | Blue Sky Returns" />
+  <meta name="twitter:description" content="Submit local Hope and Crisis stories with media and descriptions, and manage your own homepage candidate materials." />
+  <meta name="twitter:image" content="https://www.blue-sky-returns.online/assets/%E5%90%88%E4%BD%9C.jpeg" />
+  <style>
+    :root {
+      --bg: #eef4fb;
+      --card: rgba(255, 255, 255, 0.94);
+      --ink: #102236;
+      --muted: #5b6c80;
+      --line: #d7e3ef;
+      --blue: #0b5cab;
+      --teal: #14b8a6;
+      --soft: #eef6ff;
+      --warn-bg: #fff7ed;
+      --warn-line: #fdba74;
+      --ok: #15803d;
+      --warn: #b45309;
+      --danger: #b91c1c;
+      --shadow: 0 18px 40px rgba(16, 34, 54, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    [hidden] { display: none !important; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(11, 92, 171, 0.14), transparent 24%),
+        linear-gradient(180deg, #f7fbff 0%, #eff5fb 42%, #f4f8fc 100%);
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(247, 251, 255, 0.92);
+      border-bottom: 1px solid rgba(215, 227, 239, 0.95);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #fff;
+      padding: 4px;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 18px rgba(16, 34, 54, 0.08);
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand strong {
+      color: var(--blue);
+      font-size: 1rem;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill,
+    button,
+    .file-picker-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 15px;
+      background: #fff;
+      color: var(--blue);
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.94rem;
+      font-family: inherit;
+    }
+
+    .pill.active,
+    .pill.primary,
+    button.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(11, 92, 171, 0.18);
+    }
+
+    button.secondary {
+      background: #fff;
+      color: var(--ink);
+    }
+
+    button.danger {
+      background: #fff1f2;
+      color: var(--danger);
+      border-color: #fecdd3;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(11, 92, 171, 0.18);
+    }
+
+    main {
+      padding: 28px 0 70px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero,
+    .panel {
+      background: var(--card);
+      border: 1px solid rgba(215, 227, 239, 0.95);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 22px;
+      padding: 28px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 34%),
+        linear-gradient(135deg, rgba(11, 92, 171, 0.98), rgba(20, 184, 166, 0.88));
+      color: #fff;
+    }
+
+    .hero h1,
+    .panel h2,
+    .panel h3 {
+      margin: 0;
+    }
+
+    .hero-copy,
+    .hero-side,
+    .section-head,
+    .access-card,
+    .form-grid,
+    .media-preview,
+    .submission-body,
+    .submission-meta,
+    .empty-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .hero-copy p,
+    .hero-side p,
+    .section-head p,
+    .helper,
+    .muted,
+    .submission-text,
+    .empty-box p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .hero-copy p,
+    .hero-side p {
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .hero-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .hero-card strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .panel {
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      background: rgba(255,255,255,0.16);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+
+    .panel-badge {
+      background: var(--soft);
+      color: var(--blue);
+      border-color: transparent;
+    }
+
+    .access-card {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.88);
+    }
+
+    .access-card.warn {
+      background: var(--warn-bg);
+      border-color: var(--warn-line);
+    }
+
+    .status {
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .status.ok { color: var(--ok); }
+    .status.warn { color: var(--warn); }
+    .status.error { color: var(--danger); }
+
+    .form-grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 700;
+    }
+
+    .required::after {
+      content: " *";
+      color: #dc2626;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid #cbd5e1;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .segmented {
+      display: inline-grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 6px;
+      border-radius: 18px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      gap: 6px;
+    }
+
+    .segmented label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: 0.2s ease;
+    }
+
+    .segmented input {
+      display: none;
+    }
+
+    .segmented label.active {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(11, 92, 171, 0.16);
+    }
+
+    .file-picker {
+      display: grid;
+      gap: 10px;
+    }
+
+    .file-picker input {
+      display: none;
+    }
+
+    .file-meta {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .form-actions,
+    .submission-actions,
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .media-preview {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px dashed var(--line);
+      background: #fbfdff;
+    }
+
+    .media-preview img,
+    .media-preview video,
+    .submission-media img,
+    .submission-media video {
+      width: 100%;
+      max-width: 420px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      display: block;
+    }
+
+    .submission-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .submission-card {
+      display: grid;
+      grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .submission-media {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .submission-body h3 {
+      font-size: 1.15rem;
+    }
+
+    .submission-meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 14px;
+    }
+
+    .meta-box {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #f8fbff;
+      border: 1px solid var(--line);
+      font-size: 0.93rem;
+    }
+
+    .meta-box strong {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      background: var(--soft);
+      color: var(--blue);
+    }
+
+    .tag.hope {
+      background: #ecfdf5;
+      color: #15803d;
+    }
+
+    .tag.crisis {
+      background: #fff1f2;
+      color: #be123c;
+    }
+
+    .empty-box {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(11, 92, 171, 0.06);
+      border: 1px solid rgba(11, 92, 171, 0.12);
+    }
+
+    .foot {
+      text-align: center;
+      padding: 0 20px 34px;
+      color: #64748b;
+      font-size: 0.92rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 100;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(460px, 100%);
+      background: #fff;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      padding: 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .modal-card label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .modal-card input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font: inherit;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .form-grid.two,
+      .submission-card,
+      .submission-meta {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 0 16px;
+      }
+
+      .hero,
+      .panel {
+        padding: 20px 18px;
+        border-radius: 24px;
+      }
+
+      .form-actions,
+      .submission-actions,
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../PJC_LOGO.PNG" alt="JCI Peninsula logo" />
+        <div class="brand-copy">
+          <strong id="brandTitle">Blue Sky Returns</strong>
+          <span id="brandSubtitle">Hope & Crisis Upload</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <a id="navMain" class="pill" href="../index.html">Main Globe</a>
+        <a id="navAbout" class="pill" href="./index.html">About</a>
+        <a id="navMember" class="pill" href="./member-center.html">Member Center</a>
+        <a id="navUpload" class="pill active" href="./upload-hope-crisis.html">Upload Hope & Crisis</a>
+        <button id="openLoginBtn" class="pill primary" type="button">登入 / Sign In</button>
+        <button id="logoutBtn" class="pill" type="button" hidden>登出 / Sign Out</button>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell stack">
+      <section class="hero">
+        <div class="hero-copy">
+          <span id="heroBadge" class="badge">Homepage Submission Desk</span>
+          <h1 id="heroTitle">上傳 Hope / Crisis 首頁資料</h1>
+          <p id="heroBody">這裡是獨立的地方資料上傳頁。權限 2 與 3 的氣候行動者可以新增、修改、刪除自己提交過的 Hope / Crisis 內容，作為首頁候選資料。</p>
+          <div class="hero-actions">
+            <a id="heroMemberLink" class="pill primary" href="./member-center.html">回到會員中心</a>
+            <a id="heroVisionLink" class="pill" href="./countries-regions-hope-crisis.html">查看合作與願景</a>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="hero-card">
+            <strong id="stateCardTitle">目前登入狀態</strong>
+            <p id="memberState">尚未登入</p>
+          </div>
+          <div class="hero-card">
+            <strong id="abilityCardTitle">目前可做的事</strong>
+            <p id="abilitySummary">請先登入。只有具備組織或協作管理身分的氣候行動者可在此上傳首頁資料。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2 id="accessSectionTitle">上傳權限 / Upload Access</h2>
+          <p id="accessSectionBody">這個頁面只開放給可上傳 Hope / Crisis 的帳號。未登入或權限不足時，表單會保持隱藏。</p>
+        </div>
+        <div id="accessNotice" class="access-card warn">
+          <span id="accessBadge" class="badge panel-badge">Access</span>
+          <h3 id="accessTitle">請先登入符合資格的氣候行動者帳號</h3>
+          <p id="accessBody">登入後若帳號權限為 2 或 3，就能使用這個頁面新增與管理你自己的首頁候選資料。</p>
+          <div class="form-actions">
+            <button id="accessLoginBtn" class="primary" type="button">登入 / Sign In</button>
+          </div>
+        </div>
+        <div id="uploadDesk" hidden>
+          <form id="submissionForm" class="form-grid two">
+            <div class="field full">
+              <label id="modeLabel" class="required">資料類型 / Submission Type</label>
+              <div class="segmented" id="modeSegment">
+                <label data-mode="hope" class="active">
+                  <input type="radio" name="mode" value="hope" checked />
+                  <span id="modeHope">Hope / 希望</span>
+                </label>
+                <label data-mode="crisis">
+                  <input type="radio" name="mode" value="crisis" />
+                  <span id="modeCrisis">Crisis / 威脅</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label id="titleLabel" class="required" for="entryTitle">標題 / Title</label>
+              <input id="entryTitle" name="title" type="text" required />
+            </div>
+
+            <div class="field">
+              <label id="locationLabel" class="required" for="entryLocation">地區 / 城市 / Location</label>
+              <input id="entryLocation" name="location" type="text" required />
+            </div>
+
+            <div class="field">
+              <label id="dateLabel" class="required" for="entryDate">日期 / Date</label>
+              <input id="entryDate" name="eventDate" type="date" required />
+            </div>
+
+            <div class="field">
+              <label id="creditLabel" for="entryCredit">來源或署名 / Credit</label>
+              <input id="entryCredit" name="credit" type="text" />
+            </div>
+
+            <div class="field full">
+              <label id="summaryLabel" class="required" for="entrySummary">內容說明 / Description</label>
+              <textarea id="entrySummary" name="summary" required></textarea>
+            </div>
+
+            <div class="field full">
+              <label id="fileLabel" class="required">圖片或 30 秒短片 / Image or 30-second short video</label>
+              <div class="file-picker">
+                <label id="filePickerLabel" class="file-picker-label" for="entryFile">選擇檔案 / Choose File</label>
+                <input id="entryFile" name="entryFile" type="file" accept="image/*,video/*" />
+                <div id="fileMeta" class="file-meta">尚未選擇檔案。編輯既有資料時，可不重新上傳。</div>
+              </div>
+              <p id="fileHelper" class="helper">建議上傳圖片，或可清楚呈現當地 Hope / Crisis 的短片。</p>
+            </div>
+
+            <div class="field full">
+              <div id="mediaPreview" class="media-preview" hidden></div>
+            </div>
+
+            <div class="field full">
+              <div class="form-actions">
+                <button id="saveBtn" class="primary" type="submit">新增資料 / Add Submission</button>
+                <button id="cancelEditBtn" class="secondary" type="button" hidden>取消編輯 / Cancel Edit</button>
+                <span id="formStatus" class="status" aria-live="polite"></span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2 id="listSectionTitle">我的首頁資料 / My Homepage Submissions</h2>
+          <p id="listSectionBody">這裡會列出你自己已提交的 Hope / Crisis。你可以隨時回來修改內容、換圖，或刪除不需要的資料。</p>
+        </div>
+        <div id="listEmpty" class="empty-box">
+          <h3 id="emptyTitle">目前還沒有資料</h3>
+          <p id="emptyBody">登入並新增第一筆 Hope / Crisis 後，就會出現在這裡。</p>
+        </div>
+        <div id="submissionList" class="submission-list" hidden></div>
+      </section>
+    </div>
+  </main>
+
+  <section id="loginModal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <h3 id="loginModalTitle">會員登入 / Member Sign In</h3>
+      <div>
+        <label id="loginEmailLabel" for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" autocomplete="email" />
+      </div>
+      <div>
+        <label id="loginPasswordLabel" for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" />
+      </div>
+      <div class="form-actions">
+        <button id="loginSubmitBtn" class="primary" type="button">登入 / Sign In</button>
+        <button id="forgotPasswordBtn" type="button">忘記密碼 / Reset Password</button>
+        <button id="closeLoginModal" type="button">取消 / Cancel</button>
+      </div>
+      <div id="loginStatus" class="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <footer id="pageFooter" class="foot">Blue Sky Returns • Upload Hope & Crisis • 2026</footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      query,
+      where,
+      getDocs,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import {
+      getStorage,
+      ref,
+      uploadBytes,
+      getDownloadURL,
+      deleteObject
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+    const storage = getStorage(app);
+
+    const LANG_STORAGE_KEY = "bsr_lang";
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
+    let currentMember = null;
+    let currentUser = null;
+    let editingSubmission = null;
+    let submissions = [];
+
+    const I18N = {
+      zh: {
+        pageTitle: "上傳 Hope & Crisis | Blue Sky Returns",
+        brandSubtitle: "Hope & Crisis Upload",
+        nav: {
+          main: "主地球首頁",
+          about: "項目介紹",
+          member: "會員中心",
+          upload: "上傳 Hope & Crisis",
+          signIn: "登入 / Sign In",
+          signOut: "登出 / Sign Out"
+        },
+        hero: {
+          badge: "Homepage Submission Desk",
+          title: "上傳 Hope / Crisis 首頁資料",
+          body: "這裡是獨立的地方資料上傳頁。權限 2 與 3 的氣候行動者可以新增、修改、刪除自己提交過的 Hope / Crisis 內容，作為首頁候選資料。",
+          memberLink: "回到會員中心",
+          visionLink: "查看合作與願景"
+        },
+        stateCardTitle: "目前登入狀態",
+        abilityCardTitle: "目前可做的事",
+        access: {
+          sectionTitle: "上傳權限 / Upload Access",
+          sectionBody: "這個頁面只開放給可上傳 Hope / Crisis 的帳號。未登入或權限不足時，表單會保持隱藏。",
+          badge: "Access",
+          title: "請先登入符合資格的氣候行動者帳號",
+          body: "登入後若帳號權限為 2 或 3，就能使用這個頁面新增與管理你自己的首頁候選資料。",
+          login: "登入 / Sign In",
+          noAccessTitle: "目前帳號尚未開啟 Hope / Crisis 上傳權限",
+          noAccessBody: "這個功能只提供給組織或協作管理身分的氣候行動者。"
+        },
+        form: {
+          modeLabel: "資料類型 / Submission Type",
+          modeHope: "Hope / 希望",
+          modeCrisis: "Crisis / 威脅",
+          titleLabel: "標題 / Title",
+          locationLabel: "地區 / 城市 / Location",
+          dateLabel: "日期 / Date",
+          creditLabel: "來源或署名 / Credit",
+          summaryLabel: "內容說明 / Description",
+          fileLabel: "圖片或 30 秒短片 / Image or 30-second short video",
+          fileChoose: "選擇檔案 / Choose File",
+          fileEmpty: "尚未選擇檔案。編輯既有資料時，可不重新上傳。",
+          fileHelper: "建議上傳圖片，或可清楚呈現當地 Hope / Crisis 的短片。",
+          add: "新增資料 / Add Submission",
+          update: "更新資料 / Save Changes",
+          cancel: "取消編輯 / Cancel Edit",
+          previewImage: "目前預覽圖片",
+          previewVideo: "目前預覽影片"
+        },
+        list: {
+          sectionTitle: "我的首頁資料 / My Homepage Submissions",
+          sectionBody: "這裡會列出你自己已提交的 Hope / Crisis。你可以隨時回來修改內容、換圖，或刪除不需要的資料。",
+          emptyTitle: "目前還沒有資料",
+          emptyBody: "登入並新增第一筆 Hope / Crisis 後，就會出現在這裡。",
+          mode: "類型",
+          location: "地點",
+          date: "日期",
+          updatedAt: "最後更新",
+          credit: "來源 / 署名",
+          status: "狀態",
+          edit: "編輯",
+          delete: "刪除",
+          pending: "待後續整理",
+          noCredit: "未填寫"
+        },
+        state: {
+          signedOut: "尚未登入",
+          signedOutAbility: "請先登入。只有具備組織或協作管理身分的氣候行動者可在此上傳首頁資料。",
+          signedInPrefix: "已登入：",
+          level2: "你可以新增、修改、刪除自己的 Hope / Crisis 首頁候選資料。",
+          level3: "你可以管理自己的 Hope / Crisis 首頁候選資料，也可前往其他協作管理功能。",
+          loading: "正在讀取你上傳過的資料...",
+          saveReady: "可以開始新增資料。",
+          saving: "正在儲存資料...",
+          deleting: "正在刪除資料...",
+          saveSuccess: "資料已儲存。",
+          deleteSuccess: "資料已刪除。",
+          loginFailed: "登入失敗，請重新確認 Email 與密碼。",
+          resetSent: "重設密碼信已寄出。",
+          resetFailed: "寄送失敗，請先輸入正確 Email。",
+          readError: "讀取資料失敗，請稍後再試。",
+          noFileOnCreate: "新增資料時，請至少上傳一張圖片或一段短片。",
+          permissionDenied: "你目前沒有這個頁面的使用權限。",
+          confirmDelete: "確定要刪除這筆 Hope / Crisis 資料嗎？"
+        },
+        footer: "Blue Sky Returns • Upload Hope & Crisis • 2026"
+      },
+      en: {
+        pageTitle: "Upload Hope & Crisis | Blue Sky Returns",
+        brandSubtitle: "Hope & Crisis Upload",
+        nav: {
+          main: "Main Globe",
+          about: "About",
+          member: "Member Center",
+          upload: "Upload Hope & Crisis",
+          signIn: "Sign In",
+          signOut: "Sign Out"
+        },
+        hero: {
+          badge: "Homepage Submission Desk",
+          title: "Upload Hope / Crisis Homepage Content",
+          body: "This is a dedicated local-material upload page. Climate action partners with permission level 2 or 3 can create, edit, and delete their own Hope / Crisis submissions here as homepage candidates.",
+          memberLink: "Back to Member Center",
+          visionLink: "Open Collaboration & Vision"
+        },
+        stateCardTitle: "Current Sign-In Status",
+        abilityCardTitle: "What You Can Do Now",
+        access: {
+          sectionTitle: "Upload Access",
+          sectionBody: "This page is only available to accounts that can upload Hope / Crisis materials. The form stays hidden if you are signed out or do not have access.",
+          badge: "Access",
+          title: "Sign in with an eligible climate action partner account",
+          body: "After signing in, accounts with permission level 2 or 3 can create and manage their own homepage candidate materials on this page.",
+          login: "Sign In",
+          noAccessTitle: "Your current account does not have Hope / Crisis upload access yet",
+          noAccessBody: "This feature is available only to organization or coordination accounts."
+        },
+        form: {
+          modeLabel: "Submission Type",
+          modeHope: "Hope",
+          modeCrisis: "Crisis",
+          titleLabel: "Title",
+          locationLabel: "Location",
+          dateLabel: "Date",
+          creditLabel: "Credit",
+          summaryLabel: "Description",
+          fileLabel: "Image or 30-second short video",
+          fileChoose: "Choose File",
+          fileEmpty: "No file selected yet. When editing an existing item, you can keep the current upload.",
+          fileHelper: "Images are recommended, but you can also upload a short video that clearly shows the local Hope / Crisis case.",
+          add: "Add Submission",
+          update: "Save Changes",
+          cancel: "Cancel Edit",
+          previewImage: "Current image preview",
+          previewVideo: "Current video preview"
+        },
+        list: {
+          sectionTitle: "My Homepage Submissions",
+          sectionBody: "Your own Hope / Crisis submissions appear here. You can return anytime to revise details, swap media, or delete items you no longer need.",
+          emptyTitle: "No submissions yet",
+          emptyBody: "After you sign in and create your first Hope / Crisis item, it will appear here.",
+          mode: "Type",
+          location: "Location",
+          date: "Date",
+          updatedAt: "Last Updated",
+          credit: "Credit",
+          status: "Status",
+          edit: "Edit",
+          delete: "Delete",
+          pending: "Saved for follow-up",
+          noCredit: "Not provided"
+        },
+        state: {
+          signedOut: "Signed out",
+          signedOutAbility: "Sign in first. Only climate action partners with organization or coordination access can upload homepage materials here.",
+          signedInPrefix: "Signed in: ",
+          level2: "You can create, edit, and delete your own Hope / Crisis homepage candidate materials.",
+          level3: "You can manage your own Hope / Crisis homepage candidate materials and continue to other coordination tools.",
+          loading: "Loading your submissions...",
+          saveReady: "You can start creating a submission now.",
+          saving: "Saving submission...",
+          deleting: "Deleting submission...",
+          saveSuccess: "Submission saved.",
+          deleteSuccess: "Submission deleted.",
+          loginFailed: "Sign-in failed. Please check your email and password.",
+          resetSent: "Password reset email sent.",
+          resetFailed: "Sending failed. Please enter a valid email first.",
+          readError: "Failed to load submissions. Please try again later.",
+          noFileOnCreate: "Please upload at least one image or short video when creating a new submission.",
+          permissionDenied: "You do not currently have access to this page.",
+          confirmDelete: "Are you sure you want to delete this Hope / Crisis submission?"
+        },
+        footer: "Blue Sky Returns • Upload Hope & Crisis • 2026"
+      }
+    };
+
+    const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
+    const withTimeout = async (promise, ms, message) => {
+      let timeoutId;
+      const timeoutPromise = new Promise((_, reject) => {
+        timeoutId = window.setTimeout(() => reject(new Error(message)), ms);
+      });
+      try {
+        return await Promise.race([promise, timeoutPromise]);
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
+    };
+
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const accessLoginBtn = document.getElementById("accessLoginBtn");
+    const memberStateEl = document.getElementById("memberState");
+    const abilitySummaryEl = document.getElementById("abilitySummary");
+    const accessNotice = document.getElementById("accessNotice");
+    const uploadDesk = document.getElementById("uploadDesk");
+    const formEl = document.getElementById("submissionForm");
+    const fileInput = document.getElementById("entryFile");
+    const fileMetaEl = document.getElementById("fileMeta");
+    const mediaPreviewEl = document.getElementById("mediaPreview");
+    const formStatusEl = document.getElementById("formStatus");
+    const saveBtn = document.getElementById("saveBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const listEmpty = document.getElementById("listEmpty");
+    const submissionListEl = document.getElementById("submissionList");
+    const loginModal = document.getElementById("loginModal");
+    const closeLoginModalBtn = document.getElementById("closeLoginModal");
+    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const loginEmailInput = document.getElementById("loginEmail");
+    const loginPasswordInput = document.getElementById("loginPassword");
+    const loginStatusEl = document.getElementById("loginStatus");
+    const modeLabels = Array.from(document.querySelectorAll("#modeSegment label"));
+
+    const getDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || "Member";
+    const getModeLabel = (mode) => currentLang === "zh"
+      ? (mode === "crisis" ? "威脅 / Crisis" : "希望 / Hope")
+      : (mode === "crisis" ? "Crisis" : "Hope");
+    const getPermissionLevel = () => Number(currentMember?.permissionLevel || 0);
+    const hasUploadAccess = () => getPermissionLevel() >= 2;
+    const formatDate = (value) => value || "-";
+    const formatTimestamp = (value) => {
+      if (!value) return "-";
+      if (typeof value === "string") return value;
+      if (typeof value?.toDate === "function") return value.toDate().toLocaleString(currentLang === "zh" ? "zh-HK" : "en-US");
+      if (value?.seconds) return new Date(value.seconds * 1000).toLocaleString(currentLang === "zh" ? "zh-HK" : "en-US");
+      return "-";
+    };
+
+    const setStatus = (type, message) => {
+      formStatusEl.className = "status";
+      if (type) formStatusEl.classList.add(type);
+      formStatusEl.textContent = message;
+    };
+
+    const openLoginModal = () => {
+      loginStatusEl.textContent = "";
+      loginModal.classList.add("open");
+      loginModal.setAttribute("aria-hidden", "false");
+    };
+
+    const closeLoginModal = () => {
+      loginModal.classList.remove("open");
+      loginModal.setAttribute("aria-hidden", "true");
+    };
+
+    const updateModeStyles = () => {
+      const selectedMode = formEl.elements.mode.value;
+      modeLabels.forEach((label) => {
+        label.classList.toggle("active", label.dataset.mode === selectedMode);
+      });
+    };
+
+    const resetForm = () => {
+      editingSubmission = null;
+      formEl.reset();
+      formEl.elements.mode.value = "hope";
+      document.getElementById("entryDate").value = new Date().toISOString().slice(0, 10);
+      fileInput.value = "";
+      fileMetaEl.textContent = t("form.fileEmpty");
+      mediaPreviewEl.hidden = true;
+      mediaPreviewEl.innerHTML = "";
+      cancelEditBtn.hidden = true;
+      saveBtn.textContent = t("form.add");
+      setStatus("", hasUploadAccess() ? t("state.saveReady") : "");
+      updateModeStyles();
+    };
+
+    const renderPreview = ({ url, type, title }) => {
+      if (!url) {
+        mediaPreviewEl.hidden = true;
+        mediaPreviewEl.innerHTML = "";
+        return;
+      }
+
+      const safeTitle = title || "";
+      if ((type || "").startsWith("video/")) {
+        mediaPreviewEl.innerHTML = `<strong>${t("form.previewVideo")}</strong><video controls src="${url}" aria-label="${safeTitle}"></video>`;
+      } else {
+        mediaPreviewEl.innerHTML = `<strong>${t("form.previewImage")}</strong><img src="${url}" alt="${safeTitle}" />`;
+      }
+      mediaPreviewEl.hidden = false;
+    };
+
+    const loadFilePreview = (file) => {
+      if (!file) {
+        fileMetaEl.textContent = editingSubmission?.media?.name || t("form.fileEmpty");
+        renderPreview(editingSubmission?.media || {});
+        return;
+      }
+
+      fileMetaEl.textContent = `${file.name} • ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+      renderPreview({
+        url: URL.createObjectURL(file),
+        type: file.type,
+        title: file.name
+      });
+    };
+
+    const applyLanguage = (lang) => {
+      currentLang = lang;
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+      document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+      document.title = t("pageTitle");
+      document.getElementById("brandSubtitle").textContent = t("brandSubtitle");
+      document.getElementById("navMain").textContent = t("nav.main");
+      document.getElementById("navAbout").textContent = t("nav.about");
+      document.getElementById("navMember").textContent = t("nav.member");
+      document.getElementById("navUpload").textContent = t("nav.upload");
+      openLoginBtn.textContent = t("nav.signIn");
+      logoutBtn.textContent = t("nav.signOut");
+      document.getElementById("heroBadge").textContent = t("hero.badge");
+      document.getElementById("heroTitle").textContent = t("hero.title");
+      document.getElementById("heroBody").textContent = t("hero.body");
+      document.getElementById("heroMemberLink").textContent = t("hero.memberLink");
+      document.getElementById("heroVisionLink").textContent = t("hero.visionLink");
+      document.getElementById("stateCardTitle").textContent = t("stateCardTitle");
+      document.getElementById("abilityCardTitle").textContent = t("abilityCardTitle");
+      document.getElementById("accessSectionTitle").textContent = t("access.sectionTitle");
+      document.getElementById("accessSectionBody").textContent = t("access.sectionBody");
+      document.getElementById("accessBadge").textContent = t("access.badge");
+      document.getElementById("accessTitle").textContent = hasUploadAccess() ? t("access.title") : t("access.title");
+      document.getElementById("accessBody").textContent = hasUploadAccess() ? t("access.body") : t("access.body");
+      accessLoginBtn.textContent = t("access.login");
+      document.getElementById("modeLabel").textContent = t("form.modeLabel");
+      document.getElementById("modeHope").textContent = t("form.modeHope");
+      document.getElementById("modeCrisis").textContent = t("form.modeCrisis");
+      document.getElementById("titleLabel").textContent = t("form.titleLabel");
+      document.getElementById("locationLabel").textContent = t("form.locationLabel");
+      document.getElementById("dateLabel").textContent = t("form.dateLabel");
+      document.getElementById("creditLabel").textContent = t("form.creditLabel");
+      document.getElementById("summaryLabel").textContent = t("form.summaryLabel");
+      document.getElementById("fileLabel").textContent = t("form.fileLabel");
+      document.getElementById("filePickerLabel").textContent = t("form.fileChoose");
+      document.getElementById("fileHelper").textContent = t("form.fileHelper");
+      saveBtn.textContent = editingSubmission ? t("form.update") : t("form.add");
+      cancelEditBtn.textContent = t("form.cancel");
+      document.getElementById("listSectionTitle").textContent = t("list.sectionTitle");
+      document.getElementById("listSectionBody").textContent = t("list.sectionBody");
+      document.getElementById("emptyTitle").textContent = t("list.emptyTitle");
+      document.getElementById("emptyBody").textContent = t("list.emptyBody");
+      document.getElementById("loginModalTitle").textContent = currentLang === "zh" ? "會員登入 / Member Sign In" : "Member Sign In";
+      document.getElementById("loginEmailLabel").textContent = "Email";
+      document.getElementById("loginPasswordLabel").textContent = "Password";
+      loginSubmitBtn.textContent = t("nav.signIn");
+      forgotPasswordBtn.textContent = currentLang === "zh" ? "忘記密碼 / Reset Password" : "Reset Password";
+      closeLoginModalBtn.textContent = currentLang === "zh" ? "取消 / Cancel" : "Cancel";
+      document.getElementById("pageFooter").textContent = t("footer");
+      langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
+
+      if (!fileInput.files?.length) {
+        fileMetaEl.textContent = editingSubmission?.media?.name || t("form.fileEmpty");
+      }
+      renderMemberState();
+      renderSubmissionList();
+      updateModeStyles();
+    };
+
+    const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
+
+    const renderMemberState = () => {
+      if (!currentUser) {
+        memberStateEl.textContent = t("state.signedOut");
+        abilitySummaryEl.textContent = t("state.signedOutAbility");
+        openLoginBtn.hidden = false;
+        logoutBtn.hidden = true;
+        accessNotice.hidden = false;
+        uploadDesk.hidden = true;
+        document.getElementById("accessTitle").textContent = t("access.title");
+        document.getElementById("accessBody").textContent = t("access.body");
+        return;
+      }
+
+      memberStateEl.textContent = `${t("state.signedInPrefix")}${getDisplayName(currentUser)}`;
+      openLoginBtn.hidden = true;
+      logoutBtn.hidden = false;
+
+      if (hasUploadAccess()) {
+        abilitySummaryEl.textContent = getPermissionLevel() >= 3 ? t("state.level3") : t("state.level2");
+        accessNotice.hidden = true;
+        uploadDesk.hidden = false;
+      } else {
+        abilitySummaryEl.textContent = t("state.permissionDenied");
+        accessNotice.hidden = false;
+        uploadDesk.hidden = true;
+        document.getElementById("accessTitle").textContent = t("access.noAccessTitle");
+        document.getElementById("accessBody").textContent = t("access.noAccessBody");
+      }
+    };
+
+    const uploadMediaFile = async (userId, file) => {
+      if (!file || !file.name || file.size === 0) return null;
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const fileRef = ref(storage, `member-globe-submissions/${userId}/${Date.now()}-${safeName}`);
+      const snapshot = await withTimeout(
+        uploadBytes(fileRef, file, { contentType: file.type || "application/octet-stream" }),
+        20000,
+        "Upload timed out."
+      );
+      const downloadURL = await withTimeout(getDownloadURL(snapshot.ref), 10000, "Failed to load uploaded file URL.");
+      return {
+        name: file.name,
+        size: file.size,
+        type: file.type || "",
+        path: snapshot.metadata.fullPath,
+        downloadURL
+      };
+    };
+
+    const deleteStorageFile = async (media) => {
+      if (!media?.path) return;
+      try {
+        await deleteObject(ref(storage, media.path));
+      } catch (error) {
+        if (error?.code !== "storage/object-not-found") {
+          throw error;
+        }
+      }
+    };
+
+    const fillFormForEdit = (submission) => {
+      editingSubmission = submission;
+      formEl.elements.mode.value = submission.mode || "hope";
+      formEl.elements.title.value = submission.title || "";
+      formEl.elements.location.value = submission.location || "";
+      formEl.elements.eventDate.value = submission.eventDate || "";
+      formEl.elements.credit.value = submission.credit || "";
+      formEl.elements.summary.value = submission.summary || "";
+      fileInput.value = "";
+      fileMetaEl.textContent = submission.media?.name || t("form.fileEmpty");
+      renderPreview({
+        url: submission.media?.downloadURL,
+        type: submission.media?.type,
+        title: submission.title
+      });
+      cancelEditBtn.hidden = false;
+      saveBtn.textContent = t("form.update");
+      setStatus("", "");
+      updateModeStyles();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const createMetaBox = (label, value) => `
+      <div class="meta-box">
+        <strong>${label}</strong>
+        <span>${value}</span>
+      </div>
+    `;
+
+    const renderSubmissionList = () => {
+      submissionListEl.innerHTML = "";
+      if (!submissions.length) {
+        listEmpty.hidden = false;
+        submissionListEl.hidden = true;
+        return;
+      }
+
+      listEmpty.hidden = true;
+      submissionListEl.hidden = false;
+
+      submissions.forEach((submission) => {
+        const article = document.createElement("article");
+        article.className = "submission-card";
+        const mediaHtml = submission.media?.downloadURL
+          ? ((submission.media.type || "").startsWith("video/")
+              ? `<video controls src="${submission.media.downloadURL}" aria-label="${submission.title}"></video>`
+              : `<img src="${submission.media.downloadURL}" alt="${submission.title}" />`)
+          : "";
+
+        article.innerHTML = `
+          <div class="submission-media">
+            <div class="tag-row">
+              <span class="tag ${submission.mode === "crisis" ? "crisis" : "hope"}">${getModeLabel(submission.mode)}</span>
+              <span class="tag">${t("list.status")} • ${submission.statusLabel || t("list.pending")}</span>
+            </div>
+            ${mediaHtml || `<div class="empty-box"><p>${t("form.fileEmpty")}</p></div>`}
+          </div>
+          <div class="submission-body">
+            <h3>${submission.title || "-"}</h3>
+            <p class="submission-text">${submission.summary || ""}</p>
+            <div class="submission-meta">
+              ${createMetaBox(t("list.location"), submission.location || "-")}
+              ${createMetaBox(t("list.date"), formatDate(submission.eventDate))}
+              ${createMetaBox(t("list.credit"), submission.credit || t("list.noCredit"))}
+              ${createMetaBox(t("list.updatedAt"), formatTimestamp(submission.updatedAt))}
+            </div>
+            <div class="submission-actions">
+              <button type="button" class="secondary" data-action="edit" data-id="${submission.id}">${t("list.edit")}</button>
+              <button type="button" class="danger" data-action="delete" data-id="${submission.id}">${t("list.delete")}</button>
+            </div>
+          </div>
+        `;
+        submissionListEl.appendChild(article);
+      });
+    };
+
+    const loadSubmissions = async () => {
+      if (!currentUser || !hasUploadAccess()) {
+        submissions = [];
+        renderSubmissionList();
+        return;
+      }
+
+      setStatus("warn", t("state.loading"));
+
+      try {
+        const snapshot = await getDocs(
+          query(
+            collection(db, "memberGlobeSubmissions"),
+            where("uid", "==", currentUser.uid)
+          )
+        );
+
+        submissions = snapshot.docs.map((entry) => ({
+          id: entry.id,
+          ...entry.data(),
+          statusLabel: t("list.pending")
+        })).sort((a, b) => {
+          const aTime = a.updatedAt?.seconds || 0;
+          const bTime = b.updatedAt?.seconds || 0;
+          return bTime - aTime;
+        });
+        renderSubmissionList();
+        setStatus("ok", t("state.saveReady"));
+      } catch (error) {
+        console.error(error);
+        submissions = [];
+        renderSubmissionList();
+        setStatus("error", t("state.readError"));
+      }
+    };
+
+    const handleDelete = async (submissionId) => {
+      const submission = submissions.find((item) => item.id === submissionId);
+      if (!submission || !currentUser) return;
+      if (!window.confirm(t("state.confirmDelete"))) return;
+
+      setStatus("warn", t("state.deleting"));
+
+      try {
+        await deleteStorageFile(submission.media);
+        await deleteDoc(doc(db, "memberGlobeSubmissions", submissionId));
+        submissions = submissions.filter((item) => item.id !== submissionId);
+        renderSubmissionList();
+        if (editingSubmission?.id === submissionId) {
+          resetForm();
+        }
+        setStatus("ok", t("state.deleteSuccess"));
+      } catch (error) {
+        console.error(error);
+        setStatus("error", t("state.readError"));
+      }
+    };
+
+    const loadMemberProfile = async (user) => {
+      const snapshot = await getDoc(doc(db, "members", user.uid));
+      currentMember = snapshot.exists() ? snapshot.data() : null;
+      renderMemberState();
+      resetForm();
+      await loadSubmissions();
+    };
+
+    formEl.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!currentUser || !hasUploadAccess()) {
+        setStatus("error", t("state.permissionDenied"));
+        return;
+      }
+
+      const file = fileInput.files?.[0] || null;
+      if (!editingSubmission && !file) {
+        setStatus("error", t("state.noFileOnCreate"));
+        return;
+      }
+
+      saveBtn.disabled = true;
+      cancelEditBtn.disabled = true;
+      setStatus("warn", t("state.saving"));
+
+      try {
+        let media = editingSubmission?.media || null;
+        const previousMedia = editingSubmission?.media || null;
+        if (file) {
+          const newMedia = await uploadMediaFile(currentUser.uid, file);
+          media = newMedia;
+        }
+
+        const payload = {
+          uid: currentUser.uid,
+          memberName: currentMember?.name || currentUser.displayName || "",
+          memberEmail: currentUser.email || "",
+          permissionLevel: getPermissionLevel(),
+          partnerType: currentMember?.partnerType || "general",
+          mode: formEl.elements.mode.value,
+          title: formEl.elements.title.value.trim(),
+          location: formEl.elements.location.value.trim(),
+          eventDate: formEl.elements.eventDate.value,
+          credit: formEl.elements.credit.value.trim(),
+          summary: formEl.elements.summary.value.trim(),
+          media,
+          status: "pending",
+          updatedAt: serverTimestamp()
+        };
+
+        if (editingSubmission) {
+          await updateDoc(doc(db, "memberGlobeSubmissions", editingSubmission.id), payload);
+        } else {
+          payload.createdAt = serverTimestamp();
+          await addDoc(collection(db, "memberGlobeSubmissions"), payload);
+        }
+
+        if (file && previousMedia?.path && previousMedia.path !== media?.path) {
+          await deleteStorageFile(previousMedia);
+        }
+
+        await loadSubmissions();
+        resetForm();
+        setStatus("ok", t("state.saveSuccess"));
+      } catch (error) {
+        console.error(error);
+        setStatus("error", error?.message || t("state.readError"));
+      } finally {
+        saveBtn.disabled = false;
+        cancelEditBtn.disabled = false;
+      }
+    });
+
+    cancelEditBtn.addEventListener("click", () => resetForm());
+    fileInput.addEventListener("change", () => loadFilePreview(fileInput.files?.[0] || null));
+    modeLabels.forEach((label) => {
+      label.addEventListener("click", () => {
+        formEl.elements.mode.value = label.dataset.mode;
+        updateModeStyles();
+      });
+    });
+
+    submissionListEl.addEventListener("click", async (event) => {
+      const target = event.target.closest("button[data-action]");
+      if (!target) return;
+      const { action, id } = target.dataset;
+      if (action === "edit") {
+        const submission = submissions.find((item) => item.id === id);
+        if (submission) fillFormForEdit(submission);
+      }
+      if (action === "delete") {
+        await handleDelete(id);
+      }
+    });
+
+    openLoginBtn.addEventListener("click", openLoginModal);
+    accessLoginBtn.addEventListener("click", openLoginModal);
+    closeLoginModalBtn.addEventListener("click", closeLoginModal);
+    loginModal.addEventListener("click", (event) => {
+      if (event.target === loginModal) closeLoginModal();
+    });
+
+    loginSubmitBtn.addEventListener("click", async () => {
+      loginStatusEl.className = "status";
+      loginStatusEl.textContent = "";
+      try {
+        await signInWithEmailAndPassword(auth, loginEmailInput.value.trim(), loginPasswordInput.value);
+        closeLoginModal();
+      } catch (error) {
+        console.error(error);
+        loginStatusEl.classList.add("error");
+        loginStatusEl.textContent = t("state.loginFailed");
+      }
+    });
+
+    forgotPasswordBtn.addEventListener("click", async () => {
+      loginStatusEl.className = "status";
+      loginStatusEl.textContent = "";
+      try {
+        await sendPasswordResetEmail(auth, loginEmailInput.value.trim());
+        loginStatusEl.classList.add("ok");
+        loginStatusEl.textContent = t("state.resetSent");
+      } catch (error) {
+        console.error(error);
+        loginStatusEl.classList.add("error");
+        loginStatusEl.textContent = t("state.resetFailed");
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+      currentMember = null;
+      submissions = [];
+      renderSubmissionList();
+      renderMemberState();
+      if (!user) {
+        resetForm();
+        return;
+      }
+
+      try {
+        await loadMemberProfile(user);
+      } catch (error) {
+        console.error(error);
+        currentMember = null;
+        renderMemberState();
+        setStatus("error", t("state.readError"));
+      }
+    });
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+
+    applyLanguage(currentLang);
+    resetForm();
+  </script>
+</body>
+</html>

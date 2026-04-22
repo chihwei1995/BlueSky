@@ -15,6 +15,11 @@ service cloud.firestore {
         get(/databases/$(database)/documents/members/$(request.auth.uid)).data.permissionLevel == level;
     }
 
+    function hasMinPermissionLevel(level) {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/members/$(request.auth.uid)).data.permissionLevel >= level;
+    }
+
     match /globeEvents/{eventId} {
       allow read: if true;
       allow write: if false;
@@ -38,6 +43,24 @@ service cloud.firestore {
         (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
       allow delete: if isSignedIn() &&
         (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+    }
+
+    match /memberGlobeSubmissions/{submissionId} {
+      allow create: if isSignedIn() &&
+        hasMinPermissionLevel(2) &&
+        request.resource.data.uid == request.auth.uid;
+      allow read: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow update: if isSignedIn() &&
+        (
+          (resource.data.uid == request.auth.uid && hasMinPermissionLevel(2)) ||
+          hasPermissionLevel(3)
+        );
+      allow delete: if isSignedIn() &&
+        (
+          (resource.data.uid == request.auth.uid && hasMinPermissionLevel(2)) ||
+          hasPermissionLevel(3)
+        );
     }
 
     match /members/{userId} {
