@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 證書工作室 | Blue Sky Returns</title>
+  <link rel="icon" type="image/png" href="/Enter.PNG" />
+  <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
+  <link rel="apple-touch-icon" href="/Enter.PNG" />
+  <meta name="description" content="上傳自己的照片，帶入 2026 氣候行動證書編號與代幣編號，用 Firebase Gemini 生成專屬證書主視覺。" />
+  <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/certificate-studio.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Blue Sky Returns" />
+  <meta property="og:title" content="AI 證書工作室 | Blue Sky Returns" />
+  <meta property="og:description" content="上傳自己的照片，帶入 2026 氣候行動證書編號與代幣編號，用 Firebase Gemini 生成專屬證書主視覺。" />
+  <meta property="og:url" content="https://www.blue-sky-returns.online/blueskyreturns/certificate-studio.html" />
+  <meta property="og:image" content="https://www.blue-sky-returns.online/assets/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI 證書工作室 | Blue Sky Returns" />
+  <meta name="twitter:description" content="上傳自己的照片，帶入 2026 氣候行動證書編號與代幣編號，用 Firebase Gemini 生成專屬證書主視覺。" />
+  <meta name="twitter:image" content="https://www.blue-sky-returns.online/assets/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png" />
+  <style>
+    :root {
+      --bg: #eef7f4;
+      --card: rgba(255,255,255,0.94);
+      --ink: #102236;
+      --muted: #5d7186;
+      --line: #d5e8de;
+      --green: #1f7a58;
+      --green-soft: #7cc27a;
+      --teal: #2db6a3;
+      --gold: #d9a441;
+      --shadow: 0 24px 54px rgba(18, 42, 34, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(circle at top left, rgba(45, 182, 163, 0.18), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(217, 164, 65, 0.18), transparent 20%),
+        linear-gradient(180deg, #f7fcfa 0%, #edf7f2 50%, #f8fcfb 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 252, 250, 0.9);
+      border-bottom: 1px solid rgba(213, 232, 222, 0.9);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 12px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 22px rgba(16, 34, 54, 0.08);
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand-copy strong {
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+    .brand-copy span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pill,
+    button,
+    select,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .pill,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--green);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .pill.primary,
+    .btn.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--green), var(--teal));
+      color: #fff;
+      box-shadow: 0 16px 32px rgba(31, 122, 88, 0.2);
+    }
+
+    .pill.active {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--green), var(--teal));
+      color: #fff;
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.78);
+    }
+
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      border-radius: 999px;
+      padding: 7px 12px;
+      color: var(--muted);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, rgba(31,122,88,0.16), rgba(45,182,163,0.18));
+      color: var(--green);
+    }
+
+    main {
+      padding: 28px 0 72px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero,
+    .panel {
+      background: var(--card);
+      border: 1px solid rgba(213, 232, 222, 0.92);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 15px;
+      border-radius: 999px;
+      background: rgba(31,122,88,0.08);
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      width: fit-content;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      line-height: 1.04;
+      color: var(--green);
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero-side {
+      min-height: 320px;
+      border-radius: 26px;
+      border: 1px solid rgba(213, 232, 222, 0.92);
+      background:
+        linear-gradient(155deg, rgba(31, 122, 88, 0.96), rgba(124, 194, 122, 0.88)),
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
+      color: #fff;
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+      align-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-side::after {
+      content: "";
+      position: absolute;
+      inset: auto -20px -60px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.24), transparent 68%);
+      pointer-events: none;
+    }
+
+    .hero-side strong {
+      font-size: 1.1rem;
+    }
+
+    .hero-side p {
+      color: rgba(255,255,255,0.88);
+      font-size: 0.98rem;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+      gap: 22px;
+    }
+
+    .section-head {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2,
+    .card-title {
+      margin: 0;
+      color: var(--green);
+    }
+
+    .section-head p,
+    .field-hint,
+    .muted {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .control-card,
+    .preview-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.86);
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .reward-codes {
+      display: grid;
+      gap: 10px;
+    }
+
+    .code-item {
+      border-radius: 18px;
+      background: rgba(31,122,88,0.06);
+      border: 1px solid rgba(31,122,88,0.12);
+      padding: 12px 14px;
+    }
+
+    .code-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .code-item strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--green);
+      font-size: 1rem;
+      word-break: break-word;
+      letter-spacing: 0.04em;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field label {
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid #c8ddd2;
+      background: #fff;
+      padding: 12px 14px;
+      color: var(--ink);
+    }
+
+    .field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .share-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .preview-chip-row,
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(31,122,88,0.08);
+      border: 1px solid rgba(31,122,88,0.14);
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .status {
+      border-radius: 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(31,122,88,0.12);
+      background: rgba(31,122,88,0.08);
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .status.warn {
+      background: rgba(217, 164, 65, 0.12);
+      border-color: rgba(217, 164, 65, 0.26);
+      color: #915d10;
+    }
+
+    .status.error {
+      background: rgba(185, 28, 28, 0.1);
+      border-color: rgba(185, 28, 28, 0.22);
+      color: #a61b1b;
+    }
+
+    .status.ok {
+      background: rgba(22, 163, 74, 0.12);
+      border-color: rgba(22, 163, 74, 0.24);
+      color: #166534;
+    }
+
+    .photo-preview {
+      display: grid;
+      gap: 10px;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      max-width: 220px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 28px rgba(16, 34, 54, 0.08);
+    }
+
+    .certificate-shell {
+      border-radius: 26px;
+      border: 1px solid rgba(213,232,222,0.92);
+      background: linear-gradient(135deg, #0f4b40, #6fbf72);
+      padding: 16px;
+      box-shadow: 0 18px 40px rgba(16, 34, 54, 0.14);
+    }
+
+    .certificate-stage {
+      position: relative;
+      overflow: hidden;
+      min-height: 580px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background:
+        linear-gradient(135deg, rgba(11, 54, 82, 0.88), rgba(13, 103, 78, 0.62)),
+        radial-gradient(circle at top right, rgba(255,255,255,0.26), transparent 34%),
+        linear-gradient(135deg, #0e4156, #5fa86e);
+      color: #fff;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.94fr) minmax(240px, 0.88fr);
+    }
+
+    .certificate-media {
+      position: absolute;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      opacity: 0.9;
+      transform: scale(1.02);
+      transition: background-image 0.2s ease;
+    }
+
+    .certificate-wash {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(8, 31, 47, 0.88) 0%, rgba(8,31,47,0.76) 42%, rgba(8,31,47,0.26) 70%, rgba(8,31,47,0.16) 100%);
+      pointer-events: none;
+    }
+
+    .certificate-panel {
+      position: relative;
+      z-index: 1;
+      padding: 26px;
+      display: grid;
+      gap: 16px;
+      align-content: space-between;
+    }
+
+    .certificate-panel::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.22);
+      pointer-events: none;
+    }
+
+    .certificate-top {
+      display: grid;
+      gap: 12px;
+    }
+
+    .certificate-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .certificate-brand img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.96);
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .certificate-brand strong,
+    .certificate-brand span {
+      display: block;
+    }
+
+    .certificate-brand span {
+      color: rgba(255,255,255,0.78);
+      font-size: 0.82rem;
+    }
+
+    .year-stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+    }
+
+    .year-stamp img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.18));
+    }
+
+    .year-stamp strong,
+    .year-stamp span {
+      display: block;
+    }
+
+    .year-stamp span {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .certificate-kicker {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .certificate-title {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.02;
+    }
+
+    .certificate-subtitle,
+    .certificate-note {
+      margin: 0;
+      color: rgba(255,255,255,0.84);
+    }
+
+    .recipient-block {
+      display: grid;
+      gap: 6px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+    }
+
+    .recipient-block span {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .recipient-block strong {
+      font-size: clamp(1.4rem, 2.4vw, 2rem);
+    }
+
+    .certificate-code-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .certificate-achievement-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .achievement-card {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .achievement-card span {
+      display: block;
+      color: rgba(255,255,255,0.72);
+      font-size: 0.8rem;
+    }
+
+    .achievement-card strong {
+      display: block;
+      margin-top: 4px;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .achievement-card p {
+      margin: 8px 0 0;
+      color: rgba(255,255,255,0.86);
+      font-size: 0.92rem;
+    }
+
+    .certificate-code-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .certificate-code-item span {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.82rem;
+    }
+
+    .certificate-code-item strong {
+      display: block;
+      margin-top: 4px;
+      color: #fff7de;
+      letter-spacing: 0.06em;
+      font-size: 0.96rem;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .certificate-foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      justify-content: space-between;
+      color: rgba(255,255,255,0.84);
+      font-size: 0.86rem;
+    }
+
+    .art-side {
+      position: relative;
+      z-index: 1;
+      padding: 22px;
+      display: grid;
+      align-content: end;
+      justify-items: end;
+    }
+
+    .art-card {
+      width: min(100%, 320px);
+      border-radius: 22px;
+      padding: 16px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      color: #f3fbf6;
+    }
+
+    .art-card strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .art-card p {
+      margin: 0;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .art-card + .art-card {
+      margin-top: 12px;
+    }
+
+    .empty-lock {
+      border-radius: 24px;
+      border: 1px dashed rgba(31,122,88,0.28);
+      background: rgba(31,122,88,0.05);
+      padding: 22px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .foot {
+      text-align: center;
+      padding: 0 20px 36px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .panel-grid,
+      .certificate-stage {
+        grid-template-columns: 1fr;
+      }
+
+      .art-side {
+        justify-items: stretch;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 20px, 1220px);
+      }
+
+      .hero,
+      .panel,
+      .control-card,
+      .preview-card {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .certificate-shell {
+        padding: 10px;
+      }
+
+      .certificate-panel {
+        padding: 18px;
+      }
+
+      .certificate-stage {
+        min-height: 700px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+        <div class="brand-copy">
+          <strong>Blue Sky Returns</strong>
+          <span id="brandSubtitle">AI 證書工作室 / AI Certificate Studio</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <a id="navMain" class="pill" href="../index.html">Main Globe</a>
+        <a id="navAbout" class="pill" href="./index.html">About</a>
+        <a id="navMember" class="pill active" href="./member-center.html">Member Center</a>
+        <a id="navBack" class="pill" href="./member-center.html#rewardSectionTitle">返回證書區</a>
+        <button id="logoutBtn" class="pill" type="button" hidden>登出 / Sign Out</button>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell stack">
+      <section class="hero">
+        <div class="hero-copy">
+          <span id="heroBadge" class="badge">AI Certificate Studio</span>
+          <h1 id="heroTitle">上傳照片，生成你的 2026 氣候行動證書設計</h1>
+          <p id="heroBody">這個工作室會帶入你的電子證書編號、抽獎編號與代幣編號，再用 Firebase Gemini 根據你上傳的照片生成專屬主視覺，最後輸出成可下載的證書 PNG。</p>
+          <div class="preview-chip-row">
+            <span id="chip1" class="chip">Firebase Gemini</span>
+            <span id="chip2" class="chip">Photo + Certificate Codes</span>
+            <span id="chip3" class="chip">PNG Download</span>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div>
+            <strong id="heroSideTitle">使用方式</strong>
+            <p id="heroSideBody">先在氣候行動者中心領取 2026 氣候行動資格，再回到這裡上傳照片。AI 只負責生成證書主視覺，真正的證書文字與編號會由系統穩定套版，避免內容跑掉。</p>
+          </div>
+          <div id="authState" class="status warn">尚未登入 / Not signed in</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2 id="studioSectionTitle">AI 證書生成器 / AI Certificate Generator</h2>
+          <p id="studioSectionBody">只在你按下生成時，照片才會送到 Firebase Gemini。若尚未領取 2026 氣候行動資格，這個工作室會維持鎖定。</p>
+        </div>
+        <div class="panel-grid">
+          <article class="control-card">
+            <h3 id="controlTitle" class="card-title">生成設定 / Generation Setup</h3>
+            <div class="reward-codes">
+              <div class="code-item">
+                <span id="certCodeLabel">電子證書編號</span>
+                <strong id="certCodeValue">-</strong>
+              </div>
+              <div class="code-item">
+                <span id="lotteryCodeLabel">抽獎編號</span>
+                <strong id="lotteryCodeValue">-</strong>
+              </div>
+              <div class="code-item">
+                <span id="tokenCodeLabel">代幣編號</span>
+                <strong id="tokenCodeValue">-</strong>
+              </div>
+            </div>
+
+            <div id="studioLock" class="empty-lock">
+              <strong id="lockTitle">尚未開啟證書工作室</strong>
+              <p id="lockBody" class="muted">請先到氣候行動者中心完成資格檢查，並領取 2026 氣候行動證書、抽獎編號與代幣。</p>
+              <a id="lockAction" class="pill primary" href="./member-center.html#rewardSectionTitle">前往氣候行動者中心</a>
+            </div>
+
+            <div id="studioControls" class="form-grid" hidden>
+              <div class="field">
+                <label id="displayNameLabel" for="displayNameInput">證書姓名 / Certificate Name</label>
+                <input id="displayNameInput" type="text" placeholder="請輸入要顯示在證書上的姓名" />
+              </div>
+              <div class="field">
+                <label id="chapterLabel" for="chapterInput">分會 / 地區 / Chapter or Region</label>
+                <input id="chapterInput" type="text" placeholder="例如：JCI Peninsula / Hong Kong" />
+              </div>
+              <div class="field">
+                <label id="themeLabel" for="themeSelect">證書風格 / Certificate Style</label>
+                <select id="themeSelect">
+                  <option value="emerald">Emerald Atmosphere / 綠色自然感</option>
+                  <option value="blue">Blue Sky Energy / 藍天未來感</option>
+                  <option value="gold">Golden Honor / 榮譽典藏感</option>
+                </select>
+              </div>
+              <div class="field">
+                <label id="promptTemplateLabel" for="promptTemplateSelect">Prompt 模板 / Prompt Template</label>
+                <select id="promptTemplateSelect">
+                  <option value="formal">典禮正式版 / Formal Ceremony</option>
+                  <option value="youth">青年行動版 / Youth Action</option>
+                  <option value="japanese">日系寫真版 / Japanese Portrait</option>
+                </select>
+              </div>
+              <div class="field">
+                <label id="photoLabel" for="photoInput">上傳你的照片 / Upload Your Photo</label>
+                <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp" />
+                <p id="photoHint" class="field-hint">建議使用清楚的人像或半身照。只有按下生成時，照片才會送到 Firebase Gemini。</p>
+              </div>
+              <div id="photoPreview" class="photo-preview" hidden>
+                <img id="photoPreviewImg" alt="Uploaded preview" />
+                <p id="photoPreviewName" class="muted"></p>
+              </div>
+              <div class="field">
+                <label id="promptLabel" for="promptPreview">AI Prompt 預覽 / AI Prompt Preview</label>
+                <textarea id="promptPreview" readonly></textarea>
+              </div>
+              <div class="actions">
+                <button id="generateBtn" class="btn primary" type="button">使用 Firebase Gemini 生成</button>
+                <button id="downloadBtn" class="btn" type="button" disabled>下載 PNG 證書</button>
+              </div>
+              <div class="share-actions">
+                <button id="shareBtn" class="btn" type="button" disabled>分享到社群</button>
+              </div>
+              <div id="studioStatus" class="status warn">先上傳照片，再開始生成證書主視覺。</div>
+            </div>
+          </article>
+
+          <article class="preview-card">
+            <h3 id="previewTitle" class="card-title">證書預覽 / Certificate Preview</h3>
+            <p id="previewBody" class="muted">AI 生成的主視覺會出現在這裡，證書編號、抽獎編號與代幣編號則由系統正式排版。</p>
+            <div class="certificate-shell">
+              <div id="certificateStage" class="certificate-stage">
+                <div id="certificateMedia" class="certificate-media"></div>
+                <div class="certificate-wash"></div>
+                <div class="certificate-panel">
+                  <div class="certificate-top">
+                    <div class="certificate-brand">
+                      <img src="../Enter.PNG" alt="Blue Sky Returns logo" />
+                      <div>
+                        <strong>Blue Sky Returns</strong>
+                        <span id="certBrandSub">2026 Climate Action Certificate</span>
+                      </div>
+                    </div>
+                    <div class="year-stamp">
+                      <img src="../Enter.PNG" alt="2026 Enter annual badge" />
+                      <div>
+                        <span id="yearStampLabel">2026 Annual Badge</span>
+                        <strong id="yearStampTitle">2026 年度氣候行動</strong>
+                      </div>
+                    </div>
+                    <div id="certKicker" class="certificate-kicker">AI Designed Certificate</div>
+                    <h2 id="certTitle" class="certificate-title">2026 氣候行動證書</h2>
+                    <p id="certSubtitle" class="certificate-subtitle">表彰你完成邁出一步、Eco-MBTI 與 7-Day Green Proposal 的氣候行動參與。</p>
+                  </div>
+                  <div class="recipient-block">
+                    <span id="recipientLabel">Presented To</span>
+                    <strong id="recipientName">你的名字</strong>
+                    <p id="recipientChapter" class="certificate-note">JCI Peninsula / Blue Sky Returns</p>
+                  </div>
+                  <div class="certificate-code-list">
+                    <div class="certificate-code-item">
+                      <div>
+                        <span id="stageCertLabel">Certificate Code</span>
+                      </div>
+                      <strong id="stageCertCode">-</strong>
+                    </div>
+                    <div class="certificate-code-item">
+                      <div>
+                        <span id="stageLotteryLabel">Lottery Number</span>
+                      </div>
+                      <strong id="stageLotteryCode">-</strong>
+                    </div>
+                    <div class="certificate-code-item">
+                      <div>
+                        <span id="stageTokenLabel">Token Code</span>
+                      </div>
+                      <strong id="stageTokenCode">-</strong>
+                    </div>
+                  </div>
+                  <div class="certificate-achievement-list">
+                    <div class="achievement-card">
+                      <span id="mbtiLabel">Eco-MBTI 角色卡</span>
+                      <strong id="mbtiValue">-</strong>
+                      <p id="mbtiBody">-</p>
+                    </div>
+                    <div class="achievement-card">
+                      <span id="proposalLabel">7-Day Green Proposal</span>
+                      <strong id="proposalValue">7 / 7 Days Completed</strong>
+                      <p id="proposalBody">-</p>
+                    </div>
+                  </div>
+                  <div class="certificate-foot">
+                    <span id="stageIssuedAt">Issued on 2026-04-22</span>
+                    <span id="stageFootNote">Powered by Firebase Gemini • Blue Sky Returns</span>
+                  </div>
+                </div>
+                <div class="art-side">
+                  <div class="art-card">
+                    <strong id="artCardTitle">主視覺說明 / Visual Note</strong>
+                    <p id="artCardBody">這裡會根據你的照片生成帶有藍天、自然、潔淨能源與希望感的證書主視覺。</p>
+                  </div>
+                  <div class="art-card">
+                    <strong id="tokenRuleTitle">代幣規則 / Token Rule</strong>
+                    <p id="tokenRuleBody">這枚代幣只可用來生成一次專屬證書。成功生成並存檔後，就不能再次生成。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p id="generationNote" class="muted">尚未生成。你也可以先用上傳照片預覽版型。</p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="pageFooter" class="foot">Blue Sky Returns • AI Certificate Studio • 2026</footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+    import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
+    import { getAI, getGenerativeModel, GoogleAIBackend, ResponseModality } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-ai.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "certificate-studio" });
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+    const storage = getStorage(app);
+    const ai = getAI(app, { backend: new GoogleAIBackend() });
+    const imageModel = getGenerativeModel(ai, {
+      model: "gemini-2.5-flash-image",
+      generationConfig: {
+        responseModalities: [ResponseModality.TEXT, ResponseModality.IMAGE],
+        temperature: 0.8
+      }
+    });
+
+    const LANG_STORAGE_KEY = "bsr_lang";
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
+    let currentUser = null;
+    let currentMember = {};
+    let currentReward = null;
+    let currentCompletedDays = 0;
+    let selectedPhotoFile = null;
+    let uploadedPreviewUrl = "";
+    let generatedImageUrl = "";
+
+    const I18N = {
+      zh: {
+        pageTitle: "AI 證書工作室 | Blue Sky Returns",
+        brandSubtitle: "AI 證書工作室 / AI Certificate Studio",
+        navMain: "主地球首頁",
+        navAbout: "項目介紹",
+        navMember: "氣候行動者中心",
+        navBack: "返回證書區",
+        logout: "登出 / Sign Out",
+        heroBadge: "AI Certificate Studio",
+        heroTitle: "上傳照片，生成你的 2026 氣候行動證書設計",
+        heroBody: "這個工作室會帶入你的電子證書編號、抽獎編號與代幣編號，再用 Firebase Gemini 根據你上傳的照片生成專屬主視覺，最後輸出成可下載的證書 PNG。",
+        chip1: "Firebase Gemini",
+        chip2: "照片 + 證書編號",
+        chip3: "PNG 下載",
+        heroSideTitle: "使用方式",
+        heroSideBody: "先在氣候行動者中心領取 2026 氣候行動資格，再回到這裡上傳照片。AI 只負責生成證書主視覺，真正的證書文字與編號會由系統穩定套版，避免內容跑掉。",
+        authGuest: "尚未登入，請先到氣候行動者中心登入。",
+        authSignedIn: "目前帳號：",
+        studioSectionTitle: "AI 證書生成器 / AI Certificate Generator",
+        studioSectionBody: "只在你按下生成時，照片才會送到 Firebase Gemini。若尚未領取 2026 氣候行動資格，這個工作室會維持鎖定。",
+        controlTitle: "生成設定 / Generation Setup",
+        certCodeLabel: "電子證書編號",
+        lotteryCodeLabel: "抽獎編號",
+        tokenCodeLabel: "可用代幣",
+        lockTitle: "尚未開啟證書工作室",
+        lockBody: "請先到氣候行動者中心完成資格檢查，並領取 2026 氣候行動證書、抽獎編號與代幣。",
+        lockAction: "前往氣候行動者中心",
+        displayNameLabel: "證書姓名 / Certificate Name",
+        displayNamePlaceholder: "請輸入要顯示在證書上的姓名",
+        chapterLabel: "分會 / 地區 / Chapter or Region",
+        chapterPlaceholder: "例如：JCI Peninsula / Hong Kong",
+        themeLabel: "證書風格 / Certificate Style",
+        promptTemplateLabel: "Prompt 模板 / Prompt Template",
+        photoLabel: "上傳你的照片 / Upload Your Photo",
+        photoHint: "建議使用清楚的人像或半身照。只有按下生成時，照片才會送到 Firebase Gemini。",
+        promptLabel: "AI Prompt 預覽 / AI Prompt Preview",
+        generateBtn: "使用 Firebase Gemini 生成",
+        generating: "正在使用 Firebase Gemini 生成主視覺...",
+        downloadBtn: "下載 PNG 證書",
+        shareBtn: "分享到社群",
+        previewTitle: "證書預覽 / Certificate Preview",
+        previewBody: "AI 生成的主視覺會出現在這裡，證書編號、抽獎編號與代幣編號則由系統正式排版。",
+        certBrandSub: "2026 年氣候行動證書",
+        yearStampLabel: "2026 Annual Badge",
+        yearStampTitle: "2026 年度氣候行動",
+        certKicker: "AI 生成證書",
+        certTitle: "2026 氣候行動證書",
+        certSubtitle: "表彰你完成邁出一步、Eco-MBTI 與 7-Day Green Proposal 的氣候行動參與。",
+        recipientLabel: "頒發給",
+        recipientChapterFallback: "JCI Peninsula / Blue Sky Returns",
+        stageCertLabel: "證書編號",
+        stageLotteryLabel: "抽獎編號",
+        stageTokenLabel: "代幣編號",
+        mbtiLabel: "Eco-MBTI 角色卡",
+        proposalLabel: "7-Day Green Proposal 代幣進度",
+        proposalValue: "1 / 2 枚代幣",
+        proposalBody: "你在 7-Day Green Proposal 的累積完成度，會決定目前已獲得幾枚可用代幣。",
+        stageFootNote: "由 Firebase Gemini 生成 • Blue Sky Returns",
+        artCardTitle: "主視覺說明 / Visual Note",
+        artCardBody: "這裡會根據你的照片生成帶有藍天、自然、潔淨能源與希望感的證書主視覺。",
+        tokenRuleTitle: "代幣規則 / Token Rule",
+        tokenRuleBody: "每一枚代幣都可用來生成一次專屬證書。7-Day Green Proposal 每完成 7 天可獲得 1 枚代幣，最多累積 2 枚。",
+        generationNoteEmpty: "尚未生成。你也可以先用上傳照片預覽版型。",
+        generationNoteReady: "已生成新的 AI 主視覺，現在可以直接下載 PNG 證書。",
+        generationNoteUploadOnly: "目前是照片預覽版型；若要生成專屬主視覺，請按下 Firebase Gemini 生成。",
+        statusNeedReward: "你尚未領取 2026 氣候行動資格，因此證書工作室維持鎖定。",
+        statusNeedPhoto: "先上傳照片，再開始生成證書主視覺。",
+        statusReady: "已載入你的證書編號與可用代幣，現在可以開始生成。",
+        statusSuccess: "生成完成，現在可以下載 PNG 證書。",
+        statusError: "生成失敗，請稍後再試；若仍失敗，請確認 Firebase AI Logic 已啟用且額度可用。",
+        statusTokenUsed: "你目前沒有可用代幣；若已用完，可先到氣候行動者中心查看是否已累積下一枚代幣。",
+        statusSaved: "已更新你的 AI 證書工作室設定。",
+        downloadSuccess: "PNG 證書已開始下載。",
+        shareSuccess: "已準備好分享內容。",
+        shareFallback: "無法直接喚起分享，已複製連結到剪貼簿。",
+        issuePrefix: "獲得日期",
+        shareText: "我剛完成 Blue Sky Returns 的 2026 氣候行動證書，這是我的專屬 AI 證書。",
+        footer: "Blue Sky Returns • AI Certificate Studio • 2026"
+      },
+      en: {
+        pageTitle: "AI Certificate Studio | Blue Sky Returns",
+        brandSubtitle: "AI Certificate Studio",
+        navMain: "Main Globe",
+        navAbout: "About",
+        navMember: "Member Center",
+        navBack: "Back to Reward Section",
+        logout: "Sign Out",
+        heroBadge: "AI Certificate Studio",
+        heroTitle: "Upload your photo and generate your 2026 climate action certificate design",
+        heroBody: "This studio brings in your certificate code, lottery number, and token code, then uses Firebase Gemini to generate a personalized visual based on your uploaded photo before exporting a downloadable PNG certificate.",
+        chip1: "Firebase Gemini",
+        chip2: "Photo + Certificate Codes",
+        chip3: "PNG Download",
+        heroSideTitle: "How It Works",
+        heroSideBody: "Claim your 2026 climate action reward in the member center first, then return here and upload your photo. AI only generates the certificate visual. The official certificate copy and codes are layered by the system for accuracy.",
+        authGuest: "Not signed in yet. Please sign in from the member center first.",
+        authSignedIn: "Current account: ",
+        studioSectionTitle: "AI Certificate Generator",
+        studioSectionBody: "Your photo is only sent to Firebase Gemini after you click generate. If the 2026 reward has not been claimed yet, this studio stays locked.",
+        controlTitle: "Generation Setup",
+        certCodeLabel: "Certificate Code",
+        lotteryCodeLabel: "Lottery Number",
+        tokenCodeLabel: "Available Tokens",
+        lockTitle: "Certificate studio is still locked",
+        lockBody: "Please go to the member center first, complete the eligibility check, and claim your 2026 certificate, lottery number, and token.",
+        lockAction: "Open Member Center",
+        displayNameLabel: "Certificate Name",
+        displayNamePlaceholder: "Enter the name shown on the certificate",
+        chapterLabel: "Chapter or Region",
+        chapterPlaceholder: "For example: JCI Peninsula / Hong Kong",
+        themeLabel: "Certificate Style",
+        promptTemplateLabel: "Prompt Template",
+        photoLabel: "Upload Your Photo",
+        photoHint: "A clear portrait or upper-body photo works best. Your photo is sent to Firebase Gemini only after you click generate.",
+        promptLabel: "AI Prompt Preview",
+        generateBtn: "Generate with Firebase Gemini",
+        generating: "Generating visual with Firebase Gemini...",
+        downloadBtn: "Download PNG Certificate",
+        shareBtn: "Share to Social",
+        previewTitle: "Certificate Preview",
+        previewBody: "The AI-generated visual appears here, while the certificate codes and official copy are laid out by the system.",
+        certBrandSub: "2026 Climate Action Certificate",
+        yearStampLabel: "2026 Annual Badge",
+        yearStampTitle: "2026 Climate Action",
+        certKicker: "AI Designed Certificate",
+        certTitle: "2026 Climate Action Certificate",
+        certSubtitle: "Presented in recognition of completing Take One Step, Eco-MBTI, and the 7-Day Green Proposal journey.",
+        recipientLabel: "Presented To",
+        recipientChapterFallback: "JCI Peninsula / Blue Sky Returns",
+        stageCertLabel: "Certificate Code",
+        stageLotteryLabel: "Lottery Number",
+        stageTokenLabel: "Token Code",
+        mbtiLabel: "Eco-MBTI Role Card",
+        proposalLabel: "7-Day Green Proposal Token Progress",
+        proposalValue: "1 / 2 Tokens",
+        proposalBody: "Your accumulated 7-Day Green Proposal progress determines how many usable tokens you have earned so far.",
+        stageFootNote: "Powered by Firebase Gemini • Blue Sky Returns",
+        artCardTitle: "Visual Note",
+        artCardBody: "Your uploaded photo will be turned into a hopeful certificate visual with blue sky, nature, clean energy, and climate action motifs.",
+        tokenRuleTitle: "Token Rule",
+        tokenRuleBody: "Each token can be used once to generate one personalized certificate. Every 7 completed 7-Day records earns 1 token, up to 2 tokens total.",
+        generationNoteEmpty: "No AI visual yet. You can still preview the layout with your uploaded photo first.",
+        generationNoteReady: "A new AI visual is ready. You can now download the PNG certificate.",
+        generationNoteUploadOnly: "This is currently a photo-based layout preview. Click Firebase Gemini generate to create a personalized visual.",
+        statusNeedReward: "You have not claimed the 2026 climate action reward yet, so the certificate studio stays locked.",
+        statusNeedPhoto: "Upload a photo first, then start generating the certificate visual.",
+        statusReady: "Your certificate code and available tokens are loaded. You can start generating now.",
+        statusSuccess: "Generation complete. You can now download the PNG certificate.",
+        statusError: "Generation failed. Please try again later, and make sure Firebase AI Logic is enabled with available quota.",
+        statusTokenUsed: "You do not have any available tokens right now. If you have used them up, check the member center after earning your next token.",
+        statusSaved: "Your AI certificate studio settings have been updated.",
+        downloadSuccess: "Your PNG certificate download has started.",
+        shareSuccess: "Your share content is ready.",
+        shareFallback: "Direct share is not available here, so the link has been copied to your clipboard.",
+        issuePrefix: "Issued on",
+        shareText: "I just completed my Blue Sky Returns 2026 climate action certificate and generated my personalized AI certificate.",
+        footer: "Blue Sky Returns • AI Certificate Studio • 2026"
+      }
+    };
+
+    const t = (key) => I18N[currentLang][key] || "";
+    const authStateEl = document.getElementById("authState");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const certCodeValue = document.getElementById("certCodeValue");
+    const lotteryCodeValue = document.getElementById("lotteryCodeValue");
+    const tokenCodeValue = document.getElementById("tokenCodeValue");
+    const studioLock = document.getElementById("studioLock");
+    const studioControls = document.getElementById("studioControls");
+    const displayNameInput = document.getElementById("displayNameInput");
+    const chapterInput = document.getElementById("chapterInput");
+    const themeSelect = document.getElementById("themeSelect");
+    const promptTemplateSelect = document.getElementById("promptTemplateSelect");
+    const photoInput = document.getElementById("photoInput");
+    const photoPreview = document.getElementById("photoPreview");
+    const photoPreviewImg = document.getElementById("photoPreviewImg");
+    const photoPreviewName = document.getElementById("photoPreviewName");
+    const promptPreview = document.getElementById("promptPreview");
+    const generateBtn = document.getElementById("generateBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const shareBtn = document.getElementById("shareBtn");
+    const studioStatus = document.getElementById("studioStatus");
+    const certificateMedia = document.getElementById("certificateMedia");
+    const recipientName = document.getElementById("recipientName");
+    const recipientChapter = document.getElementById("recipientChapter");
+    const stageCertCode = document.getElementById("stageCertCode");
+    const stageLotteryCode = document.getElementById("stageLotteryCode");
+    const stageTokenCode = document.getElementById("stageTokenCode");
+    const mbtiValue = document.getElementById("mbtiValue");
+    const mbtiBody = document.getElementById("mbtiBody");
+    const proposalValue = document.getElementById("proposalValue");
+    const proposalBody = document.getElementById("proposalBody");
+    const stageIssuedAt = document.getElementById("stageIssuedAt");
+    const generationNote = document.getElementById("generationNote");
+    const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
+
+    const getDisplayName = (user, member = {}) => {
+      return String(
+        member?.name ||
+        member?.memberName ||
+        user?.displayName ||
+        user?.email?.split("@")[0] ||
+        ""
+      ).trim();
+    };
+
+    const getEcoLabel = (member = {}) => {
+      if (!member?.ecoMbti?.type) return "-";
+      return `${member.ecoMbti.type}${member.ecoMbti.titleZh ? ` / ${member.ecoMbti.titleZh}` : member.ecoMbti.titleEn ? ` / ${member.ecoMbti.titleEn}` : ""}`;
+    };
+
+    const getEcoAction = (member = {}) => {
+      return member?.ecoMbti?.actionsZh || member?.ecoMbti?.actionsEn || "-";
+    };
+
+    const createRandomCode = (prefix, length = 6) => {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      const bytes = new Uint8Array(length);
+      crypto.getRandomValues(bytes);
+      const body = Array.from(bytes, (byte) => chars[byte % chars.length]).join("");
+      return `${prefix}${body}`;
+    };
+
+    const createTokenCodes = (count) => Array.from({ length: count }, () => createRandomCode("TOKEN-", 8));
+
+    const getRewardTokenCodes = (reward = {}) => {
+      if (Array.isArray(reward.tokenCodes) && reward.tokenCodes.length) {
+        return reward.tokenCodes.filter(Boolean);
+      }
+      if (reward.tokenCode) return [reward.tokenCode];
+      return [];
+    };
+
+    const getConsumedTokenCodes = (reward = {}) => {
+      if (Array.isArray(reward.consumedTokenCodes)) {
+        return reward.consumedTokenCodes.filter(Boolean);
+      }
+      if (reward.certificateStudio?.tokenConsumedAt && reward.tokenCode) {
+        return [reward.tokenCode];
+      }
+      return [];
+    };
+
+    const getAvailableTokenCodes = (reward = {}) => {
+      const consumed = new Set(getConsumedTokenCodes(reward));
+      return getRewardTokenCodes(reward).filter((code) => !consumed.has(code));
+    };
+
+    const getCurrentTokenCode = (reward = {}) => {
+      const firstUsed = reward?.certificateStudio?.firstUsedTokenCode || "";
+      if (firstUsed) return firstUsed;
+      const available = getAvailableTokenCodes(reward);
+      if (available.length) return available[0];
+      return reward?.certificateStudio?.lastUsedTokenCode || getRewardTokenCodes(reward)[0] || "-";
+    };
+
+    const getPrimaryIssueDate = (reward = {}) => {
+      const firstGeneratedAt = reward?.certificateStudio?.firstGeneratedAt || "";
+      if (firstGeneratedAt) return String(firstGeneratedAt).slice(0, 10);
+      if (reward?.claimedAt) return String(reward.claimedAt).slice(0, 10);
+      return toDateLabel();
+    };
+
+    const hasAvailableToken = (reward = {}) => getAvailableTokenCodes(reward).length > 0;
+    const getEarnedTokenCount = (completedDays = 0) => Math.min(2, Math.floor(completedDays / 7));
+
+    const getPromptTemplateText = (template) => {
+      if (template === "youth") {
+        return [
+          "Style template: youth action poster.",
+          "Keep the atmosphere bright, energetic, forward-looking, and socially inspiring.",
+          "Include subtle hints of movement, youth climate action, and community collaboration."
+        ].join(" ");
+      }
+      if (template === "japanese") {
+        return [
+          "Style template: Japanese portrait photography.",
+          "Use refined natural beauty, clean composition, gentle expression, and airy magazine-like realism.",
+          "Keep the mood elegant, soft, and cinematic with tasteful visual polish."
+        ].join(" ");
+      }
+      return [
+        "Style template: formal ceremony.",
+        "Keep the visual polished, dignified, premium, and suitable for a commemorative annual certificate."
+      ].join(" ");
+    };
+
+    const setStatus = (text, variant = "warn") => {
+      studioStatus.textContent = text;
+      studioStatus.className = `status ${variant}`;
+    };
+
+    const toDateLabel = () => new Date().toISOString().slice(0, 10);
+
+    const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    const fileToInlinePart = async (file) => {
+      const dataUrl = await readFileAsDataUrl(file);
+      return {
+        inlineData: {
+          data: String(dataUrl).split(",")[1],
+          mimeType: file.type
+        }
+      };
+    };
+
+    const extractImageInlineData = (response) => {
+      try {
+        if (typeof response.inlineDataParts === "function") {
+          const parts = response.inlineDataParts() || [];
+          const first = parts.find((part) => part?.inlineData?.mimeType?.startsWith?.("image/"));
+          if (first?.inlineData) return first.inlineData;
+        }
+      } catch (error) {
+        console.warn("inlineDataParts fallback:", error);
+      }
+      const candidateParts = response?.candidates?.flatMap((candidate) => candidate?.content?.parts || []) || [];
+      const fallback = candidateParts.find((part) => part?.inlineData?.mimeType?.startsWith?.("image/"));
+      return fallback?.inlineData || null;
+    };
+
+    const createThemePalette = (theme) => {
+      if (theme === "blue") {
+        return {
+          shell: "linear-gradient(135deg, #123f6b, #4eb4e0)",
+          wash: "linear-gradient(90deg, rgba(9, 26, 46, 0.88) 0%, rgba(9,26,46,0.76) 42%, rgba(9,26,46,0.26) 70%, rgba(9,26,46,0.16) 100%)",
+          accent: "#85e7ff",
+          code: "#f2f8ff"
+        };
+      }
+      if (theme === "gold") {
+        return {
+          shell: "linear-gradient(135deg, #5b4425, #d2a64f)",
+          wash: "linear-gradient(90deg, rgba(45, 25, 5, 0.88) 0%, rgba(45,25,5,0.72) 42%, rgba(45,25,5,0.24) 70%, rgba(45,25,5,0.16) 100%)",
+          accent: "#ffe2a6",
+          code: "#fff4d7"
+        };
+      }
+      return {
+        shell: "linear-gradient(135deg, #0f4b40, #6fbf72)",
+        wash: "linear-gradient(90deg, rgba(8, 31, 47, 0.88) 0%, rgba(8,31,47,0.76) 42%, rgba(8,31,47,0.26) 70%, rgba(8,31,47,0.16) 100%)",
+        accent: "#dfffd3",
+        code: "#fff7de"
+      };
+    };
+
+    const updateStageTheme = () => {
+      const palette = createThemePalette(themeSelect.value);
+      document.querySelector(".certificate-shell").style.background = palette.shell;
+      document.querySelector(".certificate-wash").style.background = palette.wash;
+      document.querySelectorAll(".certificate-code-item strong").forEach((el) => {
+        el.style.color = palette.code;
+      });
+    };
+
+    const buildPrompt = () => {
+      const displayName = displayNameInput.value.trim() || getDisplayName(currentUser, currentMember) || "Climate Action Partner";
+      const chapter = chapterInput.value.trim() || t("recipientChapterFallback");
+      const certCode = currentReward?.certificateCode || "-";
+      const tokenCode = getCurrentTokenCode(currentReward);
+      const theme = themeSelect.value;
+      const template = promptTemplateSelect.value;
+      const themeText = theme === "blue"
+        ? "blue sky, future energy, airy, luminous, clean"
+        : theme === "gold"
+          ? "golden honor, warm ceremonial light, premium, commemorative"
+          : "emerald nature, hopeful, fresh leaves, green energy, harmonious";
+
+      return [
+        "Create a premium horizontal certificate background artwork for a climate action recognition card.",
+        "Use the uploaded photo as the visual reference for the recipient's face or upper-body presence.",
+        "Style direction: idol-drama realism, flattering beautification, natural skin, polished cinematic look, emotionally warm but believable.",
+        "Composition direction: place the person near the center of the frame, with clear visual focus and balanced breathing room.",
+        "Lighting direction: daytime forest sunlight, soft bright daylight filtering through leaves, fresh natural glow, romantic but realistic atmosphere.",
+        getPromptTemplateText(template),
+        "Preserve the person's likeness respectfully and keep the result elegant, realistic, uplifting, and suitable for public campaign materials.",
+        `Theme direction: ${themeText}.`,
+        "Include subtle motifs of blue sky, clean energy, leaves, earth, community action, and future hope.",
+        "Leave clear negative space on the left half for certificate text overlay.",
+        "Do not add any words, letters, numbers, watermark, signature, logo, frame text, or certificate codes inside the generated image.",
+        `The recipient name is ${displayName}.`,
+        `The chapter or region is ${chapter}.`,
+        `Use the token code ${tokenCode} only as abstract inspiration for decorative pattern rhythm, not as visible text.`,
+        `The certificate code ${certCode} will be added by the website afterward, so keep the design clean and text-free.`
+      ].join(" ");
+    };
+
+    const updatePromptPreview = () => {
+      promptPreview.value = buildPrompt();
+    };
+
+    const updateCertificateStage = () => {
+      const displayName = displayNameInput.value.trim() || getDisplayName(currentUser, currentMember) || (currentLang === "zh" ? "你的名字" : "Your Name");
+      recipientName.textContent = displayName;
+      recipientChapter.textContent = chapterInput.value.trim() || t("recipientChapterFallback");
+      stageCertCode.textContent = currentReward?.certificateCode || "-";
+      stageLotteryCode.textContent = currentReward?.lotteryNumber || "-";
+      stageTokenCode.textContent = getCurrentTokenCode(currentReward);
+      mbtiValue.textContent = getEcoLabel(currentMember);
+      mbtiBody.textContent = getEcoAction(currentMember);
+      proposalValue.textContent = `${Math.min(Math.floor(currentCompletedDays / 7), 3)} / 3`;
+      proposalBody.textContent = t("proposalBody");
+      stageIssuedAt.textContent = `${t("issuePrefix")} ${getPrimaryIssueDate(currentReward)}`;
+      const mediaUrl = generatedImageUrl || uploadedPreviewUrl || "";
+      certificateMedia.style.backgroundImage = mediaUrl ? `url("${mediaUrl}")` : "none";
+      generationNote.textContent = generatedImageUrl
+        ? t("generationNoteReady")
+        : uploadedPreviewUrl
+          ? t("generationNoteUploadOnly")
+          : t("generationNoteEmpty");
+      updateStageTheme();
+      updatePromptPreview();
+    };
+
+    const applyLanguage = (lang) => {
+      currentLang = lang;
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+      document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+      document.title = t("pageTitle");
+      document.getElementById("brandSubtitle").textContent = t("brandSubtitle");
+      document.getElementById("navMain").textContent = t("navMain");
+      document.getElementById("navAbout").textContent = t("navAbout");
+      document.getElementById("navMember").textContent = t("navMember");
+      document.getElementById("navBack").textContent = t("navBack");
+      logoutBtn.textContent = t("logout");
+      document.getElementById("heroBadge").textContent = t("heroBadge");
+      document.getElementById("heroTitle").textContent = t("heroTitle");
+      document.getElementById("heroBody").textContent = t("heroBody");
+      document.getElementById("chip1").textContent = t("chip1");
+      document.getElementById("chip2").textContent = t("chip2");
+      document.getElementById("chip3").textContent = t("chip3");
+      document.getElementById("heroSideTitle").textContent = t("heroSideTitle");
+      document.getElementById("heroSideBody").textContent = t("heroSideBody");
+      document.getElementById("studioSectionTitle").textContent = t("studioSectionTitle");
+      document.getElementById("studioSectionBody").textContent = t("studioSectionBody");
+      document.getElementById("controlTitle").textContent = t("controlTitle");
+      document.getElementById("certCodeLabel").textContent = t("certCodeLabel");
+      document.getElementById("lotteryCodeLabel").textContent = t("lotteryCodeLabel");
+      document.getElementById("tokenCodeLabel").textContent = t("tokenCodeLabel");
+      document.getElementById("lockTitle").textContent = t("lockTitle");
+      document.getElementById("lockBody").textContent = t("lockBody");
+      document.getElementById("lockAction").textContent = t("lockAction");
+      document.getElementById("displayNameLabel").textContent = t("displayNameLabel");
+      displayNameInput.placeholder = t("displayNamePlaceholder");
+      document.getElementById("chapterLabel").textContent = t("chapterLabel");
+      chapterInput.placeholder = t("chapterPlaceholder");
+      document.getElementById("themeLabel").textContent = t("themeLabel");
+      document.getElementById("promptTemplateLabel").textContent = t("promptTemplateLabel");
+      document.getElementById("photoLabel").textContent = t("photoLabel");
+      document.getElementById("photoHint").textContent = t("photoHint");
+      document.getElementById("promptLabel").textContent = t("promptLabel");
+      generateBtn.textContent = t("generateBtn");
+      downloadBtn.textContent = t("downloadBtn");
+      shareBtn.textContent = t("shareBtn");
+      document.getElementById("previewTitle").textContent = t("previewTitle");
+      document.getElementById("previewBody").textContent = t("previewBody");
+      document.getElementById("certBrandSub").textContent = t("certBrandSub");
+      document.getElementById("yearStampLabel").textContent = t("yearStampLabel");
+      document.getElementById("yearStampTitle").textContent = t("yearStampTitle");
+      document.getElementById("certKicker").textContent = t("certKicker");
+      document.getElementById("certTitle").textContent = t("certTitle");
+      document.getElementById("certSubtitle").textContent = t("certSubtitle");
+      document.getElementById("recipientLabel").textContent = t("recipientLabel");
+      document.getElementById("stageCertLabel").textContent = t("stageCertLabel");
+      document.getElementById("stageLotteryLabel").textContent = t("stageLotteryLabel");
+      document.getElementById("stageTokenLabel").textContent = t("stageTokenLabel");
+      document.getElementById("mbtiLabel").textContent = t("mbtiLabel");
+      document.getElementById("proposalLabel").textContent = t("proposalLabel");
+      document.getElementById("stageFootNote").textContent = t("stageFootNote");
+      document.getElementById("artCardTitle").textContent = t("artCardTitle");
+      document.getElementById("artCardBody").textContent = t("artCardBody");
+      document.getElementById("tokenRuleTitle").textContent = t("tokenRuleTitle");
+      document.getElementById("tokenRuleBody").textContent = t("tokenRuleBody");
+      document.getElementById("pageFooter").textContent = t("footer");
+      langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
+      authStateEl.textContent = currentUser ? `${t("authSignedIn")}${currentUser.email || ""}` : t("authGuest");
+      updateCertificateStage();
+    };
+
+    const loadImage = (src) => new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+
+    const drawImageCover = (ctx, img, x, y, width, height) => {
+      const scale = Math.max(width / img.width, height / img.height);
+      const scaledWidth = img.width * scale;
+      const scaledHeight = img.height * scale;
+      const dx = x + (width - scaledWidth) / 2;
+      const dy = y + (height - scaledHeight) / 2;
+      ctx.drawImage(img, dx, dy, scaledWidth, scaledHeight);
+    };
+
+    const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight, maxLines = 4) => {
+      const words = String(text || "").split(/\s+/);
+      let line = "";
+      let currentY = y;
+      let lines = 0;
+      words.forEach((word, index) => {
+        const test = line ? `${line} ${word}` : word;
+        if (ctx.measureText(test).width > maxWidth && line) {
+          ctx.fillText(line, x, currentY);
+          line = word;
+          currentY += lineHeight;
+          lines += 1;
+          if (lines >= maxLines - 1) return;
+        } else {
+          line = test;
+        }
+        if (index === words.length - 1 && lines < maxLines) {
+          ctx.fillText(line, x, currentY);
+        }
+      });
+    };
+
+    const downloadCertificatePng = async () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1600;
+      canvas.height = 900;
+      const ctx = canvas.getContext("2d");
+      const palette = createThemePalette(themeSelect.value);
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      if (themeSelect.value === "blue") {
+        gradient.addColorStop(0, "#0d3b65");
+        gradient.addColorStop(1, "#4eb4e0");
+      } else if (themeSelect.value === "gold") {
+        gradient.addColorStop(0, "#52391e");
+        gradient.addColorStop(1, "#d2a64f");
+      } else {
+        gradient.addColorStop(0, "#0f4b40");
+        gradient.addColorStop(1, "#6fbf72");
+      }
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const mediaUrl = generatedImageUrl || uploadedPreviewUrl;
+      if (mediaUrl) {
+        const image = await loadImage(mediaUrl);
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(760, 60, 780, 780, 36);
+        ctx.clip();
+        drawImageCover(ctx, image, 760, 60, 780, 780);
+        ctx.restore();
+      }
+
+      ctx.fillStyle = "rgba(6, 28, 40, 0.78)";
+      ctx.beginPath();
+      ctx.roundRect(52, 52, 830, 796, 42);
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(255,255,255,0.18)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(76, 76, 782, 748, 28);
+      ctx.stroke();
+
+      try {
+        const logo = await loadImage(`${window.location.origin}/Enter.PNG`);
+        ctx.fillStyle = "rgba(255,255,255,0.95)";
+        ctx.beginPath();
+        ctx.roundRect(96, 96, 72, 72, 18);
+        ctx.fill();
+        ctx.drawImage(logo, 106, 106, 52, 52);
+      } catch (error) {
+        console.warn("Logo load skipped:", error);
+      }
+
+      ctx.fillStyle = "rgba(255,255,255,0.82)";
+      ctx.font = "700 24px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText("Blue Sky Returns", 186, 126);
+      ctx.font = "500 16px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(t("certBrandSub"), 186, 152);
+
+      try {
+        const enterBadge = await loadImage(`${window.location.origin}/Enter.PNG`);
+        ctx.drawImage(enterBadge, 706, 98, 120, 120);
+      } catch (error) {
+        console.warn("Enter badge load skipped:", error);
+      }
+
+      ctx.fillStyle = "rgba(255,255,255,0.88)";
+      ctx.font = "800 18px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(t("certKicker"), 96, 228);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 72px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      drawWrappedText(ctx, t("certTitle"), 96, 320, 620, 78, 3);
+
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.font = "500 28px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      drawWrappedText(ctx, t("certSubtitle"), 96, 436, 630, 40, 4);
+
+      ctx.fillStyle = "rgba(255,255,255,0.14)";
+      ctx.beginPath();
+      ctx.roundRect(96, 516, 640, 110, 24);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.18)";
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(255,255,255,0.72)";
+      ctx.font = "700 16px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(t("recipientLabel"), 124, 554);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 46px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      drawWrappedText(ctx, recipientName.textContent, 124, 608, 580, 54, 2);
+
+      ctx.fillStyle = palette.code;
+      ctx.font = "800 20px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(`${t("stageCertLabel")}: ${stageCertCode.textContent}`, 96, 700);
+      ctx.fillText(`${t("stageLotteryLabel")}: ${stageLotteryCode.textContent}`, 96, 740);
+      ctx.fillText(`${t("stageTokenLabel")}: ${stageTokenCode.textContent}`, 96, 780);
+
+      ctx.fillStyle = "rgba(255,255,255,0.12)";
+      ctx.beginPath();
+      ctx.roundRect(920, 620, 540, 162, 28);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.16)";
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.font = "700 16px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(t("mbtiLabel"), 950, 660);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 24px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      drawWrappedText(ctx, mbtiValue.textContent, 950, 694, 470, 28, 2);
+      ctx.fillStyle = "rgba(255,255,255,0.86)";
+      ctx.font = "500 17px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      drawWrappedText(ctx, mbtiBody.textContent, 950, 730, 470, 24, 3);
+
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.font = "700 16px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(t("proposalLabel"), 950, 816);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 22px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(proposalValue.textContent, 1098, 816);
+
+      ctx.fillStyle = "rgba(255,255,255,0.82)";
+      ctx.font = "600 18px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(recipientChapter.textContent, 96, 828);
+      ctx.fillText(stageIssuedAt.textContent, 520, 828);
+
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = `blue-sky-returns-certificate-${(stageCertCode.textContent || "2026").replace(/[^a-zA-Z0-9-]/g, "")}.png`;
+      link.click();
+      setStatus(t("downloadSuccess"), "ok");
+    };
+
+    const loadCompletedDays = async (userId) => {
+      const snap = await getDocs(
+        query(collection(db, "greenProposalSubmissions"), where("uid", "==", userId))
+      );
+      return new Set(
+        snap.docs
+          .map((docSnap) => docSnap.data()?.taskDate || "")
+          .filter(Boolean)
+      ).size;
+    };
+
+    const syncRewardTokensIfNeeded = async (user, reward, completedDays) => {
+      if (!user || !reward) return reward;
+      const earnedTokenCount = getEarnedTokenCount(completedDays);
+      const tokenCodes = getRewardTokenCodes(reward);
+      if (earnedTokenCount <= tokenCodes.length) return reward;
+      const updatedReward = {
+        ...reward,
+        tokenCodes: [...tokenCodes, ...createTokenCodes(earnedTokenCount - tokenCodes.length)],
+        consumedTokenCodes: getConsumedTokenCodes(reward)
+      };
+      await setDoc(doc(db, "members", user.uid), { reward2026: updatedReward }, { merge: true });
+      return updatedReward;
+    };
+
+    const saveStudioMetadata = async ({ rewardPatch = {}, studioPatch = {} } = {}) => {
+      if (!currentUser || !currentReward) return;
+      const updatedReward = {
+        ...currentReward,
+        ...rewardPatch,
+        certificateStudio: {
+          ...(currentReward.certificateStudio || {}),
+          ...studioPatch
+        }
+      };
+      await setDoc(doc(db, "members", currentUser.uid), { reward2026: updatedReward }, { merge: true });
+      currentMember = { ...currentMember, reward2026: updatedReward };
+      currentReward = updatedReward;
+    };
+
+    const generateCertificateVisual = async () => {
+      if (!currentReward) {
+        setStatus(t("statusNeedReward"), "warn");
+        return;
+      }
+      const availableTokenCodes = getAvailableTokenCodes(currentReward);
+      const activeTokenCode = availableTokenCodes[0] || "";
+      if (!activeTokenCode) {
+        setStatus(t("statusTokenUsed"), "warn");
+        generateBtn.disabled = true;
+        return;
+      }
+      if (!selectedPhotoFile) {
+        setStatus(t("statusNeedPhoto"), "warn");
+        return;
+      }
+
+      generateBtn.disabled = true;
+      downloadBtn.disabled = true;
+      setStatus(t("generating"), "warn");
+
+      try {
+        const prompt = buildPrompt();
+        const imagePart = await fileToInlinePart(selectedPhotoFile);
+        const result = await imageModel.generateContent([prompt, imagePart]);
+        const response = await result.response;
+        const generated = extractImageInlineData(response);
+        if (!generated?.data || !generated?.mimeType) {
+          throw new Error("no-generated-image");
+        }
+        generatedImageUrl = `data:${generated.mimeType};base64,${generated.data}`;
+        const generatedAt = new Date().toISOString();
+        const storagePath = `certificate-studio/${currentUser.uid}/${generatedAt.replace(/[:.]/g, "-")}.png`;
+        const imageRef = storageRef(storage, storagePath);
+        await uploadString(imageRef, generatedImageUrl, "data_url");
+        const downloadUrl = await getDownloadURL(imageRef);
+        generatedImageUrl = downloadUrl;
+        updateCertificateStage();
+        const consumedTokenCodes = Array.from(new Set([...getConsumedTokenCodes(currentReward), activeTokenCode]));
+        const firstGeneratedAt = currentReward?.certificateStudio?.firstGeneratedAt || generatedAt;
+        const firstUsedTokenCode = currentReward?.certificateStudio?.firstUsedTokenCode || activeTokenCode;
+        await saveStudioMetadata({
+          rewardPatch: {
+            consumedTokenCodes
+          },
+          studioPatch: {
+            displayName: displayNameInput.value.trim(),
+            chapter: chapterInput.value.trim(),
+            theme: themeSelect.value,
+            promptTemplate: promptTemplateSelect.value,
+            prompt: prompt,
+            photoName: selectedPhotoFile?.name || "",
+            usedAiVisual: true,
+            lastGeneratedAt: generatedAt,
+            generatedAt,
+            firstGeneratedAt,
+            firstUsedTokenCode,
+            lastUsedTokenCode: activeTokenCode,
+            tokenConsumedAt: generatedAt,
+            imageUrl: downloadUrl,
+            storagePath
+          }
+        });
+        setStatus(t("statusSuccess"), "ok");
+        downloadBtn.disabled = false;
+        shareBtn.disabled = false;
+        generateBtn.disabled = !hasAvailableToken(currentReward);
+      } catch (error) {
+        console.error(error);
+        setStatus(t("statusError"), "error");
+      } finally {
+        if (hasAvailableToken(currentReward)) {
+          generateBtn.disabled = false;
+        }
+      }
+    };
+
+    const applyRewardState = (user, member) => {
+      currentUser = user;
+      currentMember = member || {};
+      currentReward = currentMember.reward2026 || null;
+      certCodeValue.textContent = currentReward?.certificateCode || "-";
+      lotteryCodeValue.textContent = currentReward?.lotteryNumber || "-";
+      const tokenCodes = getRewardTokenCodes(currentReward);
+      const availableTokenCodes = getAvailableTokenCodes(currentReward);
+      tokenCodeValue.textContent = tokenCodes.length
+        ? (currentLang === "zh"
+            ? `${availableTokenCodes.length}/${tokenCodes.length} 可用：${tokenCodes.join(", ")}`
+            : `${availableTokenCodes.length}/${tokenCodes.length} available: ${tokenCodes.join(", ")}`)
+        : "-";
+      stageCertCode.textContent = currentReward?.certificateCode || "-";
+      stageLotteryCode.textContent = currentReward?.lotteryNumber || "-";
+      stageTokenCode.textContent = getCurrentTokenCode(currentReward);
+      stageIssuedAt.textContent = `${t("issuePrefix")} ${getPrimaryIssueDate(currentReward)}`;
+      if (!currentReward) {
+        studioLock.hidden = false;
+        studioControls.hidden = true;
+        generateBtn.disabled = true;
+        downloadBtn.disabled = true;
+        shareBtn.disabled = true;
+        setStatus(t("statusNeedReward"), "warn");
+      } else {
+        studioLock.hidden = true;
+        studioControls.hidden = false;
+        generatedImageUrl = currentReward?.certificateStudio?.imageUrl || "";
+        generateBtn.disabled = !hasAvailableToken(currentReward);
+        downloadBtn.disabled = !generatedImageUrl;
+        shareBtn.disabled = !generatedImageUrl;
+        setStatus(hasAvailableToken(currentReward) ? t("statusReady") : t("statusTokenUsed"), hasAvailableToken(currentReward) ? "ok" : "warn");
+      }
+
+      const studioMeta = currentReward?.certificateStudio || {};
+      displayNameInput.value = studioMeta.displayName || getDisplayName(user, member);
+      chapterInput.value = studioMeta.chapter || member?.chapter || member?.region || "";
+      themeSelect.value = studioMeta.theme || "emerald";
+      promptTemplateSelect.value = studioMeta.promptTemplate || "formal";
+      updateCertificateStage();
+    };
+
+    photoInput.addEventListener("change", async (event) => {
+      const file = event.target.files?.[0] || null;
+      selectedPhotoFile = file;
+      if (hasAvailableToken(currentReward)) {
+        generatedImageUrl = "";
+      }
+      if (!file) {
+        uploadedPreviewUrl = "";
+        photoPreview.hidden = true;
+        updateCertificateStage();
+        downloadBtn.disabled = true;
+        shareBtn.disabled = true;
+        setStatus(currentReward ? t("statusNeedPhoto") : t("statusNeedReward"), currentReward ? "warn" : "warn");
+        return;
+      }
+      uploadedPreviewUrl = await readFileAsDataUrl(file);
+      photoPreviewImg.src = uploadedPreviewUrl;
+      photoPreviewName.textContent = file.name;
+      photoPreview.hidden = false;
+      updateCertificateStage();
+      setStatus(hasAvailableToken(currentReward) ? t("statusNeedPhoto") : t("statusTokenUsed"), "warn");
+      downloadBtn.disabled = !generatedImageUrl;
+      shareBtn.disabled = !generatedImageUrl;
+    });
+
+    [displayNameInput, chapterInput, themeSelect].forEach((element) => {
+      element.addEventListener("input", updateCertificateStage);
+      element.addEventListener("change", updateCertificateStage);
+    });
+    promptTemplateSelect.addEventListener("input", updateCertificateStage);
+    promptTemplateSelect.addEventListener("change", updateCertificateStage);
+
+    const shareCertificate = async () => {
+      const imageUrl = currentReward?.certificateStudio?.imageUrl || generatedImageUrl || "";
+      if (!imageUrl) return;
+      const shareData = {
+        title: t("certTitle"),
+        text: t("shareText"),
+        url: imageUrl
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          setStatus(t("shareSuccess"), "ok");
+          return;
+        }
+        await navigator.clipboard.writeText(imageUrl);
+        setStatus(t("shareFallback"), "ok");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    generateBtn.addEventListener("click", generateCertificateVisual);
+    downloadBtn.addEventListener("click", downloadCertificatePng);
+    shareBtn.addEventListener("click", shareCertificate);
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        currentUser = null;
+        currentMember = {};
+        currentReward = null;
+        currentCompletedDays = 0;
+        logoutBtn.hidden = true;
+        authStateEl.textContent = t("authGuest");
+        applyRewardState(null, {});
+        return;
+      }
+      logoutBtn.hidden = false;
+      authStateEl.textContent = `${t("authSignedIn")}${user.email || ""}`;
+      const memberSnap = await getDoc(doc(db, "members", user.uid));
+      currentCompletedDays = await loadCompletedDays(user.uid);
+      const member = memberSnap.exists() ? memberSnap.data() : {};
+      const syncedReward = await syncRewardTokensIfNeeded(user, member.reward2026 || null, currentCompletedDays);
+      const syncedMember = syncedReward === (member.reward2026 || null) ? member : { ...member, reward2026: syncedReward };
+      applyRewardState(user, syncedMember);
+    });
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+
+    applyLanguage(currentLang);
+  </script>
+</body>
+</html>

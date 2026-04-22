@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blue Sky Returns 邁出一步</title>
-  <link rel="icon" type="image/png" href="/PJC_LOGO.PNG" />
-  <link rel="shortcut icon" type="image/png" href="/PJC_LOGO.PNG" />
-  <link rel="apple-touch-icon" href="/PJC_LOGO.PNG" />
+  <link rel="icon" type="image/png" href="/Enter.PNG" />
+  <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
+  <link rel="apple-touch-icon" href="/Enter.PNG" />
   <meta name="description" content="Take One Step with Blue Sky Returns by creating or updating your climate action partner profile and completing the climate action questionnaire." />
   <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/climate-action-form.html" />
   <meta property="og:type" content="website" />
@@ -441,6 +441,30 @@
       margin-top: 18px;
     }
 
+    .promo-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 24px rgba(2, 132, 199, 0.08);
+      display: grid;
+      gap: 12px;
+    }
+
+    .promo-card img {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .promo-title {
+      margin: 0;
+      font-size: 1.08rem;
+      color: var(--primary-dark);
+    }
+
     @media (max-width: 640px) {
       .modal {
         padding: 10px;
@@ -468,7 +492,7 @@
   <main class="container">
     <div class="topbar">
       <div class="title-block">
-        <img src="../PJC_LOGO.PNG" alt="JCI Peninsula logo" />
+        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
         <h1 id="pageTitle">Blue Sky Returns 邁出一步<br>Blue Sky Returns Take One Step</h1>
       </div>
       <div class="topbar-actions">
@@ -487,6 +511,14 @@
       用這一步更新你的氣候行動者資料與問卷內容；第一次填寫會建立帳號，之後可直接回來修改。<br>
       Use this step to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.
     </p>
+
+    <section class="promo-card" aria-labelledby="lotteryPromoTitle">
+      <img id="lotteryPromoImage" src="../assets/2026抽獎.png" alt="2026 抽獎宣傳" />
+      <div>
+        <h2 id="lotteryPromoTitle" class="promo-title">2026 抽獎活動</h2>
+        <p id="lotteryPromoBody" class="helper">獲得 2026 氣候行動證書後，即具抽獎資格。最終資格與得獎安排由主辦單位保留最後決定權。</p>
+      </div>
+    </section>
 
     <form id="climateForm">
       <div class="bot-guard" aria-hidden="true">
@@ -764,6 +796,10 @@
         pageTitle: "Blue Sky Returns 邁出一步",
         heading: "Blue Sky Returns 邁出一步<br>Blue Sky Returns Take One Step",
         subtitle: "用這一步更新你的氣候行動者資料與問卷內容；第一次填寫會建立帳號，之後可直接回來修改。<br>Use this step to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
+        lotteryTitle: "2026 抽獎活動",
+        lotteryBody: "獲得 2026 氣候行動證書後，即具抽獎資格。抽獎結果將於 2026 年一步藍天閉幕式公布，主辦單位保留最後決定權。",
+        lotteryImage: "../assets/2026抽獎.png",
+        lotteryAlt: "2026 抽獎宣傳",
         submit: "儲存邁出一步資料 / Save Take One Step",
         shareForm: "分享表單給他人 / Share This Form",
         download: "下載角色卡 / Download Card",
@@ -777,6 +813,10 @@
         pageTitle: "Take One Step | Blue Sky Returns",
         heading: "Blue Sky Returns Take One Step",
         subtitle: "Use this page to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
+        lotteryTitle: "2026 Lucky Draw",
+        lotteryBody: "After obtaining the 2026 Climate Action Certificate, you will be eligible for the lucky draw. The lucky draw result will be announced at the 2026 Blue Sky Returns closing ceremony, and the organizer reserves the final decision.",
+        lotteryImage: "../assets/2026抽獎en.png",
+        lotteryAlt: "2026 lucky draw promotion",
         submit: "Save Take One Step",
         shareForm: "Share This Form",
         download: "Download Card",
@@ -795,6 +835,10 @@
       document.title = t("pageTitle");
       document.getElementById("pageTitle").innerHTML = t("heading");
       document.getElementById("pageSubtitle").innerHTML = t("subtitle");
+      document.getElementById("lotteryPromoTitle").textContent = t("lotteryTitle");
+      document.getElementById("lotteryPromoBody").textContent = t("lotteryBody");
+      document.getElementById("lotteryPromoImage").src = t("lotteryImage");
+      document.getElementById("lotteryPromoImage").alt = t("lotteryAlt");
       submitBtn.textContent = t("submit");
       shareCampaignBtn.textContent = t("shareForm");
       downloadResultBtn.textContent = t("download");

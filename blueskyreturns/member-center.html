@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>氣候行動者中心 | Blue Sky Returns</title>
-  <link rel="icon" type="image/png" href="/PJC_LOGO.PNG" />
-  <link rel="shortcut icon" type="image/png" href="/PJC_LOGO.PNG" />
-  <link rel="apple-touch-icon" href="/PJC_LOGO.PNG" />
+  <link rel="icon" type="image/png" href="/Enter.PNG" />
+  <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
+  <link rel="apple-touch-icon" href="/Enter.PNG" />
   <meta name="description" content="Open the Blue Sky Returns member center to review your profile, 7-Day Green Proposal tasks, Eco-MBTI result, and climate action tools available to your account." />
   <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/member-center.html" />
   <meta property="og:type" content="website" />
@@ -462,6 +462,11 @@
       flex-wrap: wrap;
     }
 
+    .reward-actions.inline {
+      margin-top: 16px;
+      align-items: flex-start;
+    }
+
     .reward-actions .status {
       margin: 0;
     }
@@ -473,6 +478,98 @@
       font-size: 1rem;
       letter-spacing: 0.03em;
       word-break: break-word;
+    }
+
+    .reward-thumbnail {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .reward-thumbnail img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 26px rgba(16, 34, 54, 0.1);
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .token-slot {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      display: grid;
+      gap: 8px;
+    }
+
+    .token-slot strong,
+    .token-slot span,
+    .token-slot code {
+      display: block;
+    }
+
+    .token-slot strong {
+      color: var(--ink);
+    }
+
+    .token-slot span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .token-slot code {
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 0.82rem;
+      word-break: break-word;
+    }
+
+    .token-slot.pending code {
+      color: var(--muted);
+    }
+
+    .token-chip {
+      width: fit-content;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .token-chip.available {
+      background: rgba(21, 128, 61, 0.12);
+      color: var(--ok);
+    }
+
+    .token-chip.used {
+      background: rgba(180, 83, 9, 0.12);
+      color: var(--warn);
+    }
+
+    .token-chip.pending {
+      background: rgba(100, 116, 139, 0.12);
+      color: var(--muted);
+    }
+
+    .promo-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .promo-panel img {
+      width: 100%;
+      display: block;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 26px rgba(16, 34, 54, 0.08);
     }
 
     .review-item {
@@ -615,6 +712,10 @@
       .reward-grid {
         grid-template-columns: 1fr;
       }
+
+      .token-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 640px) {
@@ -639,7 +740,7 @@
   <header>
     <div class="shell nav">
       <div class="brand">
-        <img src="../PJC_LOGO.PNG" alt="JCI Peninsula logo" />
+        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
         <div class="brand-copy">
           <strong id="brandTitle">Blue Sky Returns</strong>
           <span id="brandSubtitle">氣候行動者中心 / Member Center</span>
@@ -829,9 +930,27 @@
                 <strong id="rewardTokenCode">-</strong>
               </div>
             </div>
+            <div id="rewardTokenGrid" class="token-grid" hidden></div>
+            <div id="rewardThumbnail" class="reward-thumbnail" hidden>
+              <img id="rewardThumbnailImg" alt="AI certificate thumbnail" />
+              <p id="rewardThumbnailBody">已生成的 AI 證書主視覺會顯示在這裡。</p>
+            </div>
             <div id="rewardResultEmpty" class="empty-box">尚未領取 2026 氣候行動資格。</div>
+            <div class="reward-actions inline">
+              <a id="certificateStudioLink" class="pill primary" href="./certificate-studio.html" hidden>開啟 AI 證書工作室</a>
+              <p id="certificateStudioHint" class="status warn">完成領取後，即可上傳自己的照片，用 Firebase Gemini 生成專屬證書設計。</p>
+            </div>
           </article>
         </div>
+      </section>
+
+      <section class="panel promo-panel">
+        <div class="section-head">
+          <h2 id="lotterySectionTitle">2026 抽獎活動 / 2026 Lucky Draw</h2>
+          <p id="lotterySectionBody">獲得 2026 氣候行動證書後，即具抽獎資格。最終資格與得獎安排由主辦單位保留最後決定權。</p>
+        </div>
+        <img id="lotteryPromoImage" src="../assets/2026抽獎.png" alt="2026 抽獎宣傳" />
+        <div id="lotteryStatus" class="status warn">尚未獲得證書，完成資格領取後即可具抽獎資格。</div>
       </section>
 
       <section class="panel">
@@ -966,21 +1085,33 @@
           reviewTitle: "希望與威脅審核台 / Hope & Crisis Review Desk",
           reviewBody: "具備協作管理功能的帳號，可在這裡審核其他氣候行動者提交的 Hope / Crisis 首頁候選資料，並更新狀態。"
         },
+        lottery: {
+          title: "2026 抽獎活動 / 2026 Lucky Draw",
+          body: "獲得 2026 氣候行動證書後，即具抽獎資格。抽獎結果將於 2026 年一步藍天閉幕式公布，主辦單位保留最後決定權。",
+          statusReady: "你已獲得證書，具備抽獎資格；抽獎結果將於 2026 年一步藍天閉幕式公布，主辦單位保留最後決定權。",
+          statusPending: "尚未獲得證書，完成資格領取後即可具抽獎資格。",
+          image: "../assets/2026抽獎.png",
+          alt: "2026 抽獎宣傳"
+        },
         rewards: {
           title: "2026 氣候行動證書 / 2026 Climate Action Certificate",
-          body: "同一帳號只要完成指定條件一次，就可領取電子 2026 年氣候行動證書、抽獎編號與一枚代幣，而且每個帳號限領一次。",
+          body: "同一帳號完成指定條件後可領取電子 2026 年氣候行動證書與抽獎編號；7-Day Green Proposal 每完成 7 天可獲得 1 枚代幣，最多累積 2 枚代幣。",
           stepLabel: "完成邁出一步",
           stepHint: "建立或更新問卷結果",
           ecoLabel: "完成 Eco-MBTI",
           ecoHint: "已產生並儲存人格結果",
-          proposalLabel: "完成 7-Day Green Proposal 7 次紀錄",
-          proposalHint: "以不同日期完成 7 次紀錄",
+          proposalLabel: "7-Day Green Proposal 每完成 7 天可獲得 1 枚代幣",
+          proposalHint: "7 / 14 天各可獲得 1 枚，最多 2 枚代幣",
           claim: "領取 2026 氣候行動資格",
           resultTitle: "已領取內容 / Reward Details",
-          resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號、抽獎編號與代幣編號。",
+          resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號、抽獎編號，以及目前累積與可用的代幣。",
           cert: "電子證書編號",
           lottery: "抽獎編號",
-          token: "代幣編號"
+          token: "代幣狀態",
+          thumbBody: "已生成的 AI 證書主視覺會顯示在這裡。",
+          studioLink: "開啟 AI 證書工作室",
+          studioHintReady: "你可以上傳自己的照片，帶入證書編號與代幣，使用 Firebase Gemini 生成專屬證書設計。",
+          studioHintLocked: "完成領取後，即可上傳自己的照片，用 Firebase Gemini 生成專屬證書設計。"
         },
         tasks: {
           stepTitle: "邁出一步",
@@ -1030,7 +1161,7 @@
             level1: "你可以修改邁出一步，並提交 7-Day Green Proposal 任務。"
           },
           rewardGuest: "登入後即可查看目前資格進度。",
-          rewardReady: "你已符合條件，可以領取 2026 氣候行動證書、抽獎編號與代幣。",
+          rewardReady: "你已符合條件，可以領取 2026 氣候行動證書與抽獎編號；代幣會依 7-Day 完成進度自動累積。",
           rewardPending: "尚未符合領取條件，請先完成所有指定任務。",
           rewardClaiming: "正在建立你的 2026 氣候行動資格...",
           rewardClaimed: "你已完成領取，每個帳號限領一次。",
@@ -1066,21 +1197,33 @@
           reviewTitle: "Hope & Crisis Review Desk",
           reviewBody: "Accounts with coordination access can review other climate action partners' Hope / Crisis homepage candidate submissions here and update their status."
         },
+        lottery: {
+          title: "2026 Lucky Draw",
+          body: "After obtaining the 2026 Climate Action Certificate, you will be eligible for the lucky draw. The lucky draw result will be announced at the 2026 Blue Sky Returns closing ceremony, and the organizer reserves the final decision.",
+          statusReady: "You already hold the certificate and are eligible for the lucky draw. The lucky draw result will be announced at the 2026 Blue Sky Returns closing ceremony, and the organizer reserves the final decision.",
+          statusPending: "You have not obtained the certificate yet. Complete the reward claim first to become eligible for the lucky draw.",
+          image: "../assets/2026抽獎en.png",
+          alt: "2026 lucky draw promotion"
+        },
         rewards: {
           title: "2026 Climate Action Certificate",
-          body: "Once the same account completes every required step, it can claim one 2026 digital climate action certificate, one lottery number, and one token. Each account can claim only once.",
+          body: "Once the same account completes the required steps, it can claim one 2026 digital climate action certificate and one lottery number. For 7-Day Green Proposal, every 7 completed days earns 1 token, up to 2 tokens total.",
           stepLabel: "Complete Take One Step",
           stepHint: "Create or update your questionnaire result",
           ecoLabel: "Complete Eco-MBTI",
           ecoHint: "Your personality result has been generated and saved",
-          proposalLabel: "Complete 7-Day Green Proposal 7 times",
-          proposalHint: "Finish 7 records on different dates",
+          proposalLabel: "Earn 1 token for every 7 completed 7-Day records",
+          proposalHint: "Earn tokens at 7 / 14 days, up to 2 tokens total",
           claim: "Claim 2026 Climate Action Reward",
           resultTitle: "Reward Details",
-          resultBody: "After you meet the requirements and claim the reward, your certificate code, lottery number, and token code will appear here.",
+          resultBody: "After you meet the requirements and claim the reward, your certificate code, lottery number, and current token status will appear here.",
           cert: "Certificate Code",
           lottery: "Lottery Number",
-          token: "Token Code"
+          token: "Token Status",
+          thumbBody: "Your generated AI certificate visual appears here.",
+          studioLink: "Open AI Certificate Studio",
+          studioHintReady: "Upload your photo, bring in your certificate code and token, and use Firebase Gemini to generate a personalized certificate design.",
+          studioHintLocked: "Claim the reward first, then you can upload your photo and use Firebase Gemini to generate your personalized certificate design."
         },
         tasks: {
           stepTitle: "Take One Step",
@@ -1130,7 +1273,7 @@
             level1: "You can edit Take One Step and submit 7-Day Green Proposal tasks."
           },
           rewardGuest: "Sign in to see your current reward progress.",
-          rewardReady: "You have met the requirements and can now claim your 2026 climate action certificate, lottery number, and token.",
+          rewardReady: "You have met the requirements and can now claim your 2026 climate action certificate and lottery number. Tokens will accumulate automatically based on your 7-Day progress.",
           rewardPending: "The requirements are not complete yet. Please finish every required task first.",
           rewardClaiming: "Creating your 2026 climate action reward...",
           rewardClaimed: "This account has already claimed the reward. Each account can claim only once.",
@@ -1190,12 +1333,22 @@
     const rewardResultBody = document.getElementById("rewardResultBody");
     const rewardResultList = document.getElementById("rewardResultList");
     const rewardResultEmpty = document.getElementById("rewardResultEmpty");
+    const rewardTokenGrid = document.getElementById("rewardTokenGrid");
+    const rewardThumbnail = document.getElementById("rewardThumbnail");
+    const rewardThumbnailImg = document.getElementById("rewardThumbnailImg");
+    const rewardThumbnailBody = document.getElementById("rewardThumbnailBody");
+    const lotterySectionTitle = document.getElementById("lotterySectionTitle");
+    const lotterySectionBody = document.getElementById("lotterySectionBody");
+    const lotteryPromoImage = document.getElementById("lotteryPromoImage");
+    const lotteryStatus = document.getElementById("lotteryStatus");
     const rewardCertCodeLabel = document.getElementById("rewardCertCodeLabel");
     const rewardCertCode = document.getElementById("rewardCertCode");
     const rewardLotteryLabel = document.getElementById("rewardLotteryLabel");
     const rewardLotteryCode = document.getElementById("rewardLotteryCode");
     const rewardTokenLabel = document.getElementById("rewardTokenLabel");
     const rewardTokenCode = document.getElementById("rewardTokenCode");
+    const certificateStudioLink = document.getElementById("certificateStudioLink");
+    const certificateStudioHint = document.getElementById("certificateStudioHint");
 
     const summaryName = document.getElementById("summaryName");
     const summaryEmail = document.getElementById("summaryEmail");
@@ -1335,7 +1488,7 @@
         memberEmail: submission.memberEmail || ""
       };
     };
-    let currentRewardEligibility = { stepDone: false, ecoDone: false, proposalDone: false, completedDays: 0, eligible: false };
+    let currentRewardEligibility = { stepDone: false, ecoDone: false, proposalDone: false, completedDays: 0, earnedTokenCount: 0, eligible: false };
 
     const getDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || (currentLang === "zh" ? "氣候行動者" : "Climate Action Partner");
     const getPermissionLabel = (level) => {
@@ -1357,12 +1510,59 @@
       return `${prefix}${body}`;
     };
     const getRewardRecord = (member) => member?.reward2026 || null;
+    const createTokenCodes = (count) => Array.from({ length: count }, () => createRandomCode("TOKEN-", 8));
+    const getRewardTokenCodes = (reward = {}) => {
+      if (Array.isArray(reward.tokenCodes) && reward.tokenCodes.length) {
+        return reward.tokenCodes.filter(Boolean);
+      }
+      if (reward.tokenCode) return [reward.tokenCode];
+      return [];
+    };
+    const getConsumedTokenCodes = (reward = {}) => {
+      if (Array.isArray(reward.consumedTokenCodes)) {
+        return reward.consumedTokenCodes.filter(Boolean);
+      }
+      if (reward.certificateStudio?.tokenConsumedAt && reward.tokenCode) {
+        return [reward.tokenCode];
+      }
+      return [];
+    };
+    const createTokenSlots = (reward = {}, earnedTokenCount = 0) => {
+      const tokenCodes = getRewardTokenCodes(reward);
+      const consumedTokenCodes = getConsumedTokenCodes(reward);
+      return Array.from({ length: 2 }, (_, index) => {
+        const code = tokenCodes[index] || "";
+        if (index >= earnedTokenCount) {
+          return {
+            index: index + 1,
+            state: "pending",
+            label: currentLang === "zh" ? "尚未獲得" : "Not earned yet",
+            code: currentLang === "zh" ? "完成更多 7-Day 紀錄後解鎖" : "Unlock by completing more 7-Day records"
+          };
+        }
+        if (code && consumedTokenCodes.includes(code)) {
+          return {
+            index: index + 1,
+            state: "used",
+            label: currentLang === "zh" ? "已使用" : "Used",
+            code
+          };
+        }
+        return {
+          index: index + 1,
+          state: "available",
+          label: currentLang === "zh" ? "可用" : "Available",
+          code: code || "-"
+        };
+      });
+    };
     const getRewardEligibility = (member, submissions) => {
       const completedDays = new Set(submissions.map((item) => item.taskDate || "").filter(Boolean)).size;
+      const earnedTokenCount = Math.min(2, Math.floor(completedDays / 7));
       const stepDone = Boolean(member?.resultRole || member?.updatedAt || member?.totalScore != null);
       const ecoDone = Boolean(member?.ecoMbti?.type);
-      const proposalDone = completedDays >= 7;
-      return { stepDone, ecoDone, proposalDone, completedDays, eligible: stepDone && ecoDone && proposalDone };
+      const proposalDone = earnedTokenCount >= 1;
+      return { stepDone, ecoDone, proposalDone, completedDays, earnedTokenCount, eligible: stepDone && ecoDone && proposalDone };
     };
     const setRewardStepState = (element, done) => {
       element.textContent = done ? t("states.rewardDone") : t("states.rewardPendingLabel");
@@ -1376,14 +1576,73 @@
         rewardCertCode.textContent = "-";
         rewardLotteryCode.textContent = "-";
         rewardTokenCode.textContent = "-";
+        rewardTokenGrid.hidden = true;
+        rewardTokenGrid.innerHTML = "";
+        rewardThumbnail.hidden = true;
+        rewardThumbnailImg.removeAttribute("src");
+        certificateStudioLink.hidden = true;
+        certificateStudioHint.textContent = t("rewards.studioHintLocked");
+        certificateStudioHint.className = "status warn";
+        lotteryStatus.textContent = t("lottery.statusPending");
+        lotteryStatus.className = "status warn";
         return;
       }
 
       rewardCertCode.textContent = record.certificateCode || "-";
       rewardLotteryCode.textContent = record.lotteryNumber || "-";
-      rewardTokenCode.textContent = record.tokenCode || "-";
+      const tokenCodes = getRewardTokenCodes(record);
+      const consumedTokenCodes = getConsumedTokenCodes(record);
+      const availableCount = tokenCodes.filter((code) => !consumedTokenCodes.includes(code)).length;
+      rewardTokenCode.textContent = tokenCodes.length
+        ? (currentLang === "zh"
+            ? `${availableCount}/${tokenCodes.length} 可用：${tokenCodes.join(", ")}`
+            : `${availableCount}/${tokenCodes.length} available: ${tokenCodes.join(", ")}`)
+        : "-";
       rewardResultEmpty.hidden = true;
       rewardResultList.hidden = false;
+      const tokenSlots = createTokenSlots(record, currentRewardEligibility.earnedTokenCount);
+      rewardTokenGrid.innerHTML = "";
+      tokenSlots.forEach((slot) => {
+        const article = document.createElement("article");
+        article.className = `token-slot ${slot.state}`;
+        const title = document.createElement("strong");
+        title.textContent = currentLang === "zh" ? `第 ${slot.index} 枚代幣` : `Token ${slot.index}`;
+        const chip = document.createElement("span");
+        chip.className = `token-chip ${slot.state}`;
+        chip.textContent = slot.label;
+        const code = document.createElement("code");
+        code.textContent = slot.code;
+        article.append(title, chip, code);
+        rewardTokenGrid.appendChild(article);
+      });
+      rewardTokenGrid.hidden = false;
+      const imageUrl = record.certificateStudio?.imageUrl || "";
+      if (imageUrl) {
+        rewardThumbnailImg.src = imageUrl;
+        rewardThumbnail.hidden = false;
+      } else {
+        rewardThumbnailImg.removeAttribute("src");
+        rewardThumbnail.hidden = true;
+      }
+      certificateStudioLink.hidden = false;
+      certificateStudioHint.textContent = t("rewards.studioHintReady");
+      certificateStudioHint.className = "status ok";
+      lotteryStatus.textContent = t("lottery.statusReady");
+      lotteryStatus.className = "status ok";
+    };
+    const syncRewardTokensIfNeeded = async (user, member, eligibility) => {
+      const rewardRecord = getRewardRecord(member);
+      if (!user || !rewardRecord) return rewardRecord;
+      const tokenCodes = getRewardTokenCodes(rewardRecord);
+      if (eligibility.earnedTokenCount <= tokenCodes.length) return rewardRecord;
+      const updatedReward = {
+        ...rewardRecord,
+        tokenCodes: [...tokenCodes, ...createTokenCodes(eligibility.earnedTokenCount - tokenCodes.length)],
+        consumedTokenCodes: getConsumedTokenCodes(rewardRecord)
+      };
+      await setDoc(doc(db, "members", user.uid), { reward2026: updatedReward }, { merge: true });
+      currentMemberData = { ...currentMemberData, reward2026: updatedReward };
+      return updatedReward;
     };
     const renderRewardStatus = (member, submissions) => {
       currentRewardEligibility = getRewardEligibility(member, submissions);
@@ -1392,8 +1651,8 @@
       setRewardStepState(rewardEcoStatus, currentRewardEligibility.ecoDone);
       setRewardStepState(rewardProposalStatus, currentRewardEligibility.proposalDone);
       rewardProposalHint.textContent = currentLang === "zh"
-        ? `目前已完成 ${currentRewardEligibility.completedDays} / 7 天不同日期紀錄`
-        : `${currentRewardEligibility.completedDays} / 7 unique-day records completed`;
+        ? `目前已完成 ${currentRewardEligibility.completedDays} 天，已獲得 ${currentRewardEligibility.earnedTokenCount} / 2 枚代幣`
+        : `${currentRewardEligibility.completedDays} days completed, ${currentRewardEligibility.earnedTokenCount} / 2 tokens earned`;
       claimRewardBtn.disabled = !currentRewardEligibility.eligible || Boolean(rewardRecord) || !auth.currentUser;
       if (rewardRecord) {
         rewardStatus.textContent = t("states.rewardAlreadyClaimed");
@@ -1458,6 +1717,10 @@
       document.getElementById("statLatestBody").textContent = t("stats.latestBody");
       document.getElementById("reviewSectionTitle").textContent = t("sections.reviewTitle");
       document.getElementById("reviewSectionBody").textContent = t("sections.reviewBody");
+      lotterySectionTitle.textContent = t("lottery.title");
+      lotterySectionBody.textContent = t("lottery.body");
+      lotteryPromoImage.src = t("lottery.image");
+      lotteryPromoImage.alt = t("lottery.alt");
       rewardSectionTitle.textContent = t("rewards.title");
       rewardSectionBody.textContent = t("rewards.body");
       rewardStepLabel.textContent = t("rewards.stepLabel");
@@ -1469,9 +1732,11 @@
       claimRewardBtn.textContent = t("rewards.claim");
       rewardResultTitle.textContent = t("rewards.resultTitle");
       rewardResultBody.textContent = t("rewards.resultBody");
+      rewardThumbnailBody.textContent = t("rewards.thumbBody");
       rewardCertCodeLabel.textContent = t("rewards.cert");
       rewardLotteryLabel.textContent = t("rewards.lottery");
       rewardTokenLabel.textContent = t("rewards.token");
+      certificateStudioLink.textContent = t("rewards.studioLink");
       if (!auth.currentUser) {
         inviteLinkStatus.textContent = t("invite.guest");
       }
@@ -1519,7 +1784,7 @@
       reviewerSubmissionEmpty.hidden = false;
       currentMemberData = {};
       currentUserSubmissions = [];
-      currentRewardEligibility = { stepDone: false, ecoDone: false, proposalDone: false, completedDays: 0, eligible: false };
+      currentRewardEligibility = { stepDone: false, ecoDone: false, proposalDone: false, completedDays: 0, earnedTokenCount: 0, eligible: false };
       statCompletedDays.textContent = "0";
       statTotalTasks.textContent = "0";
       statLatestDate.textContent = "-";
@@ -1533,6 +1798,8 @@
       rewardStatus.className = "status warn";
       claimRewardBtn.disabled = true;
       renderRewardRecord(null);
+      certificateStudioHint.textContent = t("rewards.studioHintLocked");
+      certificateStudioHint.className = "status warn";
       inviteLinkStatus.className = "status";
       inviteLinkStatus.textContent = t("invite.guest");
     };
@@ -2079,7 +2346,8 @@
         claimedAt: new Date().toISOString(),
         certificateCode: createRandomCode("BSR-CA-2026-", 8),
         lotteryNumber: createRandomCode("DRAW-", 6),
-        tokenCode: createRandomCode("TOKEN-", 8)
+        tokenCodes: createTokenCodes(currentRewardEligibility.earnedTokenCount),
+        consumedTokenCodes: []
       };
 
       try {
@@ -2141,7 +2409,11 @@
         taskUploadWrap.hidden = permissionLevel < 2;
         reviewerCardWrap.hidden = permissionLevel !== 3;
         const userSubmissions = await loadSubmissions(user.uid);
-        renderRewardStatus(member, userSubmissions);
+        const rewardEligibility = getRewardEligibility(member, userSubmissions);
+        const syncedReward = await syncRewardTokensIfNeeded(user, member, rewardEligibility);
+        const syncedMember = syncedReward === getRewardRecord(member) ? member : { ...member, reward2026: syncedReward };
+        currentMemberData = syncedMember;
+        renderRewardStatus(syncedMember, userSubmissions);
         if (permissionLevel === 3) {
           reviewerSubmissionPanel.hidden = false;
           await loadReviewerSubmissions();

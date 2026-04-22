@@ -39,6 +39,10 @@ service firebase.storage {
       allow write: if isOwner(userId) && hasMinPermissionLevel(2);
     }
 
+    match /certificate-studio/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId);
+    }
+
     match /{allPaths=**} {
       allow read, write: if false;
     }
