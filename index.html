@@ -875,7 +875,7 @@
     };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const FIRESTORE_REST_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
+    const FIRESTORE_REST_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/default/documents`;
     const headerMemberLink = document.getElementById('headerMemberLink');
     const headerLogoutBtn = document.getElementById('headerLogoutBtn');
 

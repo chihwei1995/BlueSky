@@ -1660,7 +1660,6 @@
       const snapshot = await getDocs(collection(db, "memberGlobeSubmissions"));
       const submissions = snapshot.docs
         .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-        .filter((item) => item.uid !== auth.currentUser?.uid)
         .filter((item) => !item.status || item.status === "pending")
         .sort((a, b) => {
           const aTime = a.updatedAt?.seconds || 0;
