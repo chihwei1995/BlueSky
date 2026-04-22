@@ -705,6 +705,7 @@
         linear-gradient(135deg, rgba(18, 81, 58, 0.98), rgba(27, 122, 85, 0.94) 54%, rgba(42, 166, 181, 0.88));
       color: #fff;
       border-color: transparent;
+      overflow: hidden;
     }
 
     .result-card.primary p {
@@ -724,6 +725,13 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.36),
         inset 0 -14px 24px rgba(9, 49, 34, 0.12),
         0 18px 32px rgba(10, 49, 34, 0.22);
+    }
+
+    .portrait-frame {
+      width: min(100%, 360px);
+      min-width: 0;
+      justify-self: center;
+      align-self: start;
     }
 
     .portrait-frame::before,
@@ -787,6 +795,9 @@
       max-width: 360px;
       aspect-ratio: 2 / 3;
       object-fit: cover;
+      display: block;
+      height: auto;
+      margin: 0 auto;
       border-radius: 24px;
       border: 1px solid rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.12);
@@ -797,9 +808,10 @@
 
     .result-hero {
       display: grid;
-      grid-template-columns: minmax(240px, 360px) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
       gap: 20px;
       align-items: start;
+      min-width: 0;
     }
 
     .result-copy {
@@ -807,6 +819,7 @@
       gap: 12px;
       align-content: start;
       min-width: 0;
+      align-self: center;
     }
 
     .result-name-zh {
@@ -826,6 +839,7 @@
     .result-summary {
       font-size: 1rem;
       line-height: 1.75;
+      max-width: 60ch;
     }
 
     .role-gallery {
@@ -928,6 +942,7 @@
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
+      min-width: 0;
       display: grid;
       gap: 4px;
     }
@@ -1005,6 +1020,10 @@
 
       .role-gallery-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .result-hero {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1147,7 +1166,7 @@
           <section class="hero panel">
             <div class="hero-copy">
               <div class="eyebrow" data-i18n="hero.eyebrow">Interactive Sustainability Personality</div>
-              <h1 data-i18n="hero.title">環保 MBTI<br>Eco-MBTI</h1>
+              <h1 data-i18n="hero.title">環保 MBTI / Eco-MBTI</h1>
               <p data-i18n="hero.body">把 MBTI 的底層邏輯重新轉譯成永續行動風格。這不是傳統性格測驗，而是一個幫助大家理解自己如何參與環境保護、又適合用什麼方式擴大影響力的互動頁面。</p>
               <div class="hero-actions">
                 <a class="button primary" href="#quiz" data-i18n="hero.primary">開始 20 題測驗</a>
@@ -1323,6 +1342,7 @@
               </div>
               <div class="quiz-actions">
                 <button id="copyResultBtn" type="button" data-i18n="result.copy">複製結果文案</button>
+                <button id="shareResultBtn" type="button" data-i18n="result.shareImage">分享附圖結果</button>
                 <button id="downloadCardBtn" type="button" data-i18n="result.download">下載 PNG 角色卡</button>
                 <a class="button" href="./member-center.html" data-i18n="result.member">打開氣候行動者中心</a>
                 <a class="button" href="./climate-action-form.html" data-i18n="result.step">前往步入行動</a>
@@ -1341,7 +1361,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -1749,7 +1769,7 @@
         },
         hero: {
           eyebrow: "Interactive Sustainability Personality",
-          title: "環保 MBTI<br>Eco-MBTI",
+          title: "環保 MBTI / Eco-MBTI",
           body: "把 MBTI 的底層邏輯重新轉譯成永續行動風格。這不是傳統性格測驗，而是一個幫助大家理解自己如何參與環境保護、又適合用什麼方式擴大影響力的互動頁面。",
           primary: "開始 20 題測驗",
           secondary: "先看四大維度",
@@ -1803,10 +1823,13 @@
           shareTitle: "分享你的結果 / Share Your Result",
           shareBody: "你可以把結果文字複製出去，拿來做社群貼文、活動互動或引導更多人來測。",
           copy: "複製結果文案",
+          shareImage: "分享附圖結果",
           download: "下載 PNG 角色卡",
           member: "打開氣候行動者中心",
           step: "前往步入行動",
           copied: "結果文案已複製。",
+          shared: "已開啟附圖分享。",
+          shareUnsupported: "這個瀏覽器目前不支援附圖分享，已為你下載 PNG 角色卡。",
           saved: "已同步儲存到你的會員資料。",
           downloaded: "PNG 角色卡已下載。",
           copiedFallback: "請手動複製下方結果。",
@@ -1840,7 +1863,7 @@
         },
         hero: {
           eyebrow: "Interactive Sustainability Personality",
-          title: "Eco-MBTI<br>Environmental Action Style",
+          title: "Eco-MBTI / Environmental Action Style",
           body: "This page reinterprets MBTI through sustainability participation. It is not a traditional personality test. It is a playful tool for understanding how someone naturally joins environmental action and how they may best amplify their impact.",
           primary: "Start the 20-question quiz",
           secondary: "See the 4 dimensions first",
@@ -1894,10 +1917,13 @@
           shareTitle: "Share Your Result",
           shareBody: "You can copy the result text and use it in social posts, event interaction, or invitation flows.",
           copy: "Copy Result Text",
+          shareImage: "Share with Image",
           download: "Download PNG Card",
           member: "Open Member Center",
           step: "Open Take One Step",
           copied: "Result text copied.",
+          shared: "Image share opened.",
+          shareUnsupported: "This browser does not support image sharing. The PNG card has been downloaded instead.",
           saved: "Saved to your member profile.",
           downloaded: "PNG role card downloaded.",
           copiedFallback: "Please copy the result text manually.",
@@ -1943,6 +1969,7 @@
     const breakdownList = document.getElementById("breakdownList");
     const roleGalleryGrid = document.getElementById("roleGalleryGrid");
     const copyResultBtn = document.getElementById("copyResultBtn");
+    const shareResultBtn = document.getElementById("shareResultBtn");
     const downloadCardBtn = document.getElementById("downloadCardBtn");
     const shareStatus = document.getElementById("shareStatus");
 
@@ -2240,6 +2267,28 @@
       }
     };
 
+    const loadSavedResultFromMember = async (user) => {
+      if (!user) return;
+      try {
+        const snapshot = await getDoc(doc(db, "members", user.uid));
+        const saved = snapshot.exists() ? snapshot.data()?.ecoMbti : null;
+        if (!saved?.type || !TYPE_META[saved.type]) return;
+
+        const counts = saved.counts && typeof saved.counts === "object"
+          ? saved.counts
+          : { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+        activeType = saved.type;
+        renderResult({ counts, type: saved.type });
+        shareStatus.className = "status ok";
+        shareStatus.textContent = currentLang === "zh"
+          ? "已帶入你之前的 Eco-MBTI 結果。"
+          : "Your previous Eco-MBTI result has been loaded.";
+      } catch (error) {
+        console.error("Failed to load saved Eco-MBTI result:", error);
+      }
+    };
+
     const roundRect = (ctx, x, y, w, h, r) => {
       ctx.beginPath();
       ctx.moveTo(x + r, y);
@@ -2282,7 +2331,7 @@
       return currentY;
     };
 
-    const downloadRoleCard = async () => {
+    const buildRoleCardBlob = async () => {
       const type = activeType;
       const zh = TYPE_META[type].zh;
       const en = TYPE_META[type].en;
@@ -2357,12 +2406,47 @@
       ctx.font = "600 20px 'Segoe UI', sans-serif";
       ctx.fillText("Blue Sky Returns • Eco-MBTI", imageX, cardY + cardH - 34);
 
+      const blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((value) => {
+          if (value) resolve(value);
+          else reject(new Error("Failed to generate PNG blob."));
+        }, "image/png");
+      });
+
+      return { blob, type };
+    };
+
+    const downloadRoleCard = async () => {
+      const { blob, type } = await buildRoleCardBlob();
+      const objectUrl = URL.createObjectURL(blob);
+
       const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
+      link.href = objectUrl;
       link.download = `eco-mbti-${type}.png`;
       link.click();
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 1200);
       shareStatus.className = "status ok";
       shareStatus.textContent = t("result.downloaded");
+    };
+
+    const shareRoleCard = async () => {
+      const { blob, type } = await buildRoleCardBlob();
+      const file = new File([blob], `eco-mbti-${type}.png`, { type: "image/png" });
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: `${type} | Eco-MBTI`,
+          text: lastResultText,
+          files: [file]
+        });
+        shareStatus.className = "status ok";
+        shareStatus.textContent = t("result.shared");
+        return;
+      }
+
+      await downloadRoleCard();
+      shareStatus.className = "status warn";
+      shareStatus.textContent = t("result.shareUnsupported");
     };
 
     const applyLanguage = (lang) => {
@@ -2448,12 +2532,29 @@
       }
     });
 
+    shareResultBtn.addEventListener("click", async () => {
+      shareStatus.className = "status";
+      try {
+        await shareRoleCard();
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+        console.error("Share with image failed:", error);
+        shareStatus.classList.add("warn");
+        shareStatus.textContent = currentLang === "zh"
+          ? "附圖分享失敗，請改用下載 PNG 角色卡。"
+          : "Image sharing failed. Please download the PNG card instead.";
+      }
+    });
+
     document.querySelectorAll(".lang-btn").forEach((button) => {
       button.addEventListener("click", () => applyLanguage(button.dataset.lang));
     });
 
     onAuthStateChanged(auth, (user) => {
       currentUser = user || null;
+      if (currentUser) {
+        loadSavedResultFromMember(currentUser);
+      }
     });
 
     applyLanguage(currentLang);
