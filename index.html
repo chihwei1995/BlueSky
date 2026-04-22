@@ -986,8 +986,8 @@
         },
         misc: {
           noMedia: 'No media available',
-          fetchFail: 'Unable to load data file',
-          initFail: 'Initialization failed'
+          fetchFail: 'Unable to load Firebase data',
+          initFail: 'Firebase initialization failed'
         },
         page: {
           title: 'Blue Sky Returns'
@@ -1058,8 +1058,8 @@
         },
         misc: {
           noMedia: '無媒體資料',
-          fetchFail: '無法載入資料檔案',
-          initFail: '初始化失敗'
+          fetchFail: '無法載入 Firebase 資料',
+          initFail: 'Firebase 初始化失敗'
         },
         page: {
           title: '一步・藍天 BLUE SKY RETURNS'
@@ -1609,12 +1609,6 @@
       updateMobileLayoutVars();
     };
 
-    const fetchJSON = async (path) => {
-      const res = await fetch(path, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`${getI18n('misc.fetchFail')}: ${path} (${res.status})`);
-      return res.json();
-    };
-
     const decodeFirestoreValue = (value) => {
       if (!value || typeof value !== 'object') return null;
       if ('stringValue' in value) return value.stringValue;
@@ -1678,14 +1672,7 @@
       };
     };
 
-    const loadEventsData = async () => {
-      try {
-        return await fetchGlobeEventsFromFirestore();
-      } catch (error) {
-        console.warn('Falling back to local data.json:', error);
-        return fetchJSON('data.json');
-      }
-    };
+    const loadEventsData = async () => fetchGlobeEventsFromFirestore();
 
     const preloadImage = (url) => new Promise((resolve, reject) => {
       const img = new Image();
@@ -1950,6 +1937,7 @@
 
       const mediaContainer = document.getElementById('mediaContainer');
       mediaContainer.innerHTML = '';
+      mediaContainer.hidden = true;
       const mediaUrl = data.media?.url || data.media?.downloadURL || '';
       if (data.media?.type === 'instagram' && mediaUrl) {
         const blockquote = document.createElement('blockquote');
@@ -1958,11 +1946,19 @@
         blockquote.setAttribute('data-instgrm-version', '14');
         blockquote.style.margin = '0 auto';
         mediaContainer.appendChild(blockquote);
+        mediaContainer.hidden = false;
         setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
       } else if ((data.media?.type === 'image' || (data.media?.type || '').startsWith('image/')) && mediaUrl) {
         const img = document.createElement('img');
         img.src = mediaUrl;
         img.alt = data.title || 'image';
+        img.addEventListener('load', () => {
+          mediaContainer.hidden = false;
+        }, { once: true });
+        img.addEventListener('error', () => {
+          mediaContainer.innerHTML = '';
+          mediaContainer.hidden = true;
+        }, { once: true });
         mediaContainer.appendChild(img);
       } else if ((data.media?.type === 'video' || (data.media?.type || '').startsWith('video/')) && mediaUrl) {
         const video = document.createElement('video');
@@ -1970,9 +1966,14 @@
         video.controls = true;
         video.preload = 'metadata';
         video.playsInline = true;
+        video.addEventListener('loadeddata', () => {
+          mediaContainer.hidden = false;
+        }, { once: true });
+        video.addEventListener('error', () => {
+          mediaContainer.innerHTML = '';
+          mediaContainer.hidden = true;
+        }, { once: true });
         mediaContainer.appendChild(video);
-      } else {
-        mediaContainer.innerHTML = `<div style="padding:16px;opacity:0.7;">${getI18n('misc.noMedia')}</div>`;
       }
 
       card.classList.add('show');
