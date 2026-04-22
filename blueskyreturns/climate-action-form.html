@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blue Sky Returns 邁出一步</title>
+  <title>Blue Sky Returns 步入行動</title>
   <link rel="icon" type="image/png" href="/Enter.PNG" />
   <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
   <link rel="apple-touch-icon" href="/Enter.PNG" />
@@ -493,13 +493,13 @@
     <div class="topbar">
       <div class="title-block">
         <img src="../Enter.PNG" alt="JCI Peninsula logo" />
-        <h1 id="pageTitle">Blue Sky Returns 邁出一步<br>Blue Sky Returns Take One Step</h1>
+        <h1 id="pageTitle">Blue Sky Returns 步入行動<br>Blue Sky Returns Take One Step</h1>
       </div>
       <div class="topbar-actions">
         <a class="nav-chip" href="../index.html">主地球首頁 / Main Globe</a>
         <a class="nav-chip" href="./index.html">項目介紹 / About</a>
         <a class="nav-chip" href="./member-center.html">氣候行動者中心 / Member Center</a>
-        <a class="nav-chip active" href="./climate-action-form.html">邁出一步 / Take One Step</a>
+        <a class="nav-chip active" href="./climate-action-form.html">步入行動 / Take One Step</a>
         <button type="button" id="logoutBtn" class="secondary-btn" hidden>登出 / Sign Out</button>
         <div class="lang-toggle" role="group" aria-label="Language switcher">
           <button class="lang-btn active" type="button" data-lang="zh">中文</button>
@@ -526,7 +526,7 @@
         <input id="websiteField" name="website" type="text" tabindex="-1" autocomplete="off" />
       </div>
       <section class="card">
-        <h2>第一部分：邁出一步與基本資料<br>Part 1: Take One Step & Contact Details</h2>
+        <h2>第一部分：步入行動與基本資料<br>Part 1: Take One Step & Contact Details</h2>
         <p class="helper">第一次填寫會建立氣侯行動者帳號；若你已登入相同 Email，系統會直接更新你的問卷資料。</p>
         <div id="memberState" class="member-chip" hidden></div>
 
@@ -699,7 +699,7 @@
         </div>
 
         <div class="actions">
-          <button type="submit" id="submitBtn">儲存邁出一步資料 / Save Take One Step</button>
+          <button type="submit" id="submitBtn">儲存步入行動資料 / Save Take One Step</button>
           <button type="button" id="shareCampaignBtn" class="secondary-btn">分享表單給他人 / Share This Form</button>
           <span id="submitStatus" class="status" aria-live="polite"></span>
         </div>
@@ -793,14 +793,14 @@
     const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
     const I18N = {
       zh: {
-        pageTitle: "Blue Sky Returns 邁出一步",
-        heading: "Blue Sky Returns 邁出一步<br>Blue Sky Returns Take One Step",
+        pageTitle: "Blue Sky Returns 步入行動",
+        heading: "Blue Sky Returns 步入行動<br>Blue Sky Returns Take One Step",
         subtitle: "用這一步更新你的氣候行動者資料與問卷內容；第一次填寫會建立帳號，之後可直接回來修改。<br>Use this step to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
         lotteryTitle: "2026 抽獎活動",
         lotteryBody: "獲得 2026 氣候行動證書後，即具抽獎資格。抽獎結果將於 2026 年一步藍天閉幕式公布，主辦單位保留最後決定權。",
         lotteryImage: "../assets/2026抽獎.png",
         lotteryAlt: "2026 抽獎宣傳",
-        submit: "儲存邁出一步資料 / Save Take One Step",
+        submit: "儲存步入行動資料 / Save Take One Step",
         shareForm: "分享表單給他人 / Share This Form",
         download: "下載角色卡 / Download Card",
         shareImage: "分享圖片＋連結 / Share Image + Link",
@@ -947,8 +947,8 @@
       return url.toString();
     };
     const buildSharePayload = () => ({
-      title: "Blue Sky Returns 邁出一步",
-      text: "一起完成 Blue Sky Returns 邁出一步並加入氣侯行動者！",
+      title: "Blue Sky Returns 步入行動",
+      text: "一起完成 Blue Sky Returns 步入行動並加入氣侯行動者！",
       url: buildShareUrl()
     });
 

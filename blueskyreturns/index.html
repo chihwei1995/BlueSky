@@ -244,15 +244,32 @@
 
     .timeline-list {
       display: grid;
-      gap: 16px;
+      gap: 22px;
     }
 
     .timeline-item {
+      display: grid;
       gap: 18px;
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.92));
+      border-radius: 22px;
+      padding: 22px;
+      background:
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.06), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,250,252,0.95));
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+    }
+
+    .timeline-body {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(300px, 1.08fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .timeline-content {
+      display: grid;
+      gap: 14px;
+      align-content: start;
     }
 
     .timeline-item-header {
@@ -301,19 +318,78 @@
       margin-bottom: 8px;
     }
 
+    .timeline-ig-panel {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(14, 165, 233, 0.14);
+      background: linear-gradient(180deg, rgba(240, 249, 255, 0.9), rgba(255, 255, 255, 0.98));
+    }
+
+    .timeline-ig-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-ig-head strong {
+      font-size: 0.98rem;
+    }
+
+    .timeline-ig-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-ig-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(14, 165, 233, 0.12);
+      color: var(--accent-dark);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .timeline-ig-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(14, 165, 233, 0.18);
+      color: var(--accent-dark);
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
     .timeline-ig-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
-      margin-top: 4px;
     }
 
     .timeline-ig-card {
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       background: #fff;
       padding: 10px;
-      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+      box-shadow: 0 14px 24px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+
+    .timeline-ig-card blockquote.instagram-media {
+      min-width: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
     }
 
     .timeline-toggle {
@@ -368,6 +444,8 @@
       .hero { padding: 24px; }
       main { padding: 32px 20px 56px; }
       .timeline-item-header { flex-direction: column; }
+      .timeline-body { grid-template-columns: 1fr; }
+      .timeline-ig-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -572,7 +650,7 @@
           call: '合作與願景',
           proposal: '7 日綠色提案',
           eco: 'Eco-MBTI',
-          form: '邁出一步',
+          form: '步入行動',
           member: '氣候行動者中心'
         },
         hero: {
@@ -935,12 +1013,13 @@
       }
 
       container.innerHTML = filtered.map((item) => {
+        const postCount = (item.igPosts || []).length;
         const cards = (item.igPosts || []).map((url, index) => `
           <div class="timeline-ig-card${index >= IG_PREVIEW_COUNT ? ' hidden' : ''}">
             <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="margin:0;"></blockquote>
           </div>
         `).join('');
-        const toggle = (item.igPosts || []).length > IG_PREVIEW_COUNT
+        const toggle = postCount > IG_PREVIEW_COUNT
           ? `<button class="timeline-toggle" type="button" data-toggle-posts="${item.id}">${getI18n('timeline.showMore')}</button>`
           : '';
         return `
@@ -952,10 +1031,26 @@
               </div>
               <div class="timeline-year">${item.year || ''}</div>
             </div>
-            <ul class="timeline-points">
-              ${(item.points || []).map((point) => `<li>${point}</li>`).join('')}
-            </ul>
-            ${(item.igPosts || []).length ? `<div class="timeline-ig-grid" data-post-group="${item.id}">${cards}</div>${toggle}` : ''}
+            <div class="timeline-body">
+              <div class="timeline-content">
+                <ul class="timeline-points">
+                  ${(item.points || []).map((point) => `<li>${point}</li>`).join('')}
+                </ul>
+              </div>
+              ${postCount ? `
+                <div class="timeline-ig-panel">
+                  <div class="timeline-ig-head">
+                    <strong>${state.language === 'zh' ? 'Instagram 貼文紀錄' : 'Instagram Post Archive'}</strong>
+                    <div class="timeline-ig-meta">
+                      <span class="timeline-ig-count">${postCount} ${state.language === 'zh' ? '則貼文' : 'posts'}</span>
+                      <a class="timeline-ig-link" href="https://www.instagram.com/hkpjc/" target="_blank" rel="noopener noreferrer">${state.language === 'zh' ? '查看 IG 專頁' : 'Open Instagram'}</a>
+                    </div>
+                  </div>
+                  <div class="timeline-ig-grid" data-post-group="${item.id}">${cards}</div>
+                  ${toggle}
+                </div>
+              ` : ''}
+            </div>
           </article>
         `;
       }).join('');
