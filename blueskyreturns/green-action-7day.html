@@ -148,6 +148,15 @@
       color: #fff;
       box-shadow: 0 8px 20px rgba(31, 143, 88, 0.18);
     }
+    .bot-guard {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
     main { padding: 28px 0 70px; }
     .layout {
       display: grid;
@@ -268,7 +277,7 @@
     }
     .hero p {
       margin: 0;
-      color: rgba(255, 255, 255, 0.88);
+      color: #ffffff;
       font-size: 1rem;
     }
     .hero-actions {
@@ -315,6 +324,7 @@
       border: 1px solid rgba(255, 255, 255, 0.18);
     }
     .poster-note strong { font-size: 1rem; }
+    .poster-note span { color: rgba(255, 255, 255, 0.96); }
     .panel { padding: 26px; }
     .section-head {
       display: grid;
@@ -811,6 +821,10 @@
               <article class="task-card">
                 <h3>提交今天的綠色任務</h3>
                 <form id="proposalTaskForm" class="task-form">
+                  <div class="bot-guard" aria-hidden="true">
+                    <label for="taskWebsiteField">Website</label>
+                    <input id="taskWebsiteField" name="website" type="text" tabindex="-1" autocomplete="off" />
+                  </div>
                   <div>
                     <label for="taskTitle">任務標題 / Task Title</label>
                     <input id="taskTitle" name="taskTitle" type="text" placeholder="例：今天步行上班並自備水瓶" />
@@ -1001,6 +1015,7 @@
   </script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
@@ -1016,6 +1031,7 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "green-action-7day" });
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
     const storage = getStorage(app);
@@ -1025,6 +1041,7 @@
     const taskForm = document.getElementById("proposalTaskForm");
     const taskSubmitBtn = document.getElementById("taskSubmitBtn");
     const taskStatus = document.getElementById("taskStatus");
+    const taskWebsiteField = document.getElementById("taskWebsiteField");
     const submissionList = document.getElementById("proposalSubmissionList");
     const submissionEmpty = document.getElementById("proposalSubmissionEmpty");
     const taskTermsConsent = document.getElementById("taskTermsConsent");
@@ -1035,6 +1052,8 @@
     let editingSubmissionId = null;
     let editingSubmissionData = null;
     let acceptedTermsRecord = null;
+    const taskFormStartedAt = Date.now();
+    const MIN_TASK_FILL_MS = 2000;
 
     const openTermsModal = () => {
       termsModal.classList.add("open");
@@ -1250,6 +1269,16 @@
       }
 
       const formData = new FormData(taskForm);
+      if (String(formData.get("website") || "").trim()) {
+        setTaskStatus("error", "提交失敗，請重新整理頁面後再試。");
+        return;
+      }
+
+      if (Date.now() - taskFormStartedAt < MIN_TASK_FILL_MS) {
+        setTaskStatus("error", "送出速度過快，請稍候再試。 / Submission was too fast. Please try again in a moment.");
+        return;
+      }
+
       const dimensions = formData.getAll("dimensions");
       if (!dimensions.length) {
         setTaskStatus("error", "請至少選擇一個綠色維度。");

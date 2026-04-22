@@ -327,6 +327,16 @@
       -webkit-overflow-scrolling: touch;
     }
 
+    .bot-guard {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .role-title {
       margin: 0 0 4px;
     }
@@ -476,6 +486,10 @@
     </p>
 
     <form id="climateForm">
+      <div class="bot-guard" aria-hidden="true">
+        <label for="websiteField">Website</label>
+        <input id="websiteField" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
       <section class="card">
         <h2>第一部分：邁出一步與基本資料<br>Part 1: Take One Step & Contact Details</h2>
         <p class="helper">第一次填寫會建立氣侯行動者帳號；若你已登入相同 Email，系統會直接更新你的問卷資料。</p>
@@ -697,6 +711,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import {
       getAuth,
       createUserWithEmailAndPassword,
@@ -733,6 +748,7 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "climate-action-form" });
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
     const storage = getStorage(app);
@@ -850,6 +866,7 @@
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirmPassword");
+    const websiteField = document.getElementById("websiteField");
     const statusEl = document.getElementById("submitStatus");
     const modal = document.getElementById("resultModal");
     const shareStatusEl = document.getElementById("shareStatus");
@@ -862,15 +879,31 @@
     const memberStateEl = document.getElementById("memberState");
     const organizationStorageStatusEl = document.getElementById("organizationStorageStatus");
     let acceptedTermsRecord = null;
+    const formStartedAt = Date.now();
+    const MIN_FORM_FILL_MS = 2500;
 
     let currentRole = null;
     let storageAvailability = location.hostname === "localhost" || location.hostname === "127.0.0.1" ? "ready" : "checking";
-
-    const sharePayload = {
+    const sanitizeReferralUid = (value) => {
+      const trimmed = String(value || "").trim();
+      return /^[A-Za-z0-9_-]{10,128}$/.test(trimmed) ? trimmed : "";
+    };
+    const referralUid = sanitizeReferralUid(new URLSearchParams(window.location.search).get("ref"));
+    const buildShareUrl = (shareUid = auth.currentUser?.uid) => {
+      const url = new URL("./climate-action-form.html", window.location.href);
+      const safeUid = sanitizeReferralUid(shareUid);
+      if (safeUid) {
+        url.searchParams.set("ref", safeUid);
+      } else {
+        url.searchParams.delete("ref");
+      }
+      return url.toString();
+    };
+    const buildSharePayload = () => ({
       title: "Blue Sky Returns 邁出一步",
       text: "一起完成 Blue Sky Returns 邁出一步並加入氣侯行動者！",
-      url: window.location.href
-    };
+      url: buildShareUrl()
+    });
 
     const setStatus = (type, message) => {
       statusEl.className = "status";
@@ -1079,6 +1112,7 @@
 
     const shareFormLink = async (trigger) => {
       const source = trigger === "result" ? "分享結果" : "分享表單";
+      const sharePayload = buildSharePayload();
       shareStatusEl.textContent = "";
       try {
         if (navigator.share) {
@@ -1111,10 +1145,11 @@
         const blob = await fetchRoleImageBlob();
         const fileName = getRoleCardFileName(currentRole);
         const file = new File([blob], fileName, { type: blob.type || "image/png" });
+        const shareUrl = buildShareUrl();
         const payload = {
           title: `我的氣候角色：${currentRole.title}`,
           text: `我在 Blue Sky Returns 測驗的結果是：${currentRole.title}`,
-          url: window.location.href,
+          url: shareUrl,
           files: [file]
         };
 
@@ -1126,10 +1161,10 @@
 
         await downloadRoleCard();
         if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(window.location.href);
+          await navigator.clipboard.writeText(shareUrl);
           shareStatusEl.textContent = "已下載角色卡，並複製表單連結可貼到社群分享。";
         } else {
-          shareStatusEl.textContent = `已下載角色卡，請手動分享連結：${window.location.href}`;
+          shareStatusEl.textContent = `已下載角色卡，請手動分享連結：${shareUrl}`;
         }
       } catch (error) {
         shareStatusEl.textContent = "分享失敗，請改用下載後手動上傳。";
@@ -1280,12 +1315,36 @@
         payload.submittedAt = serverTimestamp();
       }
 
+      if (created && referralUid && referralUid !== user.uid) {
+        payload.referral = {
+          referredBy: referralUid,
+          acceptedAt: serverTimestamp(),
+          source: "take-one-step-share"
+        };
+      }
+
       setStatus("warn", "正在寫入氣侯行動者資料到 Firebase...");
       await withTimeout(
         setDoc(doc(db, "members", user.uid), payload, { merge: true }),
         15000,
         "寫入問卷資料逾時，請稍後再試一次。"
       );
+
+      if (created && referralUid && referralUid !== user.uid) {
+        const referrerSnap = await getDoc(doc(db, "members", referralUid));
+        if (referrerSnap.exists()) {
+          await withTimeout(
+            setDoc(doc(db, "memberReferrals", user.uid), {
+              referredUid: user.uid,
+              referredBy: referralUid,
+              acceptedAt: serverTimestamp(),
+              source: "take-one-step-share"
+            }),
+            10000,
+            "分享接受紀錄寫入逾時，請稍後再試一次。"
+          );
+        }
+      }
 
       if (payload.termsConsent) {
         updateTermsConsentUI({
@@ -1404,6 +1463,18 @@
       const name = String(formData.get("name") || "").trim();
       const partnerType = String(formData.get("partner_type") || "");
       const { score, role } = calculateResult(formData);
+
+      if (String(formData.get("website") || "").trim()) {
+        setStatus("error", "提交失敗，請重新整理頁面後再試。");
+        submitBtn.disabled = false;
+        return;
+      }
+
+      if (Date.now() - formStartedAt < MIN_FORM_FILL_MS) {
+        setStatus("error", "送出速度過快，請稍候再試。 / Submission was too fast. Please try again in a moment.");
+        submitBtn.disabled = false;
+        return;
+      }
 
       if (!role) {
         setStatus("error", "分數計算異常，請檢查填答。");

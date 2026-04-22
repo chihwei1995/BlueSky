@@ -63,6 +63,21 @@ service cloud.firestore {
         );
     }
 
+    match /memberReferrals/{referralId} {
+      allow create: if isSignedIn() &&
+        request.auth.uid == referralId &&
+        request.resource.data.referredUid == request.auth.uid &&
+        request.resource.data.referredBy is string &&
+        request.resource.data.referredBy != request.auth.uid;
+      allow read: if isSignedIn() &&
+        (
+          resource.data.referredUid == request.auth.uid ||
+          resource.data.referredBy == request.auth.uid ||
+          hasPermissionLevel(3)
+        );
+      allow update, delete: if false;
+    }
+
     match /members/{userId} {
       allow read, create, update: if isOwner(userId) || hasPermissionLevel(3);
       allow delete: if false;

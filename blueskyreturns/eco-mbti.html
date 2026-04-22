@@ -1263,6 +1263,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
@@ -1277,6 +1278,7 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "eco-mbti" });
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
 

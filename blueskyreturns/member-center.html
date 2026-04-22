@@ -693,6 +693,7 @@
               <p id="summaryEmail">Email：-</p>
               <p id="summaryPartnerType">類型：-</p>
               <p id="summaryPermission">權限：-</p>
+              <p id="summaryImpact">影響人數：-</p>
             </div>
           </article>
           <article class="summary-card">
@@ -705,6 +706,10 @@
               <p id="summaryUpdatedAt">更新時間：-</p>
             </div>
           </article>
+        </div>
+        <div class="actions">
+          <button id="copyInviteLinkBtn" class="pill" type="button">複製我的分享連結</button>
+          <span id="inviteLinkStatus" class="status">登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次邁出一步，就會加一位影響人數。</span>
         </div>
       </section>
 
@@ -900,6 +905,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import {
       getAuth,
       onAuthStateChanged,
@@ -913,9 +919,11 @@
       getDoc,
       collection,
       getDocs,
+      query,
       setDoc,
       addDoc,
       updateDoc,
+      where,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
@@ -930,6 +938,7 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "member-center" });
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
     const LANG_STORAGE_KEY = "bsr_lang";
@@ -997,7 +1006,14 @@
         },
         loginModal: { title: "會員登入 / Member Sign In", email: "Email", password: "Password", submit: "登入 / Sign In", forgot: "忘記密碼 / Reset Password", cancel: "取消 / Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "總分：", region: "地區 / 分會：", updatedAt: "更新時間：" },
+        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", impact: "影響人數：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "總分：", region: "地區 / 分會：", updatedAt: "更新時間：" },
+        invite: {
+          copy: "複製我的分享連結",
+          guest: "登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次邁出一步，就會加一位影響人數。",
+          copied: "已複製你的專屬分享連結。",
+          copiedFallback: "無法自動複製，請手動複製：",
+          failed: "建立分享連結失敗，請稍後再試。"
+        },
         states: {
           guest: "尚未登入",
           guestAbility: "請先登入以查看你的會員資料、7-Day 任務紀錄與可用功能。",
@@ -1090,7 +1106,14 @@
         },
         loginModal: { title: "Member Sign In", email: "Email", password: "Password", submit: "Sign In", forgot: "Reset Password", cancel: "Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Score: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
+        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", impact: "People Reached: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Score: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
+        invite: {
+          copy: "Copy My Share Link",
+          guest: "Sign in to copy your personal share link. Each new account that completes its first Take One Step through your link adds one person reached.",
+          copied: "Your personal share link has been copied.",
+          copiedFallback: "Copy this link manually:",
+          failed: "Failed to create the share link. Please try again later."
+        },
         states: {
           guest: "Signed out",
           guestAbility: "Sign in first to view your profile, 7-Day task history, and available actions.",
@@ -1175,17 +1198,31 @@
     const summaryEmail = document.getElementById("summaryEmail");
     const summaryPartnerType = document.getElementById("summaryPartnerType");
     const summaryPermission = document.getElementById("summaryPermission");
+    const summaryImpact = document.getElementById("summaryImpact");
     const summaryRole = document.getElementById("summaryRole");
     const summaryEcoMbti = document.getElementById("summaryEcoMbti");
     const summaryScore = document.getElementById("summaryScore");
     const summaryRegion = document.getElementById("summaryRegion");
     const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
+    const copyInviteLinkBtn = document.getElementById("copyInviteLinkBtn");
+    const inviteLinkStatus = document.getElementById("inviteLinkStatus");
     const statCompletedDays = document.getElementById("statCompletedDays");
     const statTotalTasks = document.getElementById("statTotalTasks");
     const statLatestDate = document.getElementById("statLatestDate");
     const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
     let currentMemberData = {};
     let currentUserSubmissions = [];
+    const buildInviteLink = (userId) => {
+      const url = new URL("./climate-action-form.html", window.location.href);
+      url.searchParams.set("ref", userId);
+      return url.toString();
+    };
+    const loadImpactCount = async (userId) => {
+      const snap = await getDocs(
+        query(collection(db, "memberReferrals"), where("referredBy", "==", userId))
+      );
+      return snap.size;
+    };
 
     const slugify = (value) => String(value || "")
       .toLowerCase()
@@ -1390,6 +1427,7 @@
       document.getElementById("summarySectionBody").textContent = t("sections.summaryBody");
       document.getElementById("basicCardTitle").textContent = t("sections.basicCard");
       document.getElementById("stepResultCardTitle").textContent = t("sections.resultCard");
+      copyInviteLinkBtn.textContent = t("invite.copy");
       document.getElementById("tasksSectionTitle").textContent = t("sections.tasksTitle");
       document.getElementById("tasksSectionBody").textContent = t("sections.tasksBody");
       document.getElementById("taskStepTitle").textContent = t("tasks.stepTitle");
@@ -1431,6 +1469,9 @@
       rewardCertCodeLabel.textContent = t("rewards.cert");
       rewardLotteryLabel.textContent = t("rewards.lottery");
       rewardTokenLabel.textContent = t("rewards.token");
+      if (!auth.currentUser) {
+        inviteLinkStatus.textContent = t("invite.guest");
+      }
       document.getElementById("loginModalTitle").textContent = t("loginModal.title");
       document.getElementById("loginEmailLabel").textContent = t("loginModal.email");
       document.getElementById("loginPasswordLabel").textContent = t("loginModal.password");
@@ -1458,6 +1499,7 @@
       summaryEmail.textContent = formatSummaryLine("email", "-");
       summaryPartnerType.textContent = formatSummaryLine("partnerType", "-");
       summaryPermission.textContent = formatSummaryLine("permission", "-");
+      summaryImpact.textContent = formatSummaryLine("impact", "-");
       summaryRole.textContent = formatSummaryLine("role", "-");
       summaryEcoMbti.textContent = formatSummaryLine("ecoMbti", "-");
       summaryScore.textContent = formatSummaryLine("score", "-");
@@ -1488,6 +1530,8 @@
       rewardStatus.className = "status warn";
       claimRewardBtn.disabled = true;
       renderRewardRecord(null);
+      inviteLinkStatus.className = "status";
+      inviteLinkStatus.textContent = t("invite.guest");
     };
 
     const renderGuestState = () => {
@@ -1666,9 +1710,46 @@
       reviewerSubmissionEmpty.hidden = false;
 
       const snapshot = await getDocs(collection(db, "memberGlobeSubmissions"));
-      const submissions = snapshot.docs
-        .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-        .filter((item) => !item.status || item.status === "pending")
+      const rawSubmissions = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+
+      const legacyJsonImports = rawSubmissions.filter((item) =>
+        item.importedVia === "json" &&
+        Number(item.permissionLevel || 0) === 3 &&
+        (!item.status || item.status === "pending")
+      );
+
+      for (const item of legacyJsonImports) {
+        const updatePayload = {
+          status: "approved",
+          reviewedAt: item.reviewedAt || new Date().toISOString(),
+          reviewedBy: item.reviewedBy || auth.currentUser?.uid || ""
+        };
+
+        try {
+          if (!item.publishedToGlobe) {
+            const globeEvent = await buildGlobeEventFromSubmission(item);
+            await setDoc(doc(db, "globeEvents", globeEvent.id), globeEvent, { merge: true });
+            updatePayload.publishedToGlobe = true;
+            updatePayload.publishedGlobeEventId = globeEvent.id;
+            updatePayload.publishedAt = item.publishedAt || new Date().toISOString();
+            updatePayload.publishError = "";
+          }
+        } catch (publishError) {
+          console.error("Legacy JSON publish fix failed:", publishError);
+          updatePayload.publishedToGlobe = false;
+          updatePayload.publishError = publishError.message === "missing-coordinates" ? "missing-coordinates" : "publish-failed";
+        }
+
+        await updateDoc(doc(db, "memberGlobeSubmissions", item.id), updatePayload);
+      }
+
+      const submissions = rawSubmissions
+        .filter((item) => {
+          if (item.importedVia === "json" && Number(item.permissionLevel || 0) === 3) {
+            return false;
+          }
+          return !item.status || item.status === "pending";
+        })
         .sort((a, b) => {
           const aTime = a.updatedAt?.seconds || 0;
           const bTime = b.updatedAt?.seconds || 0;
@@ -2030,11 +2111,13 @@
         const member = memberSnap.exists() ? memberSnap.data() : {};
         currentMemberData = member;
         const permissionLevel = Number(member.permissionLevel || 1);
+        const impactCount = await loadImpactCount(user.uid);
 
         summaryName.textContent = formatSummaryLine("name", member.name || getDisplayName(user));
         summaryEmail.textContent = formatSummaryLine("email", user.email || "-");
         summaryPartnerType.textContent = formatSummaryLine("partnerType", getPartnerLabel(member.partnerType));
         summaryPermission.textContent = formatSummaryLine("permission", getPermissionLabel(permissionLevel));
+        summaryImpact.textContent = formatSummaryLine("impact", String(impactCount));
         summaryRole.textContent = formatSummaryLine("role", member.resultRole || "-");
         summaryEcoMbti.textContent = formatSummaryLine(
           "ecoMbti",
@@ -2062,10 +2145,39 @@
         } else {
           reviewerSubmissionPanel.hidden = true;
         }
+        inviteLinkStatus.textContent = currentLang === "zh"
+          ? "每有一位新帳號透過你的分享連結完成第一次邁出一步，就會自動加一位影響人數。"
+          : "Each new account that completes its first Take One Step through your shared link adds one person reached automatically.";
+        inviteLinkStatus.className = "status";
       } catch (error) {
         console.error(error);
         abilitySummaryEl.textContent = t("states.readError");
         resetSummary();
+      }
+    });
+
+    copyInviteLinkBtn.addEventListener("click", async () => {
+      if (!auth.currentUser) {
+        inviteLinkStatus.textContent = t("invite.guest");
+        inviteLinkStatus.className = "status warn";
+        return;
+      }
+
+      const inviteUrl = buildInviteLink(auth.currentUser.uid);
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(inviteUrl);
+          inviteLinkStatus.textContent = t("invite.copied");
+          inviteLinkStatus.className = "status ok";
+          return;
+        }
+
+        inviteLinkStatus.textContent = `${t("invite.copiedFallback")} ${inviteUrl}`;
+        inviteLinkStatus.className = "status warn";
+      } catch (error) {
+        console.error(error);
+        inviteLinkStatus.textContent = `${t("invite.failed")} ${inviteUrl}`;
+        inviteLinkStatus.className = "status error";
       }
     });
 

@@ -39,6 +39,16 @@
 
     [hidden] { display: none !important; }
 
+    .bot-guard {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     body {
       margin: 0;
       font-family: "Segoe UI", "Noto Sans TC", sans-serif;
@@ -673,6 +683,10 @@
         </div>
         <div id="uploadDesk" hidden>
           <form id="submissionForm" class="form-grid two">
+            <div class="bot-guard" aria-hidden="true">
+              <label for="uploadWebsiteField">Website</label>
+              <input id="uploadWebsiteField" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
             <div class="field full">
               <label id="modeLabel" class="required">資料類型 / Submission Type</label>
               <div class="segmented" id="modeSegment">
@@ -803,6 +817,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import {
       getAuth,
       onAuthStateChanged,
@@ -843,6 +858,7 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "upload-hope-crisis" });
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
     const storage = getStorage(app);
@@ -855,6 +871,8 @@
     let editingSubmission = null;
     let submissions = [];
     let acceptedTermsRecord = null;
+    const uploadFormStartedAt = Date.now();
+    const MIN_UPLOAD_FILL_MS = 2000;
 
     const I18N = {
       zh: {
@@ -1054,6 +1072,7 @@
     const accessNotice = document.getElementById("accessNotice");
     const uploadDesk = document.getElementById("uploadDesk");
     const formEl = document.getElementById("submissionForm");
+    const uploadWebsiteField = document.getElementById("uploadWebsiteField");
     const fileInput = document.getElementById("entryFile");
     const uploadTermsConsent = document.getElementById("uploadTermsConsent");
     const uploadTermsState = document.getElementById("uploadTermsState");
@@ -1455,6 +1474,17 @@
         return;
       }
 
+      const formData = new FormData(formEl);
+      if (String(formData.get("website") || "").trim()) {
+        setStatus("error", "提交失敗，請重新整理頁面後再試。");
+        return;
+      }
+
+      if (Date.now() - uploadFormStartedAt < MIN_UPLOAD_FILL_MS) {
+        setStatus("error", "送出速度過快，請稍候再試。 / Submission was too fast. Please try again in a moment.");
+        return;
+      }
+
       if (!uploadTermsConsent.checked) {
         setStatus("error", "請先閱讀並同意隱私與規範條款。 / Please agree to the Privacy & Terms before submitting.");
         return;
@@ -1495,12 +1525,12 @@
           memberEmail: currentUser.email || "",
           permissionLevel: getPermissionLevel(),
           partnerType: currentMember?.partnerType || "general",
-          mode: formEl.elements.mode.value,
-          title: formEl.elements.title.value.trim(),
-          location: formEl.elements.location.value.trim(),
-          eventDate: formEl.elements.eventDate.value,
-          credit: formEl.elements.credit.value.trim(),
-          summary: formEl.elements.summary.value.trim(),
+          mode: formData.get("mode"),
+          title: String(formData.get("title") || "").trim(),
+          location: String(formData.get("location") || "").trim(),
+          eventDate: String(formData.get("eventDate") || ""),
+          credit: String(formData.get("credit") || "").trim(),
+          summary: String(formData.get("summary") || "").trim(),
           media,
           status: "pending",
           updatedAt: serverTimestamp()
