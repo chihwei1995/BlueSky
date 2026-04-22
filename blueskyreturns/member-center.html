@@ -1166,6 +1166,7 @@
           rewardClaiming: "正在建立你的 2026 氣候行動資格...",
           rewardClaimed: "你已完成領取，每個帳號限領一次。",
           rewardClaimFailed: "領取失敗，請稍後再試。",
+          rewardSoldOut: "2026 氣候行動證書編號目前先限量 5000 張，現階段已全數發出。",
           rewardAlreadyClaimed: "這個帳號已領取過 2026 氣候行動資格。",
           rewardEmpty: "尚未領取 2026 氣候行動資格。",
           rewardDone: "已完成",
@@ -1278,6 +1279,7 @@
           rewardClaiming: "Creating your 2026 climate action reward...",
           rewardClaimed: "This account has already claimed the reward. Each account can claim only once.",
           rewardClaimFailed: "Claim failed. Please try again later.",
+          rewardSoldOut: "The 2026 climate action certificate numbers are currently limited to the first 5000 and have all been issued for now.",
           rewardAlreadyClaimed: "This account has already claimed the 2026 climate action reward.",
           rewardEmpty: "The 2026 climate action reward has not been claimed yet.",
           rewardDone: "Done",
@@ -1368,6 +1370,8 @@
     const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
     let currentMemberData = {};
     let currentUserSubmissions = [];
+    const MAX_CERTIFICATE_COUNT = 5000;
+    const CERTIFICATE_CODE_PREFIX = "BSR-CA-2026-";
     const buildInviteLink = (userId) => {
       const url = new URL("./climate-action-form.html", window.location.href);
       url.searchParams.set("ref", userId);
@@ -1508,6 +1512,27 @@
       crypto.getRandomValues(bytes);
       const body = Array.from(bytes, (byte) => chars[byte % chars.length]).join("");
       return `${prefix}${body}`;
+    };
+    const createSequentialCertificateCode = (number) => `${CERTIFICATE_CODE_PREFIX}${String(number).padStart(4, "0")}`;
+    const getCertificateInventory = async () => {
+      const snap = await getDocs(collection(db, "members"));
+      let issuedCount = 0;
+      let maxSequentialNumber = 0;
+      snap.forEach((docSnap) => {
+        const certificateCode = String(docSnap.data()?.reward2026?.certificateCode || "").trim();
+        if (!certificateCode) return;
+        issuedCount += 1;
+        const match = certificateCode.match(/^BSR-CA-2026-(\d{4})$/);
+        if (match) {
+          maxSequentialNumber = Math.max(maxSequentialNumber, Number(match[1]));
+        }
+      });
+      return {
+        issuedCount,
+        remainingCount: Math.max(0, MAX_CERTIFICATE_COUNT - issuedCount),
+        soldOut: issuedCount >= MAX_CERTIFICATE_COUNT,
+        nextNumber: Math.min(MAX_CERTIFICATE_COUNT, Math.max(maxSequentialNumber + 1, issuedCount + 1))
+      };
     };
     const getRewardRecord = (member) => member?.reward2026 || null;
     const createTokenCodes = (count) => Array.from({ length: count }, () => createRandomCode("TOKEN-", 8));
@@ -2342,15 +2367,21 @@
       rewardStatus.textContent = t("states.rewardClaiming");
       rewardStatus.className = "status warn";
 
-      const rewardRecord = {
-        claimedAt: new Date().toISOString(),
-        certificateCode: createRandomCode("BSR-CA-2026-", 8),
-        lotteryNumber: createRandomCode("DRAW-", 6),
-        tokenCodes: createTokenCodes(currentRewardEligibility.earnedTokenCount),
-        consumedTokenCodes: []
-      };
-
       try {
+        const inventory = await getCertificateInventory();
+        if (inventory.soldOut) {
+          rewardStatus.textContent = t("states.rewardSoldOut");
+          rewardStatus.className = "status warn";
+          claimRewardBtn.disabled = false;
+          return;
+        }
+        const rewardRecord = {
+          claimedAt: new Date().toISOString(),
+          certificateCode: createSequentialCertificateCode(inventory.nextNumber),
+          lotteryNumber: createRandomCode("DRAW-", 6),
+          tokenCodes: createTokenCodes(currentRewardEligibility.earnedTokenCount),
+          consumedTokenCodes: []
+        };
         await setDoc(doc(db, "members", user.uid), { reward2026: rewardRecord }, { merge: true });
         currentMemberData = { ...currentMemberData, reward2026: rewardRecord };
         renderRewardStatus(currentMemberData, currentUserSubmissions);
