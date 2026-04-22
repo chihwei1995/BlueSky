@@ -481,6 +481,16 @@
       gap: 10px;
     }
 
+    .review-media img,
+    .review-media video {
+      width: 100%;
+      max-width: 260px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      display: block;
+      background: #fff;
+    }
+
     .review-meta {
       display: flex;
       gap: 8px;
@@ -491,6 +501,54 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+    }
+
+    .review-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .import-box {
+      margin-bottom: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.92);
+      display: grid;
+      gap: 10px;
+    }
+
+    .import-help {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .import-success-list {
+      margin: 0;
+      padding-left: 20px;
+      display: grid;
+      gap: 6px;
+      color: var(--ink);
+    }
+
+    .review-source {
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: underline;
+      width: fit-content;
+    }
+
+    .import-box input[type="file"] {
+      display: block;
+      width: 100%;
+    }
+
+    .import-box p,
+    .import-box code {
+      word-break: break-word;
     }
 
     .empty-box {
@@ -796,10 +854,23 @@
 
       <section id="reviewerSubmissionPanel" class="panel" hidden>
         <div class="section-head">
-          <h2 id="reviewSectionTitle">協作管理投稿總覽 / Global 7-Day Coordination List</h2>
-          <p id="reviewSectionBody">具備協作管理功能的帳號，可在氣候行動者中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。</p>
+          <h2 id="reviewSectionTitle">希望與威脅審核台 / Hope & Crisis Review Desk</h2>
+          <p id="reviewSectionBody">具備協作管理功能的帳號，可在這裡審核其他氣候行動者提交的 Hope / Crisis 首頁候選資料，並更新狀態。</p>
         </div>
-        <div id="reviewerSubmissionEmpty" class="empty-box">目前沒有可顯示的 7-Day 投稿。</div>
+        <div class="import-box">
+          <strong>JSON 批次匯入 / JSON Batch Import</strong>
+          <p class="import-help">可上傳 <code>JSON</code> 檔，批次建立待審核的 Hope / Crisis 投稿。支援直接陣列，或包在 <code>{ "items": [...] }</code> 的格式。</p>
+          <p class="import-help">必要欄位：<code>title</code>、<code>location</code>、<code>eventDate</code>、<code>summary</code>。可選欄位：<code>mode</code>（hope / crisis）、<code>credit</code>、<code>sourceUrl</code>、<code>media.downloadURL</code>、<code>media.type</code>、<code>media.name</code>、<code>media.path</code>、<code>coordinates.lat</code>、<code>coordinates.lng</code>。</p>
+          <p class="import-help">若有提供 <code>media.downloadURL</code>，審核台會直接顯示圖片或影片預覽；若 <code>media.type</code> 以 <code>video/</code> 開頭，會用影片播放器呈現。</p>
+          <input id="reviewJsonFile" type="file" accept="application/json,.json" />
+          <div class="actions">
+            <button id="reviewJsonSampleBtn" class="pill" type="button">下載 JSON 範例檔 / Download Sample</button>
+            <button id="reviewJsonImportBtn" class="pill" type="button">匯入 JSON / Import JSON</button>
+            <span id="reviewJsonStatus" class="status" aria-live="polite"></span>
+          </div>
+          <ul id="reviewJsonImportedTitles" class="import-success-list" hidden></ul>
+        </div>
+        <div id="reviewerSubmissionEmpty" class="empty-box">目前沒有待處理的 Hope / Crisis 投稿。</div>
         <div id="reviewerSubmissionList" class="review-list" hidden></div>
       </section>
     </div>
@@ -842,7 +913,10 @@
       getDoc,
       collection,
       getDocs,
-      setDoc
+      setDoc,
+      addDoc,
+      updateDoc,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
@@ -877,8 +951,8 @@
           tasksBody: "依照你的帳號身分，氣候行動者中心會整理目前可以直接進行的任務。",
           proposalTitle: "7-Day 任務紀錄 / Proposal Submissions",
           proposalBody: "最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。",
-          reviewTitle: "協作管理投稿總覽 / Global 7-Day Coordination List",
-          reviewBody: "具備協作管理功能的帳號，可在氣候行動者中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。"
+          reviewTitle: "希望與威脅審核台 / Hope & Crisis Review Desk",
+          reviewBody: "具備協作管理功能的帳號，可在這裡審核其他氣候行動者提交的 Hope / Crisis 首頁候選資料，並更新狀態。"
         },
         rewards: {
           title: "2026 氣候行動證書 / 2026 Climate Action Certificate",
@@ -910,7 +984,7 @@
           uploadBody: "新增、修改或刪除你自己的地方 Hope / Crisis 首頁候選資料。",
           uploadLink: "前往管理",
           reviewerTitle: "協作管理入口",
-          reviewerBody: "你的帳號已開啟協作管理功能，可進入管理區查看待處理資料。",
+          reviewerBody: "你的帳號已開啟協作管理功能，可進入管理區審核別人提交的希望與威脅資料。",
           reviewerLink: "前往管理區"
         },
         stats: {
@@ -929,10 +1003,10 @@
           guestAbility: "請先登入以查看你的會員資料、7-Day 任務紀錄與可用功能。",
           guestSubmissions: "尚未登入，或你目前還沒有提交任何 7-Day 任務。",
           noSubmissions: "你目前還沒有提交任何 7-Day 任務。",
-          noReviewerSubmissions: "目前沒有可顯示的 7-Day 投稿。",
+          noReviewerSubmissions: "目前沒有待處理的 Hope / Crisis 投稿。",
           signedInPrefix: "已登入：",
           dashboard: {
-            level3: "你可以修改邁出一步、提交 7-Day 任務，也可以前往審核台。",
+            level3: "你可以修改邁出一步、提交 7-Day 任務，也可以前往審核別人的希望與威脅資料。",
             level2: "你可以修改邁出一步，並提交 7-Day Green Proposal 與其他上傳內容。",
             level1: "你可以修改邁出一步，並提交 7-Day Green Proposal 任務。"
           },
@@ -970,8 +1044,8 @@
           tasksBody: "The member center organizes the actions you can take based on your current account access.",
           proposalTitle: "7-Day Task Records",
           proposalBody: "Your recent 7-Day Green Proposal uploads appear here so you can review what you have completed so far.",
-          reviewTitle: "Coordination 7-Day Submission List",
-          reviewBody: "Accounts with coordination access can review recent 7-Day Green Proposal submissions across the site directly from the member center."
+          reviewTitle: "Hope & Crisis Review Desk",
+          reviewBody: "Accounts with coordination access can review other climate action partners' Hope / Crisis homepage candidate submissions here and update their status."
         },
         rewards: {
           title: "2026 Climate Action Certificate",
@@ -1003,7 +1077,7 @@
           uploadBody: "Create, edit, or delete your own local Hope / Crisis homepage candidate materials.",
           uploadLink: "Open Manager",
           reviewerTitle: "Coordination Access",
-          reviewerBody: "Your account includes coordination access, so you can open the management desk and inspect pending items.",
+          reviewerBody: "Your account includes coordination access, so you can review other members' Hope and Crisis submissions from the management desk.",
           reviewerLink: "Open Management Desk"
         },
         stats: {
@@ -1022,10 +1096,10 @@
           guestAbility: "Sign in first to view your profile, 7-Day task history, and available actions.",
           guestSubmissions: "You are not signed in yet, or you have not submitted any 7-Day tasks.",
           noSubmissions: "You have not submitted any 7-Day tasks yet.",
-          noReviewerSubmissions: "There are no 7-Day submissions to display right now.",
+          noReviewerSubmissions: "There are no pending Hope / Crisis submissions right now.",
           signedInPrefix: "Signed in: ",
           dashboard: {
-            level3: "You can edit Take One Step, submit 7-Day tasks, and open the reviewer desk.",
+            level3: "You can edit Take One Step, submit 7-Day tasks, and review other members' Hope and Crisis submissions.",
             level2: "You can edit Take One Step and submit 7-Day Green Proposal tasks and other uploads.",
             level1: "You can edit Take One Step and submit 7-Day Green Proposal tasks."
           },
@@ -1068,6 +1142,11 @@
     const reviewerSubmissionPanel = document.getElementById("reviewerSubmissionPanel");
     const reviewerSubmissionEmpty = document.getElementById("reviewerSubmissionEmpty");
     const reviewerSubmissionList = document.getElementById("reviewerSubmissionList");
+    const reviewJsonFile = document.getElementById("reviewJsonFile");
+    const reviewJsonSampleBtn = document.getElementById("reviewJsonSampleBtn");
+    const reviewJsonImportBtn = document.getElementById("reviewJsonImportBtn");
+    const reviewJsonStatus = document.getElementById("reviewJsonStatus");
+    const reviewJsonImportedTitles = document.getElementById("reviewJsonImportedTitles");
     const rewardSectionTitle = document.getElementById("rewardSectionTitle");
     const rewardSectionBody = document.getElementById("rewardSectionBody");
     const rewardStepLabel = document.getElementById("rewardStepLabel");
@@ -1107,6 +1186,107 @@
     const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
     let currentMemberData = {};
     let currentUserSubmissions = [];
+
+    const slugify = (value) => String(value || "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 80);
+
+    const formatDateForGlobe = (value) => {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+      const parsed = new Date(raw);
+      if (Number.isNaN(parsed.getTime())) return "";
+      return parsed.toISOString().slice(0, 10);
+    };
+
+    const normalizeMediaForGlobe = (media, sourceUrl = "") => {
+      const downloadURL = String(media?.downloadURL || "").trim();
+      const mediaType = String(media?.type || "").trim().toLowerCase();
+      if (!downloadURL) return null;
+      return {
+        type: mediaType.startsWith("video/") ? "video" : mediaType === "instagram" ? "instagram" : "image",
+        url: downloadURL,
+        downloadURL,
+        mimeType: media?.type || "",
+        credit: sourceUrl || ""
+      };
+    };
+
+    const geocodeLocation = async (location) => {
+      const query = String(location || "").trim();
+      if (!query) return null;
+      const endpoint = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(query)}`;
+      try {
+        const response = await fetch(endpoint, {
+          headers: { Accept: "application/json" }
+        });
+        if (!response.ok) return null;
+        const results = await response.json();
+        const match = Array.isArray(results) ? results[0] : null;
+        const lat = Number(match?.lat);
+        const lng = Number(match?.lon);
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+        return { lat, lng };
+      } catch (error) {
+        console.warn("Geocoding failed:", error);
+        return null;
+      }
+    };
+
+    const resolveSubmissionCoordinates = async (submission) => {
+      const lat = Number(submission.coordinates?.lat);
+      const lng = Number(submission.coordinates?.lng);
+      if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        return { lat, lng };
+      }
+      return geocodeLocation(submission.location);
+    };
+
+    const buildGlobeEventFromSubmission = async (submission) => {
+      const coordinates = await resolveSubmissionCoordinates(submission);
+      if (!coordinates) {
+        throw new Error("missing-coordinates");
+      }
+
+      const date = formatDateForGlobe(submission.eventDate);
+      const parsedDate = date ? new Date(date) : null;
+      const year = parsedDate && !Number.isNaN(parsedDate.getTime()) ? parsedDate.getFullYear() : new Date().getFullYear();
+      const month = parsedDate && !Number.isNaN(parsedDate.getTime()) ? parsedDate.getMonth() + 1 : 1;
+      const mode = submission.mode === "crisis" ? "crisis" : "hope";
+      const titleSlug = slugify(submission.title) || submission.id || "submission";
+
+      return {
+        id: `member-${submission.id || titleSlug}`,
+        year,
+        month,
+        date: date || `${year}-${String(month).padStart(2, "0")}-01`,
+        mode,
+        title: submission.title || submission.location || "Untitled",
+        category: mode === "crisis" ? "disaster" : "solution",
+        coordinates,
+        stats: [
+          {
+            label: currentLang === "zh" ? "地點" : "Location",
+            value: submission.location || "-"
+          },
+          {
+            label: currentLang === "zh" ? "來源" : "Source",
+            value: submission.credit || submission.memberName || submission.memberEmail || "-"
+          }
+        ],
+        description: submission.summary || "",
+        media: normalizeMediaForGlobe(submission.media, submission.sourceUrl),
+        sourceUrl: submission.sourceUrl || "",
+        sourceType: "member-submission",
+        submissionId: submission.id || "",
+        memberName: submission.memberName || "",
+        memberEmail: submission.memberEmail || ""
+      };
+    };
     let currentRewardEligibility = { stepDone: false, ecoDone: false, proposalDone: false, completedDays: 0, eligible: false };
 
     const getDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || (currentLang === "zh" ? "氣候行動者" : "Climate Action Partner");
@@ -1342,9 +1522,21 @@
       return article;
     };
 
+    const getReviewStatusLabel = (status) => {
+      if (currentLang === "zh") {
+        if (status === "approved") return "已通過";
+        if (status === "rejected") return "已退回";
+        return "待審核";
+      }
+      if (status === "approved") return "Approved";
+      if (status === "rejected") return "Rejected";
+      return "Pending";
+    };
+
     const createReviewerSubmissionCard = (submission) => {
       const article = document.createElement("article");
       article.className = "review-item";
+      article.dataset.id = submission.id;
 
       const title = document.createElement("h3");
       title.textContent = submission.title || "未命名任務";
@@ -1352,7 +1544,13 @@
 
       const meta = document.createElement("div");
       meta.className = "review-meta";
-      [submission.memberName || submission.email || "Unknown", submission.taskDate || "-", ...(submission.dimensions || [])].forEach((value) => {
+      [
+        submission.memberName || submission.memberEmail || "Unknown",
+        submission.mode === "crisis" ? "Crisis / 威脅" : "Hope / 希望",
+        submission.location || "-",
+        submission.eventDate || "-",
+        getReviewStatusLabel(submission.status)
+      ].forEach((value) => {
         const badge = document.createElement("span");
         badge.className = "badge";
         badge.textContent = value;
@@ -1361,8 +1559,66 @@
       article.appendChild(meta);
 
       const caption = document.createElement("p");
-      caption.textContent = submission.caption || "沒有補充說明。";
+      caption.textContent = submission.summary || "沒有補充說明。";
       article.appendChild(caption);
+
+      if (submission.sourceUrl) {
+        const sourceLink = document.createElement("a");
+        sourceLink.href = submission.sourceUrl;
+        sourceLink.target = "_blank";
+        sourceLink.rel = "noreferrer";
+        sourceLink.className = "review-source";
+        sourceLink.textContent = currentLang === "zh" ? "查看來源連結" : "Open source link";
+        article.appendChild(sourceLink);
+      }
+
+      if (submission.media?.downloadURL) {
+        const mediaWrap = document.createElement("div");
+        mediaWrap.className = "review-media";
+        if ((submission.media.type || "").startsWith("video/")) {
+          const video = document.createElement("video");
+          video.src = submission.media.downloadURL;
+          video.controls = true;
+          video.preload = "metadata";
+          mediaWrap.appendChild(video);
+        } else {
+          const img = document.createElement("img");
+          img.src = submission.media.downloadURL;
+          img.alt = submission.title || "Hope / Crisis submission";
+          mediaWrap.appendChild(img);
+        }
+        article.appendChild(mediaWrap);
+      }
+
+      if (submission.importedVia === "json") {
+        const importMeta = document.createElement("p");
+        const importedBy = submission.importedBy || "-";
+        const importedFileName = submission.importFileName || "-";
+        importMeta.textContent = currentLang === "zh"
+          ? `JSON 匯入：${importedFileName} / 匯入者：${importedBy}`
+          : `JSON import: ${importedFileName} / Imported by: ${importedBy}`;
+        article.appendChild(importMeta);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "review-actions";
+
+      const approveBtn = document.createElement("button");
+      approveBtn.type = "button";
+      approveBtn.className = "pill primary";
+      approveBtn.dataset.action = "approve";
+      approveBtn.dataset.id = submission.id;
+      approveBtn.textContent = currentLang === "zh" ? "通過" : "Approve";
+
+      const rejectBtn = document.createElement("button");
+      rejectBtn.type = "button";
+      rejectBtn.className = "pill";
+      rejectBtn.dataset.action = "reject";
+      rejectBtn.dataset.id = submission.id;
+      rejectBtn.textContent = currentLang === "zh" ? "退回" : "Reject";
+
+      actions.append(approveBtn, rejectBtn);
+      article.appendChild(actions);
 
       return article;
     };
@@ -1401,10 +1657,16 @@
       reviewerSubmissionList.hidden = true;
       reviewerSubmissionEmpty.hidden = false;
 
-      const snapshot = await getDocs(collection(db, "greenProposalSubmissions"));
+      const snapshot = await getDocs(collection(db, "memberGlobeSubmissions"));
       const submissions = snapshot.docs
         .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-        .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
+        .filter((item) => item.uid !== auth.currentUser?.uid)
+        .filter((item) => !item.status || item.status === "pending")
+        .sort((a, b) => {
+          const aTime = a.updatedAt?.seconds || 0;
+          const bTime = b.updatedAt?.seconds || 0;
+          return bTime - aTime;
+        })
         .slice(0, 20);
 
       if (!submissions.length) {
@@ -1416,6 +1678,225 @@
       reviewerSubmissionEmpty.hidden = true;
       reviewerSubmissionList.hidden = false;
     };
+
+    const normalizeImportedEntry = (entry, user) => {
+      const modeValue = String(entry.mode || entry.type || "").toLowerCase();
+      const mode = modeValue === "crisis" || modeValue === "threat" ? "crisis" : "hope";
+      const media = entry.media && typeof entry.media === "object"
+        ? {
+            downloadURL: String(entry.media.downloadURL || "").trim(),
+            type: String(entry.media.type || "").trim(),
+            name: String(entry.media.name || "").trim(),
+            path: String(entry.media.path || "").trim()
+          }
+        : null;
+      const rawLat = Number(entry.coordinates?.lat ?? entry.lat);
+      const rawLng = Number(entry.coordinates?.lng ?? entry.lng);
+      const coordinates = Number.isFinite(rawLat) && Number.isFinite(rawLng)
+        ? { lat: rawLat, lng: rawLng }
+        : null;
+      return {
+        uid: user.uid,
+        memberName: currentMemberData?.name || getDisplayName(user),
+        memberEmail: user.email || "",
+        permissionLevel: 3,
+        partnerType: currentMemberData?.partnerType || "organization",
+        mode,
+        title: String(entry.title || "").trim(),
+        location: String(entry.location || "").trim(),
+        eventDate: String(entry.eventDate || entry.date || "").trim(),
+        credit: String(entry.credit || "").trim(),
+        summary: String(entry.summary || entry.description || "").trim(),
+        sourceUrl: String(entry.sourceUrl || "").trim(),
+        media: media && (media.downloadURL || media.type || media.name || media.path) ? media : null,
+        coordinates,
+        status: "pending",
+        importedVia: "json",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+    };
+
+    const validateImportedEntry = (entry, index) => {
+      const missing = [];
+      if (!String(entry.title || "").trim()) missing.push("title");
+      if (!String(entry.location || "").trim()) missing.push("location");
+      if (!String(entry.eventDate || entry.date || "").trim()) missing.push("eventDate");
+      if (!String(entry.summary || entry.description || "").trim()) missing.push("summary");
+      if (!missing.length) return null;
+      return `#${index + 1}: ${missing.join(", ")}`;
+    };
+
+    reviewJsonSampleBtn.addEventListener("click", () => {
+      const sample = [
+        {
+          mode: "hope",
+          title: "Community Solar Rooftop",
+          location: "Hong Kong",
+          eventDate: "2026-04-22",
+          summary: "A local school installed rooftop solar panels for education and power generation.",
+          credit: "JCI Peninsula",
+          media: {
+            type: "image/jpeg",
+            downloadURL: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80"
+          },
+          coordinates: { lat: 22.3193, lng: 114.1694 }
+        },
+        {
+          mode: "crisis",
+          title: "Coastal Flooding Event",
+          location: "Taiwan",
+          eventDate: "2025-09-03",
+          summary: "Heavy rainfall caused repeated flooding in low-lying coastal neighborhoods.",
+          credit: "Local partner",
+          media: {
+            type: "image/jpeg",
+            downloadURL: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=1200&q=80"
+          },
+          coordinates: { lat: 23.6978, lng: 120.9605 }
+        }
+      ];
+
+      const blob = new Blob([JSON.stringify(sample, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "blue-sky-returns-hope-crisis-sample.json";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    reviewJsonImportBtn.addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (!user || Number(currentMemberData?.permissionLevel || 0) !== 3) {
+        reviewJsonStatus.textContent = currentLang === "zh"
+          ? "只有協作管理帳號可使用 JSON 匯入。"
+          : "Only coordination accounts can use JSON import.";
+        reviewJsonStatus.className = "status error";
+        return;
+      }
+
+      const file = reviewJsonFile.files?.[0];
+      if (!file) {
+        reviewJsonStatus.textContent = currentLang === "zh"
+          ? "請先選擇一個 JSON 檔。"
+          : "Please choose a JSON file first.";
+        reviewJsonStatus.className = "status warn";
+        return;
+      }
+
+      reviewJsonImportBtn.disabled = true;
+      reviewJsonStatus.textContent = currentLang === "zh" ? "正在匯入 JSON..." : "Importing JSON...";
+      reviewJsonStatus.className = "status warn";
+      reviewJsonImportedTitles.hidden = true;
+      reviewJsonImportedTitles.innerHTML = "";
+
+      try {
+        const raw = await file.text();
+        const parsed = JSON.parse(raw);
+        const items = Array.isArray(parsed) ? parsed : Array.isArray(parsed.items) ? parsed.items : [];
+        if (!items.length) {
+          throw new Error("empty-json");
+        }
+
+        const errors = items
+          .map((item, index) => validateImportedEntry(item, index))
+          .filter(Boolean);
+
+        if (errors.length) {
+          throw new Error(`invalid-json:${errors.join(" | ")}`);
+        }
+
+        const validItems = items.map((item) => {
+          const normalized = normalizeImportedEntry(item, user);
+          normalized.importedBy = user.email || user.uid;
+          normalized.importFileName = file.name;
+          return normalized;
+        });
+
+        for (const item of validItems) {
+          await addDoc(collection(db, "memberGlobeSubmissions"), item);
+        }
+
+        reviewJsonStatus.textContent = currentLang === "zh"
+          ? `已匯入 ${validItems.length} 筆待審核資料。`
+          : `Imported ${validItems.length} pending submissions.`;
+        reviewJsonStatus.className = "status ok";
+        validItems.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item.title;
+          reviewJsonImportedTitles.appendChild(li);
+        });
+        reviewJsonImportedTitles.hidden = false;
+        reviewJsonFile.value = "";
+        await loadReviewerSubmissions();
+      } catch (error) {
+        console.error(error);
+        const detail = String(error.message || "");
+        if (detail.startsWith("invalid-json:")) {
+          reviewJsonStatus.textContent = currentLang === "zh"
+            ? `JSON 欄位錯誤：${detail.replace("invalid-json:", "")}`
+            : `JSON field errors: ${detail.replace("invalid-json:", "")}`;
+        } else {
+          reviewJsonStatus.textContent = currentLang === "zh"
+            ? "JSON 格式錯誤，請確認是陣列或包含 items 陣列，且每筆至少有 title、location、eventDate、summary。"
+            : "Invalid JSON. Use an array or an object with an items array, and ensure each item has at least title, location, eventDate, and summary.";
+        }
+        reviewJsonStatus.className = "status error";
+        reviewJsonImportedTitles.hidden = true;
+        reviewJsonImportedTitles.innerHTML = "";
+      } finally {
+        reviewJsonImportBtn.disabled = false;
+      }
+    });
+
+    reviewerSubmissionList.addEventListener("click", async (event) => {
+      const target = event.target.closest("button[data-action]");
+      if (!target) return;
+
+      const { action, id } = target.dataset;
+      const nextStatus = action === "approve" ? "approved" : "rejected";
+      target.disabled = true;
+
+      try {
+        const submissionSnapshot = await getDoc(doc(db, "memberGlobeSubmissions", id));
+        const submissionData = submissionSnapshot.exists() ? { id, ...submissionSnapshot.data() } : null;
+        if (!submissionData) {
+          throw new Error("missing-submission");
+        }
+
+        const updatePayload = {
+          status: nextStatus,
+          reviewedAt: new Date().toISOString(),
+          reviewedBy: auth.currentUser?.uid || ""
+        };
+
+        if (action === "approve") {
+          const globeEvent = await buildGlobeEventFromSubmission(submissionData);
+          await setDoc(doc(db, "globeEvents", globeEvent.id), globeEvent, { merge: true });
+          updatePayload.publishedToGlobe = true;
+          updatePayload.publishedGlobeEventId = globeEvent.id;
+          updatePayload.publishedAt = new Date().toISOString();
+        }
+
+        await updateDoc(doc(db, "memberGlobeSubmissions", id), updatePayload);
+        await loadReviewerSubmissions();
+        abilitySummaryEl.textContent = action === "approve"
+          ? (currentLang === "zh" ? "已發佈到首頁地球展示。" : "Published to the homepage globe.")
+          : (currentLang === "zh" ? "已退回這筆資料。" : "Submission rejected.");
+      } catch (error) {
+        console.error(error);
+        abilitySummaryEl.textContent = error.message === "missing-coordinates"
+          ? (currentLang === "zh"
+              ? "這筆資料缺少可用座標，請在 JSON 提供 coordinates.lat / coordinates.lng，或讓地點名稱更明確後再審核。"
+              : "This submission is missing usable coordinates. Please provide coordinates.lat / coordinates.lng in JSON, or make the location more specific before approving.")
+          : t("states.readError");
+      } finally {
+        target.disabled = false;
+      }
+    });
 
     openLoginBtn.addEventListener("click", openLoginModal);
     closeLoginModalBtn.addEventListener("click", closeLoginModal);

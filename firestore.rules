@@ -22,7 +22,7 @@ service cloud.firestore {
 
     match /globeEvents/{eventId} {
       allow read: if true;
-      allow write: if false;
+      allow create, update, delete: if hasPermissionLevel(3);
     }
 
     match /siteConfig/{docId} {

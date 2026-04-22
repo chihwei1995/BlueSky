@@ -402,6 +402,41 @@
       align-items: center;
     }
 
+    .consent-box {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(238, 246, 255, 0.72);
+      display: grid;
+      gap: 10px;
+    }
+
+    .consent-box label {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .consent-box input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .terms-trigger {
+      justify-self: start;
+      border: none;
+      background: transparent;
+      padding: 0;
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .terms-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
     .media-preview {
       padding: 14px;
       border-radius: 18px;
@@ -692,6 +727,17 @@
             </div>
 
             <div class="field full">
+              <div class="consent-box">
+                <button id="termsOpenBtn" class="terms-trigger" type="button">查看隱私與規範條款 / Privacy &amp; Terms</button>
+                <label for="uploadTermsConsent">
+                  <input id="uploadTermsConsent" name="uploadTermsConsent" type="checkbox" />
+                  我已閱讀並同意本網站之隱私與規範條款，理解我提交的資料、圖片、影片與文字，可能用於網站展示、互動內容、電子書宣導，以及各類氣候行動教育與推廣使用。 / I have read and agree to the Privacy &amp; Terms, and understand that my submitted data, images, videos, and text may be used for website display, interactive content, e-book promotion, and climate action education or outreach.
+                </label>
+                <p id="uploadTermsState" class="terms-copy">請只提交你有權提供的資料與媒體內容。首次同意後，同帳號可全站共用。 / Please only submit materials and media you have the right to provide. Once accepted, the same account can reuse this consent across the site.</p>
+              </div>
+            </div>
+
+            <div class="field full">
               <div class="form-actions">
                 <button id="saveBtn" class="primary" type="submit">新增資料 / Add Submission</button>
                 <button id="cancelEditBtn" class="secondary" type="button" hidden>取消編輯 / Cancel Edit</button>
@@ -736,6 +782,23 @@
     </div>
   </section>
 
+  <section id="termsModal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <h3>隱私與規範條款 / Privacy &amp; Terms</h3>
+      <p>本網站用於收集、整理與展示在地 Hope / Crisis 資料，作為 Blue Sky Returns 的互動內容與教育推廣素材。 / This website collects, curates, and presents local Hope and Crisis materials as part of Blue Sky Returns interactive content and educational outreach.</p>
+      <ul>
+        <li>你提交的標題、地點、日期、文字、圖片與短片，可能用於網站頁面、互動展示與專案成果整理。 / Your titles, locations, dates, text, images, and short videos may be used on website pages, interactive displays, and project documentation.</li>
+        <li>相關內容可能被整理為電子書、社群宣導、展覽、工作坊、學校教材與其他氣候行動用途。 / Submitted materials may be curated into an e-book, social promotion, exhibitions, workshops, school materials, and other climate action uses.</li>
+        <li>請確保你擁有上傳與分享該內容的權利，並避免提供侵權素材或未經同意的敏感個資。 / Please ensure you have the right to upload and share the material, and avoid infringing content or unauthorized sensitive personal data.</li>
+        <li>若後續需要公開使用，我們可能基於設計、翻譯或教育呈現進行必要編修。 / If materials are later used publicly, we may make reasonable edits for design, translation, or educational presentation.</li>
+      </ul>
+      <div class="form-actions">
+        <a href="./privacy-terms.html" class="pill">獨立條款頁 / Full Page</a>
+        <button id="termsCloseBtn" class="secondary" type="button">關閉 / Close</button>
+      </div>
+    </div>
+  </section>
+
   <footer id="pageFooter" class="foot">Blue Sky Returns • Upload Hope & Crisis • 2026</footer>
 
   <script type="module">
@@ -756,6 +819,7 @@
       where,
       getDocs,
       addDoc,
+      setDoc,
       updateDoc,
       deleteDoc,
       serverTimestamp
@@ -782,6 +846,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
     const storage = getStorage(app);
+    const TERMS_VERSION = "2026-04-22";
 
     const LANG_STORAGE_KEY = "bsr_lang";
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
@@ -789,6 +854,7 @@
     let currentUser = null;
     let editingSubmission = null;
     let submissions = [];
+    let acceptedTermsRecord = null;
 
     const I18N = {
       zh: {
@@ -989,6 +1055,8 @@
     const uploadDesk = document.getElementById("uploadDesk");
     const formEl = document.getElementById("submissionForm");
     const fileInput = document.getElementById("entryFile");
+    const uploadTermsConsent = document.getElementById("uploadTermsConsent");
+    const uploadTermsState = document.getElementById("uploadTermsState");
     const fileMetaEl = document.getElementById("fileMeta");
     const mediaPreviewEl = document.getElementById("mediaPreview");
     const formStatusEl = document.getElementById("formStatus");
@@ -997,9 +1065,12 @@
     const listEmpty = document.getElementById("listEmpty");
     const submissionListEl = document.getElementById("submissionList");
     const loginModal = document.getElementById("loginModal");
+    const termsModal = document.getElementById("termsModal");
     const closeLoginModalBtn = document.getElementById("closeLoginModal");
+    const termsCloseBtn = document.getElementById("termsCloseBtn");
     const loginSubmitBtn = document.getElementById("loginSubmitBtn");
     const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const termsOpenBtn = document.getElementById("termsOpenBtn");
     const loginEmailInput = document.getElementById("loginEmail");
     const loginPasswordInput = document.getElementById("loginPassword");
     const loginStatusEl = document.getElementById("loginStatus");
@@ -1011,6 +1082,19 @@
       : (mode === "crisis" ? "Crisis" : "Hope");
     const getPermissionLevel = () => Number(currentMember?.permissionLevel || 0);
     const hasUploadAccess = () => getPermissionLevel() >= 2;
+    const hasAcceptedTerms = (record) => Boolean(record?.acceptedAt);
+    const updateTermsConsentUI = (record) => {
+      acceptedTermsRecord = record || null;
+      if (hasAcceptedTerms(record)) {
+        uploadTermsConsent.checked = true;
+        uploadTermsConsent.disabled = true;
+        uploadTermsState.textContent = "此帳號已完成條款同意，這次不需重複勾選。 / This account has already accepted the terms, so you do not need to check again.";
+        return;
+      }
+      uploadTermsConsent.disabled = false;
+      uploadTermsConsent.checked = false;
+      uploadTermsState.textContent = "請只提交你有權提供的資料與媒體內容。首次同意後，同帳號可全站共用。 / Please only submit materials and media you have the right to provide. Once accepted, the same account can reuse this consent across the site.";
+    };
     const formatDate = (value) => value || "-";
     const formatTimestamp = (value) => {
       if (!value) return "-";
@@ -1032,9 +1116,19 @@
       loginModal.setAttribute("aria-hidden", "false");
     };
 
+    const openTermsModal = () => {
+      termsModal.classList.add("open");
+      termsModal.setAttribute("aria-hidden", "false");
+    };
+
     const closeLoginModal = () => {
       loginModal.classList.remove("open");
       loginModal.setAttribute("aria-hidden", "true");
+    };
+
+    const closeTermsModal = () => {
+      termsModal.classList.remove("open");
+      termsModal.setAttribute("aria-hidden", "true");
     };
 
     const updateModeStyles = () => {
@@ -1348,6 +1442,7 @@
     const loadMemberProfile = async (user) => {
       const snapshot = await getDoc(doc(db, "members", user.uid));
       currentMember = snapshot.exists() ? snapshot.data() : null;
+      updateTermsConsentUI(currentMember?.termsConsent || null);
       renderMemberState();
       resetForm();
       await loadSubmissions();
@@ -1357,6 +1452,11 @@
       event.preventDefault();
       if (!currentUser || !hasUploadAccess()) {
         setStatus("error", t("state.permissionDenied"));
+        return;
+      }
+
+      if (!uploadTermsConsent.checked) {
+        setStatus("error", "請先閱讀並同意隱私與規範條款。 / Please agree to the Privacy & Terms before submitting.");
         return;
       }
 
@@ -1371,6 +1471,17 @@
       setStatus("warn", t("state.saving"));
 
       try {
+        if (!hasAcceptedTerms(acceptedTermsRecord) && uploadTermsConsent.checked) {
+          const termsConsent = {
+            acceptedAt: new Date().toISOString(),
+            acceptedVersion: TERMS_VERSION,
+            source: "upload-hope-crisis"
+          };
+          await setDoc(doc(db, "members", currentUser.uid), { termsConsent }, { merge: true });
+          currentMember = { ...(currentMember || {}), termsConsent };
+          updateTermsConsentUI(termsConsent);
+        }
+
         let media = editingSubmission?.media || null;
         const previousMedia = editingSubmission?.media || null;
         if (file) {
@@ -1442,9 +1553,14 @@
 
     openLoginBtn.addEventListener("click", openLoginModal);
     accessLoginBtn.addEventListener("click", openLoginModal);
+    termsOpenBtn.addEventListener("click", openTermsModal);
     closeLoginModalBtn.addEventListener("click", closeLoginModal);
+    termsCloseBtn.addEventListener("click", closeTermsModal);
     loginModal.addEventListener("click", (event) => {
       if (event.target === loginModal) closeLoginModal();
+    });
+    termsModal.addEventListener("click", (event) => {
+      if (event.target === termsModal) closeTermsModal();
     });
 
     loginSubmitBtn.addEventListener("click", async () => {
@@ -1481,6 +1597,7 @@
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
       currentMember = null;
+      updateTermsConsentUI(null);
       submissions = [];
       renderSubmissionList();
       renderMemberState();

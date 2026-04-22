@@ -540,7 +540,9 @@
     .stat-pill { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px; font-size: 0.85rem; }
     .stat-label { opacity: 0.7; font-size: 0.78rem; }
     .media-area { border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.35); min-height: 150px; }
-    .media-area img { width: 100%; display: block; object-fit: cover; }
+    .media-area img,
+    .media-area video { width: 100%; display: block; object-fit: cover; }
+    .info-link-row { display: flex; justify-content: flex-end; margin-top: 12px; }
 
     .timeline-container {
       pointer-events: auto;
@@ -808,6 +810,9 @@
         <div class="date-line" id="infoDate">--</div>
         <div class="stats" id="statList"></div>
         <div class="media-area" id="mediaContainer"></div>
+        <div class="info-link-row">
+          <a id="googleSearchBtn" class="ghost-btn nav-link-btn" href="https://www.google.com/search" target="_blank" rel="noreferrer noopener" data-i18n="info.searchGoogle">Search this title on Google</a>
+        </div>
       </div>
     </div>
     <button class="info-open-btn" id="infoOpenBtn" type="button" hidden data-i18n="info.expand">Expand info</button>
@@ -952,6 +957,7 @@
           collapse: 'Collapse info',
           expand: 'Expand info',
           close: 'Close info panel',
+          searchGoogle: 'Search this title on Google',
           loading: 'Loading...',
           subtitle: {
             disaster: 'Crisis event',
@@ -1023,6 +1029,7 @@
           collapse: '收合資訊',
           expand: '展開資訊',
           close: '關閉資訊視窗',
+          searchGoogle: '用 Google 搜尋這個標題',
           loading: '載入中...',
           subtitle: {
             disaster: '危機事件',
@@ -1093,6 +1100,8 @@
       '功能': 'Function',
       '效益': 'Benefit',
       '措施': 'Measures',
+      '地點': 'Location',
+      '來源': 'Source',
       '預估節電': 'Estimated savings',
       '模式': 'Model',
       '受益': 'Benefit',
@@ -1924,6 +1933,9 @@
         : getI18n('info.subtitle.solution');
       document.getElementById('infoDesc').textContent = translated.description || '';
       document.getElementById('infoDate').textContent = data.date || '--';
+      const googleSearchBtn = document.getElementById('googleSearchBtn');
+      const queryTitle = String(translated.title || data.title || '').trim();
+      googleSearchBtn.href = `https://www.google.com/search?q=${encodeURIComponent(queryTitle)}`;
 
       const statList = document.getElementById('statList');
       statList.innerHTML = '';
@@ -1938,19 +1950,27 @@
 
       const mediaContainer = document.getElementById('mediaContainer');
       mediaContainer.innerHTML = '';
-      if (data.media?.type === 'instagram' && data.media.url) {
+      const mediaUrl = data.media?.url || data.media?.downloadURL || '';
+      if (data.media?.type === 'instagram' && mediaUrl) {
         const blockquote = document.createElement('blockquote');
         blockquote.className = 'instagram-media';
-        blockquote.setAttribute('data-instgrm-permalink', data.media.url);
+        blockquote.setAttribute('data-instgrm-permalink', mediaUrl);
         blockquote.setAttribute('data-instgrm-version', '14');
         blockquote.style.margin = '0 auto';
         mediaContainer.appendChild(blockquote);
         setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
-      } else if (data.media?.type === 'image' && data.media.url) {
+      } else if ((data.media?.type === 'image' || (data.media?.type || '').startsWith('image/')) && mediaUrl) {
         const img = document.createElement('img');
-        img.src = data.media.url;
+        img.src = mediaUrl;
         img.alt = data.title || 'image';
         mediaContainer.appendChild(img);
+      } else if ((data.media?.type === 'video' || (data.media?.type || '').startsWith('video/')) && mediaUrl) {
+        const video = document.createElement('video');
+        video.src = mediaUrl;
+        video.controls = true;
+        video.preload = 'metadata';
+        video.playsInline = true;
+        mediaContainer.appendChild(video);
       } else {
         mediaContainer.innerHTML = `<div style="padding:16px;opacity:0.7;">${getI18n('misc.noMedia')}</div>`;
       }
