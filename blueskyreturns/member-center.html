@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>會員中心 | Blue Sky Returns</title>
+  <title>氣候行動者中心 | Blue Sky Returns</title>
   <meta name="description" content="Open the Blue Sky Returns member center to review your profile, 7-Day Green Proposal tasks, Eco-MBTI result, and climate action tools available to your account." />
   <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/member-center.html" />
   <meta property="og:type" content="website" />
@@ -373,6 +373,105 @@
       gap: 14px;
     }
 
+    .reward-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .reward-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    }
+
+    .reward-card,
+    .reward-result {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(238,246,255,0.92));
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .reward-card p,
+    .reward-result p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .reward-list,
+    .reward-result-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .reward-item,
+    .reward-result-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .reward-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .reward-item strong {
+      display: block;
+      color: var(--ink);
+      font-size: 0.96rem;
+    }
+
+    .reward-item span,
+    .reward-result-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .reward-pill {
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .reward-pill.done {
+      background: rgba(21, 128, 61, 0.12);
+      color: var(--ok);
+    }
+
+    .reward-pill.pending {
+      background: rgba(180, 83, 9, 0.12);
+      color: var(--warn);
+    }
+
+    .reward-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .reward-actions .status {
+      margin: 0;
+    }
+
+    .reward-result-item strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--blue);
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      word-break: break-word;
+    }
+
     .review-item {
       border: 1px solid var(--line);
       border-radius: 18px;
@@ -451,7 +550,8 @@
     @media (max-width: 860px) {
       .hero,
       .grid.two,
-      .stats-strip {
+      .stats-strip,
+      .reward-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -481,7 +581,7 @@
         <img src="../PJC_LOGO.PNG" alt="JCI Peninsula logo" />
         <div class="brand-copy">
           <strong id="brandTitle">Blue Sky Returns</strong>
-          <span id="brandSubtitle">會員中心 / Member Center</span>
+          <span id="brandSubtitle">氣候行動者中心 / Member Center</span>
         </div>
       </div>
       <div class="nav-actions">
@@ -503,7 +603,7 @@
       <section class="hero">
         <div class="hero-copy">
           <span id="heroBadge" class="badge">Member Dashboard</span>
-          <h1 id="heroTitle">氣候行動者會員中心</h1>
+          <h1 id="heroTitle">氣候行動者中心</h1>
           <p id="heroBody">登入後，你可以看到自己的氣候行動者資料、邁出一步問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。</p>
           <div class="actions">
             <a id="heroActionProposal" class="pill primary" href="./green-action-7day.html">前往 7-Day Green Proposal</a>
@@ -541,6 +641,7 @@
             <h3 id="stepResultCardTitle">邁出一步結果</h3>
             <div class="summary-list">
               <p id="summaryRole">角色卡：-</p>
+              <p id="summaryEcoMbti">Eco-MBTI：-</p>
               <p id="summaryScore">總分：-</p>
               <p id="summaryRegion">地區 / 分會：-</p>
               <p id="summaryUpdatedAt">更新時間：-</p>
@@ -552,12 +653,12 @@
       <section class="panel">
         <div class="section-head">
           <h2 id="tasksSectionTitle">目前功能 / What You Have</h2>
-          <p id="tasksSectionBody">依照你的帳號身分，會員中心會整理目前可以直接進行的任務。</p>
+          <p id="tasksSectionBody">依照你的帳號身分，氣候行動者中心會整理目前可以直接進行的任務。</p>
         </div>
         <div class="grid two" id="taskCards">
           <article class="task-card">
             <div class="task-cover">
-              <img src="../assets/jci-peninsula-international-affairs-blue-sky-returns-climate-action-infographic.png" alt="Take One Step cover">
+              <img src="../assets/p4.png" alt="Take One Step cover">
             </div>
             <div class="task-body">
               <h3 id="taskStepTitle">邁出一步</h3>
@@ -587,7 +688,7 @@
           </article>
           <article id="taskUploadWrap" class="task-card" hidden>
             <div class="task-cover">
-              <img src="./assets/hope-crisis-en.svg" alt="Upload Hope and Crisis cover">
+              <img src="./assets/Gemini_Generated_Image_xle34wxle34wxle3.svg" alt="Upload Hope and Crisis cover">
             </div>
             <div class="task-body">
               <h3 id="taskUploadTitle">上傳希望與威脅</h3>
@@ -604,8 +705,65 @@
             <div class="task-body">
               <h3 id="reviewerCardTitle">協作管理入口</h3>
               <p id="reviewerCardBody">你的帳號已開啟協作管理功能，可進入管理區查看待處理資料。</p>
-              <a id="reviewerCardLink" class="pill" href="./countries-regions-hope-crisis.html#reviewPanel">前往審核台</a>
+              <a id="reviewerCardLink" class="pill" href="#reviewerSubmissionPanel">前往管理區</a>
             </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel reward-panel">
+        <div class="section-head">
+          <h2 id="rewardSectionTitle">2026 氣候行動證書 / 2026 Climate Action Certificate</h2>
+          <p id="rewardSectionBody">同一帳號只要完成指定條件一次，就可領取電子 2026 年氣候行動證書、抽獎編號與一枚代幣，而且每個帳號限領一次。</p>
+        </div>
+        <div class="reward-grid">
+          <article class="reward-card">
+            <div class="reward-list">
+              <div class="reward-item">
+                <div>
+                  <strong id="rewardStepLabel">完成邁出一步</strong>
+                  <span id="rewardStepHint">建立或更新問卷結果</span>
+                </div>
+                <span id="rewardStepStatus" class="reward-pill pending">未完成</span>
+              </div>
+              <div class="reward-item">
+                <div>
+                  <strong id="rewardEcoLabel">完成 Eco-MBTI</strong>
+                  <span id="rewardEcoHint">已產生並儲存人格結果</span>
+                </div>
+                <span id="rewardEcoStatus" class="reward-pill pending">未完成</span>
+              </div>
+              <div class="reward-item">
+                <div>
+                  <strong id="rewardProposalLabel">完成 7-Day Green Proposal 7 次紀錄</strong>
+                  <span id="rewardProposalHint">以不同日期完成 7 次紀錄</span>
+                </div>
+                <span id="rewardProposalStatus" class="reward-pill pending">未完成</span>
+              </div>
+            </div>
+            <div class="reward-actions">
+              <button id="claimRewardBtn" class="primary" type="button">領取 2026 氣候行動資格</button>
+              <p id="rewardStatus" class="status warn">登入後即可查看目前資格進度。</p>
+            </div>
+          </article>
+          <article class="reward-result">
+            <h3 id="rewardResultTitle">已領取內容 / Reward Details</h3>
+            <p id="rewardResultBody">達成條件並領取後，這裡會顯示你的電子證書編號、抽獎編號與代幣編號。</p>
+            <div id="rewardResultList" class="reward-result-list" hidden>
+              <div class="reward-result-item">
+                <span id="rewardCertCodeLabel">電子證書編號</span>
+                <strong id="rewardCertCode">-</strong>
+              </div>
+              <div class="reward-result-item">
+                <span id="rewardLotteryLabel">抽獎編號</span>
+                <strong id="rewardLotteryCode">-</strong>
+              </div>
+              <div class="reward-result-item">
+                <span id="rewardTokenLabel">代幣編號</span>
+                <strong id="rewardTokenCode">-</strong>
+              </div>
+            </div>
+            <div id="rewardResultEmpty" class="empty-box">尚未領取 2026 氣候行動資格。</div>
           </article>
         </div>
       </section>
@@ -639,7 +797,7 @@
       <section id="reviewerSubmissionPanel" class="panel" hidden>
         <div class="section-head">
           <h2 id="reviewSectionTitle">協作管理投稿總覽 / Global 7-Day Coordination List</h2>
-          <p id="reviewSectionBody">具備協作管理功能的帳號，可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。</p>
+          <p id="reviewSectionBody">具備協作管理功能的帳號，可在氣候行動者中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。</p>
         </div>
         <div id="reviewerSubmissionEmpty" class="empty-box">目前沒有可顯示的 7-Day 投稿。</div>
         <div id="reviewerSubmissionList" class="review-list" hidden></div>
@@ -683,7 +841,8 @@
       doc,
       getDoc,
       collection,
-      getDocs
+      getDocs,
+      setDoc
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
@@ -703,10 +862,10 @@
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
     const I18N = {
       zh: {
-        pageTitle: "會員中心 | Blue Sky Returns",
-        brandSubtitle: "會員中心 / Member Center",
-        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "7 日綠色提案", eco: "Eco-MBTI", step: "邁出一步", member: "會員中心", signIn: "登入 / Sign In", signOut: "登出 / Sign Out" },
-        hero: { badge: "Member Dashboard", title: "氣候行動者會員中心", body: "登入後，你可以看到自己的氣候行動者資料、邁出一步問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。", proposal: "前往 7-Day Green Proposal", step: "修改邁出一步" },
+        pageTitle: "氣候行動者中心 | Blue Sky Returns",
+        brandSubtitle: "氣候行動者中心 / Member Center",
+        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "7 日綠色提案", eco: "Eco-MBTI", step: "邁出一步", member: "氣候行動者中心", signIn: "登入 / Sign In", signOut: "登出 / Sign Out" },
+        hero: { badge: "Member Dashboard", title: "氣候行動者中心", body: "登入後，你可以看到自己的氣候行動者資料、邁出一步問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。", proposal: "前往 7-Day Green Proposal", step: "修改邁出一步" },
         stateCardTitle: "目前登入狀態",
         abilityCardTitle: "目前可做的事",
         sections: {
@@ -715,11 +874,27 @@
           basicCard: "基本資料",
           resultCard: "邁出一步結果",
           tasksTitle: "目前功能 / What You Have",
-          tasksBody: "依照你的帳號身分，會員中心會整理目前可以直接進行的任務。",
+          tasksBody: "依照你的帳號身分，氣候行動者中心會整理目前可以直接進行的任務。",
           proposalTitle: "7-Day 任務紀錄 / Proposal Submissions",
           proposalBody: "最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。",
           reviewTitle: "協作管理投稿總覽 / Global 7-Day Coordination List",
-          reviewBody: "具備協作管理功能的帳號，可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。"
+          reviewBody: "具備協作管理功能的帳號，可在氣候行動者中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。"
+        },
+        rewards: {
+          title: "2026 氣候行動證書 / 2026 Climate Action Certificate",
+          body: "同一帳號只要完成指定條件一次，就可領取電子 2026 年氣候行動證書、抽獎編號與一枚代幣，而且每個帳號限領一次。",
+          stepLabel: "完成邁出一步",
+          stepHint: "建立或更新問卷結果",
+          ecoLabel: "完成 Eco-MBTI",
+          ecoHint: "已產生並儲存人格結果",
+          proposalLabel: "完成 7-Day Green Proposal 7 次紀錄",
+          proposalHint: "以不同日期完成 7 次紀錄",
+          claim: "領取 2026 氣候行動資格",
+          resultTitle: "已領取內容 / Reward Details",
+          resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號、抽獎編號與代幣編號。",
+          cert: "電子證書編號",
+          lottery: "抽獎編號",
+          token: "代幣編號"
         },
         tasks: {
           stepTitle: "邁出一步",
@@ -748,7 +923,7 @@
         },
         loginModal: { title: "會員登入 / Member Sign In", email: "Email", password: "Password", submit: "登入 / Sign In", forgot: "忘記密碼 / Reset Password", cancel: "取消 / Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", role: "角色卡：", score: "總分：", region: "地區 / 分會：", updatedAt: "更新時間：" },
+        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "總分：", region: "地區 / 分會：", updatedAt: "更新時間：" },
         states: {
           guest: "尚未登入",
           guestAbility: "請先登入以查看你的會員資料、7-Day 任務紀錄與可用功能。",
@@ -761,6 +936,16 @@
             level2: "你可以修改邁出一步，並提交 7-Day Green Proposal 與其他上傳內容。",
             level1: "你可以修改邁出一步，並提交 7-Day Green Proposal 任務。"
           },
+          rewardGuest: "登入後即可查看目前資格進度。",
+          rewardReady: "你已符合條件，可以領取 2026 氣候行動證書、抽獎編號與代幣。",
+          rewardPending: "尚未符合領取條件，請先完成所有指定任務。",
+          rewardClaiming: "正在建立你的 2026 氣候行動資格...",
+          rewardClaimed: "你已完成領取，每個帳號限領一次。",
+          rewardClaimFailed: "領取失敗，請稍後再試。",
+          rewardAlreadyClaimed: "這個帳號已領取過 2026 氣候行動資格。",
+          rewardEmpty: "尚未領取 2026 氣候行動資格。",
+          rewardDone: "已完成",
+          rewardPendingLabel: "未完成",
           readError: "讀取會員資料時發生問題，請稍後再試。",
           loginFailed: "登入失敗，請重新確認 Email 與密碼。",
           resetSent: "重設密碼信已寄出。",
@@ -787,6 +972,22 @@
           proposalBody: "Your recent 7-Day Green Proposal uploads appear here so you can review what you have completed so far.",
           reviewTitle: "Coordination 7-Day Submission List",
           reviewBody: "Accounts with coordination access can review recent 7-Day Green Proposal submissions across the site directly from the member center."
+        },
+        rewards: {
+          title: "2026 Climate Action Certificate",
+          body: "Once the same account completes every required step, it can claim one 2026 digital climate action certificate, one lottery number, and one token. Each account can claim only once.",
+          stepLabel: "Complete Take One Step",
+          stepHint: "Create or update your questionnaire result",
+          ecoLabel: "Complete Eco-MBTI",
+          ecoHint: "Your personality result has been generated and saved",
+          proposalLabel: "Complete 7-Day Green Proposal 7 times",
+          proposalHint: "Finish 7 records on different dates",
+          claim: "Claim 2026 Climate Action Reward",
+          resultTitle: "Reward Details",
+          resultBody: "After you meet the requirements and claim the reward, your certificate code, lottery number, and token code will appear here.",
+          cert: "Certificate Code",
+          lottery: "Lottery Number",
+          token: "Token Code"
         },
         tasks: {
           stepTitle: "Take One Step",
@@ -815,7 +1016,7 @@
         },
         loginModal: { title: "Member Sign In", email: "Email", password: "Password", submit: "Sign In", forgot: "Reset Password", cancel: "Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", role: "Role Card: ", score: "Score: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
+        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Score: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
         states: {
           guest: "Signed out",
           guestAbility: "Sign in first to view your profile, 7-Day task history, and available actions.",
@@ -828,6 +1029,16 @@
             level2: "You can edit Take One Step and submit 7-Day Green Proposal tasks and other uploads.",
             level1: "You can edit Take One Step and submit 7-Day Green Proposal tasks."
           },
+          rewardGuest: "Sign in to see your current reward progress.",
+          rewardReady: "You have met the requirements and can now claim your 2026 climate action certificate, lottery number, and token.",
+          rewardPending: "The requirements are not complete yet. Please finish every required task first.",
+          rewardClaiming: "Creating your 2026 climate action reward...",
+          rewardClaimed: "This account has already claimed the reward. Each account can claim only once.",
+          rewardClaimFailed: "Claim failed. Please try again later.",
+          rewardAlreadyClaimed: "This account has already claimed the 2026 climate action reward.",
+          rewardEmpty: "The 2026 climate action reward has not been claimed yet.",
+          rewardDone: "Done",
+          rewardPendingLabel: "Pending",
           readError: "There was a problem loading member data. Please try again later.",
           loginFailed: "Sign-in failed. Please check your email and password.",
           resetSent: "Password reset email sent.",
@@ -857,12 +1068,36 @@
     const reviewerSubmissionPanel = document.getElementById("reviewerSubmissionPanel");
     const reviewerSubmissionEmpty = document.getElementById("reviewerSubmissionEmpty");
     const reviewerSubmissionList = document.getElementById("reviewerSubmissionList");
+    const rewardSectionTitle = document.getElementById("rewardSectionTitle");
+    const rewardSectionBody = document.getElementById("rewardSectionBody");
+    const rewardStepLabel = document.getElementById("rewardStepLabel");
+    const rewardStepHint = document.getElementById("rewardStepHint");
+    const rewardStepStatus = document.getElementById("rewardStepStatus");
+    const rewardEcoLabel = document.getElementById("rewardEcoLabel");
+    const rewardEcoHint = document.getElementById("rewardEcoHint");
+    const rewardEcoStatus = document.getElementById("rewardEcoStatus");
+    const rewardProposalLabel = document.getElementById("rewardProposalLabel");
+    const rewardProposalHint = document.getElementById("rewardProposalHint");
+    const rewardProposalStatus = document.getElementById("rewardProposalStatus");
+    const claimRewardBtn = document.getElementById("claimRewardBtn");
+    const rewardStatus = document.getElementById("rewardStatus");
+    const rewardResultTitle = document.getElementById("rewardResultTitle");
+    const rewardResultBody = document.getElementById("rewardResultBody");
+    const rewardResultList = document.getElementById("rewardResultList");
+    const rewardResultEmpty = document.getElementById("rewardResultEmpty");
+    const rewardCertCodeLabel = document.getElementById("rewardCertCodeLabel");
+    const rewardCertCode = document.getElementById("rewardCertCode");
+    const rewardLotteryLabel = document.getElementById("rewardLotteryLabel");
+    const rewardLotteryCode = document.getElementById("rewardLotteryCode");
+    const rewardTokenLabel = document.getElementById("rewardTokenLabel");
+    const rewardTokenCode = document.getElementById("rewardTokenCode");
 
     const summaryName = document.getElementById("summaryName");
     const summaryEmail = document.getElementById("summaryEmail");
     const summaryPartnerType = document.getElementById("summaryPartnerType");
     const summaryPermission = document.getElementById("summaryPermission");
     const summaryRole = document.getElementById("summaryRole");
+    const summaryEcoMbti = document.getElementById("summaryEcoMbti");
     const summaryScore = document.getElementById("summaryScore");
     const summaryRegion = document.getElementById("summaryRegion");
     const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
@@ -870,6 +1105,9 @@
     const statTotalTasks = document.getElementById("statTotalTasks");
     const statLatestDate = document.getElementById("statLatestDate");
     const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
+    let currentMemberData = {};
+    let currentUserSubmissions = [];
+    let currentRewardEligibility = { stepDone: false, ecoDone: false, proposalDone: false, completedDays: 0, eligible: false };
 
     const getDisplayName = (user) => user?.displayName?.trim() || user?.email?.trim() || (currentLang === "zh" ? "氣候行動者" : "Climate Action Partner");
     const getPermissionLabel = (level) => {
@@ -882,6 +1120,64 @@
       if (!value) return "-";
       if (typeof value === "string") return value;
       return "-";
+    };
+    const createRandomCode = (prefix, length = 6) => {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      const bytes = new Uint8Array(length);
+      crypto.getRandomValues(bytes);
+      const body = Array.from(bytes, (byte) => chars[byte % chars.length]).join("");
+      return `${prefix}${body}`;
+    };
+    const getRewardRecord = (member) => member?.reward2026 || null;
+    const getRewardEligibility = (member, submissions) => {
+      const completedDays = new Set(submissions.map((item) => item.taskDate || "").filter(Boolean)).size;
+      const stepDone = Boolean(member?.resultRole || member?.updatedAt || member?.totalScore != null);
+      const ecoDone = Boolean(member?.ecoMbti?.type);
+      const proposalDone = completedDays >= 7;
+      return { stepDone, ecoDone, proposalDone, completedDays, eligible: stepDone && ecoDone && proposalDone };
+    };
+    const setRewardStepState = (element, done) => {
+      element.textContent = done ? t("states.rewardDone") : t("states.rewardPendingLabel");
+      element.className = `reward-pill ${done ? "done" : "pending"}`;
+    };
+    const renderRewardRecord = (record) => {
+      if (!record) {
+        rewardResultList.hidden = true;
+        rewardResultEmpty.hidden = false;
+        rewardResultEmpty.textContent = t("states.rewardEmpty");
+        rewardCertCode.textContent = "-";
+        rewardLotteryCode.textContent = "-";
+        rewardTokenCode.textContent = "-";
+        return;
+      }
+
+      rewardCertCode.textContent = record.certificateCode || "-";
+      rewardLotteryCode.textContent = record.lotteryNumber || "-";
+      rewardTokenCode.textContent = record.tokenCode || "-";
+      rewardResultEmpty.hidden = true;
+      rewardResultList.hidden = false;
+    };
+    const renderRewardStatus = (member, submissions) => {
+      currentRewardEligibility = getRewardEligibility(member, submissions);
+      const rewardRecord = getRewardRecord(member);
+      setRewardStepState(rewardStepStatus, currentRewardEligibility.stepDone);
+      setRewardStepState(rewardEcoStatus, currentRewardEligibility.ecoDone);
+      setRewardStepState(rewardProposalStatus, currentRewardEligibility.proposalDone);
+      rewardProposalHint.textContent = currentLang === "zh"
+        ? `目前已完成 ${currentRewardEligibility.completedDays} / 7 天不同日期紀錄`
+        : `${currentRewardEligibility.completedDays} / 7 unique-day records completed`;
+      claimRewardBtn.disabled = !currentRewardEligibility.eligible || Boolean(rewardRecord) || !auth.currentUser;
+      if (rewardRecord) {
+        rewardStatus.textContent = t("states.rewardAlreadyClaimed");
+        rewardStatus.className = "status ok";
+      } else if (currentRewardEligibility.eligible) {
+        rewardStatus.textContent = t("states.rewardReady");
+        rewardStatus.className = "status ok";
+      } else {
+        rewardStatus.textContent = t("states.rewardPending");
+        rewardStatus.className = "status warn";
+      }
+      renderRewardRecord(rewardRecord);
     };
     const formatSummaryLine = (key, value) => `${t(`summaryLabels.${key}`)}${value}`;
     const applyLanguage = (lang) => {
@@ -933,6 +1229,20 @@
       document.getElementById("statLatestBody").textContent = t("stats.latestBody");
       document.getElementById("reviewSectionTitle").textContent = t("sections.reviewTitle");
       document.getElementById("reviewSectionBody").textContent = t("sections.reviewBody");
+      rewardSectionTitle.textContent = t("rewards.title");
+      rewardSectionBody.textContent = t("rewards.body");
+      rewardStepLabel.textContent = t("rewards.stepLabel");
+      rewardStepHint.textContent = t("rewards.stepHint");
+      rewardEcoLabel.textContent = t("rewards.ecoLabel");
+      rewardEcoHint.textContent = t("rewards.ecoHint");
+      rewardProposalLabel.textContent = t("rewards.proposalLabel");
+      rewardProposalHint.textContent = t("rewards.proposalHint");
+      claimRewardBtn.textContent = t("rewards.claim");
+      rewardResultTitle.textContent = t("rewards.resultTitle");
+      rewardResultBody.textContent = t("rewards.resultBody");
+      rewardCertCodeLabel.textContent = t("rewards.cert");
+      rewardLotteryLabel.textContent = t("rewards.lottery");
+      rewardTokenLabel.textContent = t("rewards.token");
       document.getElementById("loginModalTitle").textContent = t("loginModal.title");
       document.getElementById("loginEmailLabel").textContent = t("loginModal.email");
       document.getElementById("loginPasswordLabel").textContent = t("loginModal.password");
@@ -941,6 +1251,7 @@
       closeLoginModalBtn.textContent = t("loginModal.cancel");
       document.getElementById("pageFooter").textContent = t("footer");
       langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
+      renderRewardStatus(currentMemberData, currentUserSubmissions);
     };
 
     const openLoginModal = () => {
@@ -960,6 +1271,7 @@
       summaryPartnerType.textContent = formatSummaryLine("partnerType", "-");
       summaryPermission.textContent = formatSummaryLine("permission", "-");
       summaryRole.textContent = formatSummaryLine("role", "-");
+      summaryEcoMbti.textContent = formatSummaryLine("ecoMbti", "-");
       summaryScore.textContent = formatSummaryLine("score", "-");
       summaryRegion.textContent = formatSummaryLine("region", "-");
       summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", "-");
@@ -972,11 +1284,22 @@
       reviewerSubmissionList.innerHTML = "";
       reviewerSubmissionList.hidden = true;
       reviewerSubmissionEmpty.hidden = false;
+      currentMemberData = {};
+      currentUserSubmissions = [];
+      currentRewardEligibility = { stepDone: false, ecoDone: false, proposalDone: false, completedDays: 0, eligible: false };
       statCompletedDays.textContent = "0";
       statTotalTasks.textContent = "0";
       statLatestDate.textContent = "-";
       submissionEmpty.textContent = t("states.guestSubmissions");
       reviewerSubmissionEmpty.textContent = t("states.noReviewerSubmissions");
+      setRewardStepState(rewardStepStatus, false);
+      setRewardStepState(rewardEcoStatus, false);
+      setRewardStepState(rewardProposalStatus, false);
+      rewardProposalHint.textContent = t("rewards.proposalHint");
+      rewardStatus.textContent = t("states.rewardGuest");
+      rewardStatus.className = "status warn";
+      claimRewardBtn.disabled = true;
+      renderRewardRecord(null);
     };
 
     const renderGuestState = () => {
@@ -1062,12 +1385,15 @@
 
       if (!submissions.length) {
         submissionEmpty.textContent = t("states.noSubmissions");
-        return;
+        currentUserSubmissions = submissions;
+        return submissions;
       }
 
       submissions.forEach((submission) => submissionList.appendChild(createSubmissionCard(submission)));
       submissionEmpty.hidden = true;
       submissionList.hidden = false;
+      currentUserSubmissions = submissions;
+      return submissions;
     };
 
     const loadReviewerSubmissions = async () => {
@@ -1128,6 +1454,47 @@
       }
     });
 
+    claimRewardBtn.addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        rewardStatus.textContent = t("states.rewardGuest");
+        rewardStatus.className = "status warn";
+        return;
+      }
+      const existing = getRewardRecord(currentMemberData);
+      if (existing) {
+        renderRewardStatus(currentMemberData, []);
+        return;
+      }
+      if (!currentRewardEligibility.eligible) {
+        rewardStatus.textContent = t("states.rewardPending");
+        rewardStatus.className = "status warn";
+        return;
+      }
+
+      claimRewardBtn.disabled = true;
+      rewardStatus.textContent = t("states.rewardClaiming");
+      rewardStatus.className = "status warn";
+
+      const rewardRecord = {
+        claimedAt: new Date().toISOString(),
+        certificateCode: createRandomCode("BSR-CA-2026-", 8),
+        lotteryNumber: createRandomCode("DRAW-", 6),
+        tokenCode: createRandomCode("TOKEN-", 8)
+      };
+
+      try {
+        await setDoc(doc(db, "members", user.uid), { reward2026: rewardRecord }, { merge: true });
+        currentMemberData = { ...currentMemberData, reward2026: rewardRecord };
+        renderRewardStatus(currentMemberData, currentUserSubmissions);
+      } catch (error) {
+        console.error(error);
+        rewardStatus.textContent = t("states.rewardClaimFailed");
+        rewardStatus.className = "status error";
+        claimRewardBtn.disabled = false;
+      }
+    });
+
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
     });
@@ -1146,6 +1513,7 @@
       try {
         const memberSnap = await getDoc(doc(db, "members", user.uid));
         const member = memberSnap.exists() ? memberSnap.data() : {};
+        currentMemberData = member;
         const permissionLevel = Number(member.permissionLevel || 1);
 
         summaryName.textContent = formatSummaryLine("name", member.name || getDisplayName(user));
@@ -1153,6 +1521,12 @@
         summaryPartnerType.textContent = formatSummaryLine("partnerType", getPartnerLabel(member.partnerType));
         summaryPermission.textContent = formatSummaryLine("permission", getPermissionLabel(permissionLevel));
         summaryRole.textContent = formatSummaryLine("role", member.resultRole || "-");
+        summaryEcoMbti.textContent = formatSummaryLine(
+          "ecoMbti",
+          member.ecoMbti?.type
+            ? `${member.ecoMbti.type}${member.ecoMbti.titleZh ? ` / ${member.ecoMbti.titleZh}` : member.ecoMbti.titleEn ? ` / ${member.ecoMbti.titleEn}` : ""}`
+            : "-"
+        );
         summaryScore.textContent = formatSummaryLine("score", member.totalScore ?? "-");
         summaryRegion.textContent = formatSummaryLine("region", `${member.region || "-"}${member.chapter ? ` / ${member.chapter}` : ""}`);
         summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", formatDate(member.updatedAt?.toDate?.()?.toISOString?.() || member.updatedAt));
@@ -1165,7 +1539,8 @@
 
         taskUploadWrap.hidden = permissionLevel < 2;
         reviewerCardWrap.hidden = permissionLevel !== 3;
-        await loadSubmissions(user.uid);
+        const userSubmissions = await loadSubmissions(user.uid);
+        renderRewardStatus(member, userSubmissions);
         if (permissionLevel === 3) {
           reviewerSubmissionPanel.hidden = false;
           await loadReviewerSubmissions();

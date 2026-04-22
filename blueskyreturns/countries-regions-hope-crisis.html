@@ -812,7 +812,7 @@
         <a id="navAbout" class="pill" href="./index.html">項目介紹 / About</a>
         <a id="navRegions" class="pill active" href="./countries-regions-hope-crisis.html">合作與願景 / Collaboration & Vision</a>
         <div id="navMemberState" class="nav-member" hidden>尚未登入 / Signed out</div>
-        <a id="navLoginLink" class="pill" href="./member-center.html">會員中心 / Member Center</a>
+        <a id="navLoginLink" class="pill" href="./member-center.html">氣候行動者中心 / Member Center</a>
         <button id="navLogoutBtn" type="button" class="pill" hidden>登出 / Sign Out</button>
         <div class="lang-toggle" role="group" aria-label="Language switcher">
           <button class="lang-btn active" type="button" data-lang="zh">中文</button>
@@ -833,7 +833,6 @@
           <a class="side-link" href="#heroSection"><span>專案首頁<small>Hero</small></span></a>
           <a class="side-link" href="#introSection"><span>專案簡介<small>Project Brief</small></span></a>
           <a class="side-link" href="#journey"><span>合作等級<small>Participation Journey</small></span></a>
-          <a class="side-link reviewer-only-link" href="#reviewPanel" hidden><span>審核台<small>Reviewer Desk</small></span></a>
         </div>
       </details>
     </div>
@@ -846,7 +845,6 @@
             <a class="side-link" href="#heroSection"><span>專案首頁<small>Hero</small></span></a>
             <a class="side-link" href="#introSection"><span>專案簡介<small>Project Brief</small></span></a>
             <a class="side-link" href="#journey"><span>合作等級<small>Participation Journey</small></span></a>
-            <a class="side-link reviewer-only-link" href="#reviewPanel" hidden><span>審核台<small>Reviewer Desk</small></span></a>
           </div>
         </div>
       </aside>
@@ -863,7 +861,6 @@
           <div class="hero-actions">
             <a class="button primary" href="./climate-action-form.html">前往註冊 / Join as Climate Action Partner</a>
             <a class="button" href="#journey">查看合作等級 / View Journey</a>
-            <a id="heroReviewCta" class="button" href="#reviewPanel" hidden>審核區 / Review Desk</a>
           </div>
         </div>
 
@@ -982,19 +979,6 @@
         </div>
       </section>
 
-      <section id="reviewPanel" class="panel review-panel" hidden>
-        <div class="section-head">
-          <h2>Coordination Desk / 協作管理台</h2>
-          <p>這一區只會對受邀協作帳號開放。登入後若具備內容管理權限，系統會顯示待處理資料與狀態操作。</p>
-        </div>
-
-        <div id="reviewGate" class="auth-note">
-          目前尚未開啟協作管理權限。
-        </div>
-
-        <div id="reviewList" class="review-grid" hidden></div>
-        <div id="reviewEmpty" class="review-empty" hidden>目前沒有待顯示的審核資料。</div>
-      </section>
       </div>
     </div>
   </main>
@@ -1007,10 +991,7 @@
     import {
       getFirestore,
       doc,
-      getDoc,
-      collection,
-      getDocs,
-      updateDoc
+      getDoc
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
@@ -1034,38 +1015,22 @@
         pageTitle: "Collaboration & Vision | 一步・藍天：合作與願景",
         brandTitle: "Blue Sky Returns | Collaboration & Vision",
         brandSubtitle: "一步・藍天：希望與危機 導覽頁",
-        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "7 日綠色提案", step: "邁出一步", member: "會員中心", signOut: "登出 / Sign Out" },
+        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "7 日綠色提案", step: "邁出一步", member: "氣候行動者中心", signOut: "登出 / Sign Out" },
         footer: "Blue Sky Returns: Collaboration & Vision • Hope and Crisis • 2026",
         states: {
           signedOut: "尚未登入 / Signed out",
           authSummary: "請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或開啟進一步協作功能。",
           visitorAbility: "一般訪客目前可閱讀導覽、了解資料需求與專案流程。",
           memberNotice: "尚未登入氣候行動者帳號。請先登入後查看你的權限與可執行任務。",
-          reviewGate: "這個區域只對受邀協作帳號開放。",
-          untitled: "未命名投稿",
-          unknown: "未知",
-          unknownRegion: "未知地區",
-          noDescription: "未提供說明。",
-          submitter: "提交者",
-          permissionLevel: "權限等級",
-          approve: "Approve / 通過",
-          reject: "Reject / 退回",
-          current: "目前狀態",
-          pending: "Pending / 待審核",
-          updating: "Updating status...",
-          updateFailed: "更新失敗，請稍後再試。",
-          loadReviewFailed: "讀取協作資料失敗，請確認目前帳號仍具有協作管理權限。",
           signedInPrefix: "登入中",
           readPermissionFailed: "已登入，但目前讀取權限資料失敗，請稍後重新整理。",
           levelUnknown: "暫時無法判斷你的 permissionLevel。",
           memberReadFailed: "讀取會員資料時發生問題，請稍後再試。",
-          reviewPermissionUnknown: "目前無法載入協作管理權限資訊。",
           canSubmit: "你的帳號可提交地方 Hope / Crisis 資料。請前往上傳入口完成內容填寫與附件上傳。",
           level3Ability: "你的帳號已開啟協作管理功能，可上傳地方資料並直接進入內容管理流程。",
           level2Ability: "你目前是 Level 2，可上傳地方 Hope / Crisis 資料。",
           level1Notice: "你目前是一般帳號。若要上傳地方資料，請由後台調整為可上傳身分。",
-          level1Ability: "你目前可閱讀專案導覽與準備資料，但尚未開放提交地方內容。",
-          level3Review: "你的帳號已開啟協作管理功能，可直接處理待整理投稿。"
+          level1Ability: "你目前可閱讀專案導覽與準備資料，但尚未開放提交地方內容。"
         }
       },
       en: {
@@ -1079,31 +1044,15 @@
           authSummary: "Sign in with your climate action partner account. The system will detect whether you can upload data or unlock additional coordination tools.",
           visitorAbility: "Visitors can currently read the guide and understand the project flow and data requirements.",
           memberNotice: "You are not signed in yet. Sign in first to view your permission level and available actions.",
-          reviewGate: "This area is only available to invited coordination accounts.",
-          untitled: "Untitled Submission",
-          unknown: "Unknown",
-          unknownRegion: "Unknown Region",
-          noDescription: "No description provided.",
-          submitter: "Submitter",
-          permissionLevel: "Permission Level",
-          approve: "Approve",
-          reject: "Reject",
-          current: "Current",
-          pending: "Pending",
-          updating: "Updating status...",
-          updateFailed: "Update failed. Please try again later.",
-          loadReviewFailed: "Failed to load coordination items. Please confirm this account still has coordination access.",
           signedInPrefix: "Signed in",
           readPermissionFailed: "Signed in, but permission data could not be loaded right now. Please refresh later.",
           levelUnknown: "Your permissionLevel cannot be determined at the moment.",
           memberReadFailed: "There was a problem loading member data. Please try again later.",
-          reviewPermissionUnknown: "Coordination permission data is currently unavailable.",
           canSubmit: "Your account can submit local Hope / Crisis data. Use the upload entry to complete the content and attachments.",
           level3Ability: "Your account includes coordination access, so you can submit local data and manage incoming entries.",
           level2Ability: "You are Level 2 and can submit local Hope / Crisis data.",
           level1Notice: "Your account is currently a general access profile. An admin needs to upgrade it before local submissions are enabled.",
-          level1Ability: "You can currently read the project guide and prepare materials, but submission is not enabled yet.",
-          level3Review: "Your account includes coordination access, so you can manage pending submissions directly."
+          level1Ability: "You can currently read the project guide and prepare materials, but submission is not enabled yet."
         }
       }
     };
@@ -1127,32 +1076,15 @@
     const authChip = document.getElementById("authChip");
     const authSummary = document.getElementById("authSummary");
     const abilitySummary = document.getElementById("abilitySummary");
-    const heroReviewCta = document.getElementById("heroReviewCta");
-    const reviewGate = document.getElementById("reviewGate");
-    const reviewList = document.getElementById("reviewList");
-    const reviewEmpty = document.getElementById("reviewEmpty");
     const navMemberState = document.getElementById("navMemberState");
     const navLoginLink = document.getElementById("navLoginLink");
     const navLogoutBtn = document.getElementById("navLogoutBtn");
-    const reviewerOnlyLinks = Array.from(document.querySelectorAll(".reviewer-only-link"));
-    const reviewPanel = document.getElementById("reviewPanel");
 
     const getPermissionLabel = (level) => {
       if (level === 3) return currentLang === "zh" ? "Coordination Access / 協作管理" : "Coordination Access";
       if (level === 2) return currentLang === "zh" ? "Level 2 Contributor / 核心上傳者" : "Level 2 Contributor";
       if (level === 1) return currentLang === "zh" ? "Level 1 Partner / 一般氣候行動者" : "Level 1 Partner";
       return currentLang === "zh" ? "Guest / 訪客" : "Guest";
-    };
-
-    const formatMode = (mode) => {
-      if (mode === "hope") return currentLang === "zh" ? "Hope / 希望" : "Hope";
-      return currentLang === "zh" ? "Crisis / 危機" : "Crisis";
-    };
-
-    const formatStatus = (status) => {
-      if (status === "approved") return currentLang === "zh" ? "Approved / 已通過" : "Approved";
-      if (status === "rejected") return currentLang === "zh" ? "Rejected / 已退回" : "Rejected";
-      return currentLang === "zh" ? "Pending / 待審核" : "Pending";
     };
 
     const setGuestState = () => {
@@ -1163,13 +1095,6 @@
       navMemberState.textContent = t("states.signedOut");
       navLoginLink.hidden = false;
       navLogoutBtn.hidden = true;
-      heroReviewCta.hidden = true;
-      reviewerOnlyLinks.forEach((link) => { link.hidden = true; });
-      reviewPanel.hidden = true;
-      reviewGate.textContent = t("states.reviewGate");
-      reviewList.hidden = true;
-      reviewEmpty.hidden = true;
-      reviewList.innerHTML = "";
     };
 
     navLogoutBtn.addEventListener("click", async () => {
@@ -1182,126 +1107,6 @@
         navLogoutBtn.disabled = false;
       }
     });
-
-    const createReviewItem = (review) => {
-      const item = document.createElement("article");
-      item.className = "review-item";
-
-      const top = document.createElement("div");
-      top.className = "review-top";
-
-      const titleWrap = document.createElement("div");
-      const title = document.createElement("h3");
-      title.textContent = review.title || t("states.untitled");
-      const source = document.createElement("div");
-      source.className = "status-inline";
-      source.textContent = `${review.organizationName || review.submitterName || t("states.unknown")} • ${review.region || t("states.unknownRegion")}`;
-      titleWrap.append(title, source);
-
-      const meta = document.createElement("div");
-      meta.className = "review-meta";
-      const modeTag = document.createElement("span");
-      modeTag.className = `tag ${review.mode === "hope" ? "hope" : "crisis"}`;
-      modeTag.textContent = formatMode(review.mode);
-      const statusTag = document.createElement("span");
-      statusTag.className = `tag ${review.status || "pending"}`;
-      statusTag.textContent = formatStatus(review.status);
-      meta.append(modeTag, statusTag);
-
-      top.append(titleWrap, meta);
-
-      const copy = document.createElement("div");
-      copy.className = "review-copy";
-      const desc = document.createElement("p");
-      desc.textContent = review.description || t("states.noDescription");
-      copy.appendChild(desc);
-
-      const details = document.createElement("ul");
-      const submitterItem = document.createElement("li");
-      submitterItem.textContent = `${t("states.submitter")}: ${review.submitterEmail || "N/A"}`;
-      const permissionItem = document.createElement("li");
-      permissionItem.textContent = `${t("states.permissionLevel")}: ${review.permissionLevel || "N/A"}`;
-      details.append(submitterItem, permissionItem);
-
-      const actions = document.createElement("div");
-      actions.className = "review-actions";
-
-      const approveBtn = document.createElement("button");
-      approveBtn.type = "button";
-      approveBtn.className = "primary";
-      approveBtn.textContent = t("states.approve");
-
-      const rejectBtn = document.createElement("button");
-      rejectBtn.type = "button";
-      rejectBtn.className = "soft";
-      rejectBtn.textContent = t("states.reject");
-
-      const statusText = document.createElement("div");
-      statusText.className = "status-inline";
-      statusText.textContent = review.status ? `${t("states.current")}: ${formatStatus(review.status)}` : `${t("states.current")}: ${t("states.pending")}`;
-
-      const setReviewStatus = async (nextStatus) => {
-        approveBtn.disabled = true;
-        rejectBtn.disabled = true;
-        statusText.textContent = t("states.updating");
-
-        try {
-          await updateDoc(doc(db, "globeEventReviews", review.reviewId), {
-            status: nextStatus,
-            reviewedAt: new Date().toISOString()
-          });
-          statusText.textContent = `${t("states.current")}: ${formatStatus(nextStatus)}`;
-          statusTag.className = `tag ${nextStatus}`;
-          statusTag.textContent = formatStatus(nextStatus);
-        } catch (error) {
-          console.error(error);
-          statusText.textContent = t("states.updateFailed");
-        } finally {
-          approveBtn.disabled = false;
-          rejectBtn.disabled = false;
-        }
-      };
-
-      approveBtn.addEventListener("click", () => setReviewStatus("approved"));
-      rejectBtn.addEventListener("click", () => setReviewStatus("rejected"));
-
-      actions.append(approveBtn, rejectBtn);
-      item.append(top, copy, details, actions, statusText);
-      return item;
-    };
-
-    const loadReviewQueue = async () => {
-      reviewList.innerHTML = "";
-      reviewEmpty.hidden = true;
-
-      try {
-        const snapshot = await getDocs(collection(db, "globeEventReviews"));
-        const reviews = snapshot.docs
-          .map((docSnap) => ({
-            reviewId: docSnap.id,
-            ...docSnap.data()
-          }))
-          .filter((review) => (review.status || "pending") === "pending")
-          .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
-          .slice(0, 12);
-
-        if (reviews.length === 0) {
-          reviewList.hidden = true;
-          reviewEmpty.hidden = false;
-          return;
-        }
-
-        reviews.forEach((review) => {
-          reviewList.appendChild(createReviewItem(review));
-        });
-
-        reviewList.hidden = false;
-      } catch (error) {
-        console.error(error);
-        reviewGate.textContent = t("states.loadReviewFailed");
-        reviewList.hidden = true;
-      }
-    };
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -1331,21 +1136,6 @@
           abilitySummary.textContent = t("states.level1Ability");
         }
 
-        if (permissionLevel === 3) {
-          heroReviewCta.hidden = false;
-          reviewerOnlyLinks.forEach((link) => { link.hidden = false; });
-          reviewPanel.hidden = false;
-          reviewGate.textContent = t("states.level3Review");
-          await loadReviewQueue();
-        } else {
-          heroReviewCta.hidden = true;
-          reviewerOnlyLinks.forEach((link) => { link.hidden = true; });
-          reviewPanel.hidden = true;
-          reviewGate.textContent = t("states.reviewGate");
-          reviewList.hidden = true;
-          reviewEmpty.hidden = true;
-          reviewList.innerHTML = "";
-        }
       } catch (error) {
         console.error(error);
         authChip.textContent = `${t("states.signedInPrefix")} / ${user.email || ""}`;
@@ -1355,10 +1145,6 @@
         navMemberState.textContent = `${user.email || t("states.signedInPrefix")}`;
         navLoginLink.hidden = true;
         navLogoutBtn.hidden = false;
-        heroReviewCta.hidden = true;
-        reviewerOnlyLinks.forEach((link) => { link.hidden = true; });
-        reviewPanel.hidden = true;
-        reviewGate.textContent = t("states.reviewPermissionUnknown");
       }
     });
 

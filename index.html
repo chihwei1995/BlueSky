@@ -420,9 +420,21 @@
       touch-action: pan-y;
       overscroll-behavior: contain;
     }
+    .info-card.hidden-panel {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-50%) translateX(-24px);
+    }
     .info-card.show { opacity: 1; pointer-events: auto; transform: translateY(-50%) translateY(0); }
+    .info-card.show.hidden-panel {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-50%) translateX(-24px);
+    }
     .info-card.collapsed { padding: 14px 16px; }
     .info-card.collapsed .info-body { display: none; }
+    .info-card.collapsed .hero-text,
+    .info-card.collapsed .subtext { display: none; }
     .info-body {
       flex: 1 1 auto;
       min-height: 0;
@@ -432,6 +444,49 @@
       -webkit-overflow-scrolling: touch;
       touch-action: pan-y;
       overscroll-behavior: contain;
+    }
+    .hero-text {
+      margin: 0 0 10px 0;
+      font-size: clamp(1.4rem, 2vw, 1.9rem);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+    .subtext {
+      margin: 0 0 14px 0;
+      color: #dbe4ff;
+      line-height: 1.6;
+      font-size: 0.96rem;
+    }
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .legend {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      color: #d9e2ff;
+      font-size: 0.82rem;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+    }
+    .control-actions {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .info-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
@@ -456,6 +511,30 @@
       pointer-events: auto;
       white-space: nowrap;
     }
+    .collapse-btn.close {
+      padding-inline: 11px;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .info-open-btn {
+      position: fixed;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 4;
+      pointer-events: auto;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(9, 14, 25, 0.86);
+      color: #eef3ff;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      box-shadow: var(--panel-shadow);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+    .info-open-btn:hover { background: rgba(255,255,255,0.12); }
 
     .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0; }
     .stat-pill { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px; font-size: 0.85rem; }
@@ -618,6 +697,8 @@
         touch-action: pan-y;
       }
       .info-card.show { transform: translateY(0); }
+      .info-card.hidden-panel { transform: translateY(120%); }
+      .info-card.show.hidden-panel { transform: translateY(120%); }
       .info-body {
         flex: 1 1 auto;
         overflow-y: auto;
@@ -626,6 +707,18 @@
         -webkit-overflow-scrolling: touch;
         touch-action: pan-y;
         overscroll-behavior: contain;
+      }
+      .control-row { align-items: flex-start; }
+      .control-actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-end;
+      }
+      .info-open-btn {
+        top: auto;
+        bottom: calc(88px + env(safe-area-inset-bottom));
+        right: calc(10px + env(safe-area-inset-right));
+        transform: none;
       }
 
       .stats { grid-template-columns: 1fr; }
@@ -703,7 +796,10 @@
           <span class="legend-dot" id="legendStroke" style="background:#ff4d4d;"></span>
           <span id="legendStrokeLabel" data-i18n="hero.border">Country and region borders</span>
         </div>
-        <button class="collapse-btn" id="infoCollapseBtn" type="button" aria-expanded="true" data-i18n="info.collapse">Collapse info</button>
+        <div class="control-actions">
+          <button class="collapse-btn" id="infoCollapseBtn" type="button" aria-expanded="true" data-i18n="info.collapse">Collapse info</button>
+          <button class="collapse-btn close" id="infoCloseBtn" type="button" aria-label="Close info panel" data-i18n-title="info.close">✕</button>
+        </div>
       </div>
       <div class="info-body" id="infoBody">
         <h2 id="infoTitle" data-i18n="info.loading">Loading...</h2>
@@ -714,12 +810,12 @@
         <div class="media-area" id="mediaContainer"></div>
       </div>
     </div>
+    <button class="info-open-btn" id="infoOpenBtn" type="button" hidden data-i18n="info.expand">Expand info</button>
 
     <div class="timeline-container" id="timelineContainer">
       <div class="timeline-label-row">
         <div class="timeline-copy">
           <div class="timeline-label" id="timelineTitle" data-i18n="timeline.title">Hope & Crisis Timeline</div>
-          <div class="subtitle" id="timelineBody" data-i18n="timeline.body">Follow the years and months to understand how different climate risks and local solutions appear across the globe.</div>
         </div>
 
         <!-- ✅ 只保留年份下拉（移除年份按鈕列） -->
@@ -855,6 +951,7 @@
         info: {
           collapse: 'Collapse info',
           expand: 'Expand info',
+          close: 'Close info panel',
           loading: 'Loading...',
           subtitle: {
             disaster: 'Crisis event',
@@ -912,7 +1009,7 @@
           proposal: '7 日綠色提案',
           eco: 'Eco-MBTI',
           form: '邁出一步',
-          member: '會員中心'
+          member: '氣候行動者中心'
         },
         mode: {
           crisis: '⚠️ 危機',
@@ -925,6 +1022,7 @@
         info: {
           collapse: '收合資訊',
           expand: '展開資訊',
+          close: '關閉資訊視窗',
           loading: '載入中...',
           subtitle: {
             disaster: '危機事件',
@@ -1399,6 +1497,7 @@
       currentMonth: null,
       currentEventId: null,
       infoCollapsed: false,
+      infoHidden: false,
       timelineCollapsed: false,
       anchorOpen: false,
       language: 'en',
@@ -1488,6 +1587,7 @@
       buildAnchorList();
       refreshFiltersUI();
       setInfoCollapsed(state.infoCollapsed);
+      setInfoHidden(state.infoHidden);
       setTimelineCollapsed(state.timelineCollapsed);
       if (state.world) {
         renderPoints();
@@ -1798,6 +1898,7 @@
         refreshFiltersUI();
         showInfo(first);
       } else {
+        setInfoHidden(true);
         document.getElementById('infoPanel').classList.remove('show');
       }
     };
@@ -1812,6 +1913,7 @@
 
       const translated = getEventTranslation(data);
       const card = document.getElementById('infoPanel');
+      setInfoHidden(false);
       const tag = document.getElementById('infoTag');
       tag.className = `tag ${data.mode}`;
       tag.textContent = data.mode === 'crisis' ? getI18n('labels.crisis') : getI18n('labels.hope');
@@ -1875,6 +1977,7 @@
           showInfo(first);
         }
       } else {
+        setInfoHidden(true);
         document.getElementById('infoPanel').classList.remove('show');
         document.getElementById('eventRow').innerHTML = '';
       }
@@ -1909,6 +2012,15 @@
         : getI18n('info.collapse');
       document.getElementById('infoCollapseBtn').setAttribute('aria-expanded', String(!collapsed));
       document.getElementById('infoBody').setAttribute('aria-hidden', String(collapsed));
+    };
+
+    const setInfoHidden = (hidden) => {
+      state.infoHidden = hidden;
+      const panel = document.getElementById('infoPanel');
+      const openBtn = document.getElementById('infoOpenBtn');
+      panel.classList.toggle('hidden-panel', hidden);
+      if (!hidden) panel.classList.add('show');
+      openBtn.hidden = !hidden;
     };
 
     const setTimelineCollapsed = (collapsed) => {
@@ -2050,6 +2162,12 @@
       document.getElementById('btn-hope').addEventListener('click', () => applyMode('hope'));
 
       document.getElementById('infoCollapseBtn').addEventListener('click', () => setInfoCollapsed(!state.infoCollapsed));
+      document.getElementById('infoCloseBtn').addEventListener('click', () => setInfoHidden(true));
+      document.getElementById('infoOpenBtn').addEventListener('click', () => {
+        setInfoHidden(false);
+        const current = state.events.find(ev => ev.id === state.currentEventId);
+        if (current) showInfo(current);
+      });
       document.getElementById('timelineCollapseBtn').addEventListener('click', () => setTimelineCollapsed(!state.timelineCollapsed));
 
       const infoPanelEl = document.getElementById('infoPanel');
@@ -2198,6 +2316,7 @@
           showInfo(d);
         })
         .onGlobeClick(() => {
+          setInfoHidden(true);
           document.getElementById('infoPanel').classList.remove('show');
           if (IS_MOBILE) setTimelineCollapsed(false);
         });
