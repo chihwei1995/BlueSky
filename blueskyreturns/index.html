@@ -192,6 +192,132 @@
       border: 1px solid var(--border);
     }
 
+    .timeline-section {
+      display: grid;
+      gap: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .timeline-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-toolbar p {
+      margin: 0;
+      color: var(--ink-soft);
+    }
+
+    .timeline-select {
+      min-width: 180px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .timeline-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 18px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.92));
+    }
+
+    .timeline-date {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+      text-align: center;
+      padding: 14px 10px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(56, 189, 248, 0.2));
+      border: 1px solid rgba(14, 165, 233, 0.18);
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+
+    .timeline-date small {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
+    .timeline-item h3 {
+      margin: 0 0 8px;
+    }
+
+    .timeline-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .timeline-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--ink-soft);
+    }
+
+    .timeline-chip.crisis {
+      background: rgba(220, 38, 38, 0.1);
+      color: #b91c1c;
+    }
+
+    .timeline-chip.hope {
+      background: rgba(22, 163, 74, 0.1);
+      color: #15803d;
+    }
+
+    .timeline-media {
+      margin-top: 14px;
+    }
+
+    .timeline-media img {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .timeline-credit {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .timeline-empty {
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px dashed var(--border);
+      color: var(--ink-soft);
+      background: rgba(248, 250, 252, 0.9);
+    }
+
     .infographic caption,
     .infographic p {
       color: var(--ink-soft);
@@ -219,6 +345,8 @@
       .header-inner { flex-direction: column; align-items: flex-start; }
       .hero { padding: 24px; }
       main { padding: 32px 20px 56px; }
+      .timeline-item { grid-template-columns: 1fr; }
+      .timeline-date { text-align: left; }
     }
   </style>
 </head>
@@ -232,10 +360,6 @@
       <div class="header-actions">
         <a class="nav-link" href="../index.html" data-i18n="nav.main">Main Globe</a>
         <a class="nav-link active" href="./index.html" data-i18n="nav.about">About</a>
-        <a class="nav-link" href="./countries-regions-hope-crisis.html" data-i18n="nav.call">Collaboration & Vision</a>
-        <a class="nav-link" href="./green-action-7day.html" data-i18n="nav.proposal">7-Day Green Proposal</a>
-        <a class="nav-link" href="./eco-mbti.html" data-i18n="nav.eco">Eco-MBTI</a>
-        <a class="nav-link" href="./climate-action-form.html" data-i18n="nav.form">Take One Step</a>
         <a class="nav-link" href="./member-center.html" data-i18n="nav.member">Member Center</a>
         <div class="lang-toggle" role="group" data-i18n-aria-label="aria.languageToggle">
           <button class="lang-btn active" data-lang="en" type="button">EN</button>
@@ -291,6 +415,17 @@
         data-i18n-alt="infographic.alt"
       />
       <p data-i18n="infographic.caption">A snapshot of the project's key initiatives and activities.</p>
+    </section>
+
+    <section class="timeline-section">
+      <div class="timeline-toolbar">
+        <div>
+          <h2 data-i18n="timeline.title">Project Timeline</h2>
+          <p data-i18n="timeline.subtitle">Browse key crisis and hope moments from the Blue Sky Returns global archive.</p>
+        </div>
+        <select id="timelineYearSelect" class="timeline-select" aria-label="Project timeline year filter"></select>
+      </div>
+      <div id="timelineList" class="timeline-list"></div>
     </section>
 
     <section class="card">
@@ -374,6 +509,16 @@
           alt: 'One Step Blue Sky Returns infographic',
           caption: 'A snapshot of the project’s key initiatives and activities.'
         },
+        timeline: {
+          title: 'Project Timeline',
+          subtitle: 'Browse key crisis and hope moments from the Blue Sky Returns global archive.',
+          selectLabel: 'Select a year from the project timeline',
+          allYears: 'All years',
+          dateUnknown: 'Date TBD',
+          crisis: 'Crisis',
+          hope: 'Hope',
+          noItems: 'No timeline entries are available for this year yet.'
+        },
         support: {
           title: 'How to Support Our Project',
           body: 'Your participation is vital to our climate action. Follow JCI Peninsula’s social media for updates, join Asia-Pacific conference activities, attend upcoming workshops and talks, and take part in our Model UN on climate change to protect our blue skies together.'
@@ -437,6 +582,16 @@
           alt: '一步・藍天 BLUE SKY RETURNS 項目資訊圖',
           caption: '項目重點與活動摘要圖，呈現氣候行動的核心資訊。'
         },
+        timeline: {
+          title: '項目時間線',
+          subtitle: '瀏覽 Blue Sky Returns 全球資料庫中關於危機與希望的重要時間節點。',
+          selectLabel: '從項目時間線選擇年份',
+          allYears: '所有年份',
+          dateUnknown: '日期待定',
+          crisis: '危機',
+          hope: '希望',
+          noItems: '這個年份目前還沒有時間線資料。'
+        },
         support: {
           title: '如何支持我們的項目',
           body: '您的參與對我們的氣候行動至關重要！請密切留意 JCI Peninsula（半島青年商會）的社交媒體，獲取最新動向，報名參與亞太大會相關活動，親身蒞臨我們日後舉辦的工作坊和座談會，並積極參與我們舉辦的模擬聯合國氣候變化大會，共同為保護我們的藍天而努力！'
@@ -455,6 +610,7 @@
     };
 
     const state = { language: 'en' };
+    const timelineState = { events: [], year: 'all' };
 
     const getI18n = (path) => {
       const keys = path.split('.');
@@ -496,6 +652,106 @@
 
       document.title = getI18n('page.title') || document.title;
       document.documentElement.lang = state.language === 'en' ? 'en' : 'zh-Hant';
+      renderTimelineYearOptions();
+      renderTimelineList();
+    };
+
+    const formatTimelineDate = (value) => {
+      if (!value) return getI18n('timeline.dateUnknown');
+      const parsed = new Date(value);
+      if (Number.isNaN(parsed.getTime())) return value;
+      return parsed.toLocaleDateString(state.language === 'zh' ? 'zh-HK' : 'en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    };
+
+    const getTimelineYears = () => (
+      Array.from(new Set(timelineState.events.map(item => item.year).filter(Boolean))).sort((a, b) => b - a)
+    );
+
+    const renderTimelineYearOptions = () => {
+      const select = document.getElementById('timelineYearSelect');
+      if (!select) return;
+
+      const years = getTimelineYears();
+      const activeYear = years.includes(Number(timelineState.year)) ? String(timelineState.year) : 'all';
+      select.innerHTML = '';
+
+      const allOption = document.createElement('option');
+      allOption.value = 'all';
+      allOption.textContent = getI18n('timeline.allYears');
+      select.appendChild(allOption);
+
+      years.forEach((year) => {
+        const option = document.createElement('option');
+        option.value = String(year);
+        option.textContent = String(year);
+        select.appendChild(option);
+      });
+
+      select.value = activeYear;
+      select.setAttribute('aria-label', getI18n('timeline.selectLabel'));
+    };
+
+    const renderTimelineList = () => {
+      const container = document.getElementById('timelineList');
+      if (!container) return;
+
+      const filtered = timelineState.events.filter((item) => {
+        if (timelineState.year === 'all') return true;
+        return String(item.year) === String(timelineState.year);
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = `<div class="timeline-empty">${getI18n('timeline.noItems')}</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map((item) => {
+        const modeLabel = item.mode === 'hope' ? getI18n('timeline.hope') : getI18n('timeline.crisis');
+        const media = item.media?.type === 'image' && item.media?.url
+          ? `<div class="timeline-media"><img src="${item.media.url}" alt="${item.title || ''}" loading="lazy">${item.media.credit ? `<div class="timeline-credit">${item.media.credit}</div>` : ''}</div>`
+          : '';
+
+        return `
+          <article class="timeline-item">
+            <div class="timeline-date">
+              <span>${item.year || ''}</span>
+              <small>${formatTimelineDate(item.date)}</small>
+            </div>
+            <div>
+              <div class="timeline-meta">
+                <span class="timeline-chip ${item.mode === 'hope' ? 'hope' : 'crisis'}">${modeLabel}</span>
+                ${item.category ? `<span class="timeline-chip">${item.category}</span>` : ''}
+              </div>
+              <h3>${item.title || ''}</h3>
+              <p>${item.description || ''}</p>
+              ${media}
+            </div>
+          </article>
+        `;
+      }).join('');
+    };
+
+    const loadTimelineData = async () => {
+      try {
+        const response = await fetch('../data.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`data.json ${response.status}`);
+        const payload = await response.json();
+        timelineState.events = (payload.events || [])
+          .slice()
+          .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        renderTimelineYearOptions();
+        renderTimelineList();
+      } catch (error) {
+        console.error('Timeline load failed:', error);
+        const container = document.getElementById('timelineList');
+        if (container) {
+          container.innerHTML = `<div class="timeline-empty">${getI18n('timeline.noItems')}</div>`;
+        }
+      }
     };
 
     const applyLanguage = (lang) => {
@@ -515,6 +771,13 @@
       document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
       });
+
+      document.getElementById('timelineYearSelect')?.addEventListener('change', (event) => {
+        timelineState.year = event.target.value || 'all';
+        renderTimelineList();
+      });
+
+      loadTimelineData();
     });
   </script>
 </body>

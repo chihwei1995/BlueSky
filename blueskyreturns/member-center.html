@@ -427,10 +427,6 @@
       <div class="nav-actions">
         <a id="navMain" class="pill" href="../index.html">Main Globe</a>
         <a id="navAbout" class="pill" href="./index.html">About</a>
-        <a id="navRegions" class="pill" href="./countries-regions-hope-crisis.html">Collaboration & Vision</a>
-        <a id="navProposal" class="pill" href="./green-action-7day.html">7-Day Green Proposal</a>
-        <a id="navEco" class="pill" href="./eco-mbti.html">Eco-MBTI</a>
-        <a id="navStep" class="pill" href="./climate-action-form.html">Take One Step</a>
         <a id="navMember" class="pill active" href="./member-center.html">Member Center</a>
         <button id="openLoginBtn" class="pill primary" type="button">登入 / Sign In</button>
         <button id="logoutBtn" class="pill" type="button" hidden>登出 / Sign Out</button>
@@ -513,6 +509,11 @@
             <h3 id="taskProposalTitle">7-Day Green Proposal</h3>
             <p id="taskProposalBody">填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。</p>
             <a id="taskProposalLink" class="pill" href="./green-action-7day.html">開始任務</a>
+          </article>
+          <article id="taskUploadWrap" class="task-card" hidden>
+            <h3 id="taskUploadTitle">上傳希望與威脅</h3>
+            <p id="taskUploadBody">提交地方 Hope / Crisis 資料，包含圖片、短片與說明內容。</p>
+            <a id="taskUploadLink" class="pill" href="./climate-action-form.html">前往上傳</a>
           </article>
         </div>
         <div id="reviewerCardWrap" hidden>
@@ -645,6 +646,9 @@
           proposalTitle: "7-Day Green Proposal",
           proposalBody: "填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。",
           proposalLink: "開始任務",
+          uploadTitle: "上傳希望與威脅",
+          uploadBody: "提交地方 Hope / Crisis 資料，包含圖片、短片與說明內容。",
+          uploadLink: "前往上傳",
           reviewerTitle: "協作管理入口",
           reviewerBody: "你的帳號已開啟協作管理功能，可進入管理區查看待處理資料。",
           reviewerLink: "前往管理區"
@@ -709,6 +713,9 @@
           proposalTitle: "7-Day Green Proposal",
           proposalBody: "Log today's green action and upload a photo as part of your task record.",
           proposalLink: "Start Task",
+          uploadTitle: "Upload Hope & Crisis",
+          uploadBody: "Submit local Hope / Crisis materials including images, short videos, and supporting descriptions.",
+          uploadLink: "Open Upload",
           reviewerTitle: "Coordination Access",
           reviewerBody: "Your account includes coordination access, so you can open the management desk and inspect pending items.",
           reviewerLink: "Open Management Desk"
@@ -759,6 +766,7 @@
     const memberStateEl = document.getElementById("memberState");
     const abilitySummaryEl = document.getElementById("abilitySummary");
     const reviewerCardWrap = document.getElementById("reviewerCardWrap");
+    const taskUploadWrap = document.getElementById("taskUploadWrap");
     const submissionList = document.getElementById("submissionList");
     const submissionEmpty = document.getElementById("submissionEmpty");
     const reviewerSubmissionPanel = document.getElementById("reviewerSubmissionPanel");
@@ -799,10 +807,6 @@
       document.getElementById("brandSubtitle").textContent = t("brandSubtitle");
       document.getElementById("navMain").textContent = t("nav.main");
       document.getElementById("navAbout").textContent = t("nav.about");
-      document.getElementById("navRegions").textContent = t("nav.regions");
-      document.getElementById("navProposal").textContent = t("nav.proposal");
-      document.getElementById("navEco").textContent = t("nav.eco");
-      document.getElementById("navStep").textContent = t("nav.step");
       document.getElementById("navMember").textContent = t("nav.member");
       openLoginBtn.textContent = t("nav.signIn");
       logoutBtn.textContent = t("nav.signOut");
@@ -828,6 +832,9 @@
       document.getElementById("taskProposalTitle").textContent = t("tasks.proposalTitle");
       document.getElementById("taskProposalBody").textContent = t("tasks.proposalBody");
       document.getElementById("taskProposalLink").textContent = t("tasks.proposalLink");
+      document.getElementById("taskUploadTitle").textContent = t("tasks.uploadTitle");
+      document.getElementById("taskUploadBody").textContent = t("tasks.uploadBody");
+      document.getElementById("taskUploadLink").textContent = t("tasks.uploadLink");
       document.getElementById("reviewerCardTitle").textContent = t("tasks.reviewerTitle");
       document.getElementById("reviewerCardBody").textContent = t("tasks.reviewerBody");
       document.getElementById("reviewerCardLink").textContent = t("tasks.reviewerLink");
@@ -875,6 +882,7 @@
       submissionList.hidden = true;
       submissionEmpty.hidden = false;
       reviewerCardWrap.hidden = true;
+      taskUploadWrap.hidden = true;
       reviewerSubmissionPanel.hidden = true;
       reviewerSubmissionList.innerHTML = "";
       reviewerSubmissionList.hidden = true;
@@ -1070,6 +1078,7 @@
             ? t("states.dashboard.level2")
             : t("states.dashboard.level1");
 
+        taskUploadWrap.hidden = permissionLevel < 2;
         reviewerCardWrap.hidden = permissionLevel !== 3;
         await loadSubmissions(user.uid);
         if (permissionLevel === 3) {

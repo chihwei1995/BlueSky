@@ -500,6 +500,12 @@
 
     .badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); }
 
+    #timelineContainer,
+    #anchorPanel,
+    #qrModal {
+      display: none !important;
+    }
+
     #entryOverlay {
       position: fixed;
       inset: 0;
@@ -625,6 +631,12 @@
       }
 
       .qr-card img { width: 200px; height: 200px; }
+
+      #timelineContainer,
+      #anchorPanel,
+      #qrModal {
+        display: none !important;
+      }
     }
   </style>
 </head>
@@ -651,10 +663,8 @@
         </div>
 
       <div class="header-actions">
-        <a class="ghost-btn nav-link-btn" href="blueskyreturns/countries-regions-hope-crisis.html" data-i18n="header.call">Collaboration & Vision</a>
         <a id="headerMemberLink" class="ghost-btn nav-link-btn" href="blueskyreturns/member-center.html">Member Center</a>
         <button id="headerLogoutBtn" class="ghost-btn" type="button" hidden>Sign Out</button>
-        <button class="ghost-btn" id="anchorToggle" type="button" data-i18n="header.timeline">📌 Timeline</button>
         <div class="toggle-container" data-i18n-aria-label="aria.modeToggle">
           <button class="toggle-btn active" data-mode="crisis" id="btn-crisis" data-i18n="mode.crisis">⚠️ CRISIS</button>
           <button class="toggle-btn" data-mode="hope" id="btn-hope" data-i18n="mode.hope">🌏 HOPE</button>
@@ -2025,7 +2035,7 @@
         if (y) jumpToYear(y);
       });
 
-      document.getElementById('anchorToggle').addEventListener('click', toggleAnchorPanel);
+      document.getElementById('anchorToggle')?.addEventListener('click', toggleAnchorPanel);
       document.getElementById('anchorCloseBtn').addEventListener('click', closeAnchorPanel);
       document.getElementById('qrCloseBtn').addEventListener('click', closeQRModal);
       document.getElementById('qrModal').addEventListener('click', (e) => {
