@@ -427,6 +427,7 @@
         <a id="navAbout" class="pill" href="./index.html">About</a>
         <a id="navRegions" class="pill" href="./countries-regions-hope-crisis.html">Collaboration & Vision</a>
         <a id="navProposal" class="pill" href="./green-action-7day.html">7-Day Green Proposal</a>
+        <a id="navEco" class="pill" href="./eco-mbti.html">Eco-MBTI</a>
         <a id="navStep" class="pill" href="./climate-action-form.html">Take One Step</a>
         <a id="navMember" class="pill active" href="./member-center.html">Member Center</a>
         <button id="openLoginBtn" class="pill primary" type="button">登入 / Sign In</button>
@@ -611,7 +612,7 @@
       zh: {
         pageTitle: "會員中心 | Blue Sky Returns",
         brandSubtitle: "會員中心 / Member Center",
-        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "7 日綠色提案", step: "邁出一步", member: "會員中心", signIn: "登入 / Sign In", signOut: "登出 / Sign Out" },
+        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "7 日綠色提案", eco: "Eco-MBTI", step: "邁出一步", member: "會員中心", signIn: "登入 / Sign In", signOut: "登出 / Sign Out" },
         hero: { badge: "Member Dashboard", title: "氣候行動者會員中心", body: "登入後，你可以看到自己的氣候行動者資料、邁出一步問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。", proposal: "前往 7-Day Green Proposal", step: "修改邁出一步" },
         stateCardTitle: "目前登入狀態",
         abilityCardTitle: "目前可做的事",
@@ -672,7 +673,7 @@
       en: {
         pageTitle: "Member Center | Blue Sky Returns",
         brandSubtitle: "Member Center",
-        nav: { main: "Main Globe", about: "About", regions: "Collaboration & Vision", proposal: "7-Day Green Proposal", step: "Take One Step", member: "Member Center", signIn: "Sign In", signOut: "Sign Out" },
+        nav: { main: "Main Globe", about: "About", regions: "Collaboration & Vision", proposal: "7-Day Green Proposal", eco: "Eco-MBTI", step: "Take One Step", member: "Member Center", signIn: "Sign In", signOut: "Sign Out" },
         hero: { badge: "Member Dashboard", title: "Climate Action Partner Center", body: "After signing in, you can view your climate action partner profile, Take One Step results, 7-Day Green Proposal records, and the features currently available to you.", proposal: "Open 7-Day Green Proposal", step: "Edit Take One Step" },
         stateCardTitle: "Current Sign-In Status",
         abilityCardTitle: "What You Can Do Now",
@@ -787,6 +788,7 @@
       document.getElementById("navAbout").textContent = t("nav.about");
       document.getElementById("navRegions").textContent = t("nav.regions");
       document.getElementById("navProposal").textContent = t("nav.proposal");
+      document.getElementById("navEco").textContent = t("nav.eco");
       document.getElementById("navStep").textContent = t("nav.step");
       document.getElementById("navMember").textContent = t("nav.member");
       openLoginBtn.textContent = t("nav.signIn");

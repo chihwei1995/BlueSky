@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eco-MBTI | 環保 MBTI</title>
+  <style>
+    :root {
+      --bg: #eef6f0;
+      --surface: rgba(255, 255, 255, 0.92);
+      --surface-strong: #ffffff;
+      --ink: #153126;
+      --muted: #597068;
+      --line: #d8e7dd;
+      --forest: #1b7a55;
+      --forest-deep: #12513a;
+      --sky: #2aa6b5;
+      --sun: #c7d83e;
+      --gold: #d7a72d;
+      --shadow: 0 20px 42px rgba(21, 49, 38, 0.08);
+      --ok: #15803d;
+      --warn: #b45309;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at top left, rgba(42, 166, 181, 0.18), transparent 20%),
+        radial-gradient(circle at top right, rgba(199, 216, 62, 0.22), transparent 18%),
+        linear-gradient(180deg, #f6fbf7 0%, #eef6f0 42%, #f5fbf8 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(246, 251, 247, 0.92);
+      border-bottom: 1px solid rgba(216, 231, 221, 0.96);
+    }
+
+    .shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand strong {
+      color: var(--forest-deep);
+      font-size: 0.98rem;
+      letter-spacing: 0.03em;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill,
+    .button,
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+      color: var(--forest-deep);
+      padding: 10px 14px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .pill:hover,
+    .button:hover,
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(27, 122, 85, 0.35);
+      box-shadow: 0 10px 24px rgba(27, 122, 85, 0.12);
+    }
+
+    .pill.active,
+    .button.primary,
+    button.primary {
+      background: linear-gradient(135deg, var(--forest), var(--sky));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(27, 122, 85, 0.18);
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-strong);
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--forest), var(--sky));
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(27, 122, 85, 0.18);
+    }
+
+    main {
+      padding: 28px 0 72px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 86px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .side-card,
+    .panel {
+      background: var(--surface);
+      border: 1px solid rgba(216, 231, 221, 0.96);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .side-card {
+      padding: 18px;
+    }
+
+    .side-card h2,
+    .side-card h3,
+    .panel h2,
+    .panel h3,
+    .panel h4 {
+      margin: 0;
+    }
+
+    .side-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .side-links {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .side-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(251, 255, 252, 0.92);
+      color: var(--forest-deep);
+      font-weight: 700;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .side-link:hover {
+      transform: translateX(2px);
+      border-color: rgba(27, 122, 85, 0.35);
+      background: rgba(230, 248, 238, 0.88);
+    }
+
+    .side-link span {
+      display: grid;
+      gap: 1px;
+    }
+
+    .side-link small {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .mobile-side-nav {
+      display: none;
+      margin-bottom: 18px;
+    }
+
+    .mobile-nav-card {
+      padding: 14px;
+    }
+
+    .mobile-nav-card summary {
+      list-style: none;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--forest-deep);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .mobile-nav-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-nav-links {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 22px;
+    }
+
+    .panel {
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 24px;
+      padding: 30px;
+      color: #fff;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 30%),
+        linear-gradient(135deg, rgba(18, 81, 58, 0.98), rgba(27, 122, 85, 0.94) 54%, rgba(42, 166, 181, 0.88));
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .hero-copy h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.08;
+    }
+
+    .hero-copy p,
+    .hero-note span {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-actions .button {
+      min-width: 180px;
+    }
+
+    .hero-art {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .hero-orbit {
+      position: relative;
+      min-height: 280px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent 60%),
+        linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+      overflow: hidden;
+    }
+
+    .orbit-core {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 160px;
+      height: 160px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #e6fff3 0%, #8be6be 35%, #1b7a55 100%);
+      box-shadow: 0 0 0 18px rgba(255, 255, 255, 0.06), 0 0 0 48px rgba(255, 255, 255, 0.04);
+    }
+
+    .orbit-core::before,
+    .orbit-core::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .orbit-core::before {
+      width: 90px;
+      height: 18px;
+      top: 42px;
+      left: 34px;
+      transform: rotate(-18deg);
+    }
+
+    .orbit-core::after {
+      width: 70px;
+      height: 14px;
+      top: 86px;
+      left: 48px;
+      transform: rotate(22deg);
+    }
+
+    .trait-node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 74px;
+      height: 74px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      text-align: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 8px;
+      backdrop-filter: blur(8px);
+    }
+
+    .trait-node.energy { top: 22px; left: 26px; }
+    .trait-node.info { top: 22px; right: 26px; }
+    .trait-node.decision { bottom: 26px; left: 42px; }
+    .trait-node.lifestyle { bottom: 26px; right: 42px; }
+
+    .hero-note {
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      display: grid;
+      gap: 8px;
+    }
+
+    .hero-note strong {
+      font-size: 1rem;
+    }
+
+    .section-head {
+      display: grid;
+      gap: 6px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.5rem, 2.7vw, 2.15rem);
+    }
+
+    .section-head p,
+    .dimension-card p,
+    .framework-card p,
+    .result-copy p,
+    .insight-card p,
+    .note-card p,
+    .result-stat p,
+    .question-copy p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .framework-grid,
+    .insight-grid,
+    .result-grid,
+    .dimension-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .framework-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .framework-card,
+    .dimension-card,
+    .insight-card,
+    .question-card,
+    .result-card,
+    .note-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .framework-badge,
+    .dimension-tag,
+    .result-type,
+    .small-badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .framework-badge.energy { background: rgba(42, 166, 181, 0.12); color: #0e7280; }
+    .framework-badge.info { background: rgba(199, 216, 62, 0.18); color: #687500; }
+    .framework-badge.decision { background: rgba(215, 167, 45, 0.16); color: #845c00; }
+    .framework-badge.lifestyle { background: rgba(27, 122, 85, 0.14); color: var(--forest-deep); }
+
+    .dimension-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .dimension-tag {
+      background: rgba(27, 122, 85, 0.1);
+      color: var(--forest-deep);
+    }
+
+    .dimension-letters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .letter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(21, 49, 38, 0.06);
+      color: var(--ink);
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    .quiz-panel {
+      gap: 22px;
+    }
+
+    .progress-bar {
+      position: relative;
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(21, 49, 38, 0.08);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--forest), var(--sky));
+      transition: width 0.22s ease;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .question-card {
+      gap: 14px;
+    }
+
+    .question-top {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .question-number {
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--gold), #f1cf6f);
+      color: #5b4100;
+      font-weight: 900;
+      box-shadow: 0 10px 20px rgba(215, 167, 45, 0.18);
+    }
+
+    .question-copy {
+      display: grid;
+      gap: 4px;
+    }
+
+    .question-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice {
+      display: grid;
+      gap: 8px;
+      padding: 14px 15px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(248, 252, 249, 0.9);
+      cursor: pointer;
+      transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .choice:hover {
+      transform: translateY(-1px);
+      border-color: rgba(27, 122, 85, 0.35);
+      box-shadow: 0 10px 24px rgba(27, 122, 85, 0.08);
+    }
+
+    .choice input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice.active {
+      border-color: rgba(27, 122, 85, 0.55);
+      background: rgba(230, 248, 238, 0.95);
+      box-shadow: 0 12px 24px rgba(27, 122, 85, 0.1);
+    }
+
+    .choice-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .choice-label {
+      font-weight: 800;
+      color: var(--forest-deep);
+    }
+
+    .choice-trait {
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(42, 166, 181, 0.12);
+      color: #0f7480;
+    }
+
+    .quiz-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .status {
+      font-weight: 700;
+    }
+
+    .status.warn { color: var(--warn); }
+    .status.ok { color: var(--ok); }
+
+    .result-panel[hidden] {
+      display: none !important;
+    }
+
+    .result-grid {
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      align-items: start;
+    }
+
+    .result-card.primary {
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 28%),
+        linear-gradient(135deg, rgba(18, 81, 58, 0.98), rgba(27, 122, 85, 0.94) 54%, rgba(42, 166, 181, 0.88));
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .result-card.primary p {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .portrait-frame,
+    .role-card-media {
+      position: relative;
+      padding: 10px;
+      border-radius: 32px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.1)),
+        linear-gradient(145deg, var(--frame-soft, rgba(225, 247, 236, 0.42)), var(--frame-deep, rgba(111, 191, 163, 0.18)));
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.36),
+        inset 0 -14px 24px rgba(9, 49, 34, 0.12),
+        0 18px 32px rgba(10, 49, 34, 0.22);
+    }
+
+    .portrait-frame::before,
+    .role-card-media::before {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      pointer-events: none;
+    }
+
+    .portrait-frame::after,
+    .role-card-media::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 56px;
+      height: 56px;
+      border-radius: 18px 18px 18px 30px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.42), transparent 45%),
+        linear-gradient(145deg, var(--frame-accent, rgba(42, 166, 181, 0.26)), rgba(255,255,255,0.12));
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 10px 22px rgba(9, 49, 34, 0.14);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 32% 100%, 0 68%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .frame-leaf {
+      position: absolute;
+      left: 14px;
+      bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 96px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255,255,255,0.24);
+      color: #fff;
+      font-size: 0.86rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      box-shadow: 0 10px 18px rgba(10, 49, 34, 0.14);
+      backdrop-filter: blur(8px);
+      z-index: 2;
+    }
+
+    .frame-leaf::before {
+      content: "🍃";
+      margin-right: 6px;
+      font-size: 0.9rem;
+    }
+
+    .result-portrait {
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 14px 24px rgba(12, 55, 40, 0.18);
+    }
+
+    .result-hero {
+      display: grid;
+      grid-template-columns: minmax(240px, 360px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .result-copy {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .result-name-zh {
+      font-size: clamp(1.25rem, 3vw, 1.8rem);
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .result-name-en {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.82);
+      letter-spacing: 0.01em;
+    }
+
+    .result-summary {
+      font-size: 1rem;
+    }
+
+    .role-gallery {
+      display: grid;
+      gap: 16px;
+    }
+
+    .role-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .role-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(180deg, var(--card-top, rgba(255, 255, 255, 0.98)), var(--card-bottom, rgba(245, 250, 247, 0.96)));
+      overflow: hidden;
+      display: grid;
+      gap: 0;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .role-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(27, 122, 85, 0.35);
+      box-shadow: 0 16px 28px rgba(21, 49, 38, 0.12);
+    }
+
+    .role-card.active {
+      border-color: var(--card-active, rgba(27, 122, 85, 0.48));
+      box-shadow: 0 18px 30px color-mix(in srgb, var(--card-shadow, rgba(27, 122, 85, 0.16)) 80%, transparent);
+      background: linear-gradient(180deg, var(--card-active-top, rgba(235, 249, 241, 0.95)), rgba(255, 255, 255, 0.98));
+    }
+
+    .role-card img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      display: block;
+      background: rgba(21, 49, 38, 0.06);
+      border-radius: 18px;
+      border: 1px solid rgba(20, 63, 48, 0.08);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+        0 12px 18px rgba(21, 49, 38, 0.12);
+    }
+
+    .role-card-body {
+      padding: 12px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .role-code {
+      display: inline-flex;
+      width: fit-content;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--code-bg, rgba(27, 122, 85, 0.12));
+      color: var(--code-fg, var(--forest-deep));
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    .role-title-zh {
+      font-size: 0.96rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .role-title-en {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .result-type {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+
+    .result-card h3 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+    }
+
+    .result-stat-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .result-stat {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: grid;
+      gap: 4px;
+    }
+
+    .result-stat strong {
+      font-size: 1.2rem;
+    }
+
+    .type-breakdown {
+      display: grid;
+      gap: 12px;
+    }
+
+    .type-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .type-row-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-weight: 800;
+    }
+
+    .type-bar {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(21, 49, 38, 0.08);
+      overflow: hidden;
+    }
+
+    .type-bar-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 50%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--forest), var(--sky));
+    }
+
+    .insight-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .share-box {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(250, 252, 250, 0.9);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 0 20px 36px;
+      color: #70827a;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 1080px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .side-nav {
+        display: none;
+      }
+
+      .mobile-side-nav {
+        display: block;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .result-grid,
+      .result-hero,
+      .framework-grid,
+      .dimension-grid,
+      .insight-grid,
+      .role-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 0 16px;
+      }
+
+      .panel,
+      .hero {
+        padding: 20px 18px;
+        border-radius: 24px;
+      }
+
+      .hero-actions,
+      .quiz-actions,
+      .nav-actions {
+        align-items: stretch;
+      }
+
+      .hero-actions .button,
+      .quiz-actions .button,
+      .quiz-actions button {
+        width: 100%;
+      }
+
+      .progress-head,
+      .question-top,
+      .type-row-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="brand">
+        <strong data-i18n="header.title">Blue Sky Returns</strong>
+        <span data-i18n="header.subtitle">Eco-MBTI environmental personality test</span>
+      </div>
+      <div class="nav-actions">
+        <a class="pill" href="../index.html" data-i18n="nav.main">Main Globe</a>
+        <a class="pill" href="./index.html" data-i18n="nav.about">About</a>
+        <a class="pill" href="./countries-regions-hope-crisis.html" data-i18n="nav.call">Collaboration &amp; Vision</a>
+        <a class="pill" href="./green-action-7day.html" data-i18n="nav.proposal">7-Day Green Proposal</a>
+        <a class="pill" href="./climate-action-form.html" data-i18n="nav.form">Take One Step</a>
+        <a class="pill" href="./member-center.html" data-i18n="nav.member">Member Center</a>
+        <a class="pill active" href="./eco-mbti.html" data-i18n="nav.eco">Eco-MBTI</a>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell">
+      <div class="mobile-side-nav">
+        <details class="mobile-nav-card side-card">
+          <summary data-i18n="mobileNav.title">Quick Navigation</summary>
+          <div class="mobile-nav-links">
+            <a class="side-link" href="#framework"><span><span data-i18n="mobileNav.framework">Framework</span><small data-i18n="mobileNav.frameworkSub">4 sustainability dimensions</small></span></a>
+            <a class="side-link" href="#quiz"><span><span data-i18n="mobileNav.quiz">20 Questions</span><small data-i18n="mobileNav.quizSub">Answer and score</small></span></a>
+            <a class="side-link" href="#resultPanel"><span><span data-i18n="mobileNav.result">Your Result</span><small data-i18n="mobileNav.resultSub">4-letter Eco-MBTI</small></span></a>
+          </div>
+        </details>
+      </div>
+
+      <div class="layout">
+        <aside class="side-nav">
+          <div class="side-card">
+            <h2 data-i18n="side.title">Eco-MBTI</h2>
+            <p data-i18n="side.body">A playful framework that turns environmental action styles into a four-letter sustainability personality profile.</p>
+            <div class="side-links">
+              <a class="side-link" href="#framework"><span><span data-i18n="side.linkFramework">Framework</span><small data-i18n="side.linkFrameworkSub">4 sustainability dimensions</small></span></a>
+              <a class="side-link" href="#quiz"><span><span data-i18n="side.linkQuiz">20 Questions</span><small data-i18n="side.linkQuizSub">Answer and calculate</small></span></a>
+              <a class="side-link" href="#resultPanel"><span><span data-i18n="side.linkResult">Result Card</span><small data-i18n="side.linkResultSub">Your Eco-MBTI output</small></span></a>
+            </div>
+          </div>
+          <div class="side-card">
+            <h3 data-i18n="side.tipTitle">Quick Tip</h3>
+            <p data-i18n="side.tipBody">This page is not judging who is more green. It helps people see which kind of climate action style feels most natural to them.</p>
+          </div>
+        </aside>
+
+        <div class="stack">
+          <section class="hero panel">
+            <div class="hero-copy">
+              <div class="eyebrow" data-i18n="hero.eyebrow">Interactive Sustainability Personality</div>
+              <h1 data-i18n="hero.title">環保 MBTI<br>Eco-MBTI</h1>
+              <p data-i18n="hero.body">把 MBTI 的底層邏輯重新轉譯成永續行動風格。這不是傳統性格測驗，而是一個幫助大家理解自己如何參與環境保護、又適合用什麼方式擴大影響力的互動頁面。</p>
+              <div class="hero-actions">
+                <a class="button primary" href="#quiz" data-i18n="hero.primary">開始 20 題測驗</a>
+                <a class="button" href="#framework" data-i18n="hero.secondary">先看四大維度</a>
+              </div>
+            </div>
+            <div class="hero-art">
+              <div class="hero-orbit" aria-hidden="true">
+                <div class="orbit-core"></div>
+                <div class="trait-node energy" data-i18n-html="hero.nodeEnergy">能量<br>E / I</div>
+                <div class="trait-node info" data-i18n-html="hero.nodeInfo">資訊<br>S / N</div>
+                <div class="trait-node decision" data-i18n-html="hero.nodeDecision">決策<br>T / F</div>
+                <div class="trait-node lifestyle" data-i18n-html="hero.nodeLifestyle">執行<br>J / P</div>
+              </div>
+              <div class="hero-note">
+                <strong data-i18n="hero.noteTitle">20 questions, 4 letters, 1 climate action style.</strong>
+                <span data-i18n="hero.noteBody">每一題沒有標準答案，只有更貼近你自然習慣的環保選擇。測驗完成後，你會得到專屬的 Eco-MBTI 類型、行動優勢與下一步建議。</span>
+              </div>
+            </div>
+          </section>
+
+          <section id="framework" class="panel">
+            <div class="section-head">
+              <h2 data-i18n="framework.title">四大核心維度 / The Four Core Dimensions</h2>
+              <p data-i18n="framework.body">我們把 MBTI 的四個底層維度重新定義成「個人參與永續行動的四項核心指標」，讓它更貼近環境保護、社群倡議與低碳生活場景。</p>
+            </div>
+            <div class="framework-grid">
+              <article class="framework-card">
+                <span class="framework-badge energy" data-i18n="framework.energy.badge">能量來源 / Energy</span>
+                <h3 data-i18n="framework.energy.title">E 社群倡議 vs. I 個人實踐</h3>
+                <p data-i18n="framework.energy.body">你更習慣在群體中號召、連結與推廣，還是從自己的生活細節開始落實低碳選擇，並用穩定實踐來影響他人？</p>
+              </article>
+              <article class="framework-card">
+                <span class="framework-badge info" data-i18n="framework.info.badge">資訊處理 / Information</span>
+                <h3 data-i18n="framework.info.title">S 務實行動 vs. N 系統創新</h3>
+                <p data-i18n="framework.info.body">你更重視看得見、立刻可做的環保任務，還是更傾向思考底層結構、未來系統與跨領域創新解方？</p>
+              </article>
+              <article class="framework-card">
+                <span class="framework-badge decision" data-i18n="framework.decision.badge">決策依據 / Decision</span>
+                <h3 data-i18n="framework.decision.title">T 數據驅動 vs. F 情感共鳴</h3>
+                <p data-i18n="framework.decision.body">你做環保決策時，是更依賴科學數據、效率與結構，還是更容易被生態關懷、人的故事與代際責任所推動？</p>
+              </article>
+              <article class="framework-card">
+                <span class="framework-badge lifestyle" data-i18n="framework.lifestyle.badge">執行方式 / Lifestyle</span>
+                <h3 data-i18n="framework.lifestyle.title">J 嚴謹規劃 vs. P 彈性適應</h3>
+                <p data-i18n="framework.lifestyle.body">你的永續行動是偏向目標導向、紀律執行，還是更喜歡在現場隨機應變，以彈性與創意維持環保習慣？</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <h2 data-i18n="letters.title">八個字母代表什麼 / What Each Letter Signals</h2>
+              <p data-i18n="letters.body">每一個字母不是能力高低，而是你在永續參與中的自然傾向。結果會從四組對應字母中選出最貼近你的那一邊。</p>
+            </div>
+            <div class="dimension-grid">
+              <article class="dimension-card">
+                <span class="dimension-tag">E / I</span>
+                <h3 data-i18n="letters.energy.title">能量來源</h3>
+                <div class="dimension-letters">
+                  <span class="letter-chip" data-i18n="letters.energy.e">E 社群倡議</span>
+                  <span class="letter-chip" data-i18n="letters.energy.i">I 個人實踐</span>
+                </div>
+              </article>
+              <article class="dimension-card">
+                <span class="dimension-tag">S / N</span>
+                <h3 data-i18n="letters.info.title">資訊處理</h3>
+                <div class="dimension-letters">
+                  <span class="letter-chip" data-i18n="letters.info.s">S 務實行動</span>
+                  <span class="letter-chip" data-i18n="letters.info.n">N 系統創新</span>
+                </div>
+              </article>
+              <article class="dimension-card">
+                <span class="dimension-tag">T / F</span>
+                <h3 data-i18n="letters.decision.title">決策依據</h3>
+                <div class="dimension-letters">
+                  <span class="letter-chip" data-i18n="letters.decision.t">T 數據驅動</span>
+                  <span class="letter-chip" data-i18n="letters.decision.f">F 情感共鳴</span>
+                </div>
+              </article>
+              <article class="dimension-card">
+                <span class="dimension-tag">J / P</span>
+                <h3 data-i18n="letters.lifestyle.title">執行方式</h3>
+                <div class="dimension-letters">
+                  <span class="letter-chip" data-i18n="letters.lifestyle.j">J 嚴謹規劃</span>
+                  <span class="letter-chip" data-i18n="letters.lifestyle.p">P 彈性適應</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section id="quiz" class="panel quiz-panel">
+            <div class="section-head">
+              <h2 data-i18n="quiz.title">20 題環保 MBTI 測驗 / 20-Question Eco-MBTI Quiz</h2>
+              <p data-i18n="quiz.body">20 題平均分配到四個維度，每個維度 5 題。請依照「你平常更自然的反應」選擇，而不是你覺得最理想的答案。</p>
+            </div>
+            <div class="progress-head">
+              <div class="small-badge" id="progressLabel" data-i18n="quiz.progress">已完成 0 / 20 題</div>
+              <div class="small-badge" data-i18n="quiz.tip">所有題目都選完後，就會解鎖專屬結果卡。</div>
+            </div>
+            <div class="progress-bar" aria-hidden="true">
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <form id="quizForm">
+              <div id="questionList" class="question-list"></div>
+              <div class="quiz-actions">
+                <button id="submitQuizBtn" class="primary" type="submit" data-i18n="quiz.submit">查看我的 Eco-MBTI</button>
+                <button id="resetQuizBtn" type="button" data-i18n="quiz.reset">重新作答</button>
+                <span id="quizStatus" class="status" aria-live="polite"></span>
+              </div>
+            </form>
+          </section>
+
+          <section id="resultPanel" class="panel" hidden>
+            <div class="section-head">
+              <h2 data-i18n="result.title">你的結果 / Your Result</h2>
+              <p data-i18n="result.body">你的 4 碼 Eco-MBTI 不代表唯一正確的環保方式，而是指出你最自然、最容易持續放大的永續參與風格。</p>
+            </div>
+            <div class="result-grid">
+              <article class="result-card primary">
+                <div class="result-hero">
+                  <div class="portrait-frame">
+                    <span id="resultBadge" class="frame-leaf">Eco Type</span>
+                    <img id="resultPortrait" class="result-portrait" src="../assets/eco-mbti-full/INTJ.png" alt="Eco-MBTI character portrait" />
+                  </div>
+                  <div class="result-copy">
+                    <span class="result-type" id="resultTypeLabel">Eco-MBTI</span>
+                    <h3 id="resultType">----</h3>
+                    <div class="result-name-zh" id="resultName">-</div>
+                    <div class="result-name-en" id="resultEnTitle">-</div>
+                    <p id="resultSummary" class="result-summary">-</p>
+                  </div>
+                </div>
+                <div class="result-stat-grid">
+                  <div class="result-stat">
+                    <span data-i18n="result.statStrength">強項</span>
+                    <p id="resultStyleBody">-</p>
+                  </div>
+                  <div class="result-stat">
+                    <span data-i18n="result.statChallenge">挑戰</span>
+                    <p id="resultChallengeBody">-</p>
+                  </div>
+                </div>
+              </article>
+              <article class="result-card">
+                <h3 data-i18n="result.breakdownTitle">維度分佈 / Dimension Breakdown</h3>
+                <div id="breakdownList" class="type-breakdown"></div>
+              </article>
+            </div>
+            <div class="insight-grid">
+              <article class="insight-card">
+                <span class="small-badge" data-i18n="result.traitTitle">核心特質</span>
+                <h3 data-i18n="result.traitHeadline">人格解讀</h3>
+                <p id="resultTraitBody">-</p>
+              </article>
+              <article class="insight-card">
+                <span class="small-badge" data-i18n="result.actionTitle">適合的綠色行動建議</span>
+                <h3 data-i18n="result.actionHeadline">行動方向</h3>
+                <p id="resultActionBody">-</p>
+              </article>
+            </div>
+            <div class="role-gallery">
+              <div class="section-head">
+                <h3 data-i18n="result.galleryTitle">16 型角色總覽 / Eco-MBTI Role Gallery</h3>
+                <p data-i18n="result.galleryBody">每張角色卡都包含 4 碼類型、中文稱號與英文稱號。你也可以點選其他卡片查看完整個人角色版面。</p>
+              </div>
+              <div id="roleGalleryGrid" class="role-gallery-grid"></div>
+            </div>
+            <div class="share-box">
+              <div class="section-head">
+                <h3 data-i18n="result.shareTitle">分享你的結果 / Share Your Result</h3>
+                <p data-i18n="result.shareBody">你可以把結果文字複製出去，拿來做社群貼文、活動互動或引導更多人來測。</p>
+              </div>
+              <div class="quiz-actions">
+                <button id="copyResultBtn" type="button" data-i18n="result.copy">複製結果文案</button>
+                <button id="downloadCardBtn" type="button" data-i18n="result.download">下載 PNG 角色卡</button>
+                <a class="button" href="./member-center.html" data-i18n="result.member">打開會員中心</a>
+                <a class="button" href="./climate-action-form.html" data-i18n="result.step">前往邁出一步</a>
+                <span id="shareStatus" class="status" aria-live="polite"></span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" data-i18n="footer">Blue Sky Returns • Eco-MBTI • 2026</footer>
+
+  <script>
+    const LANG_STORAGE_KEY = "bsr_lang";
+    const QUESTIONS = [
+      {
+        id: 1,
+        dimension: "energy",
+        zh: {
+          prompt: "週末空閒時，你更傾向如何參與環保行動？",
+          a: "參加社群發起的淨灘或綠色推廣活動，與大家一起行動",
+          b: "在家研究並實踐素食料理製作，從日常中減少自己的碳足跡"
+        },
+        en: {
+          prompt: "How are you more likely to spend a free weekend in a sustainability context?",
+          a: "Join a community beach clean-up or green promotion event and act with others",
+          b: "Stay home to explore plant-based cooking and reduce your own carbon footprint through daily life"
+        },
+        options: [{ key: "A", letter: "E" }, { key: "B", letter: "I" }]
+      },
+      {
+        id: 2,
+        dimension: "energy",
+        zh: {
+          prompt: "當你發現一個很棒的環保點子時，你的第一反應是？",
+          a: "立刻分享到社群或群組，號召親朋好友一起參與",
+          b: "先在自己的日常生活中試驗，看看實際效果與可行性如何"
+        },
+        en: {
+          prompt: "When you discover a great green idea, what is your first instinct?",
+          a: "Share it right away in social spaces or group chats and invite people to join",
+          b: "Test it in your own daily routine first to see whether it really works"
+        },
+        options: [{ key: "A", letter: "E" }, { key: "B", letter: "I" }]
+      },
+      {
+        id: 3,
+        dimension: "energy",
+        zh: {
+          prompt: "哪種環保成就會讓你更有成就感？",
+          a: "成功舉辦一場百人參與的綠色倡議活動，擴大影響力",
+          b: "連續一個月達成個人零廢棄與低碳生活目標"
+        },
+        en: {
+          prompt: "Which kind of green achievement feels more rewarding to you?",
+          a: "Organizing a large public green campaign with wide participation",
+          b: "Sustaining a personal zero-waste and low-carbon routine for a full month"
+        },
+        options: [{ key: "A", letter: "E" }, { key: "B", letter: "I" }]
+      },
+      {
+        id: 4,
+        dimension: "energy",
+        zh: {
+          prompt: "面對身邊對環保較為冷漠的朋友，你會怎麼做？",
+          a: "主動發起討論，分享觀念並試圖邀請他們加入環保行列",
+          b: "做好自己的分類與減碳，相信持續以身作則會默默影響他們"
+        },
+        en: {
+          prompt: "How do you respond to friends who seem indifferent to environmental issues?",
+          a: "Start the conversation and actively invite them into green action",
+          b: "Keep practicing sorting and low-carbon habits yourself and trust quiet example-setting"
+        },
+        options: [{ key: "A", letter: "E" }, { key: "B", letter: "I" }]
+      },
+      {
+        id: 5,
+        dimension: "energy",
+        zh: {
+          prompt: "在推動如「一步・藍天」這類的環保專案時，你最喜歡扮演什麼角色？",
+          a: "負責對外聯繫、公關宣傳與招募志同道合的夥伴",
+          b: "負責內部資料建檔、維持專案的執行細節與日常環保標準"
+        },
+        en: {
+          prompt: "In a project like Blue Sky Returns, which role would you most enjoy?",
+          a: "External outreach, public communication, and recruiting aligned collaborators",
+          b: "Internal documentation, operational detail, and day-to-day sustainability standards"
+        },
+        options: [{ key: "A", letter: "E" }, { key: "B", letter: "I" }]
+      },
+      {
+        id: 6,
+        dimension: "info",
+        zh: {
+          prompt: "當看到海洋塑膠污染的新聞時，你的直覺想法是？",
+          a: "我們應該立刻減少使用一次性塑膠，並落實資源回收",
+          b: "應該研發可分解的新型替代材質，或從源頭改變產業供應鏈"
+        },
+        en: {
+          prompt: "When you see news about ocean plastic pollution, what do you instinctively think?",
+          a: "We should immediately reduce single-use plastic and improve recycling behavior",
+          b: "We should develop new substitute materials and redesign supply chains from the source"
+        },
+        options: [{ key: "A", letter: "S" }, { key: "B", letter: "N" }]
+      },
+      {
+        id: 7,
+        dimension: "info",
+        zh: {
+          prompt: "評估一個環保計畫是否成功，你更看重什麼？",
+          a: "具體回收了多少公斤的垃圾，或實際種了多少棵樹",
+          b: "是否建立了一個可持續運作、具備擴展性的商業模式或底層邏輯"
+        },
+        en: {
+          prompt: "How do you usually judge whether a green initiative has succeeded?",
+          a: "By the concrete amount of waste collected or trees planted",
+          b: "By whether it creates a sustainable and scalable underlying model"
+        },
+        options: [{ key: "A", letter: "S" }, { key: "B", letter: "N" }]
+      },
+      {
+        id: 8,
+        dimension: "info",
+        zh: {
+          prompt: "參與環保組織時，你更喜歡處理哪類任務？",
+          a: "規劃清楚的物資回收動線、分類標準與執行細節",
+          b: "構思如何利用 Web3 或區塊鏈技術來打造透明的碳追蹤系統"
+        },
+        en: {
+          prompt: "Inside an environmental organization, which kind of task sounds more attractive to you?",
+          a: "Designing practical recycling flow, sorting standards, and execution details",
+          b: "Imagining how Web3 or blockchain could support transparent carbon tracking"
+        },
+        options: [{ key: "A", letter: "S" }, { key: "B", letter: "N" }]
+      },
+      {
+        id: 9,
+        dimension: "info",
+        zh: {
+          prompt: "聽到「永續發展」這個詞，你腦中浮現的畫面是？",
+          a: "民眾自備環保杯、搭乘大眾運輸等日常生活的具體場景",
+          b: "能源轉型、智慧城市與循環經濟交織的未來系統藍圖"
+        },
+        en: {
+          prompt: "When you hear the phrase “sustainable development,” what comes to mind first?",
+          a: "Concrete daily-life scenes like reusable cups and public transportation",
+          b: "A future systems map involving energy transition, smart cities, and circular economies"
+        },
+        options: [{ key: "A", letter: "S" }, { key: "B", letter: "N" }]
+      },
+      {
+        id: 10,
+        dimension: "info",
+        zh: {
+          prompt: "為了讓更多人實踐環保，你認為最有效的方法是？",
+          a: "提供實用、好上手的綠色生活小撇步和清晰的操作指南",
+          b: "描繪一個具啟發性的綠色未來願景，激發大眾的想像力與認同感"
+        },
+        en: {
+          prompt: "What do you believe is the most effective way to help more people act sustainably?",
+          a: "Offer practical green lifestyle tips with clear guidance",
+          b: "Paint an inspiring green future that sparks imagination and identification"
+        },
+        options: [{ key: "A", letter: "S" }, { key: "B", letter: "N" }]
+      },
+      {
+        id: 11,
+        dimension: "decision",
+        zh: {
+          prompt: "決定支持某個環保倡議前，你通常會先關注？",
+          a: "該組織的碳減排數據報告、科學指標與資金運用效率",
+          b: "該倡議背後的感人故事，以及對當地生態與社區的實際關懷"
+        },
+        en: {
+          prompt: "Before supporting an environmental initiative, what do you usually look at first?",
+          a: "Carbon reduction data, scientific indicators, and financial efficiency",
+          b: "The human story behind it and the care shown toward local ecology and communities"
+        },
+        options: [{ key: "A", letter: "T" }, { key: "B", letter: "F" }]
+      },
+      {
+        id: 12,
+        dimension: "decision",
+        zh: {
+          prompt: "說服別人採取低碳生活時，你最常用的切入點是？",
+          a: "列舉氣候變遷帶來的經濟損失、環境負載力等客觀科學數據",
+          b: "描述瀕危物種失去棲息地的困境，或為了下一代留下美好地球的期盼"
+        },
+        en: {
+          prompt: "When encouraging others to adopt a low-carbon lifestyle, what argument do you reach for first?",
+          a: "Objective scientific data about climate cost, risk, and resource limits",
+          b: "Stories about endangered species, lost habitats, and the future we leave to the next generation"
+        },
+        options: [{ key: "A", letter: "T" }, { key: "B", letter: "F" }]
+      },
+      {
+        id: 13,
+        dimension: "decision",
+        zh: {
+          prompt: "看到企業宣稱達成「100% 綠電」時，你的反應是？",
+          a: "尋找背後的查核機制與數據來源，冷靜確認是否為漂綠行為",
+          b: "感到欣慰，認為企業願意展現善意並為地球盡一份心力是件好事"
+        },
+        en: {
+          prompt: "How do you react when a company claims it has reached 100% green power?",
+          a: "Check the verification mechanism and data source to assess whether it is greenwashing",
+          b: "Feel encouraged that the company is showing goodwill and contributing something positive"
+        },
+        options: [{ key: "A", letter: "T" }, { key: "B", letter: "F" }]
+      },
+      {
+        id: 14,
+        dimension: "decision",
+        zh: {
+          prompt: "在籌辦環保活動遇到意見分歧時，你會傾向如何解決？",
+          a: "回歸客觀事實、碳足跡計算與成本效益分析來做最終決策",
+          b: "照顧各方參與者的感受，尋求能凝聚團隊共識與熱情的方案"
+        },
+        en: {
+          prompt: "When a green event team disagrees, how do you lean toward resolving it?",
+          a: "Return to facts, carbon calculations, and cost-benefit analysis",
+          b: "Protect the feelings of participants and find a solution that preserves shared energy"
+        },
+        options: [{ key: "A", letter: "T" }, { key: "B", letter: "F" }]
+      },
+      {
+        id: 15,
+        dimension: "decision",
+        zh: {
+          prompt: "驅使你持續關注環境議題的最核心動力是？",
+          a: "認知到地球資源有限，必須透過邏輯與技術進行系統性的最佳化配置",
+          b: "出於對自然萬物的敬畏，以及對生態圈受到破壞的不忍之心"
+        },
+        en: {
+          prompt: "What most deeply keeps you engaged with environmental issues over time?",
+          a: "A belief that limited resources require rational and optimized systems thinking",
+          b: "A sense of care, reverence, and grief when ecological life is harmed"
+        },
+        options: [{ key: "A", letter: "T" }, { key: "B", letter: "F" }]
+      },
+      {
+        id: 16,
+        dimension: "lifestyle",
+        zh: {
+          prompt: "你的日常環保生活方式比較像是？",
+          a: "有明確的目標與規則，嚴格遵守不妥協",
+          b: "視情況而定，如果偶爾忘記帶，也會隨機應變尋找當下最環保的替代方案"
+        },
+        en: {
+          prompt: "Which description feels more like your everyday green lifestyle?",
+          a: "I set clear rules and goals and follow them consistently",
+          b: "I adapt to the situation and look for the best available alternative in the moment"
+        },
+        options: [{ key: "A", letter: "J" }, { key: "B", letter: "P" }]
+      },
+      {
+        id: 17,
+        dimension: "lifestyle",
+        zh: {
+          prompt: "規劃一場綠色環保旅行時，你會怎麼做？",
+          a: "事先詳細規劃住宿、路線與交通碳排，盡量把可控項目都安排好",
+          b: "先抓大方向，旅途中再隨機發掘當地的友善環境小店或低碳體驗"
+        },
+        en: {
+          prompt: "How would you usually plan a green trip?",
+          a: "Plan accommodation, routes, and transport emissions in detail ahead of time",
+          b: "Set a broad direction first, then discover local low-carbon options along the way"
+        },
+        options: [{ key: "A", letter: "J" }, { key: "B", letter: "P" }]
+      },
+      {
+        id: 18,
+        dimension: "lifestyle",
+        zh: {
+          prompt: "對於個人的減碳目標，你的態度是？",
+          a: "喜歡有系統地追蹤，確保自己達成預定指標",
+          b: "不喜歡被數字綁死，覺得只要保持覺察、盡力做出環保選擇就好"
+        },
+        en: {
+          prompt: "How do you relate to personal carbon-reduction targets?",
+          a: "I like systematic tracking so I can verify that I met the target",
+          b: "I do not want to be trapped by numbers as long as I stay aware and try my best"
+        },
+        options: [{ key: "A", letter: "J" }, { key: "B", letter: "P" }]
+      },
+      {
+        id: 19,
+        dimension: "lifestyle",
+        zh: {
+          prompt: "在工作或生活中推動新的環保措施時，你通常會？",
+          a: "制定一套標準操作流程，要求大家確實了解並按部就班遵守",
+          b: "先試行看看，根據大家的反應和實際執行狀況，隨時靈活調整做法"
+        },
+        en: {
+          prompt: "When introducing a new green practice in work or life, what is your usual style?",
+          a: "Create a clear SOP and ask people to follow it step by step",
+          b: "Pilot it first and keep adjusting according to real response and context"
+        },
+        options: [{ key: "A", letter: "J" }, { key: "B", letter: "P" }]
+      },
+      {
+        id: 20,
+        dimension: "lifestyle",
+        zh: {
+          prompt: "如果你參加了一個「一週無塑挑戰」活動，你會？",
+          a: "提前規劃好一週的所有飲食和購物路線，準備好所有容器，確保萬無一失",
+          b: "把這當作一場生活探索遊戲，遇到沒有帶容器的突發狀況時，再發揮創意解決"
+        },
+        en: {
+          prompt: "If you joined a one-week no-plastic challenge, how would you approach it?",
+          a: "Plan the entire week in advance and prepare every container and route",
+          b: "Treat it like an exploration game and creatively solve problems as they arise"
+        },
+        options: [{ key: "A", letter: "J" }, { key: "B", letter: "P" }]
+      }
+    ];
+
+    const TYPE_META = {
+      INTJ: {
+        zh: { title: "永續系統架構師", core: "理性前瞻，喜歡用數據和創新技術解決系統性問題。", strengths: "碳追蹤、生命週期評估、設計循環經濟模式。", challenge: "可能追求完美或過於專注技術，忽略情感共鳴。", actions: "參與綠色金融投資、研究 Web3 碳追蹤工具、擔任企業永續顧問。" },
+        en: { title: "Sustainability Systems Architect", core: "Forward-looking and rational, you like solving systemic problems with data and innovation.", strengths: "Carbon tracking, life-cycle assessment, and circular economy design.", challenge: "You may chase perfection or focus so much on technology that emotional resonance gets missed.", actions: "Explore green finance, research Web3 carbon-tracking tools, or serve as a sustainability advisor." }
+      },
+      ENTJ: {
+        zh: { title: "綠色戰略指揮官", core: "充滿動力，能將遠大願景轉化為高效的執行戰略。", strengths: "企業 ESG 戰略、大型綠色專案規劃、供應鏈去碳。", challenge: "可能過於注重效率，忽略團隊成員的情感或細節。", actions: "領導企業綠色轉型計劃、組織全球環保論壇、制定碳中和路線圖。" },
+        en: { title: "Green Strategy Commander", core: "Driven and decisive, you turn ambitious environmental vision into effective execution strategy.", strengths: "Corporate ESG strategy, large-scale green project planning, and supply-chain decarbonization.", challenge: "You may overemphasize efficiency and overlook team emotions or small operational details.", actions: "Lead corporate green transformation, organize climate forums, and design carbon-neutral roadmaps." }
+      },
+      INFJ: {
+        zh: { title: "綠色願景守護者", core: "深具洞察力，能以溫柔的方式傳遞深沉的生態關懷。", strengths: "生態敘事、啟發性倡議、人與自然的和諧。", challenge: "可能因為追求理想與現實的差距而感到倦怠。", actions: "撰寫環境寓言故事、帶領生態靜心工坊、發起守護特定物種倡議。" },
+        en: { title: "Green Vision Guardian", core: "Insightful and gentle, you communicate ecological care with depth and grace.", strengths: "Ecological storytelling, inspiring advocacy, and human-nature harmony.", challenge: "You may feel worn down by the gap between your ideals and reality.", actions: "Write environmental stories, lead eco-reflection workshops, or champion protection for a specific species." }
+      },
+      ENFJ: {
+        zh: { title: "綠色願景號召者", core: "極具感染力，能凝聚眾人為共同的環境願景而努力。", strengths: "社群動員、公關行銷、永續生活推廣。", challenge: "可能因為過度關注他人反應，而忽略數據或長期策略。", actions: "擔任環保大使、組織社群減塑活動、推廣綠色消費與友善環境品牌。" },
+        en: { title: "Green Vision Mobilizer", core: "Highly persuasive, you rally people around a shared environmental future.", strengths: "Community mobilization, public relations, and sustainable lifestyle promotion.", challenge: "You may pay too much attention to people’s reactions and not enough to data or long-term strategy.", actions: "Serve as a green ambassador, run plastic-reduction campaigns, and promote eco-friendly brands." }
+      },
+      ISTJ: {
+        zh: { title: "默默守護的實踐者", core: "踏實可靠，是維持環保習慣與分類標準的中流砥柱。", strengths: "精緻資源回收、低碳飲食、節能減碳。", challenge: "可能因為固守傳統或細節，而不容易接受新技術或變革。", actions: "擔任社區回收志工、管理企業環境數據、推廣家庭零廢棄實踐。" },
+        en: { title: "Quiet Environmental Steward", core: "Grounded and dependable, you are the backbone of daily green discipline and sorting standards.", strengths: "Detailed recycling, low-carbon food choices, and energy-saving practice.", challenge: "You may hold too tightly to familiar methods and resist new tools or change.", actions: "Volunteer in community recycling, manage environmental data, or promote zero-waste practices at home." }
+      },
+      ESTJ: {
+        zh: { title: "高效環保執行長", core: "組織能力強，能確保環保政策確實執行並達成目標。", strengths: "標準操作程序、團隊效率、碳指標追蹤。", challenge: "可能因為過於追求數據與指標，而忽略生態的感性面或長期影響。", actions: "負責綠色建築認證、制定企業垃圾減量政策、監督資源再生工廠。" },
+        en: { title: "High-Efficiency Green Operator", core: "Organized and forceful, you make sure environmental policy turns into real execution.", strengths: "SOPs, team efficiency, and carbon-metric tracking.", challenge: "You may focus so heavily on numbers and targets that emotional and long-term ecological impacts are underplayed.", actions: "Lead green building certification, set waste-reduction policy, or oversee recycling operations." }
+      },
+      ISFJ: {
+        zh: { title: "溫柔而堅定的實踐者", core: "默默付出，在日常生活中溫柔地照顧生態與他人。", strengths: "修復舊物、有機園藝、支持在地友善農業。", challenge: "可能因為不喜歡衝突，而不敢公開倡議或表達不同的環保觀點。", actions: "經營零廢棄雜貨店、傳承手工藝與綠色生活技巧、照顧受傷的小動物。" },
+        en: { title: "Gentle but Steady Practitioner", core: "Quietly devoted, you care for people and ecology through everyday acts of protection.", strengths: "Repairing old items, organic gardening, and supporting local eco-friendly agriculture.", challenge: "You may avoid conflict so much that you hesitate to advocate publicly or voice a different view.", actions: "Run a zero-waste shop, share traditional green life skills, or care for injured animals." }
+      },
+      ESFJ: {
+        zh: { title: "社群綠色網絡編織者", core: "熱愛社群，擅長將環保理念與人際網絡緊密連結。", strengths: "組織二手市集、團購友善產品、綠色生活圈。", challenge: "可能因為過度關注社交互動，而忽略環保行動的真實影響或數據。", actions: "舉辦綠色鄰里派對、建立資源共享平台、推廣友善環境的團購活動。" },
+        en: { title: "Community Green Network Weaver", core: "Community-centered and relational, you connect environmental values with real human networks.", strengths: "Second-hand markets, eco-friendly group buys, and local green communities.", challenge: "You may care so much about social harmony that the real environmental impact or data gets overlooked.", actions: "Host green neighborhood events, build resource-sharing platforms, and organize eco-conscious group purchasing." }
+      },
+      INTP: {
+        zh: { title: "綠色創新分析師", core: "充滿好奇心，喜歡探索環境問題背後的根本邏輯與解決方案。", strengths: "生物技術、材料科學、系統動力學。", challenge: "可能因為專注於研究與理論，而缺乏將理念落實為具體行動的動力。", actions: "研發可分解材料、研究氣候模型、撰寫永續發展政策分析。" },
+        en: { title: "Green Innovation Analyst", core: "Curious and conceptual, you love exploring root causes and system-level solutions.", strengths: "Biotechnology, material science, and systems dynamics.", challenge: "You may stay in research and theory so long that real-world implementation slows down.", actions: "Develop biodegradable materials, study climate models, or write sustainability policy analysis." }
+      },
+      ENTP: {
+        zh: { title: "綠色變革發明家", core: "喜歡挑戰現狀，能以創新的想法重塑環保與商業模式。", strengths: "循環經濟、Web3 與碳信用、綠色新創。", challenge: "可能因為追求新鮮感與短期突破，而缺乏將專案持續執行的恆心。", actions: "發起綠色科技新創、設計碳捕捉系統、參與永續發展駭客松。" },
+        en: { title: "Green Change Inventor", core: "You challenge the status quo and redesign environmental and business models through bold ideas.", strengths: "Circular economy, Web3 and carbon credits, and green startups.", challenge: "You may chase novelty and quick breakthroughs without sustaining long-term execution.", actions: "Launch climate-tech startups, design carbon capture systems, or join sustainability hackathons." }
+      },
+      INFP: {
+        zh: { title: "地球溫柔共情者", core: "情感豐富，能深刻感受生態與瀕危物種的痛苦並發起保護。", strengths: "自然寫作、生態藝術、人與生態的連結。", challenge: "可能因為過於感性或理想化，而不容易將行動轉化為大規模的影響。", actions: "撰寫生態散文、創作環保主題藝術、發起守護棲地與野生動物活動。" },
+        en: { title: "Gentle Earth Empath", core: "Deeply feeling and idealistic, you sense ecological suffering and respond with heartfelt protection.", strengths: "Nature writing, ecological art, and human-ecology connection.", challenge: "You may be so idealistic or feeling-led that it becomes hard to scale your impact.", actions: "Write eco-essays, create environmental art, or launch habitat and wildlife protection projects." }
+      },
+      ENFP: {
+        zh: { title: "自由綠色行動家", core: "充滿創意與自由精神，喜歡以有趣的方式推廣綠色生活。", strengths: "綠色旅遊、綠色行銷、快閃環保行動。", challenge: "可能因為專注於當下的快樂與創意，而缺乏長期、持續性的環保規劃。", actions: "經營環保主題自媒體、規劃綠色旅遊行程、發起有趣無塑生活挑戰。" },
+        en: { title: "Free-Spirited Green Activist", core: "Creative and playful, you spread sustainable living through energy, surprise, and freedom.", strengths: "Green travel, eco-marketing, and pop-up environmental action.", challenge: "You may focus on the fun and creativity of the moment without building long-term consistency.", actions: "Run eco-themed media, design green travel routes, or launch playful no-plastic challenges." }
+      },
+      ISTP: {
+        zh: { title: "綠色動手實踐者", core: "擅長運用工具與技術，喜歡動手解決具體的環境問題。", strengths: "舊物修復、再生能源裝置、綠色木工。", challenge: "可能因為專注於個人的手作與技術，而不容易參與更大規模的社群倡議。", actions: "維修二手電器、設計綠色裝置藝術、建立社區維修工坊。" },
+        en: { title: "Hands-On Green Builder", core: "Tool-oriented and practical, you like solving visible environmental problems with your hands.", strengths: "Repair work, renewable-energy installations, and green woodworking.", challenge: "You may stay so focused on individual craft and technical work that broader community advocacy feels distant.", actions: "Repair used electronics, design green installations, or build a community repair workshop." }
+      },
+      ESTP: {
+        zh: { title: "行動派環境勇士", core: "充滿活力，喜歡身先士卒地參與立竿見影的環保行動。", strengths: "淨灘、淨山、直接行動、戶外探索。", challenge: "可能因為過於注重當下的行動與快感，而忽略長期的數據與策略分析。", actions: "擔任戶外嚮導並推廣無痕山林、組織大型淨灘活動、參與環境守護志工。" },
+        en: { title: "Action-First Environmental Warrior", core: "Energetic and bold, you want to be out front in visible, immediate environmental action.", strengths: "Beach cleans, mountain cleans, direct action, and outdoor exploration.", challenge: "You may prioritize fast action and excitement over long-term strategy and data analysis.", actions: "Lead Leave No Trace outdoor trips, organize large cleanup actions, or join environmental protection volunteering." }
+      },
+      ISFP: {
+        zh: { title: "藝術感性環保家", core: "審美敏銳，喜歡透過藝術與自然創造感性的環保共鳴。", strengths: "自然攝影、生態插畫、綠色花藝。", challenge: "可能因為追求個人的藝術表達與自由，而不容易參與規範化的環保組織。", actions: "創作生態攝影作品、經營植物社群媒體、利用回收材料進行藝術創作。" },
+        en: { title: "Artful Eco Sensitive", core: "Aesthetic and intuitive, you create emotional environmental resonance through beauty and nature.", strengths: "Nature photography, ecological illustration, and green floral design.", challenge: "You may value artistic freedom so much that structured environmental organizations feel restrictive.", actions: "Create eco-photography, build plant-focused social content, or make art from recycled materials." }
+      },
+      ESFP: {
+        zh: { title: "快樂低碳生活家", core: "熱愛生活，喜歡以輕鬆、有趣的方式享受低碳生活樂趣。", strengths: "綠色時尚、健康蔬食、快樂低碳運動。", challenge: "可能因為追求時尚與當下快樂，而忽略環保產品背後的真實成本或數據。", actions: "推廣二手衣穿搭、經營健康蔬食餐廳、舉辦戶外綠色運動會。" },
+        en: { title: "Joyful Low-Carbon Lifestyle Creator", core: "Life-loving and upbeat, you enjoy making low-carbon living feel light, healthy, and fun.", strengths: "Green fashion, healthy plant-based living, and joyful low-carbon movement.", challenge: "You may focus on style and present enjoyment while overlooking real product costs or environmental data.", actions: "Promote second-hand styling, run a healthy plant-based cafe, or host outdoor green sports events." }
+      }
+    };
+
+    const I18N = {
+      zh: {
+        page: { title: "Eco-MBTI | 環保 MBTI" },
+        header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI 環保行動人格互動頁" },
+        nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "7 日綠色提案", form: "邁出一步", member: "會員中心", eco: "Eco-MBTI" },
+        mobileNav: { title: "快速導覽", framework: "四大維度", frameworkSub: "永續行動核心指標", quiz: "20 題測驗", quizSub: "開始作答", result: "結果卡", resultSub: "4 碼 Eco-MBTI" },
+        side: {
+          title: "Eco-MBTI",
+          body: "一個把環保參與方式轉譯成四碼人格傾向的互動頁，適合做活動、社群和教育推廣。",
+          linkFramework: "四大維度",
+          linkFrameworkSub: "永續參與底層框架",
+          linkQuiz: "20 題測驗",
+          linkQuizSub: "開始作答與計分",
+          linkResult: "結果卡",
+          linkResultSub: "你的專屬類型",
+          tipTitle: "快速提醒",
+          tipBody: "這份測驗不是要判斷誰比較環保，而是幫你找到最自然、最容易持續的氣候行動方式。"
+        },
+        hero: {
+          eyebrow: "Interactive Sustainability Personality",
+          title: "環保 MBTI<br>Eco-MBTI",
+          body: "把 MBTI 的底層邏輯重新轉譯成永續行動風格。這不是傳統性格測驗，而是一個幫助大家理解自己如何參與環境保護、又適合用什麼方式擴大影響力的互動頁面。",
+          primary: "開始 20 題測驗",
+          secondary: "先看四大維度",
+          nodeEnergy: "能量<br>E / I",
+          nodeInfo: "資訊<br>S / N",
+          nodeDecision: "決策<br>T / F",
+          nodeLifestyle: "執行<br>J / P",
+          noteTitle: "20 題、4 個字母、1 種環保行動風格。",
+          noteBody: "每一題沒有標準答案，只有更貼近你自然習慣的環保選擇。測驗完成後，你會得到專屬的 Eco-MBTI 類型、行動優勢與下一步建議。"
+        },
+        framework: {
+          title: "四大核心維度 / The Four Core Dimensions",
+          body: "我們把 MBTI 的四個底層維度重新定義成「個人參與永續行動的四項核心指標」，讓它更貼近環境保護、社群倡議與低碳生活場景。",
+          energy: { badge: "能量來源 / Energy", title: "E 社群倡議 vs. I 個人實踐", body: "你更習慣在群體中號召、連結與推廣，還是從自己的生活細節開始落實低碳選擇，並用穩定實踐來影響他人？" },
+          info: { badge: "資訊處理 / Information", title: "S 務實行動 vs. N 系統創新", body: "你更重視看得見、立刻可做的環保任務，還是更傾向思考底層結構、未來系統與跨領域創新解方？" },
+          decision: { badge: "決策依據 / Decision", title: "T 數據驅動 vs. F 情感共鳴", body: "你做環保決策時，是更依賴科學數據、效率與結構，還是更容易被生態關懷、人的故事與代際責任所推動？" },
+          lifestyle: { badge: "執行方式 / Lifestyle", title: "J 嚴謹規劃 vs. P 彈性適應", body: "你的永續行動是偏向目標導向、紀律執行，還是更喜歡在現場隨機應變，以彈性與創意維持環保習慣？" }
+        },
+        letters: {
+          title: "八個字母代表什麼 / What Each Letter Signals",
+          body: "每一個字母不是能力高低，而是你在永續參與中的自然傾向。結果會從四組對應字母中選出最貼近你的那一邊。",
+          energy: { title: "能量來源", e: "E 社群倡議", i: "I 個人實踐" },
+          info: { title: "資訊處理", s: "S 務實行動", n: "N 系統創新" },
+          decision: { title: "決策依據", t: "T 數據驅動", f: "F 情感共鳴" },
+          lifestyle: { title: "執行方式", j: "J 嚴謹規劃", p: "P 彈性適應" }
+        },
+        quiz: {
+          title: "20 題環保 MBTI 測驗 / 20-Question Eco-MBTI Quiz",
+          body: "20 題平均分配到四個維度，每個維度 5 題。請依照你平常更自然的反應作答，而不是你覺得最理想的答案。",
+          progress: "已完成 0 / 20 題",
+          tip: "所有題目都選完後，就會解鎖專屬結果卡。",
+          submit: "查看我的 Eco-MBTI",
+          reset: "重新作答",
+          missing: "還有題目尚未作答，請先完成全部 20 題。",
+          ready: "已完成，往下查看你的結果。",
+          optionA: "選項 A",
+          optionB: "選項 B"
+        },
+        result: {
+          title: "你的結果 / Your Result",
+          body: "你的 4 碼 Eco-MBTI 不代表唯一正確的環保方式，而是指出你最自然、最容易持續放大的永續參與風格。",
+          statStrength: "強項",
+          statChallenge: "挑戰",
+          breakdownTitle: "維度分佈 / Dimension Breakdown",
+          traitTitle: "核心特質 / Core Trait",
+          traitHeadline: "人格解讀",
+          actionTitle: "適合的綠色行動建議 / Suggested Green Actions",
+          actionHeadline: "行動方向",
+          galleryTitle: "16 型角色總覽 / Eco-MBTI Role Gallery",
+          galleryBody: "每張角色卡都包含 4 碼類型、中文稱號與英文稱號。你也可以點選其他卡片查看完整個人角色版面。",
+          shareTitle: "分享你的結果 / Share Your Result",
+          shareBody: "你可以把結果文字複製出去，拿來做社群貼文、活動互動或引導更多人來測。",
+          copy: "複製結果文案",
+          download: "下載 PNG 角色卡",
+          member: "打開會員中心",
+          step: "前往邁出一步",
+          copied: "結果文案已複製。",
+          downloaded: "PNG 角色卡已下載。",
+          copiedFallback: "請手動複製下方結果。",
+          typeLabel: "你的 Eco-MBTI",
+          tie: "平手"
+        },
+        footer: "Blue Sky Returns • Eco-MBTI • 2026",
+        dimensions: {
+          energy: "能量來源",
+          info: "資訊處理",
+          decision: "決策依據",
+          lifestyle: "執行方式"
+        }
+      },
+      en: {
+        page: { title: "Eco-MBTI | Blue Sky Returns" },
+        header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI environmental action personality" },
+        nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "7-Day Green Proposal", form: "Take One Step", member: "Member Center", eco: "Eco-MBTI" },
+        mobileNav: { title: "Quick Navigation", framework: "Framework", frameworkSub: "4 sustainability dimensions", quiz: "20 Questions", quizSub: "Answer and score", result: "Result Card", resultSub: "Your 4-letter Eco-MBTI" },
+        side: {
+          title: "Eco-MBTI",
+          body: "An interactive page that translates environmental participation style into a four-letter sustainability personality profile.",
+          linkFramework: "Framework",
+          linkFrameworkSub: "The core sustainability logic",
+          linkQuiz: "20 Questions",
+          linkQuizSub: "Answer and calculate",
+          linkResult: "Result Card",
+          linkResultSub: "Your personal output",
+          tipTitle: "Quick Tip",
+          tipBody: "This test is not deciding who is greener. It helps people discover which climate action style feels most natural and sustainable for them."
+        },
+        hero: {
+          eyebrow: "Interactive Sustainability Personality",
+          title: "Eco-MBTI<br>Environmental Action Style",
+          body: "This page reinterprets MBTI through sustainability participation. It is not a traditional personality test. It is a playful tool for understanding how someone naturally joins environmental action and how they may best amplify their impact.",
+          primary: "Start the 20-question quiz",
+          secondary: "See the 4 dimensions first",
+          nodeEnergy: "Energy<br>E / I",
+          nodeInfo: "Information<br>S / N",
+          nodeDecision: "Decision<br>T / F",
+          nodeLifestyle: "Lifestyle<br>J / P",
+          noteTitle: "20 questions, 4 letters, 1 environmental action style.",
+          noteBody: "There are no ideal answers here. The goal is to find the choice that feels most natural to you. When you finish, you will get a personal Eco-MBTI type, strengths, and suggested next steps."
+        },
+        framework: {
+          title: "The Four Core Dimensions",
+          body: "The traditional MBTI dimensions are redefined here as four core indicators of sustainable participation, making them easier to use in environmental action, public campaigns, and low-carbon living.",
+          energy: { badge: "Energy", title: "E Engagement vs. I Individual Practice", body: "Do you naturally create impact through group energy, outreach, and coordination, or through personal low-carbon practice and consistent example-setting?" },
+          info: { badge: "Information", title: "S Practical Action vs. N Systems Innovation", body: "Do you focus on visible, immediate tasks, or do you prefer rethinking systems, long-term structures, and cross-disciplinary innovation?" },
+          decision: { badge: "Decision", title: "T Data-Driven vs. F Empathy-Driven", body: "Do you make environmental decisions through science, efficiency, and evidence, or through care, ecological feeling, and intergenerational concern?" },
+          lifestyle: { badge: "Lifestyle", title: "J Planned Discipline vs. P Adaptive Flexibility", body: "Is your green behavior more target-driven and structured, or more flexible, creative, and situationally adaptive?" }
+        },
+        letters: {
+          title: "What Each Letter Signals",
+          body: "Each letter reflects a natural preference rather than a better-or-worse ability. Your final type selects one side from each of the four pairs.",
+          energy: { title: "Energy", e: "E Engagement", i: "I Individual Practice" },
+          info: { title: "Information", s: "S Practical Action", n: "N Systems Innovation" },
+          decision: { title: "Decision", t: "T Data-Driven", f: "F Empathy-Driven" },
+          lifestyle: { title: "Lifestyle", j: "J Planned Discipline", p: "P Adaptive Flexibility" }
+        },
+        quiz: {
+          title: "20-Question Eco-MBTI Quiz",
+          body: "The 20 questions are evenly distributed across the four dimensions, with five questions in each group. Choose what feels most natural to you, not what sounds most ideal.",
+          progress: "Completed 0 / 20 questions",
+          tip: "Your result card unlocks once all questions are answered.",
+          submit: "Show My Eco-MBTI",
+          reset: "Reset Answers",
+          missing: "Some questions are still unanswered. Please complete all 20 first.",
+          ready: "All answered. Scroll down to see your result.",
+          optionA: "Option A",
+          optionB: "Option B"
+        },
+        result: {
+          title: "Your Result",
+          body: "Your 4-letter Eco-MBTI does not represent the only correct environmental style. It highlights the sustainability participation pattern you are most likely to sustain and amplify naturally.",
+          statStrength: "Strengths",
+          statChallenge: "Challenges",
+          breakdownTitle: "Dimension Breakdown",
+          traitTitle: "Core Trait",
+          traitHeadline: "Personality Snapshot",
+          actionTitle: "Suggested Green Actions",
+          actionHeadline: "Action Direction",
+          galleryTitle: "Eco-MBTI Role Gallery",
+          galleryBody: "Each role card includes the 4-letter type, Chinese title, and English title. Click any card to open its full character layout.",
+          shareTitle: "Share Your Result",
+          shareBody: "You can copy the result text and use it in social posts, event interaction, or invitation flows.",
+          copy: "Copy Result Text",
+          download: "Download PNG Card",
+          member: "Open Member Center",
+          step: "Open Take One Step",
+          copied: "Result text copied.",
+          downloaded: "PNG role card downloaded.",
+          copiedFallback: "Please copy the result text manually.",
+          typeLabel: "Your Eco-MBTI",
+          tie: "Tie"
+        },
+        footer: "Blue Sky Returns • Eco-MBTI • 2026",
+        dimensions: {
+          energy: "Energy",
+          info: "Information",
+          decision: "Decision",
+          lifestyle: "Lifestyle"
+        }
+      }
+    };
+
+    const DIMENSION_META = {
+      energy: { pair: ["E", "I"] },
+      info: { pair: ["S", "N"] },
+      decision: { pair: ["T", "F"] },
+      lifestyle: { pair: ["J", "P"] }
+    };
+
+    const questionList = document.getElementById("questionList");
+    const quizForm = document.getElementById("quizForm");
+    const progressFill = document.getElementById("progressFill");
+    const progressLabel = document.getElementById("progressLabel");
+    const quizStatus = document.getElementById("quizStatus");
+    const submitQuizBtn = document.getElementById("submitQuizBtn");
+    const resetQuizBtn = document.getElementById("resetQuizBtn");
+    const resultPanel = document.getElementById("resultPanel");
+    const resultPortrait = document.getElementById("resultPortrait");
+    const resultBadge = document.getElementById("resultBadge");
+    const resultTypeLabel = document.getElementById("resultTypeLabel");
+    const resultType = document.getElementById("resultType");
+    const resultName = document.getElementById("resultName");
+    const resultEnTitle = document.getElementById("resultEnTitle");
+    const resultSummary = document.getElementById("resultSummary");
+    const resultStyleBody = document.getElementById("resultStyleBody");
+    const resultChallengeBody = document.getElementById("resultChallengeBody");
+    const resultTraitBody = document.getElementById("resultTraitBody");
+    const resultActionBody = document.getElementById("resultActionBody");
+    const breakdownList = document.getElementById("breakdownList");
+    const roleGalleryGrid = document.getElementById("roleGalleryGrid");
+    const copyResultBtn = document.getElementById("copyResultBtn");
+    const downloadCardBtn = document.getElementById("downloadCardBtn");
+    const shareStatus = document.getElementById("shareStatus");
+
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
+    let lastResultText = "";
+    let activeType = "INTJ";
+
+    const TYPE_THEMES = {
+      INTJ: { soft: "rgba(109, 198, 220, 0.38)", deep: "rgba(47, 106, 170, 0.26)", accent: "rgba(92, 224, 206, 0.34)", codeBg: "rgba(91, 169, 224, 0.16)", codeFg: "#0c4f72", cardTop: "rgba(240, 248, 255, 0.98)", cardBottom: "rgba(229, 242, 250, 0.96)", active: "rgba(69, 146, 215, 0.5)", activeTop: "rgba(228, 242, 255, 0.96)", shadow: "rgba(69, 146, 215, 0.18)", badge: "Systems" },
+      ENTJ: { soft: "rgba(117, 197, 152, 0.4)", deep: "rgba(34, 112, 83, 0.24)", accent: "rgba(212, 183, 90, 0.3)", codeBg: "rgba(46, 132, 102, 0.16)", codeFg: "#0f6048", cardTop: "rgba(245, 252, 247, 0.98)", cardBottom: "rgba(232, 244, 237, 0.96)", active: "rgba(37, 123, 94, 0.46)", activeTop: "rgba(234, 247, 240, 0.96)", shadow: "rgba(37, 123, 94, 0.18)", badge: "Strategy" },
+      INFJ: { soft: "rgba(176, 226, 188, 0.4)", deep: "rgba(89, 160, 123, 0.22)", accent: "rgba(250, 214, 138, 0.3)", codeBg: "rgba(99, 173, 125, 0.16)", codeFg: "#2f6c47", cardTop: "rgba(248, 252, 246, 0.98)", cardBottom: "rgba(237, 246, 236, 0.96)", active: "rgba(93, 164, 123, 0.44)", activeTop: "rgba(241, 250, 238, 0.96)", shadow: "rgba(93, 164, 123, 0.18)", badge: "Vision" },
+      ENFJ: { soft: "rgba(255, 203, 137, 0.42)", deep: "rgba(229, 128, 89, 0.22)", accent: "rgba(135, 207, 198, 0.28)", codeBg: "rgba(228, 138, 89, 0.16)", codeFg: "#8e4b1d", cardTop: "rgba(255, 248, 241, 0.98)", cardBottom: "rgba(251, 238, 225, 0.96)", active: "rgba(223, 138, 91, 0.48)", activeTop: "rgba(255, 244, 232, 0.96)", shadow: "rgba(223, 138, 91, 0.18)", badge: "Mobilize" },
+      ISTJ: { soft: "rgba(160, 204, 220, 0.38)", deep: "rgba(83, 112, 146, 0.24)", accent: "rgba(188, 221, 168, 0.28)", codeBg: "rgba(91, 116, 158, 0.16)", codeFg: "#294e70", cardTop: "rgba(245, 249, 252, 0.98)", cardBottom: "rgba(234, 241, 247, 0.96)", active: "rgba(89, 121, 164, 0.46)", activeTop: "rgba(237, 244, 251, 0.96)", shadow: "rgba(89, 121, 164, 0.18)", badge: "Steady" },
+      ESTJ: { soft: "rgba(146, 200, 189, 0.4)", deep: "rgba(54, 117, 121, 0.22)", accent: "rgba(250, 199, 108, 0.3)", codeBg: "rgba(49, 121, 119, 0.16)", codeFg: "#0f5f64", cardTop: "rgba(242, 251, 249, 0.98)", cardBottom: "rgba(229, 244, 241, 0.96)", active: "rgba(48, 128, 125, 0.46)", activeTop: "rgba(236, 248, 245, 0.96)", shadow: "rgba(48, 128, 125, 0.18)", badge: "Operate" },
+      ISFJ: { soft: "rgba(175, 219, 150, 0.38)", deep: "rgba(102, 151, 106, 0.22)", accent: "rgba(250, 211, 140, 0.26)", codeBg: "rgba(99, 149, 96, 0.16)", codeFg: "#35653a", cardTop: "rgba(248, 252, 244, 0.98)", cardBottom: "rgba(237, 245, 232, 0.96)", active: "rgba(101, 151, 99, 0.44)", activeTop: "rgba(242, 249, 238, 0.96)", shadow: "rgba(101, 151, 99, 0.18)", badge: "Care" },
+      ESFJ: { soft: "rgba(144, 220, 192, 0.38)", deep: "rgba(58, 152, 126, 0.22)", accent: "rgba(120, 190, 244, 0.28)", codeBg: "rgba(61, 155, 127, 0.16)", codeFg: "#136b53", cardTop: "rgba(243, 252, 248, 0.98)", cardBottom: "rgba(231, 246, 240, 0.96)", active: "rgba(67, 161, 134, 0.44)", activeTop: "rgba(236, 249, 243, 0.96)", shadow: "rgba(67, 161, 134, 0.18)", badge: "Network" },
+      INTP: { soft: "rgba(142, 202, 255, 0.38)", deep: "rgba(76, 106, 181, 0.24)", accent: "rgba(147, 237, 210, 0.3)", codeBg: "rgba(82, 117, 201, 0.16)", codeFg: "#244a84", cardTop: "rgba(244, 248, 255, 0.98)", cardBottom: "rgba(232, 239, 250, 0.96)", active: "rgba(80, 116, 194, 0.46)", activeTop: "rgba(238, 244, 255, 0.96)", shadow: "rgba(80, 116, 194, 0.18)", badge: "Analyze" },
+      ENTP: { soft: "rgba(121, 223, 202, 0.4)", deep: "rgba(49, 149, 145, 0.22)", accent: "rgba(255, 198, 122, 0.28)", codeBg: "rgba(45, 146, 141, 0.16)", codeFg: "#0f6866", cardTop: "rgba(241, 252, 251, 0.98)", cardBottom: "rgba(228, 243, 242, 0.96)", active: "rgba(43, 147, 143, 0.46)", activeTop: "rgba(234, 248, 247, 0.96)", shadow: "rgba(43, 147, 143, 0.18)", badge: "Invent" },
+      INFP: { soft: "rgba(188, 221, 168, 0.38)", deep: "rgba(109, 153, 116, 0.22)", accent: "rgba(165, 214, 255, 0.26)", codeBg: "rgba(109, 153, 116, 0.16)", codeFg: "#3d6c45", cardTop: "rgba(248, 252, 246, 0.98)", cardBottom: "rgba(237, 244, 234, 0.96)", active: "rgba(108, 154, 115, 0.46)", activeTop: "rgba(241, 249, 238, 0.96)", shadow: "rgba(108, 154, 115, 0.18)", badge: "Empath" },
+      ENFP: { soft: "rgba(255, 198, 126, 0.42)", deep: "rgba(232, 139, 86, 0.22)", accent: "rgba(140, 214, 182, 0.26)", codeBg: "rgba(228, 136, 84, 0.16)", codeFg: "#8d4a1f", cardTop: "rgba(255, 248, 242, 0.98)", cardBottom: "rgba(250, 238, 228, 0.96)", active: "rgba(228, 136, 84, 0.46)", activeTop: "rgba(255, 243, 234, 0.96)", shadow: "rgba(228, 136, 84, 0.18)", badge: "Spark" },
+      ISTP: { soft: "rgba(170, 199, 217, 0.4)", deep: "rgba(92, 109, 132, 0.22)", accent: "rgba(241, 201, 119, 0.26)", codeBg: "rgba(88, 108, 134, 0.16)", codeFg: "#324b66", cardTop: "rgba(245, 248, 251, 0.98)", cardBottom: "rgba(234, 239, 245, 0.96)", active: "rgba(89, 111, 139, 0.46)", activeTop: "rgba(239, 243, 248, 0.96)", shadow: "rgba(89, 111, 139, 0.18)", badge: "Build" },
+      ESTP: { soft: "rgba(123, 215, 207, 0.4)", deep: "rgba(58, 142, 165, 0.22)", accent: "rgba(255, 188, 92, 0.28)", codeBg: "rgba(54, 141, 167, 0.16)", codeFg: "#125a6a", cardTop: "rgba(241, 252, 250, 0.98)", cardBottom: "rgba(229, 243, 244, 0.96)", active: "rgba(56, 145, 170, 0.46)", activeTop: "rgba(235, 249, 248, 0.96)", shadow: "rgba(56, 145, 170, 0.18)", badge: "Action" },
+      ISFP: { soft: "rgba(187, 226, 171, 0.38)", deep: "rgba(120, 174, 132, 0.22)", accent: "rgba(255, 204, 148, 0.28)", codeBg: "rgba(121, 171, 130, 0.16)", codeFg: "#46734c", cardTop: "rgba(248, 252, 246, 0.98)", cardBottom: "rgba(237, 245, 234, 0.96)", active: "rgba(122, 170, 131, 0.44)", activeTop: "rgba(242, 249, 239, 0.96)", shadow: "rgba(122, 170, 131, 0.18)", badge: "Art" },
+      ESFP: { soft: "rgba(255, 209, 132, 0.42)", deep: "rgba(237, 159, 88, 0.24)", accent: "rgba(149, 220, 190, 0.26)", codeBg: "rgba(236, 157, 86, 0.16)", codeFg: "#91501e", cardTop: "rgba(255, 249, 243, 0.98)", cardBottom: "rgba(251, 240, 229, 0.96)", active: "rgba(236, 156, 87, 0.46)", activeTop: "rgba(255, 245, 236, 0.96)", shadow: "rgba(236, 156, 87, 0.18)", badge: "Joy" }
+    };
+
+    const applyThemeVars = (node, type) => {
+      const theme = TYPE_THEMES[type] || TYPE_THEMES.INTJ;
+      node.style.setProperty("--frame-soft", theme.soft);
+      node.style.setProperty("--frame-deep", theme.deep);
+      node.style.setProperty("--frame-accent", theme.accent);
+      node.style.setProperty("--code-bg", theme.codeBg);
+      node.style.setProperty("--code-fg", theme.codeFg);
+      node.style.setProperty("--card-top", theme.cardTop);
+      node.style.setProperty("--card-bottom", theme.cardBottom);
+      node.style.setProperty("--card-active", theme.active);
+      node.style.setProperty("--card-active-top", theme.activeTop);
+      node.style.setProperty("--card-shadow", theme.shadow);
+      return theme;
+    };
+
+    const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
+
+    const createQuestionCard = (question) => {
+      const article = document.createElement("article");
+      article.className = "question-card";
+      article.dataset.dimension = question.dimension;
+
+      const top = document.createElement("div");
+      top.className = "question-top";
+
+      const number = document.createElement("div");
+      number.className = "question-number";
+      number.textContent = question.id;
+
+      const copy = document.createElement("div");
+      copy.className = "question-copy";
+
+      const title = document.createElement("h3");
+      title.textContent = question[currentLang].prompt;
+
+      const badge = document.createElement("p");
+      badge.textContent = `${t(`dimensions.${question.dimension}`)} • ${DIMENSION_META[question.dimension].pair.join(" / ")}`;
+
+      copy.append(title, badge);
+      top.append(number, copy);
+
+      const options = document.createElement("div");
+      options.className = "question-options";
+
+      question.options.forEach((option, index) => {
+        const label = document.createElement("label");
+        label.className = "choice";
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `question-${question.id}`;
+        input.value = option.letter;
+
+        const head = document.createElement("div");
+        head.className = "choice-head";
+
+        const choiceLabel = document.createElement("span");
+        choiceLabel.className = "choice-label";
+        choiceLabel.textContent = `${t(index === 0 ? "quiz.optionA" : "quiz.optionB")} • ${option.key}`;
+
+        const trait = document.createElement("span");
+        trait.className = "choice-trait";
+        trait.textContent = option.letter;
+
+        head.append(choiceLabel, trait);
+
+        const body = document.createElement("div");
+        body.textContent = question[currentLang][option.key.toLowerCase()];
+
+        input.addEventListener("change", () => {
+          options.querySelectorAll(".choice").forEach((node) => node.classList.remove("active"));
+          label.classList.add("active");
+          updateProgress();
+        });
+
+        label.append(input, head, body);
+        options.appendChild(label);
+      });
+
+      article.append(top, options);
+      return article;
+    };
+
+    const renderQuestions = () => {
+      questionList.innerHTML = "";
+      QUESTIONS.forEach((question) => {
+        questionList.appendChild(createQuestionCard(question));
+      });
+      updateProgress();
+    };
+
+    const updateProgress = () => {
+      const answered = QUESTIONS.filter((question) => quizForm.querySelector(`input[name="question-${question.id}"]:checked`)).length;
+      const percent = Math.round((answered / QUESTIONS.length) * 100);
+      progressFill.style.width = `${percent}%`;
+      progressLabel.textContent = currentLang === "zh" ? `已完成 ${answered} / ${QUESTIONS.length} 題` : `Completed ${answered} / ${QUESTIONS.length} questions`;
+      quizStatus.className = "status";
+      if (answered === QUESTIONS.length) {
+        quizStatus.classList.add("ok");
+        quizStatus.textContent = t("quiz.ready");
+      } else {
+        quizStatus.textContent = "";
+      }
+      return answered;
+    };
+
+    const calculateResult = () => {
+      const counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+      QUESTIONS.forEach((question) => {
+        const selected = quizForm.querySelector(`input[name="question-${question.id}"]:checked`);
+        if (selected) counts[selected.value] += 1;
+      });
+
+      const type = [
+        counts.E >= counts.I ? "E" : "I",
+        counts.S >= counts.N ? "S" : "N",
+        counts.T >= counts.F ? "T" : "F",
+        counts.J >= counts.P ? "J" : "P"
+      ].join("");
+
+      return { counts, type };
+    };
+
+    const getProfile = (type) => TYPE_META[type][currentLang];
+
+    const renderBreakdown = (counts) => {
+      breakdownList.innerHTML = "";
+      const rows = [
+        { key: "energy", left: "E", right: "I" },
+        { key: "info", left: "S", right: "N" },
+        { key: "decision", left: "T", right: "F" },
+        { key: "lifestyle", left: "J", right: "P" }
+      ];
+
+      rows.forEach((row) => {
+        const total = counts[row.left] + counts[row.right];
+        const percentLeft = total ? Math.round((counts[row.left] / total) * 100) : 50;
+        const dominant = counts[row.left] === counts[row.right]
+          ? t("result.tie")
+          : (counts[row.left] > counts[row.right] ? row.left : row.right);
+
+        const wrap = document.createElement("div");
+        wrap.className = "type-row";
+
+        const head = document.createElement("div");
+        head.className = "type-row-head";
+        head.innerHTML = `<span>${t(`dimensions.${row.key}`)} • ${row.left} / ${row.right}</span><span>${row.left}: ${counts[row.left]} · ${row.right}: ${counts[row.right]} · ${dominant}</span>`;
+
+        const bar = document.createElement("div");
+        bar.className = "type-bar";
+
+        const fill = document.createElement("div");
+        fill.className = "type-bar-fill";
+        fill.style.width = `${percentLeft}%`;
+
+        bar.appendChild(fill);
+        wrap.append(head, bar);
+        breakdownList.appendChild(wrap);
+      });
+    };
+
+    const buildShareText = (type, profile) => {
+      if (currentLang === "zh") {
+        return `我的 Eco-MBTI 是 ${type}｜${profile.title}\n核心特質：${profile.core}\n強項：${profile.strengths}\n挑戰：${profile.challenge}\n適合的綠色行動建議：${profile.actions}\n來測看看你的永續行動風格：https://www.blue-sky-returns.online/blueskyreturns/eco-mbti.html`;
+      }
+      return `My Eco-MBTI is ${type} | ${profile.title}\nCore trait: ${profile.core}\nStrengths: ${profile.strengths}\nChallenge: ${profile.challenge}\nSuggested green actions: ${profile.actions}\nTry your own sustainability style here: https://www.blue-sky-returns.online/blueskyreturns/eco-mbti.html`;
+    };
+
+    const getPortraitAlt = (type, profile) => {
+      if (currentLang === "zh") return `${type} ${profile.title} 角色卡`;
+      return `${type} ${profile.title} character card`;
+    };
+
+    const getFullPortraitPath = (type) => `../assets/eco-mbti-full/${type}.png`;
+
+    const renderRoleGallery = (selectedType) => {
+      roleGalleryGrid.innerHTML = "";
+      Object.keys(TYPE_META).forEach((type) => {
+        const card = document.createElement("article");
+        card.className = "role-card";
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        if (type === selectedType) card.classList.add("active");
+
+        const img = document.createElement("img");
+        img.src = getFullPortraitPath(type);
+        img.alt = `${type} ${TYPE_META[type].en.title}`;
+        img.loading = "lazy";
+        const theme = applyThemeVars(card, type);
+
+        const body = document.createElement("div");
+        body.className = "role-card-body";
+
+        const code = document.createElement("span");
+        code.className = "role-code";
+        code.textContent = type;
+
+        const zhTitle = document.createElement("div");
+        zhTitle.className = "role-title-zh";
+        zhTitle.textContent = TYPE_META[type].zh.title;
+
+        const enTitle = document.createElement("div");
+        enTitle.className = "role-title-en";
+        enTitle.textContent = TYPE_META[type].en.title;
+
+        body.append(code, zhTitle, enTitle);
+        const media = document.createElement("div");
+        media.className = "role-card-media";
+        applyThemeVars(media, type);
+        const badge = document.createElement("span");
+        badge.className = "frame-leaf";
+        badge.textContent = theme.badge;
+        media.append(badge, img);
+
+        card.append(media, body);
+        card.addEventListener("click", () => {
+          renderResult({ counts: calculateResult().counts, type });
+        });
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            renderResult({ counts: calculateResult().counts, type });
+          }
+        });
+        roleGalleryGrid.appendChild(card);
+      });
+    };
+
+    const renderResult = ({ counts, type }) => {
+      const profile = getProfile(type);
+      activeType = type;
+      renderBreakdown(counts);
+      renderRoleGallery(type);
+
+      const theme = applyThemeVars(resultPanel.querySelector(".result-card.primary"), type);
+      applyThemeVars(resultPanel.querySelector(".portrait-frame"), type);
+      resultPortrait.src = getFullPortraitPath(type);
+      resultPortrait.alt = getPortraitAlt(type, profile);
+      resultBadge.textContent = theme.badge;
+      resultTypeLabel.textContent = t("result.typeLabel");
+      resultType.textContent = type;
+      resultName.textContent = TYPE_META[type].zh.title;
+      resultEnTitle.textContent = TYPE_META[type].en.title;
+      resultSummary.textContent = profile.core;
+      resultStyleBody.textContent = profile.strengths;
+      resultChallengeBody.textContent = profile.challenge;
+      resultTraitBody.textContent = profile.core;
+      resultActionBody.textContent = profile.actions;
+      lastResultText = buildShareText(type, profile);
+      resultPanel.hidden = false;
+      resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    const roundRect = (ctx, x, y, w, h, r) => {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    };
+
+    const fillRoundRect = (ctx, x, y, w, h, r, fillStyle) => {
+      roundRect(ctx, x, y, w, h, r);
+      ctx.fillStyle = fillStyle;
+      ctx.fill();
+    };
+
+    const drawRoundedImage = (ctx, img, x, y, w, h, r) => {
+      ctx.save();
+      roundRect(ctx, x, y, w, h, r);
+      ctx.clip();
+      ctx.drawImage(img, x, y, w, h);
+      ctx.restore();
+    };
+
+    const wrapText = (ctx, text, x, y, maxWidth, lineHeight) => {
+      let line = "";
+      const chars = Array.from(text);
+      let currentY = y;
+      for (const ch of chars) {
+        const next = line + ch;
+        if (ctx.measureText(next).width > maxWidth && line) {
+          ctx.fillText(line, x, currentY);
+          line = ch;
+          currentY += lineHeight;
+        } else {
+          line = next;
+        }
+      }
+      if (line) ctx.fillText(line, x, currentY);
+      return currentY;
+    };
+
+    const downloadRoleCard = async () => {
+      const type = activeType;
+      const zh = TYPE_META[type].zh;
+      const en = TYPE_META[type].en;
+      const theme = TYPE_THEMES[type] || TYPE_THEMES.INTJ;
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = getFullPortraitPath(type);
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1400;
+      canvas.height = 2000;
+      const ctx = canvas.getContext("2d");
+
+      const bg = ctx.createLinearGradient(0, 0, 1400, 2000);
+      bg.addColorStop(0, "#f6fbf7");
+      bg.addColorStop(1, "#eef8f2");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const cardX = 72, cardY = 72, cardW = 1256, cardH = 1856;
+      const frame = ctx.createLinearGradient(cardX, cardY, cardX + cardW, cardY + cardH);
+      frame.addColorStop(0, theme.soft);
+      frame.addColorStop(1, theme.deep);
+      fillRoundRect(ctx, cardX, cardY, cardW, cardH, 42, frame);
+      fillRoundRect(ctx, cardX + 14, cardY + 14, cardW - 28, cardH - 28, 36, "rgba(255,255,255,0.82)");
+      fillRoundRect(ctx, cardX + 36, cardY + 36, cardW - 72, cardH - 72, 30, "#ffffff");
+
+      const imageX = cardX + 72;
+      const imageY = cardY + 78;
+      const imageW = cardW - 144;
+      const imageH = 1020;
+      drawRoundedImage(ctx, img, imageX, imageY, imageW, imageH, 28);
+
+      fillRoundRect(ctx, imageX + 26, imageY + imageH - 88, 176, 46, 23, "rgba(255,255,255,0.2)");
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 26px 'Segoe UI', sans-serif";
+      ctx.fillText(`🍃 ${theme.badge}`, imageX + 42, imageY + imageH - 56);
+
+      ctx.fillStyle = "#12382d";
+      ctx.font = "900 58px 'Segoe UI', sans-serif";
+      ctx.fillText(type, imageX, imageY + imageH + 90);
+
+      ctx.font = "900 48px 'Noto Sans TC', 'PingFang TC', sans-serif";
+      const zhBottom = wrapText(ctx, zh.title, imageX, imageY + imageH + 158, imageW, 56);
+      ctx.fillStyle = "#53726a";
+      ctx.font = "700 27px 'Segoe UI', sans-serif";
+      const enBottom = wrapText(ctx, en.title, imageX, zhBottom + 42, imageW, 36);
+
+      const sections = [
+        ["核心特質", zh.core],
+        ["強項", zh.strengths],
+        ["挑戰", zh.challenge],
+        ["綠色行動建議", zh.actions]
+      ];
+      let y = enBottom + 86;
+      sections.forEach(([label, value]) => {
+        fillRoundRect(ctx, imageX, y - 28, imageW, 112, 22, "rgba(239,247,243,0.98)");
+        ctx.fillStyle = "#0f5c48";
+        ctx.font = "900 24px 'Noto Sans TC', 'PingFang TC', sans-serif";
+        ctx.fillText(label, imageX + 24, y + 4);
+        ctx.fillStyle = "#395951";
+        ctx.font = "500 23px 'Noto Sans TC', 'PingFang TC', sans-serif";
+        wrapText(ctx, value, imageX + 24, y + 42, imageW - 48, 30);
+        y += 126;
+      });
+
+      ctx.fillStyle = "#5d776f";
+      ctx.font = "600 20px 'Segoe UI', sans-serif";
+      ctx.fillText("Blue Sky Returns • Eco-MBTI", imageX, cardY + cardH - 34);
+
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = `eco-mbti-${type}.png`;
+      link.click();
+      shareStatus.className = "status ok";
+      shareStatus.textContent = t("result.downloaded");
+    };
+
+    const applyLanguage = (lang) => {
+      currentLang = lang === "en" ? "en" : "zh";
+      localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+      document.documentElement.lang = currentLang === "zh" ? "zh-Hant" : "en";
+      document.title = t("page.title");
+
+      const update = (prefix, value) => {
+        Object.entries(value).forEach(([key, nested]) => {
+          const next = prefix ? `${prefix}.${key}` : key;
+          if (nested && typeof nested === "object" && !Array.isArray(nested)) {
+            update(next, nested);
+            return;
+          }
+          document.querySelectorAll(`[data-i18n="${next}"]`).forEach((node) => {
+            node.textContent = nested;
+          });
+          document.querySelectorAll(`[data-i18n-html="${next}"]`).forEach((node) => {
+            node.innerHTML = nested;
+          });
+        });
+      };
+
+      update("", I18N[currentLang]);
+      document.querySelectorAll(".lang-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === currentLang);
+      });
+      renderQuestions();
+      if (!resultPanel.hidden && lastResultText) {
+        renderResult({ counts: calculateResult().counts, type: activeType });
+      }
+    };
+
+    quizForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const answered = updateProgress();
+      if (answered !== QUESTIONS.length) {
+        quizStatus.className = "status warn";
+        quizStatus.textContent = t("quiz.missing");
+        return;
+      }
+      quizStatus.textContent = "";
+      renderResult(calculateResult());
+    });
+
+    resetQuizBtn.addEventListener("click", () => {
+      quizForm.reset();
+      questionList.querySelectorAll(".choice").forEach((node) => node.classList.remove("active"));
+      resultPanel.hidden = true;
+      lastResultText = "";
+      shareStatus.textContent = "";
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    copyResultBtn.addEventListener("click", async () => {
+      shareStatus.className = "status";
+      try {
+        if (navigator.clipboard?.writeText && lastResultText) {
+          await navigator.clipboard.writeText(lastResultText);
+          shareStatus.classList.add("ok");
+          shareStatus.textContent = t("result.copied");
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      shareStatus.classList.add("warn");
+      shareStatus.textContent = `${t("result.copiedFallback")}\n${lastResultText}`;
+    });
+
+    downloadCardBtn.addEventListener("click", async () => {
+      shareStatus.className = "status";
+      try {
+        await downloadRoleCard();
+      } catch (error) {
+        console.error("Download card failed:", error);
+        shareStatus.classList.add("warn");
+        shareStatus.textContent = currentLang === "zh"
+          ? "下載角色卡失敗，請稍後再試。"
+          : "Failed to download the role card. Please try again.";
+      }
+    });
+
+    document.querySelectorAll(".lang-btn").forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+
+    applyLanguage(currentLang);
+  </script>
+</body>
+</html>
