@@ -705,7 +705,7 @@
         linear-gradient(135deg, rgba(18, 81, 58, 0.98), rgba(27, 122, 85, 0.94) 54%, rgba(42, 166, 181, 0.88));
       color: #fff;
       border-color: transparent;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .result-card.primary p {
@@ -820,6 +820,7 @@
       align-content: start;
       min-width: 0;
       align-self: center;
+      padding-right: 6px;
     }
 
     .result-card.primary {
@@ -830,6 +831,7 @@
       font-size: clamp(1.25rem, 3vw, 1.8rem);
       font-weight: 900;
       color: #fff;
+      line-height: 1.2;
     }
 
     .result-name-en {
@@ -838,12 +840,13 @@
       color: rgba(255, 255, 255, 0.82);
       letter-spacing: 0.01em;
       line-height: 1.5;
+      white-space: normal;
     }
 
     .result-summary {
       font-size: 1rem;
       line-height: 1.75;
-      max-width: 38ch;
+      max-width: none;
     }
 
     .role-gallery {
@@ -933,6 +936,8 @@
       font-size: clamp(1.8rem, 4vw, 2.6rem);
       line-height: 1;
       margin: 0;
+      overflow-wrap: normal;
+      word-break: normal;
     }
 
     .result-stat-grid {
