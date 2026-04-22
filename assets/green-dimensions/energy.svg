@@ -1,0 +1,17 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="energyBg" x1="30" y1="24" x2="164" y2="170" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6FFE0"/>
+      <stop offset="1" stop-color="#D5F0BF"/>
+    </linearGradient>
+  </defs>
+  <circle cx="96" cy="96" r="82" fill="url(#energyBg)"/>
+  <path d="M96 46C117 46 134 63 134 84C134 100 124 112 110 117V132H82V117C68 112 58 100 58 84C58 63 75 46 96 46Z" fill="#FFF5B8" stroke="#1F6E52" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M90 70H107L96 88H108L87 114L93 93H81L90 70Z" fill="#FFB15C" stroke="#1F6E52" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M82 132H110" stroke="#1F6E52" stroke-width="5" stroke-linecap="round"/>
+  <path d="M85 144H107" stroke="#1F6E52" stroke-width="5" stroke-linecap="round"/>
+  <path d="M70 55L64 47" stroke="#1F6E52" stroke-width="5" stroke-linecap="round"/>
+  <path d="M122 55L128 47" stroke="#1F6E52" stroke-width="5" stroke-linecap="round"/>
+  <path d="M48 84H38" stroke="#1F6E52" stroke-width="5" stroke-linecap="round"/>
+  <path d="M154 84H144" stroke="#1F6E52" stroke-width="5" stroke-linecap="round"/>
+</svg>

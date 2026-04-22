@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>7-Day Green Proposal | 自定義 7 日綠色提案</title>
+  <link rel="icon" type="image/png" href="/PJC_LOGO.PNG" />
+  <link rel="shortcut icon" type="image/png" href="/PJC_LOGO.PNG" />
+  <link rel="apple-touch-icon" href="/PJC_LOGO.PNG" />
   <meta name="description" content="Join the 7-Day Green Proposal challenge and document flexible daily green actions across diet, mobility, waste, energy, and nature connection." />
   <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/green-action-7day.html" />
   <meta property="og:type" content="website" />
@@ -384,6 +387,18 @@
       gap: 12px;
       min-height: 100%;
     }
+    .dimension-icon-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .dimension-icon {
+      width: 128px;
+      height: 128px;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 20px rgba(31, 143, 88, 0.1));
+    }
     .dimension-tag {
       display: inline-flex;
       width: fit-content;
@@ -412,6 +427,63 @@
       border: 1px solid rgba(140, 198, 63, 0.45);
       color: var(--green-deep);
       font-weight: 700;
+    }
+    .task-panel {
+      position: relative;
+      scroll-margin-top: 104px;
+      border: 1px solid rgba(31, 143, 88, 0.25);
+      background:
+        linear-gradient(180deg, rgba(223, 245, 209, 0.48), rgba(255, 255, 255, 0.96) 30%),
+        var(--surface-strong);
+      box-shadow: 0 26px 54px rgba(20, 92, 58, 0.12);
+    }
+    .task-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 8px;
+      border-radius: 26px 26px 0 0;
+      background: linear-gradient(90deg, var(--green), var(--lime));
+    }
+    .task-panel .section-head {
+      margin-bottom: 16px;
+    }
+    .task-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(20, 92, 58, 0.09);
+      border: 1px solid rgba(20, 92, 58, 0.12);
+      color: var(--green-deep);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .task-spotlight {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .task-spotlight-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 14px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(31, 143, 88, 0.18);
+      color: var(--green-deep);
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(20, 92, 58, 0.08);
+    }
+    .task-card.task-form-card {
+      border: 1px solid rgba(31, 143, 88, 0.2);
+      box-shadow: 0 18px 34px rgba(20, 92, 58, 0.08);
     }
 
     .task-auth {
@@ -637,6 +709,9 @@
         padding: 22px 18px;
         border-radius: 24px;
       }
+      .task-panel::before {
+        border-radius: 24px 24px 0 0;
+      }
       .dimension-grid { grid-template-columns: 1fr; }
       .checkbox-grid { grid-template-columns: 1fr; }
       .hero h1 { font-size: 2.25rem; }
@@ -672,6 +747,7 @@
           <summary data-i18n="mobileNav.title">Quick Navigation</summary>
           <div class="mobile-nav-links">
             <a class="side-link" href="#concept"><span><span data-i18n="mobileNav.concept">Concept</span><small data-i18n="mobileNav.conceptSub">Why this format works</small></span></a>
+            <a class="side-link" href="#task"><span><span data-i18n="mobileNav.task">Task Submission</span><small data-i18n="mobileNav.taskSub">Submit today right away</small></span></a>
             <a class="side-link" href="#dimensions"><span><span data-i18n="mobileNav.dimensions">Five Dimensions</span><small data-i18n="mobileNav.dimensionsSub">Free combination in 7 days</small></span></a>
             <a class="side-link" href="#flow"><span><span data-i18n="mobileNav.flow">7-Day Flow</span><small data-i18n="mobileNav.flowSub">How to participate</small></span></a>
             <a class="side-link" href="#cta"><span><span data-i18n="mobileNav.cta">Next Step</span><small data-i18n="mobileNav.ctaSub">Join the action</small></span></a>
@@ -685,6 +761,7 @@
             <p data-i18n="side.body">A flexible guide page for a seven-day green rhythm.</p>
             <div class="side-links">
               <a class="side-link" href="#concept"><span><span data-i18n="side.linkConcept">Concept</span><small data-i18n="side.linkConceptSub">Why flexible works</small></span></a>
+              <a class="side-link" href="#task"><span><span data-i18n="side.linkTask">Task Submission</span><small data-i18n="side.linkTaskSub">Open the upload form</small></span></a>
               <a class="side-link" href="#dimensions"><span><span data-i18n="side.linkDimensions">Five Dimensions</span><small data-i18n="side.linkDimensionsSub">Diet, Mobility, Waste, Energy, Nature</small></span></a>
               <a class="side-link" href="#flow"><span><span data-i18n="side.linkFlow">7-Day Flow</span><small data-i18n="side.linkFlowSub">Photo-based participation</small></span></a>
               <a class="side-link" href="#cta"><span><span data-i18n="side.linkCta">Join</span><small data-i18n="side.linkCtaSub">Become a Climate Action Partner</small></span></a>
@@ -703,6 +780,7 @@
               <p data-i18n="hero.body">我們不直接規定參與者每天要做什麼，而是提供五大綠色維度，讓大家在 7 天內自由組合、重複、交叉上傳，用更真實也更可持續的方式練習低碳生活。</p>
               <div class="hero-actions">
               <a class="button primary" href="./member-center.html" data-i18n="hero.primary">前往氣候行動者中心登入</a>
+              <a class="button primary" href="#task" data-i18n="hero.submit">立即提交任務</a>
               <a class="button" href="#dimensions" data-i18n="hero.secondary">查看五大維度</a>
               </div>
             </div>
@@ -745,26 +823,41 @@
             </div>
             <div class="dimension-grid">
               <article class="dimension-card">
+                <div class="dimension-icon-wrap">
+                  <img class="dimension-icon" src="../assets/green-dimensions/diet.svg" alt="Green Diet icon" />
+                </div>
                 <span class="dimension-tag" data-i18n="dimensions.dietTag">Green Diet</span>
                 <h3 data-i18n="dimensions.dietTitle">Plant-forward food choices</h3>
                 <p data-i18n-html="dimensions.dietBody"><strong>Examples:</strong> meat-free meals, home-cooked vegetables, reducing food waste.</p>
               </article>
               <article class="dimension-card">
+                <div class="dimension-icon-wrap">
+                  <img class="dimension-icon" src="../assets/green-dimensions/mobility.svg" alt="Low-carbon Mobility icon" />
+                </div>
                 <span class="dimension-tag" data-i18n="dimensions.mobilityTag">Low-carbon Mobility</span>
                 <h3 data-i18n="dimensions.mobilityTitle">Move with less carbon</h3>
                 <p data-i18n-html="dimensions.mobilityBody"><strong>Examples:</strong> walking, cycling, buses, metro, or choosing not to drive.</p>
               </article>
               <article class="dimension-card">
+                <div class="dimension-icon-wrap">
+                  <img class="dimension-icon" src="../assets/green-dimensions/waste.svg" alt="Waste Reduction icon" />
+                </div>
                 <span class="dimension-tag" data-i18n="dimensions.wasteTag">Waste Reduction</span>
                 <h3 data-i18n="dimensions.wasteTitle">Reduce and reuse</h3>
                 <p data-i18n-html="dimensions.wasteBody"><strong>Examples:</strong> reusable containers, repairs, recycling, refusing single-use plastic.</p>
               </article>
               <article class="dimension-card">
+                <div class="dimension-icon-wrap">
+                  <img class="dimension-icon" src="../assets/green-dimensions/energy.svg" alt="Energy Saving icon" />
+                </div>
                 <span class="dimension-tag" data-i18n="dimensions.energyTag">Energy Saving</span>
                 <h3 data-i18n="dimensions.energyTitle">Save energy and trim digital waste</h3>
                 <p data-i18n-html="dimensions.energyBody"><strong>Examples:</strong> natural light, unplugging devices, deleting expired emails.</p>
               </article>
               <article class="dimension-card">
+                <div class="dimension-icon-wrap">
+                  <img class="dimension-icon" src="../assets/green-dimensions/nature.svg" alt="City and Nature Connection icon" />
+                </div>
                 <span class="dimension-tag" data-i18n="dimensions.natureTag">City / Nature Connection</span>
                 <h3 data-i18n="dimensions.natureTitle">Reconnect urban life with nature</h3>
                 <p data-i18n-html="dimensions.natureBody"><strong>Examples:</strong> green infrastructure, community parks, indoor plants, Green Hunt stops.</p>
@@ -811,14 +904,20 @@
               </article>
             </div>
           </section>
-          <section id="task" class="panel">
+          <section id="task" class="panel task-panel">
             <div class="section-head">
+              <div class="task-kicker">Fast Entry / 快速入口</div>
               <h2>Task Submission / 任務提交</h2>
               <p>登入後，你可以在這裡填寫今天完成的 7-Day Green Proposal 內容，並上傳圖片作為任務紀錄。</p>
             </div>
+            <div class="task-spotlight">
+              <div class="task-spotlight-chip">📸 今天拍完就能交</div>
+              <div class="task-spotlight-chip">🗓 7 天累積成挑戰</div>
+              <div class="task-spotlight-chip">🌿 可重複、可混搭五大維度</div>
+            </div>
             <div id="taskAuthState" class="task-auth">請先到氣候行動者中心登入，才可提交任務與查看自己的紀錄。</div>
             <div class="task-grid">
-              <article class="task-card">
+              <article class="task-card task-form-card">
                 <h3>提交今天的綠色任務</h3>
                 <form id="proposalTaskForm" class="task-form">
                   <div class="bot-guard" aria-hidden="true">
@@ -924,13 +1023,13 @@
         header: { title: "Blue Sky Returns", subtitle: "自定義 7 日綠色提案" },
         nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "7 日綠色提案", member: "氣候行動者中心", form: "邁出一步" },
         mobileNav: {
-          title: "快速導覽", concept: "概念", conceptSub: "為什麼這樣設計", dimensions: "五大維度", dimensionsSub: "素・行・減・能・森", flow: "7 天節奏", flowSub: "如何參與", cta: "下一步", ctaSub: "開始加入"
+          title: "快速導覽", concept: "概念", conceptSub: "為什麼這樣設計", task: "任務提交", taskSub: "直接打開上傳表單", dimensions: "五大維度", dimensionsSub: "素・行・減・能・森", flow: "7 天節奏", flowSub: "如何參與", cta: "下一步", ctaSub: "開始加入"
         },
         side: {
-          title: "7 日綠色提案", body: "一個不規定每天做什麼，而是讓參與者自己定義 7 天綠色行動節奏的導覽頁。", linkConcept: "概念", linkConceptSub: "自由組合的玩法", linkDimensions: "五大維度", linkDimensionsSub: "素・行・減・能・森", linkFlow: "7 天節奏", linkFlowSub: "上傳照片的節奏", linkCta: "加入流程", linkCtaSub: "開始成為氣候行動者", tipTitle: "快速提醒", tipBody: "重點不是打卡壓力，而是把綠色生活拆成五個入口，讓每個人都能用自己的方式參與。"
+          title: "7 日綠色提案", body: "一個不規定每天做什麼，而是讓參與者自己定義 7 天綠色行動節奏的導覽頁。", linkConcept: "概念", linkConceptSub: "自由組合的玩法", linkTask: "任務提交", linkTaskSub: "直接進入上傳區", linkDimensions: "五大維度", linkDimensionsSub: "素・行・減・能・森", linkFlow: "7 天節奏", linkFlowSub: "上傳照片的節奏", linkCta: "加入流程", linkCtaSub: "開始成為氣候行動者", tipTitle: "快速提醒", tipBody: "重點不是打卡壓力，而是把綠色生活拆成五個入口，讓每個人都能用自己的方式參與。"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "自定義 7 日綠色提案", body: "我們不直接規定參與者每天要做什麼，而是提供五大綠色維度，讓大家在 7 天內自由組合、重複、交叉上傳，用更真實也更可持續的方式練習低碳生活。", primary: "前往氣候行動者中心登入", secondary: "查看五大維度", posterAlt: "7 日綠色提案主視覺", noteTitle: "7 天，用你自己的節奏。", noteBody: "可以一天做一件，也可以某幾天集中發力；重要的是留下你選擇的綠色證據與故事。"
+          eyebrow: "Flexible Climate Participation", title: "自定義 7 日綠色提案", body: "我們不直接規定參與者每天要做什麼，而是提供五大綠色維度，讓大家在 7 天內自由組合、重複、交叉上傳，用更真實也更可持續的方式練習低碳生活。", primary: "前往氣候行動者中心登入", submit: "立即提交任務", secondary: "查看五大維度", posterAlt: "7 日綠色提案主視覺", noteTitle: "7 天，用你自己的節奏。", noteBody: "可以一天做一件，也可以某幾天集中發力；重要的是留下你選擇的綠色證據與故事。"
         },
         concept: {
           title: "Concept / 概念", body: "這不是一份僵硬的每日任務表，而是一個開放式參與框架。五大維度像五扇門，參與者只要在 7 天內，上傳任何符合其中一個維度的照片，就算完成當天的綠色提案紀錄。", card1Title: "不預設標準答案", card1Body: "不由主辦方替每個人決定行程，而是鼓勵大家從自己的生活節奏、城市條件、家庭習慣出發，找到做得到的行動。", card2Title: "照片優先的參與方式", card2Body: "上傳一張照片就能記錄一個選擇。影像比勾選題更有溫度，也更容易成為日後展覽、社群或電子書的素材。", highlight1: "🍀 不限順序", highlight2: "📷 可重複維度", highlight3: "🧩 可交叉混搭", highlight4: "🌍 更貼近真實生活"
@@ -954,13 +1053,13 @@
         header: { title: "Blue Sky Returns", subtitle: "7-Day Green Proposal" },
         nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "7-Day Green Proposal", member: "Member Center", form: "Take One Step" },
         mobileNav: {
-          title: "Quick Navigation", concept: "Concept", conceptSub: "Why this format works", dimensions: "Five Dimensions", dimensionsSub: "Diet, Mobility, Waste, Energy, Nature", flow: "7-Day Flow", flowSub: "How to participate", cta: "Next Step", ctaSub: "Join the action"
+          title: "Quick Navigation", concept: "Concept", conceptSub: "Why this format works", task: "Task Submission", taskSub: "Open the upload form", dimensions: "Five Dimensions", dimensionsSub: "Diet, Mobility, Waste, Energy, Nature", flow: "7-Day Flow", flowSub: "How to participate", cta: "Next Step", ctaSub: "Join the action"
         },
         side: {
-          title: "7-Day Green Proposal", body: "A guide page that gives participants a flexible seven-day green rhythm instead of prescribing the exact task for every day.", linkConcept: "Concept", linkConceptSub: "Why flexible works", linkDimensions: "Five Dimensions", linkDimensionsSub: "Diet, Mobility, Waste, Energy, Nature", linkFlow: "7-Day Flow", linkFlowSub: "Photo-based participation", linkCta: "Join", linkCtaSub: "Become a Climate Action Partner", tipTitle: "Quick Note", tipBody: "The point is not pressure or perfect streaks. The point is to turn green living into approachable entry points."
+          title: "7-Day Green Proposal", body: "A guide page that gives participants a flexible seven-day green rhythm instead of prescribing the exact task for every day.", linkConcept: "Concept", linkConceptSub: "Why flexible works", linkTask: "Task Submission", linkTaskSub: "Open the upload form", linkDimensions: "Five Dimensions", linkDimensionsSub: "Diet, Mobility, Waste, Energy, Nature", linkFlow: "7-Day Flow", linkFlowSub: "Photo-based participation", linkCta: "Join", linkCtaSub: "Become a Climate Action Partner", tipTitle: "Quick Note", tipBody: "The point is not pressure or perfect streaks. The point is to turn green living into approachable entry points."
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "Build Your Own 7-Day Green Proposal", body: "Instead of telling participants exactly what to do, we offer five green dimensions and let them freely combine, repeat, and remix actions across seven days in a way that feels real and sustainable.", primary: "Open Member Center", secondary: "See the five dimensions", posterAlt: "7-Day Green Proposal key visual", noteTitle: "7 days, your own rhythm.", noteBody: "One action a day works. A concentrated burst over a few days also works. What matters is the evidence and story behind your choices."
+          eyebrow: "Flexible Climate Participation", title: "Build Your Own 7-Day Green Proposal", body: "Instead of telling participants exactly what to do, we offer five green dimensions and let them freely combine, repeat, and remix actions across seven days in a way that feels real and sustainable.", primary: "Open Member Center", submit: "Submit a Task Now", secondary: "See the five dimensions", posterAlt: "7-Day Green Proposal key visual", noteTitle: "7 days, your own rhythm.", noteBody: "One action a day works. A concentrated burst over a few days also works. What matters is the evidence and story behind your choices."
         },
         concept: {
           title: "Concept", body: "This is not a rigid daily checklist. It is an open participation framework. Think of the five dimensions as five doors: if a participant uploads a photo that matches any one of them within seven days, it counts as part of the proposal.", card1Title: "Not prescriptive", card1Body: "The organizer does not dictate everyone's schedule. Participants start from their own pace, city context, family routines, and real constraints.", card2Title: "Photo-first participation", card2Body: "One photo can capture one conscious choice. That makes participation warmer, easier to share, and more reusable for exhibitions, social posts, or an e-book.", highlight1: "🍀 Any order", highlight2: "📷 Repeat dimensions", highlight3: "🧩 Mix and overlap", highlight4: "🌍 Rooted in real life"

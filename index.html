@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blue Sky Returns</title>
+  <link rel="icon" type="image/png" href="/PJC_LOGO.PNG" />
+  <link rel="shortcut icon" type="image/png" href="/PJC_LOGO.PNG" />
+  <link rel="apple-touch-icon" href="/PJC_LOGO.PNG" />
   <meta name="description" content="Blue Sky Returns is a 3D globe experience that helps the public understand climate crisis and local hope through global stories, timelines, and interactive Earth exploration." />
   <link rel="canonical" href="https://www.blue-sky-returns.online/index.html" />
   <meta property="og:type" content="website" />
@@ -420,7 +423,7 @@
       left: 20px;
       top: 104px;
       width: min(360px, calc(100vw - 40px));
-      max-height: min(360px, calc(100vh - 240px));
+      max-height: min(260px, calc(100vh - 300px));
       opacity: 1;
       pointer-events: auto;
       justify-content: flex-start;
@@ -1856,6 +1859,8 @@
         if (first) {
           state.currentEventId = first.id;
           highlightEvent(first.id);
+          setInfoHidden(false);
+          showInfo(first);
         }
       } else {
         document.getElementById('eventRow').innerHTML = '';
