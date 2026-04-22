@@ -758,6 +758,10 @@
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
       }
+
+      #heroTitle {
+        display: none;
+      }
       .info-card.show { transform: translateY(0); }
       .info-card.hidden-panel { transform: translateY(120%); }
       .info-card.show.hidden-panel { transform: translateY(120%); }
@@ -1966,9 +1970,6 @@
     const showInfo = (data) => {
       if (!data) return;
 
-      // ✅ 手機：點事件就收合時間表（避免干擾/重疊）
-      if (IS_MOBILE) setTimelineCollapsed(true);
-
       state.world?.pointOfView?.({ lat: data.lat, lng: data.lng, altitude: 1.8 }, 1200);
 
       const translated = getEventTranslation(data);
@@ -2436,7 +2437,7 @@
       }
 
       setInfoCollapsed(false);
-      setTimelineCollapsed(IS_MOBILE);
+      setTimelineCollapsed(false);
 
       applyMode(state.currentMode);
 
