@@ -695,7 +695,7 @@
     }
 
     .result-grid {
-      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      grid-template-columns: minmax(0, 0.94fr) minmax(320px, 1.06fr);
       align-items: start;
     }
 
@@ -728,7 +728,7 @@
     }
 
     .portrait-frame {
-      width: min(100%, 360px);
+      width: min(100%, 300px);
       min-width: 0;
       justify-self: center;
       align-self: start;
@@ -792,7 +792,7 @@
 
     .result-portrait {
       width: 100%;
-      max-width: 360px;
+      max-width: 300px;
       aspect-ratio: 2 / 3;
       object-fit: cover;
       display: block;
@@ -808,8 +808,8 @@
 
     .result-hero {
       display: grid;
-      grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-      gap: 20px;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      gap: 18px;
       align-items: start;
       min-width: 0;
     }
@@ -820,6 +820,10 @@
       align-content: start;
       min-width: 0;
       align-self: center;
+    }
+
+    .result-card.primary {
+      gap: 16px;
     }
 
     .result-name-zh {
@@ -839,7 +843,7 @@
     .result-summary {
       font-size: 1rem;
       line-height: 1.75;
-      max-width: 60ch;
+      max-width: 38ch;
     }
 
     .role-gallery {
