@@ -68,3 +68,7 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# Local/internal docs not intended for git
+docs/website-features.md
+docs/client-website-overview.md
