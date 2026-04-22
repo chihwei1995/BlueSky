@@ -22,6 +22,8 @@
 
     * { box-sizing: border-box; }
 
+    [hidden] { display: none !important; }
+
     body {
       margin: 0;
       font-family: "Segoe UI", "Noto Sans TC", sans-serif;
@@ -467,7 +469,7 @@
       <section class="panel">
         <div class="section-head">
           <h2 id="summarySectionTitle">帳號摘要 / Member Summary</h2>
-          <p id="summarySectionBody">這裡會顯示你目前的基本資訊、權限等級與問卷結果。</p>
+          <p id="summarySectionBody">這裡會顯示你目前的基本資訊、帳號身分與問卷結果。</p>
         </div>
         <div class="grid two">
           <article class="summary-card">
@@ -494,13 +496,18 @@
       <section class="panel">
         <div class="section-head">
           <h2 id="tasksSectionTitle">目前功能 / What You Have</h2>
-          <p id="tasksSectionBody">依照你的權限，會員中心會整理目前可以直接進行的任務。</p>
+          <p id="tasksSectionBody">依照你的帳號身分，會員中心會整理目前可以直接進行的任務。</p>
         </div>
         <div class="grid two" id="taskCards">
           <article class="task-card">
             <h3 id="taskStepTitle">邁出一步</h3>
             <p id="taskStepBody">建立或更新你的氣候行動者資料，並重跑問卷結果。</p>
             <a id="taskStepLink" class="pill" href="./climate-action-form.html">前往修改</a>
+          </article>
+          <article class="task-card">
+            <h3 id="taskEcoTitle">Eco-MBTI</h3>
+            <p id="taskEcoBody">完成 20 題環保人格測驗，產出角色卡，並在登入時同步儲存到會員資料。</p>
+            <a id="taskEcoLink" class="pill" href="./eco-mbti.html">開始測驗</a>
           </article>
           <article class="task-card">
             <h3 id="taskProposalTitle">7-Day Green Proposal</h3>
@@ -510,8 +517,8 @@
         </div>
         <div id="reviewerCardWrap" hidden>
           <article class="task-card">
-            <h3 id="reviewerCardTitle">審核者入口</h3>
-            <p id="reviewerCardBody">你目前具有 Level 3 權限，可進入審核區查看待處理資料。</p>
+            <h3 id="reviewerCardTitle">協作管理入口</h3>
+            <p id="reviewerCardBody">你的帳號已開啟協作管理功能，可進入管理區查看待處理資料。</p>
             <a id="reviewerCardLink" class="pill" href="./countries-regions-hope-crisis.html#reviewPanel">前往審核台</a>
           </article>
         </div>
@@ -545,8 +552,8 @@
 
       <section id="reviewerSubmissionPanel" class="panel" hidden>
         <div class="section-head">
-          <h2 id="reviewSectionTitle">Level 3 投稿總覽 / Global 7-Day Review List</h2>
-          <p id="reviewSectionBody">Level 3 可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。</p>
+          <h2 id="reviewSectionTitle">協作管理投稿總覽 / Global 7-Day Coordination List</h2>
+          <p id="reviewSectionBody">具備協作管理功能的帳號，可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。</p>
         </div>
         <div id="reviewerSubmissionEmpty" class="empty-box">目前沒有可顯示的 7-Day 投稿。</div>
         <div id="reviewerSubmissionList" class="review-list" hidden></div>
@@ -618,26 +625,29 @@
         abilityCardTitle: "目前可做的事",
         sections: {
           summaryTitle: "帳號摘要 / Member Summary",
-          summaryBody: "這裡會顯示你目前的基本資訊、權限等級與問卷結果。",
+          summaryBody: "這裡會顯示你目前的基本資訊、帳號身分與問卷結果。",
           basicCard: "基本資料",
           resultCard: "邁出一步結果",
           tasksTitle: "目前功能 / What You Have",
-          tasksBody: "依照你的權限，會員中心會整理目前可以直接進行的任務。",
+          tasksBody: "依照你的帳號身分，會員中心會整理目前可以直接進行的任務。",
           proposalTitle: "7-Day 任務紀錄 / Proposal Submissions",
           proposalBody: "最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。",
-          reviewTitle: "Level 3 投稿總覽 / Global 7-Day Review List",
-          reviewBody: "Level 3 可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。"
+          reviewTitle: "協作管理投稿總覽 / Global 7-Day Coordination List",
+          reviewBody: "具備協作管理功能的帳號，可在會員中心直接查看全站 7-Day Green Proposal 投稿，快速掌握哪些內容已提交。"
         },
         tasks: {
           stepTitle: "邁出一步",
           stepBody: "建立或更新你的氣候行動者資料，並重跑問卷結果。",
           stepLink: "前往修改",
+          ecoTitle: "Eco-MBTI",
+          ecoBody: "完成 20 題環保人格測驗，產出角色卡，並在登入時同步儲存到會員資料。",
+          ecoLink: "開始測驗",
           proposalTitle: "7-Day Green Proposal",
           proposalBody: "填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。",
           proposalLink: "開始任務",
-          reviewerTitle: "審核者入口",
-          reviewerBody: "你目前具有 Level 3 權限，可進入審核區查看待處理資料。",
-          reviewerLink: "前往審核台"
+          reviewerTitle: "協作管理入口",
+          reviewerBody: "你的帳號已開啟協作管理功能，可進入管理區查看待處理資料。",
+          reviewerLink: "前往管理區"
         },
         stats: {
           daysLabel: "完成天數 / Days Completed",
@@ -668,7 +678,7 @@
           resetFailed: "寄送失敗，請先輸入正確 Email。"
         },
         partner: { organization: "組織 / Organization", general: "一般 / General" },
-        permission: { level1: "Level 1 General / 一般", level2: "Level 2 Organization / 組織", level3: "Level 3 Reviewer / 審核者" }
+          permission: { level1: "一般氣候行動者 / General", level2: "組織氣候行動者 / Organization", level3: "協作管理 / Coordination" }
       },
       en: {
         pageTitle: "Member Center | Blue Sky Returns",
@@ -679,26 +689,29 @@
         abilityCardTitle: "What You Can Do Now",
         sections: {
           summaryTitle: "Member Summary",
-          summaryBody: "This section shows your current profile, permission level, and questionnaire result.",
+          summaryBody: "This section shows your current profile, account access, and questionnaire result.",
           basicCard: "Profile Basics",
           resultCard: "Take One Step Result",
           tasksTitle: "Current Features",
-          tasksBody: "The member center organizes the actions you can take based on your current permission level.",
+          tasksBody: "The member center organizes the actions you can take based on your current account access.",
           proposalTitle: "7-Day Task Records",
           proposalBody: "Your recent 7-Day Green Proposal uploads appear here so you can review what you have completed so far.",
-          reviewTitle: "Level 3 Global 7-Day Review List",
-          reviewBody: "Level 3 accounts can review recent 7-Day Green Proposal submissions across the site directly from the member center."
+          reviewTitle: "Coordination 7-Day Submission List",
+          reviewBody: "Accounts with coordination access can review recent 7-Day Green Proposal submissions across the site directly from the member center."
         },
         tasks: {
           stepTitle: "Take One Step",
           stepBody: "Create or update your climate action partner profile and refresh your questionnaire result.",
           stepLink: "Edit Now",
+          ecoTitle: "Eco-MBTI",
+          ecoBody: "Complete the 20-question environmental personality quiz, generate your role card, and save it to your member profile when signed in.",
+          ecoLink: "Start Quiz",
           proposalTitle: "7-Day Green Proposal",
           proposalBody: "Log today's green action and upload a photo as part of your task record.",
           proposalLink: "Start Task",
-          reviewerTitle: "Reviewer Access",
-          reviewerBody: "Your Level 3 permission lets you open the reviewer desk and inspect pending items.",
-          reviewerLink: "Open Reviewer Desk"
+          reviewerTitle: "Coordination Access",
+          reviewerBody: "Your account includes coordination access, so you can open the management desk and inspect pending items.",
+          reviewerLink: "Open Management Desk"
         },
         stats: {
           daysLabel: "Days Completed",
@@ -729,7 +742,7 @@
           resetFailed: "Sending failed. Please enter a valid email first."
         },
         partner: { organization: "Organization", general: "General" },
-        permission: { level1: "Level 1 General", level2: "Level 2 Organization", level3: "Level 3 Reviewer" }
+        permission: { level1: "General Access", level2: "Organization Access", level3: "Coordination Access" }
       }
     };
     const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
@@ -809,6 +822,9 @@
       document.getElementById("taskStepTitle").textContent = t("tasks.stepTitle");
       document.getElementById("taskStepBody").textContent = t("tasks.stepBody");
       document.getElementById("taskStepLink").textContent = t("tasks.stepLink");
+      document.getElementById("taskEcoTitle").textContent = t("tasks.ecoTitle");
+      document.getElementById("taskEcoBody").textContent = t("tasks.ecoBody");
+      document.getElementById("taskEcoLink").textContent = t("tasks.ecoLink");
       document.getElementById("taskProposalTitle").textContent = t("tasks.proposalTitle");
       document.getElementById("taskProposalBody").textContent = t("tasks.proposalBody");
       document.getElementById("taskProposalLink").textContent = t("tasks.proposalLink");

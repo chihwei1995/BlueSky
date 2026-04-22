@@ -1231,7 +1231,25 @@
 
   <footer class="footer" data-i18n="footer">Blue Sky Returns • Eco-MBTI • 2026</footer>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+
     const LANG_STORAGE_KEY = "bsr_lang";
     const QUESTIONS = [
       {
@@ -1681,6 +1699,7 @@
           member: "打開會員中心",
           step: "前往邁出一步",
           copied: "結果文案已複製。",
+          saved: "已同步儲存到你的會員資料。",
           downloaded: "PNG 角色卡已下載。",
           copiedFallback: "請手動複製下方結果。",
           typeLabel: "你的 Eco-MBTI",
@@ -1771,6 +1790,7 @@
           member: "Open Member Center",
           step: "Open Take One Step",
           copied: "Result text copied.",
+          saved: "Saved to your member profile.",
           downloaded: "PNG role card downloaded.",
           copiedFallback: "Please copy the result text manually.",
           typeLabel: "Your Eco-MBTI",
@@ -1821,6 +1841,7 @@
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
     let lastResultText = "";
     let activeType = "INTJ";
+    let currentUser = null;
 
     const TYPE_THEMES = {
       INTJ: { soft: "rgba(109, 198, 220, 0.38)", deep: "rgba(47, 106, 170, 0.26)", accent: "rgba(92, 224, 206, 0.34)", codeBg: "rgba(91, 169, 224, 0.16)", codeFg: "#0c4f72", cardTop: "rgba(240, 248, 255, 0.98)", cardBottom: "rgba(229, 242, 250, 0.96)", active: "rgba(69, 146, 215, 0.5)", activeTop: "rgba(228, 242, 255, 0.96)", shadow: "rgba(69, 146, 215, 0.18)", badge: "Systems" },
@@ -1876,10 +1897,7 @@
       const title = document.createElement("h3");
       title.textContent = question[currentLang].prompt;
 
-      const badge = document.createElement("p");
-      badge.textContent = `${t(`dimensions.${question.dimension}`)} • ${DIMENSION_META[question.dimension].pair.join(" / ")}`;
-
-      copy.append(title, badge);
+      copy.append(title);
       top.append(number, copy);
 
       const options = document.createElement("div");
@@ -1899,13 +1917,9 @@
 
         const choiceLabel = document.createElement("span");
         choiceLabel.className = "choice-label";
-        choiceLabel.textContent = `${t(index === 0 ? "quiz.optionA" : "quiz.optionB")} • ${option.key}`;
+        choiceLabel.textContent = t(index === 0 ? "quiz.optionA" : "quiz.optionB");
 
-        const trait = document.createElement("span");
-        trait.className = "choice-trait";
-        trait.textContent = option.letter;
-
-        head.append(choiceLabel, trait);
+        head.append(choiceLabel);
 
         const body = document.createElement("div");
         body.textContent = question[currentLang][option.key.toLowerCase()];
@@ -2092,6 +2106,30 @@
       lastResultText = buildShareText(type, profile);
       resultPanel.hidden = false;
       resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      saveResultToMember(type, profile, counts);
+    };
+
+    const saveResultToMember = async (type, profile, counts) => {
+      if (!currentUser) return;
+      try {
+        await setDoc(doc(db, "members", currentUser.uid), {
+          ecoMbti: {
+            type,
+            titleZh: TYPE_META[type].zh.title,
+            titleEn: TYPE_META[type].en.title,
+            coreZh: TYPE_META[type].zh.core,
+            coreEn: TYPE_META[type].en.core,
+            actionsZh: TYPE_META[type].zh.actions,
+            actionsEn: TYPE_META[type].en.actions,
+            counts,
+            updatedAt: new Date().toISOString()
+          }
+        }, { merge: true });
+        shareStatus.className = "status ok";
+        shareStatus.textContent = t("result.saved");
+      } catch (error) {
+        console.error("Failed to save Eco-MBTI to member profile:", error);
+      }
     };
 
     const roundRect = (ctx, x, y, w, h, r) => {
@@ -2304,6 +2342,10 @@
 
     document.querySelectorAll(".lang-btn").forEach((button) => {
       button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user || null;
     });
 
     applyLanguage(currentLang);

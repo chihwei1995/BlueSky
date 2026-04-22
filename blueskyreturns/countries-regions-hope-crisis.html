@@ -23,6 +23,8 @@
 
     * { box-sizing: border-box; }
 
+    [hidden] { display: none !important; }
+
     body {
       margin: 0;
       font-family: "Segoe UI", "Noto Sans TC", sans-serif;
@@ -783,7 +785,7 @@
           <a class="side-link" href="#introSection"><span>專案簡介<small>Project Brief</small></span></a>
           <a class="side-link" href="#journey"><span>合作等級<small>Participation Journey</small></span></a>
           <a class="side-link" href="#accessSection"><span>權限導覽<small>Access Navigator</small></span></a>
-          <a class="side-link" href="#reviewPanel"><span>審核台<small>Reviewer Desk</small></span></a>
+          <a class="side-link reviewer-only-link" href="#reviewPanel" hidden><span>審核台<small>Reviewer Desk</small></span></a>
         </div>
       </details>
     </div>
@@ -798,13 +800,13 @@
             <a class="side-link" href="#introSection"><span>專案簡介<small>Project Brief</small></span></a>
             <a class="side-link" href="#journey"><span>合作等級<small>Participation Journey</small></span></a>
             <a class="side-link" href="#accessSection"><span>權限導覽<small>Access Navigator</small></span></a>
-            <a class="side-link" href="#reviewPanel"><span>審核台<small>Reviewer Desk</small></span></a>
+            <a class="side-link reviewer-only-link" href="#reviewPanel" hidden><span>審核台<small>Reviewer Desk</small></span></a>
           </div>
         </div>
 
         <div class="side-card">
           <h3>快速判斷</h3>
-          <p>Level 1 看介紹，Level 2/3 可上傳，Level 3 可審核。</p>
+          <p>先了解專案流程；符合資格的氣候行動者登入後，可開啟地方資料上傳與後續協作功能。</p>
         </div>
       </aside>
 
@@ -814,13 +816,13 @@
           <div class="hero-kicker">JCI Peninsula • SDG 13 • Global E-book</div>
           <h1>Collaboration & Vision:<br>Hope and Crisis</h1>
           <p>
-            這一頁是 Blue Sky Returns 的專案導覽中心。你可以先理解整個合作旅程，再依照你的氣候行動者等級進入對應任務：
-            Level 2 與 Level 3 可上傳地方資料，Level 3 可審核投稿內容。
+            這一頁是 Blue Sky Returns 的專案導覽中心。你可以先理解整個合作旅程，再依照你的氣候行動者身分進入對應任務：
+            符合資格的帳號登入後，可上傳地方資料；部分協作帳號也會開啟後續內容管理功能。
           </p>
           <div class="hero-actions">
             <a class="button primary" href="./climate-action-form.html">前往註冊 / Join as Climate Action Partner</a>
             <a class="button" href="#journey">查看合作等級 / View Journey</a>
-            <a class="button" href="#reviewPanel">審核區 / Review Desk</a>
+            <a id="heroReviewCta" class="button" href="#reviewPanel" hidden>審核區 / Review Desk</a>
           </div>
         </div>
 
@@ -828,7 +830,7 @@
           <div class="status-card">
             <h2>登入與權限 / Access Status</h2>
             <div id="authChip" class="status-chip">尚未登入 / Signed out</div>
-            <p id="authSummary" class="status-text">請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或進入審核。</p>
+            <p id="authSummary" class="status-text">請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或開啟進一步協作功能。</p>
           </div>
           <div class="status-card">
             <h2>目前功能 / What You Can Do</h2>
@@ -841,19 +843,22 @@
         <div class="roadmap-head">
           <div>
             <h2>Project Brief / 專案導覽</h2>
-            <p>先看懂 Blue Sky Returns 想蒐集什麼、為什麼重要，再決定你要以哪一種方式參與這本國際環境電子書。</p>
+            <p>Blue Sky Returns is an international environmental co-creation initiative led by JCI Peninsula (Hong Kong). We are building a global E-book to help the next generation understand both the climate crisis already happening around us and the local green solutions that are giving us hope.</p>
           </div>
         </div>
         <div class="intro-grid">
           <article class="card">
-            <div class="eyebrow crisis">Crisis</div>
-            <h3>Local climate impacts<br>地方氣候危機</h3>
-            <p>整理 2024–2026 的極端高溫、暴雨、淹水、乾旱、海岸倒灌或其他在地氣候衝擊，用照片、短片與文字把「危機已經發生」說清楚。</p>
+            <div class="eyebrow hope">Blue Sky Returns</div>
+            <h3>Global environmental E-book<br>全球環境電子書</h3>
+            <p>「一步・藍天」是由 JCI Peninsula（香港半島青年商會）發起的國際環境共創計畫。我們正在製作一本全球環境電子書，讓下一代能更清楚看見：氣候危機已經發生，而各地也正出現值得記錄與分享的綠色解方。</p>
           </article>
           <article class="card">
-            <div class="eyebrow hope">Hope</div>
-            <h3>Local green solutions<br>地方希望解方</h3>
-            <p>拍下太陽能、風能、節能建築、社區綠電、韌性基礎建設或政策成果，讓不同國家都能看到「轉型正在發生」。</p>
+            <div class="eyebrow crisis">SDG 13</div>
+            <h3>Local, visible, actionable<br>在地、可見、可行動</h3>
+            <p>By connecting stories from different cities and regions, we want students, schools, youth groups, and community partners to see climate change not as a distant topic, but as something local, visible, and actionable.</p>
+            <p>透過連結不同城市與地區的真實案例，我們希望讓學生、學校、青年組織與社區夥伴明白：氣候變化不是遙遠議題，而是正在身邊發生、可以被理解、也可以一起行動改變的現實。</p>
+            <p>This initiative supports SDG 13: Climate Action. We want to document not only the crisis, but also the hope emerging from local action, clean energy, resilience, and community response.</p>
+            <p>本計畫呼應 SDG 13：氣候行動。我們希望記錄的不只是危機，也包括各地透過潔淨能源、韌性建設與社區行動所展現出的希望。</p>
           </article>
         </div>
       </section>
@@ -862,7 +867,8 @@
         <div class="roadmap-head">
           <div>
             <h2>Participation Journey / 參與等級導覽</h2>
-            <p>以下整理成更清楚的合作路徑。你提供的圖片概念，我把它轉成適合網站操作的三層導覽。</p>
+            <p>To make this E-book truly global, we invite JCI sister chapters and international partners to join as supporting organizations. Depending on your chapter’s capacity and schedule, you can participate in one of the following ways:</p>
+            <p>為了讓這本電子書真正成為全球共同創作的成果，我們誠邀各地 JCI 姐妹分會與國際夥伴成為支持組織。你可以按分會的時間與資源安排，選擇以下不同參與方式：</p>
           </div>
         </div>
         <div class="journey-grid">
@@ -870,33 +876,49 @@
             <div class="step-number">1</div>
             <div class="eyebrow level">Level 1</div>
             <h3>Co-Promote / 共同推廣</h3>
-            <p>先完成氣候行動問卷、建立帳號、理解 Blue Sky Returns 的方向，再協助分享給分會、學校與在地夥伴。</p>
+            <p>Support the project by helping us share our Climate Action Survey and Low-Carbon Habit Photo Collection through your local network.</p>
+            <p>透過你所在城市的分會、學校、青年網絡或合作夥伴，協助推廣我們的「氣候行動問卷」與「低碳生活照片募集」。</p>
             <ul>
-              <li>完成問卷與角色卡</li>
-              <li>分享專案連結與招募資訊</li>
-              <li>引導更多夥伴加入</li>
+              <li>Share project information locally / 協助在地宣傳專案資訊</li>
+              <li>Invite more youth and organizations to participate / 邀請更多青年與組織參與</li>
+              <li>Help build awareness before data collection begins / 在資料募集前擴大關注與認識</li>
             </ul>
           </article>
           <article class="card step">
             <div class="step-number">2</div>
             <div class="eyebrow level">Level 2</div>
             <h3>Co-Create Local Data / 共創地方資料</h3>
-            <p>Level 2 開始進入核心貢獻。你可以上傳地方希望與危機資料，提供電子書內容的第一手案例。</p>
+            <p>Help us build a global database by contributing real materials from your city or region.</p>
+            <p>協助我們建立全球資料庫，提交你所在城市或地區的真實案例。</p>
             <ul>
-              <li>上傳地方 Hope 與 Crisis</li>
-              <li>可附短片、照片與簡短文字</li>
-              <li>內容會進入待審核佇列</li>
+              <li>Hope / 希望: Upload an image or a 30-second short video showing a local green energy facility, climate solution, or visible sustainability action. / 提交能展示當地綠色能源設施、氣候解方或具體永續行動的圖片或 30 秒短片。</li>
+              <li>Crisis / 危機: Submit photos or short descriptions of extreme climate impacts your region experienced between 2024 and 2026. / 提交 2024 至 2026 年間你所在地區曾經歷的極端氣候影響照片或簡短說明。</li>
+              <li>Upload local Hope and Crisis materials with brief captions or short descriptions / 上傳地方 Hope 與 Crisis 資料，並附上簡短說明文字</li>
             </ul>
           </article>
           <article class="card step">
             <div class="step-number">3</div>
             <div class="eyebrow level">Level 3</div>
-            <h3>Review & Educational Outreach / 審核與教育推廣</h3>
-            <p>Level 3 具有審核權限，可檢視投稿品質、調整狀態，並為後續教材整理與教育應用把關。</p>
+            <h3>Educational Outreach / 教育推廣</h3>
+            <p>After the E-book is completed, help us distribute it to local primary schools, youth groups, and educational partners in your city.</p>
+            <p>當電子書完成後，協助把成果推廣到你所在城市的本地小學、青年組織與教育合作夥伴。</p>
             <ul>
-              <li>查看 `globeEventReviews` 待審資料</li>
-              <li>將投稿標記為 Approved 或 Rejected</li>
-              <li>協助電子書內容品質控管</li>
+              <li>Share the completed E-book with schools and youth organizations / 向學校與青年團體推廣完成版電子書</li>
+              <li>Extend the project’s educational value locally / 擴大專案在地教育影響力</li>
+              <li>Help students connect global climate issues with local action / 幫助學生把全球氣候議題連結到地方行動</li>
+            </ul>
+          </article>
+          <article class="card step">
+            <div class="step-number">4</div>
+            <div class="eyebrow level">Level 4</div>
+            <h3>Deep Collaboration / 深度合作</h3>
+            <p>If your chapter would like to explore more meaningful collaboration, we welcome deeper partnership discussions.</p>
+            <p>如果你的分會希望進一步參與，我們也非常歡迎展開更深入的合作討論。</p>
+            <ul>
+              <li>Co-host online environmental sharing sessions / 合辦線上環境分享活動</li>
+              <li>Customized educational collaboration / 客製化教育合作</li>
+              <li>Regional campaign support / 區域推廣協作</li>
+              <li>Cross-city climate storytelling exchange / 跨城市氣候故事交流</li>
             </ul>
           </article>
         </div>
@@ -922,7 +944,7 @@
       <section id="accessSection" class="panel callout">
         <div class="section-head">
           <h2>Access Navigator / 權限導覽</h2>
-          <p>這裡會根據你登入帳號的 `permissionLevel` 自動顯示能做的事。一般為 1，組織為 2，審核者為 3。</p>
+          <p>這裡會根據你登入帳號的身分自動顯示能做的事。一般帳號可先了解流程，組織帳號可提交地方資料；部分受邀協作帳號會看到額外管理功能。</p>
         </div>
 
         <div class="info-grid">
@@ -935,12 +957,12 @@
             <p>可前往上傳表單提交地方希望與危機內容，適合組織型氣候行動者、地方合作核心夥伴。</p>
           </div>
           <div class="permission-box">
-            <strong>Level 3 / permissionLevel = 3</strong>
-            <p>可上傳資料，也可在本頁審核 `globeEventReviews` 佇列，進行基本狀態管理。</p>
+            <strong>Coordination Access / 協作管理</strong>
+            <p>僅對受邀協作帳號顯示。登入後若具備此身分，系統會自動開啟額外的內容管理入口。</p>
           </div>
           <div class="permission-box">
             <strong>Upload Flow / 上傳流程</strong>
-            <p>目前上傳入口仍使用氣候行動者表單。你登入後若為 Level 2 或 3，系統會開放你進入上傳入口。</p>
+            <p>目前上傳入口仍使用氣候行動者表單。你登入後若具備上傳資格，系統會自動開放你進入上傳入口。</p>
           </div>
         </div>
 
@@ -957,12 +979,12 @@
 
       <section id="reviewPanel" class="panel review-panel">
         <div class="section-head">
-          <h2>Reviewer Desk / 審核台</h2>
-          <p>只有 `permissionLevel = 3` 的帳號會看到待審資料並可改變狀態。這裡先提供基本審核：`pending`、`approved`、`rejected`。</p>
+          <h2>Coordination Desk / 協作管理台</h2>
+          <p>這一區只會對受邀協作帳號開放。登入後若具備內容管理權限，系統會顯示待處理資料與狀態操作。</p>
         </div>
 
         <div id="reviewGate" class="auth-note">
-          目前尚未取得審核權限。
+          目前尚未開啟協作管理權限。
         </div>
 
         <div id="reviewList" class="review-grid" hidden></div>
@@ -1011,10 +1033,10 @@
         footer: "Blue Sky Returns: Collaboration & Vision • Hope and Crisis • 2026",
         states: {
           signedOut: "尚未登入 / Signed out",
-          authSummary: "請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或進入審核。",
+          authSummary: "請先登入氣候行動者帳號，系統會自動判斷你是否能上傳資料或開啟進一步協作功能。",
           visitorAbility: "一般訪客目前可閱讀導覽、了解資料需求與專案流程。",
           memberNotice: "尚未登入氣候行動者帳號。請先登入後查看你的權限與可執行任務。",
-          reviewGate: "只有 Level 3 帳號可進入審核台。",
+          reviewGate: "這個區域只對受邀協作帳號開放。",
           untitled: "未命名投稿",
           unknown: "未知",
           unknownRegion: "未知地區",
@@ -1027,18 +1049,18 @@
           pending: "Pending / 待審核",
           updating: "Updating status...",
           updateFailed: "更新失敗，請稍後再試。",
-          loadReviewFailed: "讀取審核資料失敗，請確認目前帳號仍具有 Level 3 權限。",
+          loadReviewFailed: "讀取協作資料失敗，請確認目前帳號仍具有協作管理權限。",
           signedInPrefix: "登入中",
           readPermissionFailed: "已登入，但目前讀取權限資料失敗，請稍後重新整理。",
           levelUnknown: "暫時無法判斷你的 permissionLevel。",
           memberReadFailed: "讀取會員資料時發生問題，請稍後再試。",
-          reviewPermissionUnknown: "目前無法載入審核權限資訊。",
+          reviewPermissionUnknown: "目前無法載入協作管理權限資訊。",
           canSubmit: "你的帳號可提交地方 Hope / Crisis 資料。請前往上傳入口完成內容填寫與附件上傳。",
-          level3Ability: "你目前是 Level 3，可上傳地方資料並直接進入審核流程。",
+          level3Ability: "你的帳號已開啟協作管理功能，可上傳地方資料並直接進入內容管理流程。",
           level2Ability: "你目前是 Level 2，可上傳地方 Hope / Crisis 資料。",
-          level1Notice: "你目前是 Level 1。若要上傳地方資料，請由後台將你的 permissionLevel 提升到 2 或 3。",
+          level1Notice: "你目前是一般帳號。若要上傳地方資料，請由後台調整為可上傳身分。",
           level1Ability: "你目前可閱讀專案導覽與準備資料，但尚未開放提交地方內容。",
-          level3Review: "你目前具有 Level 3 權限，可直接審核待處理投稿。"
+          level3Review: "你的帳號已開啟協作管理功能，可直接處理待整理投稿。"
         }
       },
       en: {
@@ -1049,10 +1071,10 @@
         footer: "Blue Sky Returns: Collaboration & Vision • Hope and Crisis • 2026",
         states: {
           signedOut: "Signed out",
-          authSummary: "Sign in with your climate action partner account. The system will detect whether you can upload data or access the reviewer desk.",
+          authSummary: "Sign in with your climate action partner account. The system will detect whether you can upload data or unlock additional coordination tools.",
           visitorAbility: "Visitors can currently read the guide and understand the project flow and data requirements.",
           memberNotice: "You are not signed in yet. Sign in first to view your permission level and available actions.",
-          reviewGate: "Only Level 3 accounts can access the reviewer desk.",
+          reviewGate: "This area is only available to invited coordination accounts.",
           untitled: "Untitled Submission",
           unknown: "Unknown",
           unknownRegion: "Unknown Region",
@@ -1065,18 +1087,18 @@
           pending: "Pending",
           updating: "Updating status...",
           updateFailed: "Update failed. Please try again later.",
-          loadReviewFailed: "Failed to load review items. Please confirm this account still has Level 3 access.",
+          loadReviewFailed: "Failed to load coordination items. Please confirm this account still has coordination access.",
           signedInPrefix: "Signed in",
           readPermissionFailed: "Signed in, but permission data could not be loaded right now. Please refresh later.",
           levelUnknown: "Your permissionLevel cannot be determined at the moment.",
           memberReadFailed: "There was a problem loading member data. Please try again later.",
-          reviewPermissionUnknown: "Reviewer permission data is currently unavailable.",
+          reviewPermissionUnknown: "Coordination permission data is currently unavailable.",
           canSubmit: "Your account can submit local Hope / Crisis data. Use the upload entry to complete the content and attachments.",
-          level3Ability: "You are Level 3 and can submit local data and review incoming entries.",
+          level3Ability: "Your account includes coordination access, so you can submit local data and manage incoming entries.",
           level2Ability: "You are Level 2 and can submit local Hope / Crisis data.",
-          level1Notice: "You are currently Level 1. To submit local data, an admin needs to raise your permissionLevel to 2 or 3.",
+          level1Notice: "Your account is currently a general access profile. An admin needs to upgrade it before local submissions are enabled.",
           level1Ability: "You can currently read the project guide and prepare materials, but submission is not enabled yet.",
-          level3Review: "You have Level 3 access and can review pending submissions directly."
+          level3Review: "Your account includes coordination access, so you can manage pending submissions directly."
         }
       }
     };
@@ -1106,15 +1128,18 @@
     const uploadCta = document.getElementById("uploadCta");
     const accessLoginCta = document.getElementById("accessLoginCta");
     const registerCta = document.getElementById("registerCta");
+    const heroReviewCta = document.getElementById("heroReviewCta");
     const reviewGate = document.getElementById("reviewGate");
     const reviewList = document.getElementById("reviewList");
     const reviewEmpty = document.getElementById("reviewEmpty");
     const navMemberState = document.getElementById("navMemberState");
     const navLoginLink = document.getElementById("navLoginLink");
     const navLogoutBtn = document.getElementById("navLogoutBtn");
+    const reviewerOnlyLinks = Array.from(document.querySelectorAll(".reviewer-only-link"));
+    const reviewPanel = document.getElementById("reviewPanel");
 
     const getPermissionLabel = (level) => {
-      if (level === 3) return currentLang === "zh" ? "Level 3 Reviewer / 審核者" : "Level 3 Reviewer";
+      if (level === 3) return currentLang === "zh" ? "Coordination Access / 協作管理" : "Coordination Access";
       if (level === 2) return currentLang === "zh" ? "Level 2 Contributor / 核心上傳者" : "Level 2 Contributor";
       if (level === 1) return currentLang === "zh" ? "Level 1 Partner / 一般氣候行動者" : "Level 1 Partner";
       return currentLang === "zh" ? "Guest / 訪客" : "Guest";
@@ -1143,6 +1168,9 @@
       accessLoginCta.hidden = false;
       registerCta.hidden = false;
       uploadCta.hidden = true;
+      heroReviewCta.hidden = true;
+      reviewerOnlyLinks.forEach((link) => { link.hidden = true; });
+      reviewPanel.hidden = true;
       reviewGate.textContent = t("states.reviewGate");
       reviewList.hidden = true;
       reviewEmpty.hidden = true;
@@ -1316,9 +1344,15 @@
         }
 
         if (permissionLevel === 3) {
+          heroReviewCta.hidden = false;
+          reviewerOnlyLinks.forEach((link) => { link.hidden = false; });
+          reviewPanel.hidden = false;
           reviewGate.textContent = t("states.level3Review");
           await loadReviewQueue();
         } else {
+          heroReviewCta.hidden = true;
+          reviewerOnlyLinks.forEach((link) => { link.hidden = true; });
+          reviewPanel.hidden = true;
           reviewGate.textContent = t("states.reviewGate");
           reviewList.hidden = true;
           reviewEmpty.hidden = true;
@@ -1337,6 +1371,9 @@
         accessLoginCta.hidden = true;
         registerCta.hidden = false;
         uploadCta.hidden = true;
+        heroReviewCta.hidden = true;
+        reviewerOnlyLinks.forEach((link) => { link.hidden = true; });
+        reviewPanel.hidden = true;
         reviewGate.textContent = t("states.reviewPermissionUnknown");
       }
     });
