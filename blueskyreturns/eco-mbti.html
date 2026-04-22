@@ -699,6 +699,12 @@
       align-items: start;
     }
 
+    .result-side-stack {
+      display: grid;
+      gap: 16px;
+      min-width: 0;
+    }
+
     .result-card.primary {
       background:
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 28%),
@@ -856,7 +862,7 @@
 
     .role-gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
     }
 
@@ -995,7 +1001,7 @@
     }
 
     .insight-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
     }
 
     .share-box {
@@ -1028,7 +1034,7 @@
       }
 
       .role-gallery-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .result-hero {
@@ -1044,7 +1050,7 @@
       .dimension-grid,
       .insight-grid,
       .role-gallery-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .hero-copy h1 {
@@ -1057,6 +1063,11 @@
       .dimension-grid,
       .insight-grid,
       .result-stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-grid,
+      .result-side-stack {
         grid-template-columns: 1fr;
       }
 
@@ -1114,6 +1125,10 @@
       .role-title-en,
       .side-link small {
         font-size: 0.9rem;
+      }
+
+      .role-gallery-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1320,22 +1335,24 @@
                   </div>
                 </div>
               </article>
-              <article class="result-card">
-                <h3 data-i18n="result.breakdownTitle">維度分佈 / Dimension Breakdown</h3>
-                <div id="breakdownList" class="type-breakdown"></div>
-              </article>
-            </div>
-            <div class="insight-grid">
-              <article class="insight-card">
-                <span class="small-badge" data-i18n="result.traitTitle">核心特質</span>
-                <h3 data-i18n="result.traitHeadline">人格解讀</h3>
-                <p id="resultTraitBody">-</p>
-              </article>
-              <article class="insight-card">
-                <span class="small-badge" data-i18n="result.actionTitle">適合的綠色行動建議</span>
-                <h3 data-i18n="result.actionHeadline">行動方向</h3>
-                <p id="resultActionBody">-</p>
-              </article>
+              <div class="result-side-stack">
+                <article class="result-card">
+                  <h3 data-i18n="result.breakdownTitle">維度分佈 / Dimension Breakdown</h3>
+                  <div id="breakdownList" class="type-breakdown"></div>
+                </article>
+                <div class="insight-grid">
+                  <article class="insight-card">
+                    <span class="small-badge" data-i18n="result.traitTitle">核心特質</span>
+                    <h3 data-i18n="result.traitHeadline">人格解讀</h3>
+                    <p id="resultTraitBody">-</p>
+                  </article>
+                  <article class="insight-card">
+                    <span class="small-badge" data-i18n="result.actionTitle">適合的綠色行動建議</span>
+                    <h3 data-i18n="result.actionHeadline">行動方向</h3>
+                    <p id="resultActionBody">-</p>
+                  </article>
+                </div>
+              </div>
             </div>
             <div class="role-gallery">
               <div class="section-head">
