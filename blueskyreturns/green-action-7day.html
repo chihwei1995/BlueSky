@@ -277,11 +277,16 @@
       margin: 0;
       font-size: clamp(2.1rem, 4.3vw, 3.8rem);
       line-height: 1.06;
-    }
-    .hero p {
-      margin: 0;
       color: #ffffff;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+    }
+    .hero p,
+    .hero .hero-copy p,
+    .hero .poster-note span {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.98);
       font-size: 1rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
     }
     .hero-actions {
       display: flex;
@@ -296,10 +301,11 @@
       gap: 8px;
       padding: 12px 18px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.52);
       font-weight: 800;
-      background: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.22);
       color: #fff;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
     }
     .button.primary {
       background: #fff;
@@ -323,11 +329,14 @@
       gap: 8px;
       padding: 16px 18px;
       border-radius: 22px;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
     }
-    .poster-note strong { font-size: 1rem; }
-    .poster-note span { color: rgba(255, 255, 255, 0.96); }
+    .poster-note strong {
+      font-size: 1rem;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+    }
     .panel { padding: 26px; }
     .section-head {
       display: grid;
@@ -403,12 +412,26 @@
       display: inline-flex;
       width: fit-content;
       align-items: center;
-      padding: 7px 12px;
+      gap: 8px;
+      padding: 8px 14px;
       border-radius: 999px;
-      background: var(--leaf);
+      background: linear-gradient(135deg, #efffdc, #dff5d1);
+      border: 1px solid rgba(140, 198, 63, 0.35);
+      box-shadow: 0 10px 18px rgba(31, 143, 88, 0.08);
       color: var(--green-deep);
       font-weight: 800;
       font-size: 0.88rem;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+    }
+    .dimension-tag::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--green), var(--lime));
+      box-shadow: 0 0 0 4px rgba(140, 198, 63, 0.16);
+      flex: 0 0 auto;
     }
     .dimension-card p { margin: 0; }
     .highlight-strip {
