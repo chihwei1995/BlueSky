@@ -862,6 +862,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
 
     const firebaseConfig = {
@@ -875,7 +876,7 @@
     };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const FIRESTORE_REST_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/default/documents`;
+    const db = getFirestore(app, "default");
     const headerMemberLink = document.getElementById('headerMemberLink');
     const headerLogoutBtn = document.getElementById('headerLogoutBtn');
 
@@ -1609,54 +1610,25 @@
       updateMobileLayoutVars();
     };
 
-    const decodeFirestoreValue = (value) => {
-      if (!value || typeof value !== 'object') return null;
-      if ('stringValue' in value) return value.stringValue;
-      if ('integerValue' in value) return Number(value.integerValue);
-      if ('doubleValue' in value) return Number(value.doubleValue);
-      if ('booleanValue' in value) return Boolean(value.booleanValue);
-      if ('nullValue' in value) return null;
-      if ('timestampValue' in value) return value.timestampValue;
-      if ('mapValue' in value) {
-        const fields = value.mapValue.fields || {};
-        return Object.fromEntries(
-          Object.entries(fields).map(([key, nestedValue]) => [key, decodeFirestoreValue(nestedValue)])
-        );
-      }
-      if ('arrayValue' in value) {
-        return (value.arrayValue.values || []).map(decodeFirestoreValue);
-      }
-      return null;
-    };
-
-    const decodeFirestoreDocument = (document) => {
-      const fields = document?.fields || {};
-      const decoded = Object.fromEntries(
-        Object.entries(fields).map(([key, value]) => [key, decodeFirestoreValue(value)])
-      );
+    const fetchFirestoreDocument = async (docPath) => {
+      const snapshot = await getDoc(doc(db, docPath));
+      if (!snapshot.exists()) return null;
       return {
-        ...decoded,
-        id: decoded.id || document.name?.split('/').pop()
+        id: snapshot.id,
+        ...snapshot.data()
       };
     };
 
-    const fetchFirestoreDocument = async (docPath) => {
-      const res = await fetch(`${FIRESTORE_REST_BASE}/${docPath}`, { cache: 'no-store' });
-      if (res.status === 404) return null;
-      if (!res.ok) throw new Error(`Firestore REST fetch failed: ${docPath} (${res.status})`);
-      const document = await res.json();
-      return decodeFirestoreDocument(document);
-    };
-
     const fetchFirestoreCollection = async (collectionPath) => {
-      const res = await fetch(`${FIRESTORE_REST_BASE}/${collectionPath}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`Firestore REST fetch failed: ${collectionPath} (${res.status})`);
-      const payload = await res.json();
-      return (payload.documents || []).map(decodeFirestoreDocument);
+      const snapshot = await getDocs(collection(db, collectionPath));
+      return snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      }));
     };
 
     const fetchGlobeEventsFromFirestore = async () => {
-      // Public globe data is loaded through Firestore REST to avoid SDK listen-channel blockers.
+      // Public globe data is loaded through Firestore Lite to avoid realtime listen-channel blockers.
       const [events, config] = await Promise.all([
         fetchFirestoreCollection('globeEvents'),
         fetchFirestoreDocument('siteConfig/globe')

@@ -1203,16 +1203,24 @@
       return parsed.toISOString().slice(0, 10);
     };
 
+    const sanitizeSourceUrl = (value) => {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+      if (/^https?:\/\/example\.com(?:\/|$)/i.test(raw)) return "";
+      return raw;
+    };
+
     const normalizeMediaForGlobe = (media, sourceUrl = "") => {
       const downloadURL = String(media?.downloadURL || "").trim();
       const mediaType = String(media?.type || "").trim().toLowerCase();
+      const cleanSourceUrl = sanitizeSourceUrl(sourceUrl);
       if (!downloadURL) return null;
       return {
         type: mediaType.startsWith("video/") ? "video" : mediaType === "instagram" ? "instagram" : "image",
         url: downloadURL,
         downloadURL,
         mimeType: media?.type || "",
-        credit: sourceUrl || ""
+        credit: cleanSourceUrl || ""
       };
     };
 
@@ -1280,7 +1288,7 @@
         ],
         description: submission.summary || "",
         media: normalizeMediaForGlobe(submission.media, submission.sourceUrl),
-        sourceUrl: submission.sourceUrl || "",
+        sourceUrl: sanitizeSourceUrl(submission.sourceUrl),
         sourceType: "member-submission",
         submissionId: submission.id || "",
         memberName: submission.memberName || "",
@@ -1706,7 +1714,7 @@
         eventDate: String(entry.eventDate || entry.date || "").trim(),
         credit: String(entry.credit || "").trim(),
         summary: String(entry.summary || entry.description || "").trim(),
-        sourceUrl: String(entry.sourceUrl || "").trim(),
+        sourceUrl: sanitizeSourceUrl(entry.sourceUrl),
         media: media && (media.downloadURL || media.type || media.name || media.path) ? media : null,
         coordinates,
         status: "pending",
@@ -1787,7 +1795,7 @@
       }
 
       reviewJsonImportBtn.disabled = true;
-      reviewJsonStatus.textContent = currentLang === "zh" ? "正在匯入 JSON..." : "Importing JSON...";
+      reviewJsonStatus.textContent = currentLang === "zh" ? "正在匯入並直接通過 JSON..." : "Importing and auto-approving JSON...";
       reviewJsonStatus.className = "status warn";
       reviewJsonImportedTitles.hidden = true;
       reviewJsonImportedTitles.innerHTML = "";
@@ -1812,20 +1820,47 @@
           const normalized = normalizeImportedEntry(item, user);
           normalized.importedBy = user.email || user.uid;
           normalized.importFileName = file.name;
+          normalized.status = "approved";
+          normalized.reviewedAt = new Date().toISOString();
+          normalized.reviewedBy = user.uid;
           return normalized;
         });
 
+        const results = [];
         for (const item of validItems) {
-          await addDoc(collection(db, "memberGlobeSubmissions"), item);
+          const createdRef = await addDoc(collection(db, "memberGlobeSubmissions"), item);
+          const createdItem = { id: createdRef.id, ...item };
+
+          try {
+            const globeEvent = await buildGlobeEventFromSubmission(createdItem);
+            await setDoc(doc(db, "globeEvents", globeEvent.id), globeEvent, { merge: true });
+            await updateDoc(doc(db, "memberGlobeSubmissions", createdRef.id), {
+              publishedToGlobe: true,
+              publishedGlobeEventId: globeEvent.id,
+              publishedAt: new Date().toISOString()
+            });
+            results.push({ title: item.title, published: true });
+          } catch (publishError) {
+            console.error(publishError);
+            await updateDoc(doc(db, "memberGlobeSubmissions", createdRef.id), {
+              publishedToGlobe: false,
+              publishError: publishError.message === "missing-coordinates" ? "missing-coordinates" : "publish-failed"
+            });
+            results.push({ title: item.title, published: false });
+          }
         }
 
+        const publishedCount = results.filter((item) => item.published).length;
+        const unpublishedCount = results.length - publishedCount;
         reviewJsonStatus.textContent = currentLang === "zh"
-          ? `已匯入 ${validItems.length} 筆待審核資料。`
-          : `Imported ${validItems.length} pending submissions.`;
+          ? `已匯入並直接通過 ${validItems.length} 筆資料，其中 ${publishedCount} 筆已發佈到首頁${unpublishedCount ? `，${unpublishedCount} 筆因缺少座標暫未發佈。` : "。"}`
+          : `Imported and auto-approved ${validItems.length} items. ${publishedCount} published to the homepage globe${unpublishedCount ? `, ${unpublishedCount} not published yet because coordinates were missing.` : "."}`;
         reviewJsonStatus.className = "status ok";
-        validItems.forEach((item) => {
+        results.forEach((item) => {
           const li = document.createElement("li");
-          li.textContent = item.title;
+          li.textContent = item.published
+            ? item.title
+            : `${item.title}${currentLang === "zh" ? "（已通過，未發佈）" : " (approved, not published)"}`;
           reviewJsonImportedTitles.appendChild(li);
         });
         reviewJsonImportedTitles.hidden = false;
