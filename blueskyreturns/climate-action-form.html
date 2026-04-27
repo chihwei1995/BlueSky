@@ -459,6 +459,36 @@
       border: 1px solid var(--border);
     }
 
+    .promo-visual {
+      position: relative;
+    }
+
+    .promo-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.82);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.24);
+      backdrop-filter: blur(8px);
+      font-weight: 800;
+    }
+
+    .promo-badge strong {
+      font-size: 1.08rem;
+      line-height: 1;
+    }
+
+    .promo-badge span {
+      font-size: 0.84rem;
+      line-height: 1.1;
+    }
+
     .promo-title {
       margin: 0;
       font-size: 1.08rem;
@@ -513,10 +543,14 @@
     </p>
 
     <section class="promo-card" aria-labelledby="lotteryPromoTitle">
-      <img id="lotteryPromoImage" src="../assets/2026抽獎.png" alt="2026 抽獎宣傳" />
+      <div class="promo-visual">
+        <img id="lotteryPromoImage" src="../assets/2026植樹計劃.png" alt="2026 植樹計劃宣傳" />
+        <div id="lotteryPromoBadge" class="promo-badge"><strong>321</strong><span>總名額</span></div>
+      </div>
       <div>
-        <h2 id="lotteryPromoTitle" class="promo-title">2026 抽獎活動</h2>
-        <p id="lotteryPromoBody" class="helper">獲得 2026 氣候行動證書後，即具抽獎資格。最終資格與得獎安排由主辦單位保留最後決定權。</p>
+        <h2 id="lotteryPromoTitle" class="promo-title">2026 植樹計劃</h2>
+        <p id="lotteryPromoBody" class="helper">2026 植樹計劃：每 100 人註冊成為氣候行動者，對應 1 個植樹名額；每 1 人完成全部任務，再對應 1 個植樹名額。總上限為 321 個名額。</p>
+        <p><a class="pill" href="./tree-planting-forest.html">查看植樹森林 / Open Forest View</a></p>
       </div>
     </section>
 
@@ -796,10 +830,11 @@
         pageTitle: "Blue Sky Returns 步入行動",
         heading: "Blue Sky Returns 步入行動<br>Blue Sky Returns Take One Step",
         subtitle: "用這一步更新你的氣候行動者資料與問卷內容；第一次填寫會建立帳號，之後可直接回來修改。<br>Use this step to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
-        lotteryTitle: "2026 抽獎活動",
-        lotteryBody: "獲得 2026 氣候行動證書後，即具抽獎資格。抽獎結果將於 2026 年一步藍天閉幕式公布，主辦單位保留最後決定權。",
-        lotteryImage: "../assets/2026抽獎.png",
-        lotteryAlt: "2026 抽獎宣傳",
+        lotteryTitle: "2026 植樹計劃",
+        lotteryBody: "2026 植樹計劃：每 100 人註冊成為氣候行動者，對應 1 個植樹名額；每 1 人完成全部任務，再對應 1 個植樹名額。總上限為 321 個名額。",
+        lotteryImage: "../assets/2026植樹計劃.png",
+        lotteryAlt: "2026 植樹計劃宣傳",
+        lotteryBadge: "<strong>321</strong><span>總名額</span>",
         submit: "儲存步入行動資料 / Save Take One Step",
         shareForm: "分享表單給他人 / Share This Form",
         download: "下載角色卡 / Download Card",
@@ -813,10 +848,11 @@
         pageTitle: "Take One Step | Blue Sky Returns",
         heading: "Blue Sky Returns Take One Step",
         subtitle: "Use this page to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
-        lotteryTitle: "2026 Lucky Draw",
-        lotteryBody: "After obtaining the 2026 Climate Action Certificate, you will be eligible for the lucky draw. The lucky draw result will be announced at the 2026 Blue Sky Returns closing ceremony, and the organizer reserves the final decision.",
-        lotteryImage: "../assets/2026抽獎en.png",
-        lotteryAlt: "2026 lucky draw promotion",
+        lotteryTitle: "2026 Tree Planting Plan",
+        lotteryBody: "2026 Tree Planting Plan: every 100 climate action partner registrations counts toward 1 tree planting slot, and every 1 person who completes all tasks counts toward another tree planting slot. Total cap: 321 slots.",
+        lotteryImage: "../assets/2026植樹計劃en.png",
+        lotteryAlt: "2026 tree planting plan promotion",
+        lotteryBadge: "<strong>321</strong><span>Total Slots</span>",
         submit: "Save Take One Step",
         shareForm: "Share This Form",
         download: "Download Card",
@@ -839,6 +875,7 @@
       document.getElementById("lotteryPromoBody").textContent = t("lotteryBody");
       document.getElementById("lotteryPromoImage").src = t("lotteryImage");
       document.getElementById("lotteryPromoImage").alt = t("lotteryAlt");
+      document.getElementById("lotteryPromoBadge").innerHTML = t("lotteryBadge");
       submitBtn.textContent = t("submit");
       shareCampaignBtn.textContent = t("shareForm");
       downloadResultBtn.textContent = t("download");

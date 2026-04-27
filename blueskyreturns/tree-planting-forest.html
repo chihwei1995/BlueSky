@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 植樹互動畫面 | Blue Sky Returns</title>
+  <link rel="icon" type="image/png" href="/Enter.PNG" />
+  <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
+  <link rel="apple-touch-icon" href="/Enter.PNG" />
+  <meta name="description" content="Explore the Blue Sky Returns tree planting forest view and see how many climate action partners and completed missions have contributed to the current tree planting slots." />
+  <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/tree-planting-forest.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Blue Sky Returns" />
+  <meta property="og:title" content="2026 Tree Planting Forest | Blue Sky Returns" />
+  <meta property="og:description" content="An interactive forest scene showing current participants, completed missions, and the tree planting slots accumulated by Blue Sky Returns." />
+  <meta property="og:url" content="https://www.blue-sky-returns.online/blueskyreturns/tree-planting-forest.html" />
+  <meta property="og:image" content="https://www.blue-sky-returns.online/assets/2026植樹計劃.png" />
+  <meta property="og:image:alt" content="Blue Sky Returns tree planting forest cover" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 Tree Planting Forest | Blue Sky Returns" />
+  <meta name="twitter:description" content="See the current tree planting forest built from participant counts and completed missions in Blue Sky Returns." />
+  <meta name="twitter:image" content="https://www.blue-sky-returns.online/assets/2026植樹計劃.png" />
+  <style>
+    :root {
+      --bg: #08120f;
+      --panel: rgba(11, 28, 22, 0.82);
+      --panel-strong: rgba(8, 20, 17, 0.92);
+      --line: rgba(208, 241, 224, 0.16);
+      --ink: #effaf4;
+      --muted: rgba(223, 245, 234, 0.76);
+      --green: #5ed16d;
+      --green-deep: #22784c;
+      --mint: #9df3bb;
+      --gold: #f4df8f;
+      --glow: 0 18px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(74, 143, 96, 0.35), transparent 28%),
+        radial-gradient(circle at top right, rgba(94, 209, 109, 0.16), transparent 24%),
+        linear-gradient(180deg, #0a1712 0%, #0d1d16 36%, #08110d 100%);
+      color: var(--ink);
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+    }
+
+    body {
+      display: grid;
+      min-height: 100vh;
+      grid-template-rows: auto 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      width: min(1380px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(7, 16, 13, 0.78);
+      border-bottom: 1px solid rgba(208, 241, 224, 0.1);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.96);
+      padding: 5px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand strong {
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .brand span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip,
+    .lang-btn {
+      border: 1px solid rgba(208, 241, 224, 0.18);
+      background: rgba(255,255,255,0.06);
+      color: #eaf9ef;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    .chip.active,
+    .lang-btn.active {
+      background: linear-gradient(135deg, #368f58, #78de8d);
+      border-color: transparent;
+      color: #092112;
+      box-shadow: 0 12px 24px rgba(94, 209, 109, 0.2);
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(208, 241, 224, 0.15);
+    }
+
+    main {
+      padding: 22px 0 30px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.25fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--glow);
+      backdrop-filter: blur(16px);
+    }
+
+    .intro {
+      padding: 26px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(208, 241, 224, 0.14);
+      color: var(--mint);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.7rem);
+      line-height: 1.04;
+    }
+
+    .intro p {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(208, 241, 224, 0.12);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 7px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      line-height: 1;
+      color: #fff;
+    }
+
+    .formula {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(94, 209, 109, 0.15), rgba(244, 223, 143, 0.08));
+      border: 1px solid rgba(157, 243, 187, 0.18);
+    }
+
+    .formula-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .formula-row strong {
+      color: #fff;
+    }
+
+    .scene-panel {
+      position: relative;
+      min-height: 720px;
+      overflow: hidden;
+    }
+
+    #forestCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .scene-overlay {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 18px;
+    }
+
+    .scene-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .scene-note,
+    .tree-detail {
+      max-width: 360px;
+      padding: 14px 16px;
+      border-radius: 22px;
+      background: rgba(7, 18, 14, 0.68);
+      border: 1px solid rgba(208, 241, 224, 0.14);
+      box-shadow: var(--glow);
+      pointer-events: auto;
+    }
+
+    .scene-note h2,
+    .tree-detail h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .scene-note p,
+    .tree-detail p,
+    .tree-detail li {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .tree-detail ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .legend {
+      justify-self: end;
+      display: grid;
+      gap: 10px;
+      max-width: 300px;
+      padding: 14px 16px;
+      border-radius: 22px;
+      background: rgba(7, 18, 14, 0.68);
+      border: 1px solid rgba(208, 241, 224, 0.14);
+      box-shadow: var(--glow);
+      pointer-events: auto;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      flex: none;
+    }
+
+    .dot.partners { background: #82e39d; }
+    .dot.completed { background: #f4df8f; }
+
+    .scene-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(208, 241, 224, 0.14);
+      color: #fff;
+      pointer-events: auto;
+    }
+
+    .status-pill strong {
+      color: var(--mint);
+    }
+
+    .foot {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      margin-top: 22px;
+      align-items: center;
+    }
+
+    .foot .panel {
+      padding: 18px 20px;
+    }
+
+    .foot p {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1080px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .scene-panel {
+        min-height: 640px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100%, calc(100% - 18px));
+      }
+      main {
+        padding-top: 16px;
+      }
+      .intro {
+        padding: 20px;
+      }
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+      .scene-panel {
+        min-height: 580px;
+      }
+      .scene-overlay {
+        padding: 12px;
+      }
+      .scene-top,
+      .scene-bottom,
+      .foot {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+      .legend {
+        justify-self: stretch;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <a class="brand" href="./index.html">
+        <img src="../Enter.PNG" alt="Blue Sky Returns" />
+        <div class="brand-copy">
+          <strong>Blue Sky Returns</strong>
+          <span id="brandSubtitle">2026 植樹互動畫面</span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <a id="navMain" class="chip" href="../index.html">主地球首頁</a>
+        <a id="navAbout" class="chip" href="./index.html">項目介紹</a>
+        <a id="navMember" class="chip" href="./member-center.html">氣候行動者中心</a>
+        <a id="navForest" class="chip active" href="./tree-planting-forest.html">植樹森林</a>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <article class="panel intro">
+        <span id="eyebrow" class="eyebrow">TREE PROGRESS</span>
+        <h1 id="heroTitle">2026 植樹森林</h1>
+        <p id="heroBody">這個互動畫面會依照目前的氣候行動者人數與完成全部任務的人數，即時換算出對應的植樹名額，並以樹林方式展示。</p>
+
+        <div class="stats">
+          <div class="stat">
+            <div id="participantsLabel" class="stat-label">目前氣候行動者</div>
+            <strong id="participantsValue">-</strong>
+          </div>
+          <div class="stat">
+            <div id="completedLabel" class="stat-label">完成全部任務</div>
+            <strong id="completedValue">-</strong>
+          </div>
+          <div class="stat">
+            <div id="treesLabel" class="stat-label">目前對應植樹名額</div>
+            <strong id="treesValue">-</strong>
+          </div>
+          <div class="stat">
+            <div id="remainingLabel" class="stat-label">距離上限剩餘</div>
+            <strong id="remainingValue">-</strong>
+          </div>
+        </div>
+
+        <div class="formula">
+          <div class="formula-row"><span id="formulaPartnersLabel">每 100 位氣候行動者</span><strong id="formulaPartnersValue">= 0 個名額</strong></div>
+          <div class="formula-row"><span id="formulaCompletedLabel">每 1 位完成全部任務</span><strong id="formulaCompletedValue">= 0 個名額</strong></div>
+          <div class="formula-row"><span id="formulaCapLabel">總上限</span><strong id="formulaCapValue">321 個名額</strong></div>
+        </div>
+      </article>
+
+      <article class="panel scene-panel">
+        <canvas id="forestCanvas"></canvas>
+        <div class="scene-overlay">
+          <div class="scene-top">
+            <div class="scene-note">
+              <h2 id="sceneTitle">互動森林視角</h2>
+              <p id="sceneBody">拖曳可旋轉視角，滾輪可縮放，點擊任一棵樹可查看這棵樹代表的是哪一種名額來源。</p>
+            </div>
+            <div class="legend">
+              <div class="legend-item"><span class="dot partners"></span><span id="legendPartners">由氣候行動者累積的名額</span></div>
+              <div class="legend-item"><span class="dot completed"></span><span id="legendCompleted">由完成全部任務累積的名額</span></div>
+            </div>
+          </div>
+
+          <div></div>
+
+          <div class="scene-bottom">
+            <div id="sceneStatus" class="status-pill"><strong>0</strong><span id="sceneStatusText">棵樹正在場景中生長</span></div>
+            <div id="treeDetail" class="tree-detail">
+              <h3 id="treeDetailTitle">樹木名額詳情</h3>
+              <p id="treeDetailBody">載入後，點擊畫面中的樹木即可查看它對應的名額來源。</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="foot">
+      <div class="panel">
+        <h3 id="footTitle">計算方式</h3>
+        <p id="footBody">目前會以 Firebase 內的氣候行動者總數、已完成步入行動 + Eco-MBTI + 7-Day 7 天紀錄的帳號數，換算出本頁顯示的植樹名額。最多顯示 321 個名額。</p>
+      </div>
+      <a id="footAction" class="chip active" href="./member-center.html">回到氣候行動者中心</a>
+    </section>
+  </main>
+
+  <script src="../assets/vendor/three.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+
+    const translations = {
+      zh: {
+        title: "2026 植樹互動畫面 | Blue Sky Returns",
+        brandSubtitle: "2026 植樹互動畫面",
+        navMain: "主地球首頁",
+        navAbout: "項目介紹",
+        navMember: "氣候行動者中心",
+        navForest: "植樹森林",
+        eyebrow: "TREE PROGRESS",
+        heroTitle: "2026 植樹森林",
+        heroBody: "這個互動畫面會依照目前的氣候行動者人數與完成全部任務的人數，即時換算出對應的植樹名額，並以樹林方式展示。",
+        participantsLabel: "目前氣候行動者",
+        completedLabel: "完成全部任務",
+        treesLabel: "目前對應植樹名額",
+        remainingLabel: "距離上限剩餘",
+        formulaPartnersLabel: "每 100 位氣候行動者",
+        formulaCompletedLabel: "每 1 位完成全部任務",
+        formulaCapLabel: "總上限",
+        formulaPartnersValue: (value) => `= ${value} 個名額`,
+        formulaCompletedValue: (value) => `= ${value} 個名額`,
+        formulaCapValue: "321 個名額",
+        sceneTitle: "互動森林視角",
+        sceneBody: "拖曳可旋轉視角，滾輪可縮放，點擊任一棵樹可查看這棵樹代表的是哪一種名額來源。",
+        legendPartners: "由氣候行動者累積的名額",
+        legendCompleted: "由完成全部任務累積的名額",
+        sceneStatusText: "棵樹正在場景中生長",
+        treeDetailTitle: "樹木名額詳情",
+        treeDetailBody: "載入後，點擊畫面中的樹木即可查看它對應的名額來源。",
+        footTitle: "計算方式",
+        footBody: "目前會以 Firebase 內的氣候行動者總數、已完成步入行動 + Eco-MBTI + 7-Day 7 天紀錄的帳號數，換算出本頁顯示的植樹名額。最多顯示 321 個名額。",
+        footAction: "回到氣候行動者中心",
+        loading: "正在讀取 Firebase 植樹資料...",
+        noTrees: "目前尚未累積到植樹名額",
+        treeInfoTitle: (slot) => `第 ${slot} 個植樹名額`,
+        treeInfoPartner: (order) => `這棵樹來自氣候行動者累積名額，第 ${order} 棵由每 100 位氣候行動者換算而來。`,
+        treeInfoCompleted: (order) => `這棵樹來自完成全部任務的累積名額，第 ${order} 棵由 1 位完成全部任務的氣候行動者直接對應。`,
+        treeInfoMeta: (source, cap) => `<ul><li>來源：${source}</li><li>名額序號：${cap} / 321</li></ul>`,
+        sourcePartner: "氣候行動者人數",
+        sourceCompleted: "完成全部任務",
+        statusText: (count) => `${count} 棵樹正在場景中生長`,
+        countsSuffix: "人",
+        treeSuffix: "棵",
+        error: "目前無法載入植樹資料，請稍後再試。"
+      },
+      en: {
+        title: "2026 Tree Planting Forest | Blue Sky Returns",
+        brandSubtitle: "2026 Tree Planting Forest",
+        navMain: "Main Globe",
+        navAbout: "About",
+        navMember: "Member Center",
+        navForest: "Tree Forest",
+        eyebrow: "TREE PROGRESS",
+        heroTitle: "2026 Tree Planting Forest",
+        heroBody: "This interactive forest converts the current number of climate action partners and the number of people who completed all tasks into live tree planting slots, then visualizes them as a growing forest.",
+        participantsLabel: "Climate Action Partners",
+        completedLabel: "Completed All Tasks",
+        treesLabel: "Current Tree Planting Slots",
+        remainingLabel: "Remaining to Cap",
+        formulaPartnersLabel: "Every 100 Climate Action Partners",
+        formulaCompletedLabel: "Every 1 Full Completion",
+        formulaCapLabel: "Cap",
+        formulaPartnersValue: (value) => `= ${value} slots`,
+        formulaCompletedValue: (value) => `= ${value} slots`,
+        formulaCapValue: "321 slots",
+        sceneTitle: "Interactive Forest View",
+        sceneBody: "Drag to rotate, use the wheel to zoom, and click any tree to see which slot source it represents.",
+        legendPartners: "Slots accumulated from climate action partners",
+        legendCompleted: "Slots accumulated from full task completion",
+        sceneStatusText: "trees are currently growing in the scene",
+        treeDetailTitle: "Tree Slot Details",
+        treeDetailBody: "After loading, click a tree in the scene to see which slot source it represents.",
+        footTitle: "How the count is calculated",
+        footBody: "This page reads the total number of climate action partners in Firebase and the number of accounts that completed Take One Step + Eco-MBTI + 7-Day (7 distinct days), then converts them into tree planting slots. The display is capped at 321 slots.",
+        footAction: "Back to Member Center",
+        loading: "Loading tree planting data from Firebase...",
+        noTrees: "No tree planting slots have been accumulated yet.",
+        treeInfoTitle: (slot) => `Tree Planting Slot ${slot}`,
+        treeInfoPartner: (order) => `This tree comes from the climate action partner count. It is slot ${order} created by the “every 100 partners” rule.`,
+        treeInfoCompleted: (order) => `This tree comes from a full completion. It is slot ${order} created directly by 1 person who completed all tasks.`,
+        treeInfoMeta: (source, cap) => `<ul><li>Source: ${source}</li><li>Slot number: ${cap} / 321</li></ul>`,
+        sourcePartner: "Climate action partner count",
+        sourceCompleted: "Full task completion",
+        statusText: (count) => `${count} trees are currently growing in the scene`,
+        countsSuffix: "",
+        treeSuffix: "",
+        error: "The tree planting data could not be loaded right now. Please try again later."
+      }
+    };
+
+    const firebaseConfig = {
+      apiKey: "<SECRET>",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:394dfe3f0f4b1d840f6060"
+    };
+
+    const MAX_SLOTS = 321;
+    const currentLang = localStorage.getItem("bsr_lang") === "en" ? "en" : "zh";
+    const t = (key, ...args) => {
+      const value = translations[state.lang][key];
+      return typeof value === "function" ? value(...args) : value;
+    };
+
+    const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "tree-planting-forest" });
+    const db = getFirestore(app, "default");
+
+    const state = {
+      lang: currentLang,
+      treeGroups: [],
+      treeMeta: [],
+      visibleTreeCount: 0,
+      participantTrees: 0,
+      completedTrees: 0,
+      totalTrees: 0
+    };
+
+    const els = {
+      brandSubtitle: document.getElementById("brandSubtitle"),
+      navMain: document.getElementById("navMain"),
+      navAbout: document.getElementById("navAbout"),
+      navMember: document.getElementById("navMember"),
+      navForest: document.getElementById("navForest"),
+      eyebrow: document.getElementById("eyebrow"),
+      heroTitle: document.getElementById("heroTitle"),
+      heroBody: document.getElementById("heroBody"),
+      participantsLabel: document.getElementById("participantsLabel"),
+      participantsValue: document.getElementById("participantsValue"),
+      completedLabel: document.getElementById("completedLabel"),
+      completedValue: document.getElementById("completedValue"),
+      treesLabel: document.getElementById("treesLabel"),
+      treesValue: document.getElementById("treesValue"),
+      remainingLabel: document.getElementById("remainingLabel"),
+      remainingValue: document.getElementById("remainingValue"),
+      formulaPartnersLabel: document.getElementById("formulaPartnersLabel"),
+      formulaCompletedLabel: document.getElementById("formulaCompletedLabel"),
+      formulaCapLabel: document.getElementById("formulaCapLabel"),
+      formulaPartnersValue: document.getElementById("formulaPartnersValue"),
+      formulaCompletedValue: document.getElementById("formulaCompletedValue"),
+      formulaCapValue: document.getElementById("formulaCapValue"),
+      sceneTitle: document.getElementById("sceneTitle"),
+      sceneBody: document.getElementById("sceneBody"),
+      legendPartners: document.getElementById("legendPartners"),
+      legendCompleted: document.getElementById("legendCompleted"),
+      sceneStatus: document.getElementById("sceneStatus"),
+      sceneStatusText: document.getElementById("sceneStatusText"),
+      treeDetailTitle: document.getElementById("treeDetailTitle"),
+      treeDetailBody: document.getElementById("treeDetailBody"),
+      footTitle: document.getElementById("footTitle"),
+      footBody: document.getElementById("footBody"),
+      footAction: document.getElementById("footAction"),
+      langButtons: Array.from(document.querySelectorAll(".lang-btn"))
+    };
+
+    const setLanguage = (lang) => {
+      state.lang = lang;
+      localStorage.setItem("bsr_lang", lang);
+      document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+      document.title = t("title");
+      els.brandSubtitle.textContent = t("brandSubtitle");
+      els.navMain.textContent = t("navMain");
+      els.navAbout.textContent = t("navAbout");
+      els.navMember.textContent = t("navMember");
+      els.navForest.textContent = t("navForest");
+      els.eyebrow.textContent = t("eyebrow");
+      els.heroTitle.textContent = t("heroTitle");
+      els.heroBody.textContent = t("heroBody");
+      els.participantsLabel.textContent = t("participantsLabel");
+      els.completedLabel.textContent = t("completedLabel");
+      els.treesLabel.textContent = t("treesLabel");
+      els.remainingLabel.textContent = t("remainingLabel");
+      els.formulaPartnersLabel.textContent = t("formulaPartnersLabel");
+      els.formulaCompletedLabel.textContent = t("formulaCompletedLabel");
+      els.formulaCapLabel.textContent = t("formulaCapLabel");
+      els.formulaCapValue.textContent = t("formulaCapValue");
+      els.sceneTitle.textContent = t("sceneTitle");
+      els.sceneBody.textContent = t("sceneBody");
+      els.legendPartners.textContent = t("legendPartners");
+      els.legendCompleted.textContent = t("legendCompleted");
+      els.treeDetailTitle.textContent = t("treeDetailTitle");
+      els.footTitle.textContent = t("footTitle");
+      els.footBody.textContent = t("footBody");
+      els.footAction.textContent = t("footAction");
+      els.langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
+      renderStats(lastStats);
+      renderSelectedTree(selectedTreeIndex);
+    };
+
+    let lastStats = null;
+    let selectedTreeIndex = -1;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.getElementById("forestCanvas"),
+      antialias: true,
+      alpha: true
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x0d1d16, 0.028);
+
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    const orbit = { radius: 14, theta: -0.55, phi: 1.02, auto: true };
+
+    const ambient = new THREE.HemisphereLight(0xdfffe9, 0x0a130f, 1.6);
+    scene.add(ambient);
+
+    const sun = new THREE.DirectionalLight(0xfff4cb, 1.35);
+    sun.position.set(7, 9, 5);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024);
+    scene.add(sun);
+
+    const fill = new THREE.DirectionalLight(0x84e7b1, 0.45);
+    fill.position.set(-8, 4, -5);
+    scene.add(fill);
+
+    const ground = new THREE.Mesh(
+      new THREE.CircleGeometry(9.8, 72),
+      new THREE.MeshStandardMaterial({
+        color: 0x193d2a,
+        roughness: 0.95,
+        metalness: 0.02
+      })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(9.95, 10.3, 72),
+      new THREE.MeshBasicMaterial({ color: 0x9df3bb, transparent: true, opacity: 0.15, side: THREE.DoubleSide })
+    );
+    ring.rotation.x = -Math.PI / 2;
+    scene.add(ring);
+
+    const particles = new THREE.Group();
+    for (let i = 0; i < 90; i += 1) {
+      const particle = new THREE.Mesh(
+        new THREE.SphereGeometry(0.03, 10, 10),
+        new THREE.MeshBasicMaterial({ color: i % 3 === 0 ? 0xf4df8f : 0x9df3bb, transparent: true, opacity: 0.55 })
+      );
+      particle.position.set((Math.random() - 0.5) * 16, Math.random() * 4 + 0.5, (Math.random() - 0.5) * 16);
+      particle.userData = {
+        baseY: particle.position.y,
+        speed: 0.4 + Math.random() * 0.7,
+        drift: Math.random() * Math.PI * 2
+      };
+      particles.add(particle);
+    }
+    scene.add(particles);
+
+    const treeRoot = new THREE.Group();
+    scene.add(treeRoot);
+    const interactiveMeshes = [];
+
+    const trunkGeometry = new THREE.CylinderGeometry(0.08, 0.12, 0.9, 8);
+    const crownGeometry = new THREE.SphereGeometry(0.38, 16, 16);
+    const crownGeometryLarge = new THREE.SphereGeometry(0.32, 16, 16);
+
+    const makeTree = (index) => {
+      const group = new THREE.Group();
+      const trunk = new THREE.Mesh(
+        trunkGeometry,
+        new THREE.MeshStandardMaterial({ color: 0x6b4327, roughness: 0.9 })
+      );
+      trunk.castShadow = true;
+      trunk.position.y = 0.45;
+      const crownMain = new THREE.Mesh(
+        crownGeometry,
+        new THREE.MeshStandardMaterial({ color: 0x3f9e56, roughness: 0.8 })
+      );
+      crownMain.castShadow = true;
+      crownMain.position.set(0, 1.06, 0);
+      const crownLeft = new THREE.Mesh(
+        crownGeometryLarge,
+        new THREE.MeshStandardMaterial({ color: 0x7ed98b, roughness: 0.82 })
+      );
+      crownLeft.castShadow = true;
+      crownLeft.position.set(-0.22, 0.95, 0.1);
+      const crownRight = new THREE.Mesh(
+        crownGeometryLarge,
+        new THREE.MeshStandardMaterial({ color: 0x64bf73, roughness: 0.82 })
+      );
+      crownRight.castShadow = true;
+      crownRight.position.set(0.24, 0.94, -0.05);
+      group.add(trunk, crownMain, crownLeft, crownRight);
+
+      const shell = new THREE.Mesh(
+        new THREE.CircleGeometry(0.32, 18),
+        new THREE.MeshBasicMaterial({ color: 0x9df3bb, transparent: true, opacity: 0.07 })
+      );
+      shell.rotation.x = -Math.PI / 2;
+      shell.position.y = 0.01;
+      group.add(shell);
+
+      const radius = 0.8 + Math.sqrt(index) * 0.48;
+      const angle = index * 2.399963229728653;
+      group.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+      group.rotation.y = Math.random() * Math.PI * 2;
+      group.scale.setScalar(0.01);
+      group.visible = false;
+      group.userData.baseScale = 0.78 + Math.random() * 0.45;
+      group.userData.treeIndex = index;
+
+      [trunk, crownMain, crownLeft, crownRight].forEach((mesh) => {
+        mesh.userData.treeIndex = index;
+        interactiveMeshes.push(mesh);
+      });
+      treeRoot.add(group);
+      return group;
+    };
+
+    for (let i = 0; i < MAX_SLOTS; i += 1) {
+      state.treeGroups.push(makeTree(i));
+    }
+
+    const resize = () => {
+      const panel = document.querySelector(".scene-panel");
+      const width = panel.clientWidth;
+      const height = panel.clientHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+
+    const updateCamera = () => {
+      const sinPhi = Math.sin(orbit.phi);
+      camera.position.set(
+        orbit.radius * Math.sin(orbit.theta) * sinPhi,
+        orbit.radius * Math.cos(orbit.phi),
+        orbit.radius * Math.cos(orbit.theta) * sinPhi
+      );
+      camera.lookAt(0, 1.4, 0);
+    };
+
+    resize();
+    updateCamera();
+    window.addEventListener("resize", resize);
+
+    const pointer = new THREE.Vector2();
+    const raycaster = new THREE.Raycaster();
+    const canvas = renderer.domElement;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    canvas.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      orbit.auto = false;
+      lastX = event.clientX;
+      lastY = event.clientY;
+      canvas.setPointerCapture(event.pointerId);
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      const dx = event.clientX - lastX;
+      const dy = event.clientY - lastY;
+      lastX = event.clientX;
+      lastY = event.clientY;
+      orbit.theta -= dx * 0.005;
+      orbit.phi = Math.min(Math.PI * 0.48, Math.max(0.42, orbit.phi + dy * 0.004));
+      updateCamera();
+    });
+
+    const releasePointer = () => { dragging = false; };
+    canvas.addEventListener("pointerup", releasePointer);
+    canvas.addEventListener("pointercancel", releasePointer);
+    canvas.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      orbit.auto = false;
+      orbit.radius = Math.min(20, Math.max(8.5, orbit.radius + event.deltaY * 0.01));
+      updateCamera();
+    }, { passive: false });
+
+    const renderSelectedTree = (index) => {
+      selectedTreeIndex = index;
+      if (index < 0 || !state.treeMeta[index]) {
+        els.treeDetailTitle.textContent = t("treeDetailTitle");
+        els.treeDetailBody.innerHTML = t("treeDetailBody");
+        return;
+      }
+      const info = state.treeMeta[index];
+      els.treeDetailTitle.textContent = t("treeInfoTitle", info.slotNumber);
+      const lead = info.source === "partners"
+        ? t("treeInfoPartner", info.sourceOrder)
+        : t("treeInfoCompleted", info.sourceOrder);
+      const meta = t("treeInfoMeta", info.source === "partners" ? t("sourcePartner") : t("sourceCompleted"), info.slotNumber);
+      els.treeDetailBody.innerHTML = `${lead}${meta}`;
+    };
+
+    canvas.addEventListener("click", (event) => {
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObjects(interactiveMeshes, false);
+      const hit = hits.find((item) => {
+        const idx = item.object.userData.treeIndex;
+        return idx != null && idx < state.visibleTreeCount;
+      });
+      if (hit) {
+        renderSelectedTree(hit.object.userData.treeIndex);
+      }
+    });
+
+    const renderStats = (stats) => {
+      if (!stats) return;
+      lastStats = stats;
+      els.participantsValue.textContent = `${stats.participants}${t("countsSuffix")}`;
+      els.completedValue.textContent = `${stats.completed}${t("countsSuffix")}`;
+      els.treesValue.textContent = `${stats.totalTrees}${state.lang === "zh" ? "棵" : ""}`;
+      els.remainingValue.textContent = `${stats.remaining}${state.lang === "zh" ? "棵" : ""}`;
+      els.formulaPartnersValue.textContent = t("formulaPartnersValue", stats.partnerTrees);
+      els.formulaCompletedValue.textContent = t("formulaCompletedValue", stats.completedTrees);
+      els.sceneStatus.innerHTML = `<strong>${stats.totalTrees}</strong><span>${t("statusText", stats.totalTrees)}</span>`;
+      if (stats.totalTrees === 0) {
+        renderSelectedTree(-1);
+        els.treeDetailBody.textContent = t("noTrees");
+      } else if (selectedTreeIndex >= stats.totalTrees || selectedTreeIndex < 0) {
+        renderSelectedTree(0);
+      } else {
+        renderSelectedTree(selectedTreeIndex);
+      }
+    };
+
+    const setVisibleTrees = (count, partnerTrees, completedTrees) => {
+      state.visibleTreeCount = count;
+      state.participantTrees = partnerTrees;
+      state.completedTrees = completedTrees;
+      state.totalTrees = count;
+      state.treeMeta = [];
+
+      for (let i = 0; i < MAX_SLOTS; i += 1) {
+        const group = state.treeGroups[i];
+        if (i < count) {
+          group.visible = true;
+          const source = i < partnerTrees ? "partners" : "completed";
+          const sourceOrder = source === "partners" ? i + 1 : i - partnerTrees + 1;
+          state.treeMeta.push({
+            slotNumber: i + 1,
+            source,
+            sourceOrder
+          });
+        } else {
+          group.visible = false;
+          group.scale.setScalar(0.01);
+        }
+      }
+    };
+
+    const getRewardEligibility = (member, submissions) => {
+      const completedDays = new Set(submissions.map((item) => item.taskDate || "").filter(Boolean)).size;
+      const earnedTokenCount = Math.min(2, Math.floor(completedDays / 7));
+      const stepDone = Boolean(member?.resultRole || member?.updatedAt || member?.totalScore != null);
+      const ecoDone = Boolean(member?.ecoMbti?.type);
+      return stepDone && ecoDone && earnedTokenCount >= 1;
+    };
+
+    const loadStats = async () => {
+      els.participantsValue.textContent = "…";
+      els.completedValue.textContent = "…";
+      els.treesValue.textContent = "…";
+      els.remainingValue.textContent = "…";
+      els.treeDetailBody.textContent = t("loading");
+
+      try {
+        const [memberSnap, submissionSnap] = await Promise.all([
+          getDocs(collection(db, "members")),
+          getDocs(collection(db, "greenProposalSubmissions"))
+        ]);
+
+        const members = memberSnap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+        const submissionsByUid = new Map();
+        submissionSnap.docs.forEach((docSnap) => {
+          const data = docSnap.data();
+          const list = submissionsByUid.get(data.uid) || [];
+          list.push(data);
+          submissionsByUid.set(data.uid, list);
+        });
+
+        const participants = members.length;
+        let completed = 0;
+        members.forEach((member) => {
+          const submissions = submissionsByUid.get(member.id) || [];
+          if (getRewardEligibility(member, submissions)) completed += 1;
+        });
+
+        const partnerTrees = Math.floor(participants / 100);
+        const completedTrees = completed;
+        const totalTrees = Math.min(MAX_SLOTS, partnerTrees + completedTrees);
+        const remaining = Math.max(0, MAX_SLOTS - totalTrees);
+
+        setVisibleTrees(totalTrees, Math.min(partnerTrees, totalTrees), Math.max(0, totalTrees - Math.min(partnerTrees, totalTrees)));
+        renderStats({ participants, completed, partnerTrees, completedTrees, totalTrees, remaining });
+      } catch (error) {
+        console.error(error);
+        els.treeDetailTitle.textContent = t("treeDetailTitle");
+        els.treeDetailBody.textContent = t("error");
+      }
+    };
+
+    const clock = new THREE.Clock();
+    const animate = () => {
+      const elapsed = clock.getElapsedTime();
+      if (orbit.auto) {
+        orbit.theta += 0.0016;
+        updateCamera();
+      }
+
+      state.treeGroups.forEach((group, index) => {
+        if (!group.visible) return;
+        const targetScale = group.userData.baseScale;
+        const eased = Math.min(1, elapsed * 0.38 - index * 0.018);
+        const scale = targetScale * Math.max(0.01, eased);
+        group.scale.setScalar(scale);
+        group.rotation.y += 0.0012;
+      });
+
+      particles.children.forEach((particle, index) => {
+        particle.position.y = particle.userData.baseY + Math.sin(elapsed * particle.userData.speed + index) * 0.08;
+        particle.position.x += Math.sin(elapsed * 0.2 + particle.userData.drift) * 0.0013;
+      });
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+
+    els.langButtons.forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.lang));
+    });
+
+    setLanguage(state.lang);
+    loadStats();
+    animate();
+  </script>
+</body>
+</html>

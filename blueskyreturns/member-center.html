@@ -572,6 +572,36 @@
       box-shadow: 0 12px 26px rgba(16, 34, 54, 0.08);
     }
 
+    .promo-visual {
+      position: relative;
+    }
+
+    .promo-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.82);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.24);
+      backdrop-filter: blur(8px);
+      font-weight: 800;
+    }
+
+    .promo-badge strong {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .promo-badge span {
+      font-size: 0.84rem;
+      line-height: 1.1;
+    }
+
     .review-item {
       border: 1px solid var(--line);
       border-radius: 18px;
@@ -853,6 +883,16 @@
               <a id="taskProposalLink" class="pill" href="./green-action-7day.html">開始任務</a>
             </div>
           </article>
+          <article class="task-card">
+            <div class="task-cover">
+              <img src="../assets/2026植樹計劃.png" alt="Tree planting forest cover">
+            </div>
+            <div class="task-body">
+              <h3>植樹森林 / Tree Planting Forest</h3>
+              <p>用 3D 森林畫面查看目前參與人數、完成全部任務人數，以及已累積的植樹名額。</p>
+              <a class="pill" href="./tree-planting-forest.html">開啟畫面 / Open View</a>
+            </div>
+          </article>
           <article id="taskUploadWrap" class="task-card" hidden>
             <div class="task-cover">
               <img src="./assets/Gemini_Generated_Image_xle34wxle34wxle3.svg" alt="Upload Hope and Crisis cover">
@@ -881,7 +921,7 @@
       <section class="panel reward-panel">
         <div class="section-head">
           <h2 id="rewardSectionTitle">2026 氣候行動證書 / 2026 Climate Action Certificate</h2>
-          <p id="rewardSectionBody">同一帳號只要完成指定條件一次，就可領取電子 2026 年氣候行動證書、抽獎編號與一枚代幣，而且每個帳號限領一次。</p>
+          <p id="rewardSectionBody">同一帳號只要完成指定條件一次，就可領取電子 2026 年氣候行動證書；若植樹名額尚有餘額，會同步取得 2026 植樹計劃編號，並累積對應代幣。</p>
         </div>
         <div class="reward-grid">
           <article class="reward-card">
@@ -915,14 +955,14 @@
           </article>
           <article class="reward-result">
             <h3 id="rewardResultTitle">已領取內容 / Reward Details</h3>
-            <p id="rewardResultBody">達成條件並領取後，這裡會顯示你的電子證書編號、抽獎編號與代幣編號。</p>
+            <p id="rewardResultBody">達成條件並領取後，這裡會顯示你的電子證書編號、植樹計劃編號，以及目前累積與可用的代幣。</p>
             <div id="rewardResultList" class="reward-result-list" hidden>
               <div class="reward-result-item">
                 <span id="rewardCertCodeLabel">電子證書編號</span>
                 <strong id="rewardCertCode">-</strong>
               </div>
               <div class="reward-result-item">
-                <span id="rewardLotteryLabel">抽獎編號</span>
+                <span id="rewardLotteryLabel">植樹計劃編號</span>
                 <strong id="rewardLotteryCode">-</strong>
               </div>
               <div class="reward-result-item">
@@ -946,11 +986,14 @@
 
       <section class="panel promo-panel">
         <div class="section-head">
-          <h2 id="lotterySectionTitle">2026 抽獎活動 / 2026 Lucky Draw</h2>
-          <p id="lotterySectionBody">獲得 2026 氣候行動證書後，即具抽獎資格。最終資格與得獎安排由主辦單位保留最後決定權。</p>
+          <h2 id="lotterySectionTitle">2026 植樹計劃 / 2026 Tree Planting Plan</h2>
+          <p id="lotterySectionBody">2026 植樹計劃：每 100 人註冊成為氣候行動者，對應 1 個植樹名額；每 1 人完成全部任務，再對應 1 個植樹名額。總上限為 321 個名額。</p>
         </div>
-        <img id="lotteryPromoImage" src="../assets/2026抽獎.png" alt="2026 抽獎宣傳" />
-        <div id="lotteryStatus" class="status warn">尚未獲得證書，完成資格領取後即可具抽獎資格。</div>
+        <div class="promo-visual">
+          <img id="lotteryPromoImage" src="../assets/2026植樹計劃.png" alt="2026 植樹計劃宣傳" />
+          <div id="lotteryPromoBadge" class="promo-badge"><strong>321</strong><span>總名額</span></div>
+        </div>
+        <div id="lotteryStatus" class="status warn">尚未獲得證書，完成資格領取後即可參與植樹計劃。</div>
       </section>
 
       <section class="panel">
@@ -1086,16 +1129,18 @@
           reviewBody: "具備協作管理功能的帳號，可在這裡審核其他氣候行動者提交的 Hope / Crisis 首頁候選資料，並更新狀態。"
         },
         lottery: {
-          title: "2026 抽獎活動 / 2026 Lucky Draw",
-          body: "獲得 2026 氣候行動證書後，即具抽獎資格。抽獎結果將於 2026 年一步藍天閉幕式公布，主辦單位保留最後決定權。",
-          statusReady: "你已獲得證書，具備抽獎資格；抽獎結果將於 2026 年一步藍天閉幕式公布，主辦單位保留最後決定權。",
-          statusPending: "尚未獲得證書，完成資格領取後即可具抽獎資格。",
-          image: "../assets/2026抽獎.png",
-          alt: "2026 抽獎宣傳"
+          title: "2026 植樹計劃 / 2026 Tree Planting Plan",
+          body: "2026 植樹計劃：每 100 人註冊成為氣候行動者，對應 1 個植樹名額；每 1 人完成全部任務，再對應 1 個植樹名額。總上限為 321 個名額，主辦單位保留最後調整與執行安排。",
+          statusReady: "你已獲得證書，並取得 2026 植樹計劃資格。",
+          statusPending: "尚未獲得證書，完成資格領取後即可參與植樹計劃。",
+          statusFull: "你已獲得證書，但 321 個植樹名額已額滿；證書與代幣仍可正常使用。",
+          image: "../assets/2026植樹計劃.png",
+          alt: "2026 植樹計劃宣傳",
+          badge: "<strong>321</strong><span>總名額</span>"
         },
         rewards: {
           title: "2026 氣候行動證書 / 2026 Climate Action Certificate",
-          body: "同一帳號完成指定條件後可領取電子 2026 年氣候行動證書與抽獎編號；7-Day Green Proposal 每完成 7 天可獲得 1 枚代幣，最多累積 2 枚代幣。",
+          body: "同一帳號完成指定條件後可領取電子 2026 年氣候行動證書；若植樹名額尚有餘額，會同步取得 2026 植樹計劃編號。7-Day Green Proposal 每完成 7 天可獲得 1 枚代幣，最多累積 2 枚代幣。",
           stepLabel: "完成步入行動",
           stepHint: "建立或更新問卷結果",
           ecoLabel: "完成 Eco-MBTI",
@@ -1104,9 +1149,9 @@
           proposalHint: "7 / 14 天各可獲得 1 枚，最多 2 枚代幣",
           claim: "領取 2026 氣候行動資格",
           resultTitle: "已領取內容 / Reward Details",
-          resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號、抽獎編號，以及目前累積與可用的代幣。",
+          resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號、植樹計劃編號，以及目前累積與可用的代幣。",
           cert: "電子證書編號",
-          lottery: "抽獎編號",
+          lottery: "植樹計劃編號",
           token: "代幣狀態",
           thumbBody: "已生成的 AI 證書主視覺會顯示在這裡。",
           studioLink: "開啟 AI 證書工作室",
@@ -1161,9 +1206,9 @@
             level1: "你可以修改步入行動，並提交 7-Day Green Proposal 任務。"
           },
           rewardGuest: "登入後即可查看目前資格進度。",
-          rewardReady: "你已符合條件，可以領取 2026 氣候行動證書與抽獎編號；代幣會依 7-Day 完成進度自動累積。",
+          rewardReady: "你已符合條件，可以領取 2026 氣候行動證書；若植樹名額尚有餘額，會同步取得 2026 植樹計劃編號；代幣會依 7-Day 完成進度自動累積。",
           rewardPending: "尚未符合領取條件，請先完成所有指定任務。",
-          rewardClaiming: "正在建立你的 2026 氣候行動資格...",
+          rewardClaiming: "正在建立你的 2026 氣候行動資格與植樹紀錄...",
           rewardClaimed: "你已完成領取，每個帳號限領一次。",
           rewardClaimFailed: "領取失敗，請稍後再試。",
           rewardSoldOut: "2026 氣候行動證書編號目前先限量 5000 張，現階段已全數發出。",
@@ -1199,16 +1244,18 @@
           reviewBody: "Accounts with coordination access can review other climate action partners' Hope / Crisis homepage candidate submissions here and update their status."
         },
         lottery: {
-          title: "2026 Lucky Draw",
-          body: "After obtaining the 2026 Climate Action Certificate, you will be eligible for the lucky draw. The lucky draw result will be announced at the 2026 Blue Sky Returns closing ceremony, and the organizer reserves the final decision.",
-          statusReady: "You already hold the certificate and are eligible for the lucky draw. The lucky draw result will be announced at the 2026 Blue Sky Returns closing ceremony, and the organizer reserves the final decision.",
-          statusPending: "You have not obtained the certificate yet. Complete the reward claim first to become eligible for the lucky draw.",
-          image: "../assets/2026抽獎en.png",
-          alt: "2026 lucky draw promotion"
+          title: "2026 Tree Planting Plan",
+          body: "2026 Tree Planting Plan: every 100 climate action partner registrations counts toward 1 tree planting slot, and every 1 person who completes all tasks counts toward another tree planting slot. Total cap: 321 slots. The organizer reserves the final implementation arrangements.",
+          statusReady: "You already hold the certificate and have secured a place in the 2026 Tree Planting Plan.",
+          statusPending: "You have not obtained the certificate yet. Complete the reward claim first to join the tree planting plan.",
+          statusFull: "You already hold the certificate, but all 321 tree planting slots have been allocated. Your certificate and tokens are still valid.",
+          image: "../assets/2026植樹計劃en.png",
+          alt: "2026 tree planting plan promotion",
+          badge: "<strong>321</strong><span>Total Slots</span>"
         },
         rewards: {
           title: "2026 Climate Action Certificate",
-          body: "Once the same account completes the required steps, it can claim one 2026 digital climate action certificate and one lottery number. For 7-Day Green Proposal, every 7 completed days earns 1 token, up to 2 tokens total.",
+          body: "Once the same account completes the required steps, it can claim one 2026 digital climate action certificate. If tree planting places remain, it will also receive a 2026 tree plan number. For 7-Day Green Proposal, every 7 completed days earns 1 token, up to 2 tokens total.",
           stepLabel: "Complete Take One Step",
           stepHint: "Create or update your questionnaire result",
           ecoLabel: "Complete Eco-MBTI",
@@ -1217,9 +1264,9 @@
           proposalHint: "Earn tokens at 7 / 14 days, up to 2 tokens total",
           claim: "Claim 2026 Climate Action Reward",
           resultTitle: "Reward Details",
-          resultBody: "After you meet the requirements and claim the reward, your certificate code, lottery number, and current token status will appear here.",
+          resultBody: "After you meet the requirements and claim the reward, your certificate code, tree plan number, and current token status will appear here.",
           cert: "Certificate Code",
-          lottery: "Lottery Number",
+          lottery: "Tree Plan Number",
           token: "Token Status",
           thumbBody: "Your generated AI certificate visual appears here.",
           studioLink: "Open AI Certificate Studio",
@@ -1274,9 +1321,9 @@
             level1: "You can edit Take One Step and submit 7-Day Green Proposal tasks."
           },
           rewardGuest: "Sign in to see your current reward progress.",
-          rewardReady: "You have met the requirements and can now claim your 2026 climate action certificate and lottery number. Tokens will accumulate automatically based on your 7-Day progress.",
+          rewardReady: "You have met the requirements and can now claim your 2026 climate action certificate. If planting places remain, you will also receive a tree plan number. Tokens will accumulate automatically based on your 7-Day progress.",
           rewardPending: "The requirements are not complete yet. Please finish every required task first.",
-          rewardClaiming: "Creating your 2026 climate action reward...",
+          rewardClaiming: "Creating your 2026 climate action reward and tree planting record...",
           rewardClaimed: "This account has already claimed the reward. Each account can claim only once.",
           rewardClaimFailed: "Claim failed. Please try again later.",
           rewardSoldOut: "The 2026 climate action certificate numbers are currently limited to the first 5000 and have all been issued for now.",
@@ -1342,6 +1389,7 @@
     const lotterySectionTitle = document.getElementById("lotterySectionTitle");
     const lotterySectionBody = document.getElementById("lotterySectionBody");
     const lotteryPromoImage = document.getElementById("lotteryPromoImage");
+    const lotteryPromoBadge = document.getElementById("lotteryPromoBadge");
     const lotteryStatus = document.getElementById("lotteryStatus");
     const rewardCertCodeLabel = document.getElementById("rewardCertCodeLabel");
     const rewardCertCode = document.getElementById("rewardCertCode");
@@ -1371,7 +1419,8 @@
     let currentMemberData = {};
     let currentUserSubmissions = [];
     const MAX_CERTIFICATE_COUNT = 5000;
-    const CERTIFICATE_CODE_PREFIX = "BSR-CA-2026-";
+    const MAX_TREE_PLAN_COUNT = 321;
+    const TREE_PLAN_CODE_PREFIX = "TREE-2026-";
     const buildInviteLink = (userId) => {
       const url = new URL("./climate-action-form.html", window.location.href);
       url.searchParams.set("ref", userId);
@@ -1513,7 +1562,17 @@
       const body = Array.from(bytes, (byte) => chars[byte % chars.length]).join("");
       return `${prefix}${body}`;
     };
-    const createSequentialCertificateCode = (number) => `${CERTIFICATE_CODE_PREFIX}${String(number).padStart(4, "0")}`;
+    const createSequentialCertificateCode = (number) => String(number).padStart(4, "0");
+    const createSequentialTreePlanCode = (number) => `${TREE_PLAN_CODE_PREFIX}${String(number).padStart(3, "0")}`;
+    const normalizeCertificateCode = (value) => {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+      const prefixed = raw.match(/^BSR-CA-2026-(\d{4})$/);
+      if (prefixed) return prefixed[1];
+      const plain = raw.match(/^(\d{1,4})$/);
+      if (plain) return plain[1].padStart(4, "0");
+      return raw;
+    };
     const getCertificateInventory = async () => {
       const snap = await getDocs(collection(db, "members"));
       let issuedCount = 0;
@@ -1522,7 +1581,8 @@
         const certificateCode = String(docSnap.data()?.reward2026?.certificateCode || "").trim();
         if (!certificateCode) return;
         issuedCount += 1;
-        const match = certificateCode.match(/^BSR-CA-2026-(\d{4})$/);
+        const normalized = normalizeCertificateCode(certificateCode);
+        const match = normalized.match(/^(\d{4})$/);
         if (match) {
           maxSequentialNumber = Math.max(maxSequentialNumber, Number(match[1]));
         }
@@ -1532,6 +1592,26 @@
         remainingCount: Math.max(0, MAX_CERTIFICATE_COUNT - issuedCount),
         soldOut: issuedCount >= MAX_CERTIFICATE_COUNT,
         nextNumber: Math.min(MAX_CERTIFICATE_COUNT, Math.max(maxSequentialNumber + 1, issuedCount + 1))
+      };
+    };
+    const getTreePlanInventory = async () => {
+      const snap = await getDocs(collection(db, "members"));
+      let issuedCount = 0;
+      let maxSequentialNumber = 0;
+      snap.forEach((docSnap) => {
+        const treePlanCode = String(docSnap.data()?.reward2026?.lotteryNumber || "").trim();
+        if (!treePlanCode) return;
+        issuedCount += 1;
+        const match = treePlanCode.match(/^TREE-2026-(\d{3})$/);
+        if (match) {
+          maxSequentialNumber = Math.max(maxSequentialNumber, Number(match[1]));
+        }
+      });
+      return {
+        issuedCount,
+        remainingCount: Math.max(0, MAX_TREE_PLAN_COUNT - issuedCount),
+        soldOut: issuedCount >= MAX_TREE_PLAN_COUNT,
+        nextNumber: Math.min(MAX_TREE_PLAN_COUNT, Math.max(maxSequentialNumber + 1, issuedCount + 1))
       };
     };
     const getRewardRecord = (member) => member?.reward2026 || null;
@@ -1613,8 +1693,9 @@
         return;
       }
 
-      rewardCertCode.textContent = record.certificateCode || "-";
-      rewardLotteryCode.textContent = record.lotteryNumber || "-";
+      rewardCertCode.textContent = normalizeCertificateCode(record.certificateCode) || "-";
+      const treePlanCode = record.lotteryNumber || "";
+      rewardLotteryCode.textContent = treePlanCode || "-";
       const tokenCodes = getRewardTokenCodes(record);
       const consumedTokenCodes = getConsumedTokenCodes(record);
       const availableCount = tokenCodes.filter((code) => !consumedTokenCodes.includes(code)).length;
@@ -1652,8 +1733,8 @@
       certificateStudioLink.hidden = false;
       certificateStudioHint.textContent = t("rewards.studioHintReady");
       certificateStudioHint.className = "status ok";
-      lotteryStatus.textContent = t("lottery.statusReady");
-      lotteryStatus.className = "status ok";
+      lotteryStatus.textContent = treePlanCode ? t("lottery.statusReady") : t("lottery.statusFull");
+      lotteryStatus.className = treePlanCode ? "status ok" : "status warn";
     };
     const syncRewardTokensIfNeeded = async (user, member, eligibility) => {
       const rewardRecord = getRewardRecord(member);
@@ -1746,6 +1827,7 @@
       lotterySectionBody.textContent = t("lottery.body");
       lotteryPromoImage.src = t("lottery.image");
       lotteryPromoImage.alt = t("lottery.alt");
+      lotteryPromoBadge.innerHTML = t("lottery.badge");
       rewardSectionTitle.textContent = t("rewards.title");
       rewardSectionBody.textContent = t("rewards.body");
       rewardStepLabel.textContent = t("rewards.stepLabel");
@@ -2375,10 +2457,11 @@
           claimRewardBtn.disabled = false;
           return;
         }
+        const treePlanInventory = await getTreePlanInventory();
         const rewardRecord = {
           claimedAt: new Date().toISOString(),
           certificateCode: createSequentialCertificateCode(inventory.nextNumber),
-          lotteryNumber: createRandomCode("DRAW-", 6),
+          lotteryNumber: treePlanInventory.soldOut ? "" : createSequentialTreePlanCode(treePlanInventory.nextNumber),
           tokenCodes: createTokenCodes(currentRewardEligibility.earnedTokenCount),
           consumedTokenCodes: []
         };
