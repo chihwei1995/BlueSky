@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#102a43"/><stop offset="100%" stop-color="#2c7da0"/></linearGradient></defs>
-<rect width="1600" height="900" fill="url(#g)"/>
-<text x="800" y="340" text-anchor="middle" fill="#ffd166" font-size="120" font-family="Arial" font-weight="700">一步・藍天：希望與危機</text>
-<text x="800" y="500" text-anchor="middle" fill="#eaf6ff" font-size="88" font-family="Arial" font-weight="700">2026 全球綠色倡議</text>
-<text x="800" y="790" text-anchor="middle" fill="#eaf6ff" font-size="36" font-family="Arial">若已有正式宣傳圖，請替換此暫用圖片。</text>
-</svg>

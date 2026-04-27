@@ -320,7 +320,7 @@
     }
 
     .modal-card {
-      width: min(660px, 100%);
+      width: min(980px, 100%);
       max-height: calc(100dvh - 36px);
       overflow-y: auto;
       background: #fff;
@@ -340,29 +340,203 @@
       pointer-events: none;
     }
 
-    .role-title {
-      margin: 0 0 4px;
+    .result-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
     }
 
-    .role-range {
-      color: var(--primary-dark);
-      font-weight: 700;
-      margin: 0 0 12px;
+    .result-visual-card {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(160deg, #0f766e 0%, #0f8f84 52%, #79c46c 100%);
+      color: #fff;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 18px 40px rgba(15, 118, 110, 0.22);
+      overflow: hidden;
+    }
+
+    .result-visual-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.26), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.16), transparent 36%);
+      pointer-events: none;
+    }
+
+    .result-visual-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
     }
 
     .role-image-wrap {
-      margin: 12px 0;
+      margin: 0;
+      border-radius: 22px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
     }
 
     .role-image {
       width: 100%;
-      max-width: 420px;
-      max-height: min(52vh, 700px);
-      object-fit: contain;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      border-radius: 18px;
       display: block;
-      margin: 0 auto;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.22);
+    }
+
+    .result-summary {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .role-code {
+      margin: 0;
+      font-size: clamp(44px, 8vw, 72px);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .role-title {
+      margin: 0;
+      font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+      line-height: 1.15;
+    }
+
+    .role-title-en {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .result-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .result-meta-card {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .result-meta-card strong,
+    .result-meta-card span {
+      display: block;
+    }
+
+    .result-meta-card strong {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 4px;
+    }
+
+    .result-meta-card span {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .result-content {
+      display: grid;
+      gap: 16px;
+    }
+
+    .result-side-card {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+    }
+
+    .result-side-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.32rem;
+      line-height: 1.2;
+    }
+
+    .role-range {
+      color: var(--primary-dark);
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #e0f2fe, #dcfce7);
+      color: #075985;
+      font-weight: 800;
+      margin-top: 12px;
+    }
+
+    .role-copy {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .insight-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef8f3 100%);
+      border: 1px solid var(--border);
+    }
+
+    .insight-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--primary-dark);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .insight-card p {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 700;
     }
 
     #resultModal .actions {
@@ -508,12 +682,29 @@
         border-radius: 14px;
       }
 
-      .role-image {
-        max-height: 42vh;
-      }
-
       #resultModal .actions {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .result-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .result-visual-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .result-meta-grid,
+      .insight-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .role-code {
+        font-size: 38px;
       }
     }
   </style>
@@ -544,13 +735,12 @@
 
     <section class="promo-card" aria-labelledby="lotteryPromoTitle">
       <div class="promo-visual">
-        <img id="lotteryPromoImage" src="../assets/2026植樹計劃.png" alt="2026 植樹計劃宣傳" />
-        <div id="lotteryPromoBadge" class="promo-badge"><strong>321</strong><span>總名額</span></div>
+        <img id="lotteryPromoImage" src="../assets/2026抽獎.png" alt="2026 抽獎活動宣傳" />
+        <div id="lotteryPromoBadge" class="promo-badge" hidden></div>
       </div>
       <div>
-        <h2 id="lotteryPromoTitle" class="promo-title">2026 植樹計劃</h2>
-        <p id="lotteryPromoBody" class="helper">2026 植樹計劃：每 100 人註冊成為氣候行動者，對應 1 個植樹名額；每 1 人完成全部任務，再對應 1 個植樹名額。總上限為 321 個名額。</p>
-        <p><a class="pill" href="./tree-planting-forest.html">查看植樹森林 / Open Forest View</a></p>
+        <h2 id="lotteryPromoTitle" class="promo-title">2026 抽獎活動</h2>
+        <p id="lotteryPromoBody" class="helper">完成氣候行動任務後，即有機會參與 2026 抽獎活動。獎勵包含 USD 30 頭獎 x3、USD 10 二獎 x10、2 USDC 參與獎 x50；所有獎勵均可選擇兌換植樹，主辦單位保留最後決定權。</p>
       </div>
     </section>
 
@@ -743,14 +933,47 @@
 
   <section id="resultModal" class="modal" aria-hidden="true">
     <div class="modal-card">
-      <h3 class="role-title" id="roleTitle"></h3>
-      <p class="role-range" id="roleRange"></p>
-      <p id="roleDescZh"></p>
-      <p id="roleDescEn"></p>
-      <div class="role-image-wrap">
-        <img id="roleImage" class="role-image" alt="氣候角色卡圖片 / Climate role card image" />
+      <div class="result-layout">
+        <div class="result-visual-card">
+          <div class="result-chip">Blue Sky Returns Step Into Action</div>
+          <div class="role-image-wrap">
+            <img id="roleImage" class="role-image" alt="氣候角色卡圖片 / Climate role card image" />
+          </div>
+          <div class="result-summary">
+            <p class="role-code" id="roleCode"></p>
+            <h3 class="role-title" id="roleTitle"></h3>
+            <p class="role-title-en" id="roleTitleEn"></p>
+          </div>
+          <div class="result-meta-grid">
+            <div class="result-meta-card">
+              <strong>Score</strong>
+              <span id="scoreText"></span>
+            </div>
+            <div class="result-meta-card">
+              <strong>Range</strong>
+              <span id="roleRange"></span>
+            </div>
+          </div>
+        </div>
+        <div class="result-content">
+          <div class="result-side-card">
+            <h3>角色分析 / Role Insight</h3>
+            <p class="role-copy" id="roleDescZh"></p>
+            <p class="role-copy" id="roleDescEn"></p>
+            <div class="score-badge">步入行動結果 / Step Into Action Result</div>
+          </div>
+          <div class="insight-grid">
+            <div class="insight-card">
+              <div class="insight-label">適合階段 / Best Fit Stage</div>
+              <p id="roleStageText"></p>
+            </div>
+            <div class="insight-card">
+              <div class="insight-label">下一步建議 / Next Step</div>
+              <p id="roleNextStepText"></p>
+            </div>
+          </div>
+        </div>
       </div>
-      <p class="small-note" id="scoreText"></p>
       <div class="actions">
         <button type="button" id="downloadResultBtn" class="secondary-btn">下載角色卡 / Download Card</button>
         <button type="button" id="shareImageBtn" class="secondary-btn">分享圖片＋連結 / Share Image + Link</button>
@@ -830,11 +1053,11 @@
         pageTitle: "Blue Sky Returns 步入行動",
         heading: "Blue Sky Returns 步入行動<br>Blue Sky Returns Take One Step",
         subtitle: "用這一步更新你的氣候行動者資料與問卷內容；第一次填寫會建立帳號，之後可直接回來修改。<br>Use this step to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
-        lotteryTitle: "2026 植樹計劃",
-        lotteryBody: "2026 植樹計劃：每 100 人註冊成為氣候行動者，對應 1 個植樹名額；每 1 人完成全部任務，再對應 1 個植樹名額。總上限為 321 個名額。",
-        lotteryImage: "../assets/2026植樹計劃.png",
-        lotteryAlt: "2026 植樹計劃宣傳",
-        lotteryBadge: "<strong>321</strong><span>總名額</span>",
+        lotteryTitle: "2026 抽獎活動",
+        lotteryBody: "完成氣候行動任務後，即有機會參與 2026 抽獎活動。獎勵包含 USD 30 頭獎 x3、USD 10 二獎 x10、2 USDC 參與獎 x50；所有獎勵均可選擇兌換植樹，主辦單位保留最後決定權。",
+        lotteryImage: "../assets/2026抽獎.png",
+        lotteryAlt: "2026 抽獎活動宣傳",
+        lotteryBadge: "",
         submit: "儲存步入行動資料 / Save Take One Step",
         shareForm: "分享表單給他人 / Share This Form",
         download: "下載角色卡 / Download Card",
@@ -848,11 +1071,11 @@
         pageTitle: "Take One Step | Blue Sky Returns",
         heading: "Blue Sky Returns Take One Step",
         subtitle: "Use this page to update your climate action partner profile and questionnaire. Your first submission creates the account, and later visits can update it directly.",
-        lotteryTitle: "2026 Tree Planting Plan",
-        lotteryBody: "2026 Tree Planting Plan: every 100 climate action partner registrations counts toward 1 tree planting slot, and every 1 person who completes all tasks counts toward another tree planting slot. Total cap: 321 slots.",
-        lotteryImage: "../assets/2026植樹計劃en.png",
-        lotteryAlt: "2026 tree planting plan promotion",
-        lotteryBadge: "<strong>321</strong><span>Total Slots</span>",
+        lotteryTitle: "2026 Lucky Draw",
+        lotteryBody: "Complete the climate action missions for a chance to join the 2026 lucky draw. Rewards include USD 30 grand prizes x3, USD 10 second prizes x10, and 2 USDC participation rewards x50. All rewards can be redeemed for tree planting, and the organizer reserves the final decision.",
+        lotteryImage: "../assets/2026抽獎en.png",
+        lotteryAlt: "2026 lucky draw promotion",
+        lotteryBadge: "",
         submit: "Save Take One Step",
         shareForm: "Share This Form",
         download: "Download Card",
@@ -902,7 +1125,11 @@
         title: "環境學習者 / Environmental Learner",
         image: "../assets/step-roles/role-1.png",
         descZh: "你正從好奇與觀察開始累積環境知識，是踏入氣候行動的起點型角色。先建立理解，再慢慢把關心轉化為行動，就是很好的開始。",
-        descEn: "You are beginning with curiosity and observation, building your environmental knowledge step by step. This is the starting-point role for climate action: understand first, then turn awareness into action."
+        descEn: "You are beginning with curiosity and observation, building your environmental knowledge step by step. This is the starting-point role for climate action: understand first, then turn awareness into action.",
+        stageZh: "適合先從觀察、記錄與理解生活中的氣候議題開始。",
+        stageEn: "Best suited to start with observing, recording, and understanding climate issues in daily life.",
+        nextZh: "先完成 7-Day Green Proposal，再試著做一次 Eco-MBTI，建立自己的行動方向。",
+        nextEn: "Try the 7-Day Green Proposal and Eco-MBTI next to build your own action direction."
       },
       {
         min: 9,
@@ -910,7 +1137,11 @@
         title: "社區綠色大使 / Community Green Ambassador",
         image: "../assets/step-roles/role-2.png",
         descZh: "你已經不只是關心，而是願意走進社區、參與實作並串連身邊的人。你很適合把在地行動變成看得見、帶得動的綠色影響力。",
-        descEn: "You do more than care. You are willing to step into the community, take part in real action, and connect people around you. You are well suited to turn local action into visible green influence."
+        descEn: "You do more than care. You are willing to step into the community, take part in real action, and connect people around you. You are well suited to turn local action into visible green influence.",
+        stageZh: "適合投入社區、校園或小型倡議行動，把關心轉成實際參與。",
+        stageEn: "Best suited for community, school, and small advocacy actions that turn care into participation.",
+        nextZh: "可以邀請朋友一起完成任務，讓影響從自己延伸到身邊的人。",
+        nextEn: "Invite friends to join the tasks so your impact can grow from yourself to your community."
       },
       {
         min: 12,
@@ -918,7 +1149,11 @@
         title: "青商全球影響力催化劑 / JCI Global Impact Catalyst",
         image: "../assets/step-roles/role-3.png",
         descZh: "你具備把地方行動連結到更大舞台的潛力，能看見策略、視野與協作之間的關係。你適合成為推動跨地區合作與影響擴散的催化者。",
-        descEn: "You have the potential to connect local action to a wider stage, seeing how strategy, vision, and collaboration work together. You are well suited to catalyze cross-region cooperation and broader impact."
+        descEn: "You have the potential to connect local action to a wider stage, seeing how strategy, vision, and collaboration work together. You are well suited to catalyze cross-region cooperation and broader impact.",
+        stageZh: "適合開始思考區域合作、影響擴散與跨城市的氣候故事串連。",
+        stageEn: "Best suited to think about regional collaboration, broader influence, and cross-city climate storytelling.",
+        nextZh: "可以進一步整理在地案例，讓地方行動有機會走向更大的舞台。",
+        nextEn: "Collect and organize local cases so your local action can move onto a bigger stage."
       },
       {
         min: 15,
@@ -926,7 +1161,11 @@
         title: "氣候行動倡議者 / Climate Action Advocate",
         image: "../assets/step-roles/role-4.png",
         descZh: "你已經展現出倡議、帶動與公開發聲的能量。你不只是參與者，更是能把氣候議題說清楚、推進改變的人。",
-        descEn: "You already show the energy to advocate, mobilize, and speak up in public. You are not only a participant, but someone who can clarify climate issues and help move change forward."
+        descEn: "You already show the energy to advocate, mobilize, and speak up in public. You are not only a participant, but someone who can clarify climate issues and help move change forward.",
+        stageZh: "適合投入公開倡議、活動帶動與更清晰的議題溝通。",
+        stageEn: "Best suited for public advocacy, mobilizing others, and clearer climate communication.",
+        nextZh: "可以把你的觀點整理成分享內容，帶領更多人一起步入行動。",
+        nextEn: "Turn your ideas into shareable content and lead more people to step into action."
       },
       {
         min: 18,
@@ -934,7 +1173,11 @@
         title: "綠色未來創造者 / Green Future Architect",
         image: "../assets/step-roles/role-5.png",
         descZh: "你兼具創新、設計與影響力，能把想法轉化成可持續發展的方向。你適合站在更前端，思考如何讓氣候行動變成長期而有系統的未來方案。",
-        descEn: "You combine innovation, design thinking, and impact. You can turn ideas into sustainable directions for the future. You are well suited to think ahead and shape climate action into long-term, systemic solutions."
+        descEn: "You combine innovation, design thinking, and impact. You can turn ideas into sustainable directions for the future. You are well suited to think ahead and shape climate action into long-term, systemic solutions.",
+        stageZh: "適合從系統設計、未來規劃與長期影響的角度看待氣候行動。",
+        stageEn: "Best suited to approach climate action through systems design, future planning, and long-term impact.",
+        nextZh: "建議把你的成果延伸成分享、合作或提案，成為下一段氣候行動的起點。",
+        nextEn: "Extend your results into sharing, collaboration, or proposals to shape the next stage of climate action."
       }
     ];
 
@@ -1156,13 +1399,18 @@
 
     const openResultModal = ({ score, role }) => {
       currentRole = role;
-      document.getElementById("roleTitle").textContent = role.title;
-      document.getElementById("roleRange").textContent = `分數區間 Score Range: ${role.min}-${role.max}`;
-      document.getElementById("roleDescZh").textContent = `中文分析：${role.descZh}`;
-      document.getElementById("roleDescEn").textContent = `English Analysis: ${role.descEn}`;
+      const [zhTitle, enTitle] = role.title.split("/").map((part) => part.trim());
+      document.getElementById("roleCode").textContent = `${role.min}-${role.max}`;
+      document.getElementById("roleTitle").textContent = zhTitle || role.title;
+      document.getElementById("roleTitleEn").textContent = enTitle || "";
+      document.getElementById("roleRange").textContent = `${role.min}-${role.max}`;
+      document.getElementById("roleDescZh").textContent = role.descZh;
+      document.getElementById("roleDescEn").textContent = role.descEn;
+      document.getElementById("roleStageText").textContent = `${role.stageZh} ${role.stageEn}`;
+      document.getElementById("roleNextStepText").textContent = `${role.nextZh} ${role.nextEn}`;
       roleImageEl.src = role.image;
       roleImageEl.alt = `${role.title} 角色卡 / role card`;
-      document.getElementById("scoreText").textContent = `你的總分 Your Total Score: ${score}`;
+      document.getElementById("scoreText").textContent = `${score} / 20`;
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
     };
