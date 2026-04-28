@@ -2048,6 +2048,19 @@
       resetSummary();
     };
 
+    const normalizeSubmissionDimensions = (dimensions) => {
+      if (Array.isArray(dimensions)) {
+        return dimensions.map((item) => String(item || "").trim()).filter(Boolean);
+      }
+      if (typeof dimensions === "string") {
+        return dimensions
+          .split(/[,\n/|]+/)
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+      return [];
+    };
+
     const createSubmissionCard = (submission) => {
       const article = document.createElement("article");
       article.className = "submission-card";
@@ -2057,7 +2070,7 @@
 
       const meta = document.createElement("div");
       meta.className = "submission-meta";
-      (submission.dimensions || []).forEach((dimension) => {
+      normalizeSubmissionDimensions(submission.dimensions).forEach((dimension) => {
         const badge = document.createElement("span");
         badge.className = "badge";
         badge.textContent = dimension;
@@ -2667,7 +2680,7 @@
           : "Each new account that completes its first Take One Step through your shared link adds one person reached automatically.";
         inviteLinkStatus.className = "status";
       } catch (error) {
-        console.error(error);
+        console.error("Failed to load member center data", error);
         abilitySummaryEl.textContent = t("states.readError");
         resetSummary();
       }
