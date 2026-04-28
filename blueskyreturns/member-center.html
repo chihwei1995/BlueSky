@@ -1640,6 +1640,17 @@
     const formatDate = (value) => {
       if (!value) return "-";
       if (typeof value === "string") return value;
+      if (value instanceof Date && !Number.isNaN(value.getTime())) return value.toISOString().slice(0, 10);
+      if (typeof value?.toDate === "function") {
+        const date = value.toDate();
+        if (date instanceof Date && !Number.isNaN(date.getTime())) {
+          return date.toISOString().slice(0, 10);
+        }
+      }
+      if (typeof value?.seconds === "number") {
+        const date = new Date(value.seconds * 1000);
+        if (!Number.isNaN(date.getTime())) return date.toISOString().slice(0, 10);
+      }
       return "-";
     };
     const createRandomCode = (prefix, length = 6) => {
@@ -2637,7 +2648,12 @@
         const member = memberSnap.exists() ? memberSnap.data() : {};
         currentMemberData = member;
         const permissionLevel = Number(member.permissionLevel || 1);
-        const impactCount = await loadImpactCount(user.uid);
+        let impactCount = 0;
+        try {
+          impactCount = await loadImpactCount(user.uid);
+        } catch (error) {
+          console.error("Failed to load impact count", error);
+        }
 
         summaryName.textContent = formatSummaryLine("name", getMemberDisplayName(member, user) || "-");
         summaryEmail.textContent = formatSummaryLine("email", user.email || "-");
@@ -2653,7 +2669,7 @@
         );
         summaryScore.textContent = formatSummaryLine("score", getMemberScore(member));
         summaryRegion.textContent = formatSummaryLine("region", getMemberRegionLabel(member));
-        summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", formatDate(member.updatedAt?.toDate?.()?.toISOString?.() || member.updatedAt));
+        summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", formatDate(member.updatedAt));
 
         abilitySummaryEl.textContent = permissionLevel >= 3
           ? t("states.dashboard.level3")
@@ -2663,15 +2679,41 @@
 
         taskUploadWrap.hidden = permissionLevel < 2;
         reviewerCardWrap.hidden = permissionLevel !== 3;
-        const userSubmissions = await loadSubmissions(user.uid);
+        let userSubmissions = [];
+        try {
+          userSubmissions = await loadSubmissions(user.uid);
+        } catch (error) {
+          console.error("Failed to load 7-Day submissions", error);
+          submissionList.innerHTML = "";
+          submissionList.hidden = true;
+          submissionEmpty.hidden = false;
+          submissionEmpty.textContent = currentLang === "zh"
+            ? "7-Day 任務紀錄讀取失敗，但會員資料已成功載入。"
+            : "7-Day task records could not be loaded, but your member profile loaded successfully.";
+        }
         const rewardEligibility = getRewardEligibility(member, userSubmissions);
-        const syncedReward = await syncRewardTokensIfNeeded(user, member, rewardEligibility);
+        let syncedReward = getRewardRecord(member);
+        try {
+          syncedReward = await syncRewardTokensIfNeeded(user, member, rewardEligibility);
+        } catch (error) {
+          console.error("Failed to sync reward tokens", error);
+        }
         const syncedMember = syncedReward === getRewardRecord(member) ? member : { ...member, reward2026: syncedReward };
         currentMemberData = syncedMember;
         renderRewardStatus(syncedMember, userSubmissions);
         if (permissionLevel === 3) {
           reviewerSubmissionPanel.hidden = false;
-          await loadReviewerSubmissions();
+          try {
+            await loadReviewerSubmissions();
+          } catch (error) {
+            console.error("Failed to load reviewer submissions", error);
+            reviewerSubmissionList.innerHTML = "";
+            reviewerSubmissionList.hidden = true;
+            reviewerSubmissionEmpty.hidden = false;
+            reviewerSubmissionEmpty.textContent = currentLang === "zh"
+              ? "審核資料讀取失敗，請稍後再試。"
+              : "Review submissions could not be loaded. Please try again later.";
+          }
         } else {
           reviewerSubmissionPanel.hidden = true;
         }
