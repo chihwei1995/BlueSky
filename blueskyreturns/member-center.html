@@ -561,12 +561,25 @@
 
     .promo-panel {
       display: grid;
-      gap: 12px;
+      gap: 18px;
+      grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+      align-items: start;
+    }
+
+    .promo-panel .section-head {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(215, 227, 239, 0.95);
+      background:
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.14), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(238,246,255,0.92));
     }
 
     .promo-panel img {
       width: 100%;
       display: block;
+      min-height: 360px;
+      object-fit: cover;
       border-radius: 18px;
       border: 1px solid var(--line);
       box-shadow: 0 12px 26px rgba(16, 34, 54, 0.08);
@@ -574,6 +587,21 @@
 
     .promo-visual {
       position: relative;
+    }
+
+    .promo-kicker {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(11, 92, 171, 0.08);
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .promo-badge {
@@ -600,6 +628,38 @@
     .promo-badge span {
       font-size: 0.84rem;
       line-height: 1.1;
+    }
+
+    .promo-note-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .promo-note-item {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(11, 92, 171, 0.1);
+      background: rgba(255,255,255,0.92);
+    }
+
+    .promo-note-item strong,
+    .promo-note-item span {
+      display: block;
+    }
+
+    .promo-note-item strong {
+      color: var(--blue);
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .promo-note-item span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.4;
     }
 
     .review-item {
@@ -739,11 +799,16 @@
       .hero,
       .grid.two,
       .stats-strip,
-      .reward-grid {
+      .reward-grid,
+      .promo-panel {
         grid-template-columns: 1fr;
       }
 
       .token-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .promo-note-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -986,8 +1051,23 @@
 
       <section class="panel promo-panel">
         <div class="section-head">
+          <span id="lotterySectionKicker" class="promo-kicker">Climate Reward Campaign</span>
           <h2 id="lotterySectionTitle">2026 抽獎活動 / 2026 Lucky Draw</h2>
-          <p id="lotterySectionBody">完成氣候行動任務後，即有機會參與 2026 抽獎活動。獎勵包含 USD 30 頭獎 x3、USD 10 二獎 x10、2 USDC 參與獎 x50；所有獎勵均可選擇兌換植樹，主辦單位保留最後決定權。</p>
+          <p id="lotterySectionBody">完成氣候行動任務後，即有機會參與 2026 抽獎活動。獎勵包含 USD 30 頭獎 x3、USD 10 二獎 x10、2 USDC 參與獎 x50。頭獎與二獎可兌換 Amazon 或其他平台禮品卡，所有獎勵均可選擇兌換植樹；禮品卡將依得獎者所在地與供應情況提供，USDC 獎勵需具備有效虛擬貨幣錢包領取，植樹行動由合作夥伴執行。</p>
+          <div class="promo-note-grid" aria-label="Reward summary">
+            <div class="promo-note-item">
+              <strong>63</strong>
+              <span id="lotteryNote1">總獎項 / Total Rewards</span>
+            </div>
+            <div class="promo-note-item">
+              <strong>Gift Cards</strong>
+              <span id="lotteryNote2">頭獎與二獎可兌換禮品卡</span>
+            </div>
+            <div class="promo-note-item">
+              <strong>Tree Planting</strong>
+              <span id="lotteryNote3">所有獎勵均可選植樹</span>
+            </div>
+          </div>
         </div>
         <div class="promo-visual">
           <img id="lotteryPromoImage" src="../assets/2026抽獎.png" alt="2026 抽獎活動宣傳" />
@@ -1129,14 +1209,18 @@
           reviewBody: "具備協作管理功能的帳號，可在這裡審核其他氣候行動者提交的 Hope / Crisis 首頁候選資料，並更新狀態。"
         },
         lottery: {
+          kicker: "Climate Reward Campaign",
           title: "2026 抽獎活動 / 2026 Lucky Draw",
-          body: "完成氣候行動任務後，即有機會參與 2026 抽獎活動。獎勵包含 USD 30 頭獎 x3、USD 10 二獎 x10、2 USDC 參與獎 x50；所有獎勵均可選擇兌換植樹，主辦單位保留最後決定權。",
+          body: "完成氣候行動任務後，即有機會參與 2026 抽獎活動。獎勵包含 USD 30 頭獎 x3、USD 10 二獎 x10、2 USDC 參與獎 x50。頭獎與二獎可兌換 Amazon 或其他平台禮品卡，所有獎勵均可選擇兌換植樹；禮品卡將依得獎者所在地與供應情況提供，USDC 獎勵需具備有效虛擬貨幣錢包領取，植樹行動由合作夥伴執行。",
           statusReady: "你已取得 2026 抽獎編號，可保留參與抽獎，同時另外前往植樹森林查看互動進度。",
           statusPending: "完成資格領取後即可取得 2026 抽獎編號；植樹森林互動畫面仍可另外開啟查看。",
           statusMissing: "你已領取資格，但這筆資料尚未帶入抽獎編號；證書與代幣仍可正常使用。",
           image: "../assets/2026抽獎.png",
           alt: "2026 抽獎活動宣傳",
-          badge: "<strong>63</strong><span>總獎項</span>"
+          badge: "<strong>63</strong><span>總獎項</span>",
+          note1: "總獎項 / Total Rewards",
+          note2: "頭獎與二獎可兌換禮品卡",
+          note3: "所有獎勵均可選植樹"
         },
         rewards: {
           title: "2026 氣候行動證書 / 2026 Climate Action Certificate",
@@ -1244,14 +1328,18 @@
           reviewBody: "Accounts with coordination access can review other climate action partners' Hope / Crisis homepage candidate submissions here and update their status."
         },
         lottery: {
+          kicker: "Climate Reward Campaign",
           title: "2026 Lucky Draw",
-          body: "Complete the climate action missions for a chance to join the 2026 lucky draw. Rewards include USD 30 grand prizes x3, USD 10 second prizes x10, and 2 USDC participation rewards x50. All rewards can be redeemed for tree planting, and the organizer reserves the final decision.",
+          body: "Complete the climate action missions for a chance to join the 2026 lucky draw. Rewards include USD 30 grand prizes x3, USD 10 second prizes x10, and 2 USDC participation rewards x50. Grand and second prizes can be redeemed as Amazon or other platform gift cards, and all rewards can be redeemed for tree planting. Gift cards are provided based on the recipient's region and availability, USDC rewards require a valid crypto wallet to claim, and tree planting is carried out through verified partners.",
           statusReady: "Your 2026 lucky draw number is ready. The tree planting forest remains available separately as its own interactive feature.",
           statusPending: "Claim the reward first to receive your 2026 lucky draw number. The tree planting forest can still be opened separately.",
           statusMissing: "You have already claimed the reward, but this record does not have a lucky draw number yet. Your certificate and tokens are still valid.",
           image: "../assets/2026抽獎en.png",
           alt: "2026 lucky draw promotion",
-          badge: "<strong>63</strong><span>Total Rewards</span>"
+          badge: "<strong>63</strong><span>Total Rewards</span>",
+          note1: "Total Rewards",
+          note2: "Grand and second prizes can be gift cards",
+          note3: "Every reward can be redeemed for tree planting"
         },
         rewards: {
           title: "2026 Climate Action Certificate",
@@ -1573,6 +1661,34 @@
       if (plainMatch) return `${LOTTERY_CODE_PREFIX}${plainMatch[1].padStart(4, "0")}`;
       return raw;
     };
+    const getMemberDisplayName = (member = {}, user = null) => String(
+      member?.name ||
+      member?.memberName ||
+      member?.organizationName ||
+      member?.profile?.name ||
+      user?.displayName ||
+      user?.email?.split("@")[0] ||
+      ""
+    ).trim();
+    const getMemberRoleLabel = (member = {}) => String(
+      member?.resultRole ||
+      member?.role ||
+      member?.profile?.resultRole ||
+      member?.climateRole ||
+      ""
+    ).trim();
+    const getMemberRegionLabel = (member = {}) => {
+      const region = String(member?.region || member?.profile?.region || "").trim();
+      const chapter = String(member?.chapter || member?.profile?.chapter || "").trim();
+      if (region && chapter) return `${region} / ${chapter}`;
+      return region || chapter || "-";
+    };
+    const getMemberScore = (member = {}) => (
+      member?.totalScore ??
+      member?.score ??
+      member?.profile?.totalScore ??
+      "-"
+    );
     const createSequentialLotteryCode = (number) => `${LOTTERY_CODE_PREFIX}${String(number).padStart(4, "0")}`;
     const normalizeCertificateCode = (value) => {
       const raw = String(value || "").trim();
@@ -1831,11 +1947,15 @@
       document.getElementById("statLatestBody").textContent = t("stats.latestBody");
       document.getElementById("reviewSectionTitle").textContent = t("sections.reviewTitle");
       document.getElementById("reviewSectionBody").textContent = t("sections.reviewBody");
+      document.getElementById("lotterySectionKicker").textContent = t("lottery.kicker");
       lotterySectionTitle.textContent = t("lottery.title");
       lotterySectionBody.textContent = t("lottery.body");
       lotteryPromoImage.src = t("lottery.image");
       lotteryPromoImage.alt = t("lottery.alt");
       lotteryPromoBadge.innerHTML = t("lottery.badge");
+      document.getElementById("lotteryNote1").textContent = t("lottery.note1");
+      document.getElementById("lotteryNote2").textContent = t("lottery.note2");
+      document.getElementById("lotteryNote3").textContent = t("lottery.note3");
       rewardSectionTitle.textContent = t("rewards.title");
       rewardSectionBody.textContent = t("rewards.body");
       rewardStepLabel.textContent = t("rewards.stepLabel");
@@ -2444,7 +2564,7 @@
       }
       const existing = getRewardRecord(currentMemberData);
       if (existing) {
-        renderRewardStatus(currentMemberData, []);
+        renderRewardStatus(currentMemberData, currentUserSubmissions);
         return;
       }
       if (!currentRewardEligibility.eligible) {
@@ -2506,20 +2626,20 @@
         const permissionLevel = Number(member.permissionLevel || 1);
         const impactCount = await loadImpactCount(user.uid);
 
-        summaryName.textContent = formatSummaryLine("name", member.name || getDisplayName(user));
+        summaryName.textContent = formatSummaryLine("name", getMemberDisplayName(member, user) || "-");
         summaryEmail.textContent = formatSummaryLine("email", user.email || "-");
         summaryPartnerType.textContent = formatSummaryLine("partnerType", getPartnerLabel(member.partnerType));
         summaryPermission.textContent = formatSummaryLine("permission", getPermissionLabel(permissionLevel));
         summaryImpact.textContent = formatSummaryLine("impact", String(impactCount));
-        summaryRole.textContent = formatSummaryLine("role", member.resultRole || "-");
+        summaryRole.textContent = formatSummaryLine("role", getMemberRoleLabel(member) || "-");
         summaryEcoMbti.textContent = formatSummaryLine(
           "ecoMbti",
           member.ecoMbti?.type
             ? `${member.ecoMbti.type}${member.ecoMbti.titleZh ? ` / ${member.ecoMbti.titleZh}` : member.ecoMbti.titleEn ? ` / ${member.ecoMbti.titleEn}` : ""}`
             : "-"
         );
-        summaryScore.textContent = formatSummaryLine("score", member.totalScore ?? "-");
-        summaryRegion.textContent = formatSummaryLine("region", `${member.region || "-"}${member.chapter ? ` / ${member.chapter}` : ""}`);
+        summaryScore.textContent = formatSummaryLine("score", getMemberScore(member));
+        summaryRegion.textContent = formatSummaryLine("region", getMemberRegionLabel(member));
         summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", formatDate(member.updatedAt?.toDate?.()?.toISOString?.() || member.updatedAt));
 
         abilitySummaryEl.textContent = permissionLevel >= 3
