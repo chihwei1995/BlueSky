@@ -426,6 +426,132 @@
       display: none;
     }
 
+    .timeline-slider {
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(14, 165, 233, 0.14);
+      background: linear-gradient(180deg, rgba(240, 249, 255, 0.9), rgba(255, 255, 255, 0.98));
+    }
+
+    .timeline-slider-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-slider-head strong {
+      font-size: 0.98rem;
+    }
+
+    .timeline-slider-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-slider-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(14, 165, 233, 0.12);
+      color: var(--accent-dark);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .timeline-slider-frame {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #dbeafe;
+      box-shadow: 0 14px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .timeline-slides {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      scroll-behavior: smooth;
+    }
+
+    .timeline-slides::-webkit-scrollbar {
+      display: none;
+    }
+
+    .timeline-slide {
+      min-width: 100%;
+      scroll-snap-align: start;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(56, 189, 248, 0.2));
+    }
+
+    .timeline-slide img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .timeline-slider-nav {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      pointer-events: none;
+    }
+
+    .timeline-slider-btn {
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.72);
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      pointer-events: auto;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+    }
+
+    .timeline-slider-btn:hover {
+      background: rgba(3, 105, 161, 0.92);
+    }
+
+    .timeline-slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-slider-dot {
+      width: 10px;
+      height: 10px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(14, 165, 233, 0.24);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .timeline-slider-dot.active {
+      background: var(--accent-dark);
+      transform: scale(1.15);
+    }
+
     .timeline-empty {
       padding: 18px;
       border-radius: 16px;
@@ -466,6 +592,12 @@
       .timeline-ig-grid { grid-template-columns: 1fr; }
       .timeline-ig-panel { padding: 12px; }
       .timeline-ig-card { padding: 6px; }
+      .timeline-slider { padding: 12px; }
+      .timeline-slider-nav { padding: 0 8px; }
+      .timeline-slider-btn {
+        width: 38px;
+        height: 38px;
+      }
     }
   </style>
 </head>
@@ -569,8 +701,6 @@
         Harbourview Commercial Building, 21/F
       </p>
       <p data-i18n-html="contact.details">
-        Tel: (852) 2543 8913<br />
-        Fax: (852) 3007 8718<br />
         Email: info@hkpjc.org
       </p>
     </section>
@@ -636,7 +766,9 @@
           allYears: 'All years',
           noItems: 'No timeline entries are available for this year yet.',
           showMore: 'Show more posts',
-          showLess: 'Show fewer posts'
+          showLess: 'Show fewer posts',
+          slideDeckTitle: '2026 Work Plan Slides',
+          slideAlt: '2026 climate action slide'
         },
         support: {
           title: 'How to Support Our Project',
@@ -649,7 +781,7 @@
           instagram: 'Instagram: JCI Peninsula',
           linkedin: 'LinkedIn: JCI Peninsula',
           address: 'JCI Peninsula<br />21–24 Connaught Road West<br />Harbourview Commercial Building, 21/F',
-          details: 'Tel: (852) 2543 8913<br />Fax: (852) 3007 8718<br />Email: info@hkpjc.org'
+          details: 'Email: info@hkpjc.org'
         },
         footer: 'Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). All rights reserved.'
       },
@@ -708,7 +840,9 @@
           allYears: '所有年份',
           noItems: '這個年份目前還沒有時間線內容。',
           showMore: '展開更多貼文',
-          showLess: '收合貼文'
+          showLess: '收合貼文',
+          slideDeckTitle: '2026 年度工作計劃簡報',
+          slideAlt: '2026 氣候行動簡報'
         },
         support: {
           title: '如何支持我們的項目',
@@ -721,7 +855,7 @@
           instagram: 'Instagram 專頁：JCI Peninsula Instagram',
           linkedin: 'LinkedIn 專頁：JCI Peninsula LinkedIn',
           address: 'JCI Peninsula 半島青年商會<br />香港干諾道西21至24號<br />海景商業大廈21字樓',
-          details: '電話：(852) 2543 8913<br />傳真：(852) 3007 8718<br />電郵：info@hkpjc.org'
+          details: '電郵：info@hkpjc.org'
         },
         footer: 'Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). 保留一切權利。'
       }
@@ -730,6 +864,9 @@
     const state = { language: 'en' };
     const timelineState = { year: 'all' };
     const IG_PREVIEW_COUNT = 4;
+    const getAbout2026Slides = () => (
+      Array.from({ length: 16 }, (_, index) => `./assets/about-2026-slides/${index + 1}.png`)
+    );
     const ANCHORS = {
       en: [
         {
@@ -834,7 +971,8 @@
             'Practice zero-carbon action and visual education',
             'Help SDG 13 take root in the next generation'
           ],
-          igPosts: []
+          igPosts: [],
+          slideImages: getAbout2026Slides()
         }
       ],
       zh: [
@@ -940,7 +1078,8 @@
             '實踐零碳行動與可視化教育',
             '讓 SDG 13 在下一代萌芽'
           ],
-          igPosts: []
+          igPosts: [],
+          slideImages: getAbout2026Slides()
         }
       ]
     };
@@ -1034,10 +1173,16 @@
 
       container.innerHTML = filtered.map((item) => {
         const postCount = (item.igPosts || []).length;
+        const slideCount = (item.slideImages || []).length;
         const cards = (item.igPosts || []).map((url, index) => `
           <div class="timeline-ig-card${index >= IG_PREVIEW_COUNT ? ' hidden' : ''}">
             <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="margin:0;"></blockquote>
           </div>
+        `).join('');
+        const slides = (item.slideImages || []).map((src, index) => `
+          <figure class="timeline-slide">
+            <img src="${src}" alt="${getI18n('timeline.slideAlt')} ${index + 1}">
+          </figure>
         `).join('');
         const toggle = postCount > IG_PREVIEW_COUNT
           ? `<button class="timeline-toggle" type="button" data-toggle-posts="${item.id}">${getI18n('timeline.showMore')}</button>`
@@ -1057,6 +1202,28 @@
                   ${(item.points || []).map((point) => `<li>${point}</li>`).join('')}
                 </ul>
               </div>
+              ${slideCount ? `
+                <div class="timeline-slider" data-slider="${item.id}">
+                  <div class="timeline-slider-head">
+                    <strong>${getI18n('timeline.slideDeckTitle')}</strong>
+                    <div class="timeline-slider-meta">
+                      <span class="timeline-slider-count">${slideCount} ${state.language === 'zh' ? '頁' : 'slides'}</span>
+                    </div>
+                  </div>
+                  <div class="timeline-slider-frame">
+                    <div class="timeline-slides" data-slider-track="${item.id}">${slides}</div>
+                    <div class="timeline-slider-nav">
+                      <button class="timeline-slider-btn" type="button" aria-label="${state.language === 'zh' ? '上一頁' : 'Previous slide'}" data-slider-prev="${item.id}">‹</button>
+                      <button class="timeline-slider-btn" type="button" aria-label="${state.language === 'zh' ? '下一頁' : 'Next slide'}" data-slider-next="${item.id}">›</button>
+                    </div>
+                  </div>
+                  <div class="timeline-slider-dots">
+                    ${(item.slideImages || []).map((_, index) => `
+                      <button class="timeline-slider-dot${index === 0 ? ' active' : ''}" type="button" aria-label="${state.language === 'zh' ? `跳到第 ${index + 1} 頁` : `Go to slide ${index + 1}`}" data-slider-dot="${item.id}" data-slide-index="${index}"></button>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
               ${postCount ? `
                 <div class="timeline-ig-panel">
                   <div class="timeline-ig-head">
@@ -1087,6 +1254,45 @@
           button.textContent = isExpanded ? getI18n('timeline.showMore') : getI18n('timeline.showLess');
           setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
         });
+      });
+
+      container.querySelectorAll('[data-slider]').forEach((slider) => {
+        const sliderId = slider.dataset.slider;
+        const track = slider.querySelector(`[data-slider-track="${sliderId}"]`);
+        const dots = Array.from(slider.querySelectorAll(`[data-slider-dot="${sliderId}"]`));
+        const prevBtn = slider.querySelector(`[data-slider-prev="${sliderId}"]`);
+        const nextBtn = slider.querySelector(`[data-slider-next="${sliderId}"]`);
+        if (!track || !dots.length) return;
+
+        const updateActiveDot = () => {
+          const slideWidth = track.clientWidth || 1;
+          const activeIndex = Math.min(dots.length - 1, Math.round(track.scrollLeft / slideWidth));
+          dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeIndex);
+          });
+        };
+
+        const goToSlide = (index) => {
+          const clamped = Math.max(0, Math.min(index, dots.length - 1));
+          track.scrollTo({ left: track.clientWidth * clamped, behavior: 'smooth' });
+        };
+
+        prevBtn?.addEventListener('click', () => {
+          const current = Math.round(track.scrollLeft / (track.clientWidth || 1));
+          goToSlide(current - 1);
+        });
+
+        nextBtn?.addEventListener('click', () => {
+          const current = Math.round(track.scrollLeft / (track.clientWidth || 1));
+          goToSlide(current + 1);
+        });
+
+        dots.forEach((dot, index) => {
+          dot.addEventListener('click', () => goToSlide(index));
+        });
+
+        track.addEventListener('scroll', updateActiveDot, { passive: true });
+        updateActiveDot();
       });
 
       setTimeout(() => window.instgrm?.Embeds?.process?.(), 120);
