@@ -209,6 +209,23 @@
       border: 1px solid var(--border);
     }
 
+    .reference-image {
+      display: grid;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .reference-image img {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+    }
+
     .timeline-section {
       display: grid;
       gap: 18px;
@@ -719,6 +736,16 @@
         Email: info@hkpjc.org
       </p>
     </section>
+
+    <section class="reference-image">
+      <h2 data-i18n="contactSlide.title">Contact Slide Preview</h2>
+      <p data-i18n="contactSlide.body">Keep the updated contact slide available at the bottom of the About page for quick review.</p>
+      <img
+        src="./assets/about-2026-slides/16.png"
+        alt="Blue Sky Returns contact slide"
+        data-i18n-alt="contactSlide.alt"
+      />
+    </section>
   </main>
 
   <footer data-i18n="footer">Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). All rights reserved.</footer>
@@ -798,6 +825,11 @@
           address: 'JCI Peninsula<br />21–24 Connaught Road West<br />Harbourview Commercial Building, 21/F',
           details: 'Email: info@hkpjc.org'
         },
+        contactSlide: {
+          title: 'Contact Slide Preview',
+          body: 'Keep the updated contact slide available at the bottom of the About page for quick review.',
+          alt: 'Blue Sky Returns contact slide'
+        },
         footer: 'Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). All rights reserved.'
       },
       zh: {
@@ -871,6 +903,11 @@
           linkedin: 'LinkedIn 專頁：JCI Peninsula LinkedIn',
           address: 'JCI Peninsula 半島青年商會<br />香港干諾道西21至24號<br />海景商業大廈21字樓',
           details: '電郵：info@hkpjc.org'
+        },
+        contactSlide: {
+          title: '聯絡頁重點預覽',
+          body: '頁面最底下同步放上最新聯絡圖，方便直接查看與核對內容。',
+          alt: '一步・藍天聯絡資訊圖'
         },
         footer: 'Copyright © 1969 - 2025 Junior Chamber International Peninsula (Hong Kong). 保留一切權利。'
       }
