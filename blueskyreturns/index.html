@@ -268,6 +268,11 @@
       min-width: 0;
     }
 
+    .timeline-item.has-slides .timeline-body {
+      grid-template-columns: minmax(0, 1.28fr) minmax(240px, 0.72fr);
+      align-items: start;
+    }
+
     .timeline-content {
       display: grid;
       gap: 14px;
@@ -436,6 +441,12 @@
       background: linear-gradient(180deg, rgba(240, 249, 255, 0.9), rgba(255, 255, 255, 0.98));
     }
 
+    .timeline-item.has-slides .timeline-slider {
+      padding: 18px;
+      border-radius: 20px;
+      box-shadow: 0 18px 30px rgba(15, 23, 42, 0.08);
+    }
+
     .timeline-slider-head {
       display: flex;
       align-items: center;
@@ -500,6 +511,10 @@
       height: 100%;
       display: block;
       object-fit: cover;
+    }
+
+    .timeline-item.has-slides .timeline-slide {
+      aspect-ratio: 16 / 8.6;
     }
 
     .timeline-slider-nav {
@@ -1128,7 +1143,14 @@
       renderTimelineList();
     };
 
-    const getTimelineItems = () => ANCHORS[state.language] ?? ANCHORS.en;
+    const getTimelineItems = () => (
+      (ANCHORS[state.language] ?? ANCHORS.en)
+        .map((item, index) => ({ ...item, __sortIndex: index }))
+        .sort((a, b) => {
+          if ((b.year || 0) !== (a.year || 0)) return (b.year || 0) - (a.year || 0);
+          return b.__sortIndex - a.__sortIndex;
+        })
+    );
     const getTimelineYears = () => (
       Array.from(new Set(getTimelineItems().map(item => item.year).filter(Boolean))).sort((a, b) => b - a)
     );
@@ -1188,7 +1210,7 @@
           ? `<button class="timeline-toggle" type="button" data-toggle-posts="${item.id}">${getI18n('timeline.showMore')}</button>`
           : '';
         return `
-          <article class="timeline-item" id="${item.id}">
+          <article class="timeline-item${slideCount ? ' has-slides' : ''}" id="${item.id}">
             <div class="timeline-item-header">
               <div class="timeline-copy">
                 <h3>${item.title || ''}</h3>
@@ -1197,11 +1219,6 @@
               <div class="timeline-year">${item.year || ''}</div>
             </div>
             <div class="timeline-body">
-              <div class="timeline-content">
-                <ul class="timeline-points">
-                  ${(item.points || []).map((point) => `<li>${point}</li>`).join('')}
-                </ul>
-              </div>
               ${slideCount ? `
                 <div class="timeline-slider" data-slider="${item.id}">
                   <div class="timeline-slider-head">
@@ -1224,6 +1241,11 @@
                   </div>
                 </div>
               ` : ''}
+              <div class="timeline-content">
+                <ul class="timeline-points">
+                  ${(item.points || []).map((point) => `<li>${point}</li>`).join('')}
+                </ul>
+              </div>
               ${postCount ? `
                 <div class="timeline-ig-panel">
                   <div class="timeline-ig-head">
