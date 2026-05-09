@@ -518,6 +518,26 @@
       font-weight: 700;
     }
 
+    .task-rule {
+      display: grid;
+      gap: 8px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(31, 143, 88, 0.1), rgba(140, 198, 63, 0.12));
+      border: 1px solid rgba(31, 143, 88, 0.18);
+      color: var(--green-deep);
+    }
+
+    .task-rule strong {
+      font-size: 0.96rem;
+    }
+
+    .task-rule p {
+      margin: 0;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
     .task-form {
       display: grid;
       gap: 12px;
@@ -769,11 +789,8 @@
         <details class="mobile-nav-card side-card">
           <summary data-i18n="mobileNav.title">Quick Navigation</summary>
           <div class="mobile-nav-links">
-            <a class="side-link" href="#concept"><span><span data-i18n="mobileNav.concept">Concept</span><small data-i18n="mobileNav.conceptSub">Why this format works</small></span></a>
             <a class="side-link" href="#task"><span><span data-i18n="mobileNav.task">Task Submission</span><small data-i18n="mobileNav.taskSub">Submit today right away</small></span></a>
             <a class="side-link" href="#dimensions"><span><span data-i18n="mobileNav.dimensions">Five Dimensions</span><small data-i18n="mobileNav.dimensionsSub">Free combination in 7 days</small></span></a>
-            <a class="side-link" href="#flow"><span><span data-i18n="mobileNav.flow">7-Day Flow</span><small data-i18n="mobileNav.flowSub">How to participate</small></span></a>
-            <a class="side-link" href="#cta"><span><span data-i18n="mobileNav.cta">Next Step</span><small data-i18n="mobileNav.ctaSub">Join the action</small></span></a>
           </div>
         </details>
       </div>
@@ -783,11 +800,8 @@
             <h2 data-i18n="side.title">7-Day Green Proposal</h2>
             <p data-i18n="side.body">A flexible guide page for a seven-day green rhythm.</p>
             <div class="side-links">
-              <a class="side-link" href="#concept"><span><span data-i18n="side.linkConcept">Concept</span><small data-i18n="side.linkConceptSub">Why flexible works</small></span></a>
               <a class="side-link" href="#task"><span><span data-i18n="side.linkTask">Task Submission</span><small data-i18n="side.linkTaskSub">Open the upload form</small></span></a>
               <a class="side-link" href="#dimensions"><span><span data-i18n="side.linkDimensions">Five Dimensions</span><small data-i18n="side.linkDimensionsSub">Diet, Mobility, Waste, Energy, Nature</small></span></a>
-              <a class="side-link" href="#flow"><span><span data-i18n="side.linkFlow">7-Day Flow</span><small data-i18n="side.linkFlowSub">Photo-based participation</small></span></a>
-              <a class="side-link" href="#cta"><span><span data-i18n="side.linkCta">Join</span><small data-i18n="side.linkCtaSub">Become a Climate Action Partner</small></span></a>
             </div>
           </div>
           <div class="side-card">
@@ -817,32 +831,10 @@
               </div>
             </div>
           </section>
-          <section id="concept" class="panel">
-            <div class="section-head">
-              <h2 data-i18n="concept.title">Concept / 概念</h2>
-              <p data-i18n="concept.body">This is not a rigid task list. It is an open framework.</p>
-            </div>
-            <div class="concept-grid">
-              <article class="concept-card">
-                <h3 data-i18n="concept.card1Title">Not prescriptive</h3>
-                <p data-i18n="concept.card1Body">Participants start from their own pace and context.</p>
-              </article>
-              <article class="concept-card">
-                <h3 data-i18n="concept.card2Title">Photo-first participation</h3>
-                <p data-i18n="concept.card2Body">One photo can capture one conscious choice.</p>
-              </article>
-            </div>
-            <div class="highlight-strip">
-              <span class="highlight" data-i18n="concept.highlight1">🍀 Any order</span>
-              <span class="highlight" data-i18n="concept.highlight2">📷 Repeat dimensions</span>
-              <span class="highlight" data-i18n="concept.highlight3">🧩 Mix and overlap</span>
-              <span class="highlight" data-i18n="concept.highlight4">🌍 Rooted in real life</span>
-            </div>
-          </section>
           <section id="dimensions" class="panel">
             <div class="section-head">
               <h2 data-i18n="dimensions.title">The Green Dimensions / 五大維度</h2>
-              <p data-i18n="dimensions.body">Any photo that fits one dimension can count toward the 7-day proposal.</p>
+              <p data-i18n="dimensions.body">不知道怎麼分類也沒關係，先完成今天的一個行動。</p>
             </div>
             <div class="dimension-grid">
               <article class="dimension-card">
@@ -887,56 +879,20 @@
               </article>
             </div>
           </section>
-          <section id="flow" class="panel">
-            <div class="section-head">
-              <h2 data-i18n="flow.title">7-Day Flow / 7 天參與節奏</h2>
-              <p data-i18n="flow.body">A light participation rhythm with lots of creative room.</p>
-            </div>
-            <div class="flow-grid">
-              <article class="flow-card">
-                <h3 data-i18n="flow.card1Title">Day 1–7: capture what feels real</h3>
-                <ul>
-                  <li data-i18n="flow.card1Point1">Find one moment each day that fits one of the five dimensions.</li>
-                  <li data-i18n="flow.card1Point2">If a day gets busy, you can make it up the next day.</li>
-                  <li data-i18n="flow.card1Point3">The same dimension can appear multiple times.</li>
-                </ul>
-              </article>
-              <article class="flow-card">
-                <h3 data-i18n="flow.card2Title">Upload with a short caption</h3>
-                <ul>
-                  <li data-i18n="flow.card2Point1">Each photo can include one short line explaining what happened.</li>
-                  <li data-i18n="flow.card2Point2">You can label the matching dimensions.</li>
-                  <li data-i18n="flow.card2Point3">You can also share the reason or challenge behind it.</li>
-                </ul>
-              </article>
-            </div>
-          </section>
-          <section class="panel">
-            <div class="section-head">
-              <h2 data-i18n="why.title">Why This Works / 為什麼這樣設計</h2>
-              <p data-i18n="why.body">An open format is easier to adopt across different cities, ages, and lifestyles.</p>
-            </div>
-            <div class="why-grid">
-              <article class="why-card">
-                <h3 data-i18n="why.card1Title">Lower pressure, higher participation</h3>
-                <p data-i18n="why.card1Body">People are less likely to quit after missing one day.</p>
-              </article>
-              <article class="why-card">
-                <h3 data-i18n="why.card2Title">Better for storytelling</h3>
-                <p data-i18n="why.card2Body">The five dimensions naturally become content categories for posts, exhibits, or an e-book.</p>
-              </article>
-            </div>
-          </section>
           <section id="task" class="panel task-panel">
             <div class="section-head">
               <div class="task-kicker">Fast Entry / 快速入口</div>
               <h2>Task Submission / 任務提交</h2>
-              <p>登入後，你可以在這裡填寫今天完成的 7-Day Green Proposal 內容，並上傳圖片作為任務紀錄。</p>
+              <p>登入後，記下今天做的一個綠色行動就可以。</p>
             </div>
             <div class="task-spotlight">
-              <div class="task-spotlight-chip">📸 今天拍完就能交</div>
-              <div class="task-spotlight-chip">🗓 7 天累積成挑戰</div>
-              <div class="task-spotlight-chip">🌿 可重複、可混搭五大維度</div>
+              <div class="task-spotlight-chip">📸 有照片更好</div>
+              <div class="task-spotlight-chip">🗓 每天交一筆就好</div>
+              <div class="task-spotlight-chip">🌿 不用想太多，先開始</div>
+            </div>
+            <div class="task-rule">
+              <strong data-i18n="taskRule.title">正式行動者規則 / Official Action Taker Rule</strong>
+              <p data-i18n="taskRule.body">第一次完成今天的一個行動可獲得 +5。之後每日完成 1 個行動可再 +1；若連續 7 日完成，額外再 +5。</p>
             </div>
             <div id="taskAuthState" class="task-auth">請先到氣候行動者中心登入，才可提交任務與查看自己的紀錄。</div>
             <div class="task-grid">
@@ -948,15 +904,11 @@
                     <input id="taskWebsiteField" name="website" type="text" tabindex="-1" autocomplete="off" />
                   </div>
                   <div>
-                    <label for="taskTitle">任務標題 / Task Title</label>
-                    <input id="taskTitle" name="taskTitle" type="text" placeholder="例：今天步行上班並自備水瓶" />
-                  </div>
-                  <div>
                     <label for="taskDate">日期 / Date</label>
                     <input id="taskDate" name="taskDate" type="date" />
                   </div>
                   <div>
-                    <label>對應維度 / Dimensions</label>
+                    <label>對應維度（選填） / Dimensions (Optional)</label>
                     <div class="checkbox-grid">
                       <label class="checkbox-item"><input type="checkbox" name="dimensions" value="素 Green Diet" />素 Green Diet</label>
                       <label class="checkbox-item"><input type="checkbox" name="dimensions" value="行 Low-carbon Mobility" />行 Low-carbon Mobility</label>
@@ -966,24 +918,20 @@
                     </div>
                   </div>
                   <div>
-                    <label for="taskCaption">任務內容 / Caption</label>
-                    <textarea id="taskCaption" name="taskCaption" placeholder="簡短描述你今天做了什麼，以及這件事為什麼重要。"></textarea>
+                    <label for="taskCaption">今天做了什麼 / What did you do today?</label>
+                    <textarea id="taskCaption" name="taskCaption" placeholder="例：今天步行 15 分鐘，少開一次冷氣。"></textarea>
                   </div>
                   <div>
-                    <label for="taskReflection">心得補充（選填）/ Reflection</label>
-                    <textarea id="taskReflection" name="taskReflection" placeholder="例如：最難的地方、最意外的發現、想延續的習慣。"></textarea>
-                  </div>
-                  <div>
-                    <label for="taskImage">任務照片 / Upload Image</label>
+                    <label for="taskImage">照片（選填） / Photo (Optional)</label>
                     <input id="taskImage" name="taskImage" type="file" accept="image/*" />
                   </div>
                   <div class="consent-box">
                     <button type="button" id="termsOpenBtn" class="terms-trigger">查看隱私與規範條款 / Privacy &amp; Terms</button>
                     <label for="taskTermsConsent">
                       <input id="taskTermsConsent" name="taskTermsConsent" type="checkbox" />
-                      我已閱讀並同意本網站之隱私與規範條款，理解我提交的任務內容、圖片與文字，可能用於網站展示、互動內容、電子書宣導，以及各類氣候行動教育與推廣使用。 / I have read and agree to the Privacy &amp; Terms, and understand that my task content, images, and text may be used for website display, interactive content, e-book promotion, and climate action education or outreach.
+                      我已閱讀並同意隱私與規範條款。 / I have read and agree to the Privacy &amp; Terms.
                     </label>
-                    <p id="taskTermsState" class="terms-copy">請只上傳你有權提供的照片與內容。首次同意後，同帳號可全站共用。 / Please only upload materials you have the right to provide. Once accepted, the same account can reuse this consent across the site.</p>
+                    <p id="taskTermsState" class="terms-copy">請只提交你有權提供的內容。首次同意後，同帳號可沿用。 / Please only submit content you have the right to provide. Once accepted, the same account can reuse this consent.</p>
                   </div>
                   <div class="task-actions">
                     <button id="taskSubmitBtn" class="pill primary" type="submit">提交任務 / Submit</button>
@@ -996,24 +944,6 @@
                 <h3>我的任務紀錄 / My Recent Submissions</h3>
                 <div id="proposalSubmissionEmpty" class="submission-empty">登入後，這裡會顯示你最近提交的 7-Day 任務。</div>
                 <div id="proposalSubmissionList" class="submission-list" hidden></div>
-              </article>
-            </div>
-          </section>
-          <section id="cta" class="panel">
-            <div class="section-head">
-              <h2 data-i18n="cta.title">Next Step / 下一步</h2>
-              <p data-i18n="cta.body">Start from the existing Blue Sky Returns registration and navigation flow.</p>
-            </div>
-            <div class="cta-grid">
-              <article class="cta-card">
-                <h3 data-i18n="cta.card1Title">Become a Climate Action Partner</h3>
-                <p data-i18n="cta.card1Body">Register, sign in, and complete the basic profile first.</p>
-                <a class="pill" href="./climate-action-form.html" data-i18n="cta.card1Link">Open Climate Action Form</a>
-              </article>
-              <article class="cta-card">
-                <h3 data-i18n="cta.card2Title">View the participation journey</h3>
-                <p data-i18n="cta.card2Body">See the broader project structure, upload permissions, and review logic.</p>
-                <a class="pill" href="./countries-regions-hope-crisis.html" data-i18n="cta.card2Link">Open Countries &amp; Regions</a>
               </article>
             </div>
           </section>
@@ -1046,28 +976,20 @@
         header: { title: "Blue Sky Returns", subtitle: "自定義 7 日綠色提案" },
         nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "7 日綠色提案", member: "氣候行動者中心", form: "步入行動" },
         mobileNav: {
-          title: "快速導覽", concept: "概念", conceptSub: "為什麼這樣設計", task: "任務提交", taskSub: "直接打開上傳表單", dimensions: "五大維度", dimensionsSub: "素・行・減・能・森", flow: "7 天節奏", flowSub: "如何參與", cta: "下一步", ctaSub: "開始加入"
+          title: "快速導覽", task: "任務提交", taskSub: "今天交一筆", dimensions: "五大維度", dimensionsSub: "需要時再看"
         },
         side: {
-          title: "7 日綠色提案", body: "一個不規定每天做什麼，而是讓參與者自己定義 7 天綠色行動節奏的導覽頁。", linkConcept: "概念", linkConceptSub: "自由組合的玩法", linkTask: "任務提交", linkTaskSub: "直接進入上傳區", linkDimensions: "五大維度", linkDimensionsSub: "素・行・減・能・森", linkFlow: "7 天節奏", linkFlowSub: "上傳照片的節奏", linkCta: "加入流程", linkCtaSub: "開始成為氣候行動者", tipTitle: "快速提醒", tipBody: "重點不是打卡壓力，而是把綠色生活拆成五個入口，讓每個人都能用自己的方式參與。"
+          title: "7 日綠色提案", body: "今天完成一個綠色行動，記下來就可以。", linkTask: "任務提交", linkTaskSub: "直接進入上傳區", linkDimensions: "五大維度", linkDimensionsSub: "需要時再看", tipTitle: "快速提醒", tipBody: "先提交今天的一個行動，比看完所有說明更重要。"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "自定義 7 日綠色提案", body: "我們不直接規定參與者每天要做什麼，而是提供五大綠色維度，讓大家在 7 天內自由組合、重複、交叉上傳，用更真實也更可持續的方式練習低碳生活。", primary: "前往氣候行動者中心登入", submit: "立即提交任務", secondary: "查看五大維度", posterAlt: "7 日綠色提案主視覺", posterImage: "../assets/GA.png", noteTitle: "7 天，用你自己的節奏。", noteBody: "可以一天做一件，也可以某幾天集中發力；重要的是留下你選擇的綠色證據與故事。"
-        },
-        concept: {
-          title: "Concept / 概念", body: "這不是一份僵硬的每日任務表，而是一個開放式參與框架。五大維度像五扇門，參與者只要在 7 天內，上傳任何符合其中一個維度的照片，就算完成當天的綠色提案紀錄。", card1Title: "不預設標準答案", card1Body: "不由主辦方替每個人決定行程，而是鼓勵大家從自己的生活節奏、城市條件、家庭習慣出發，找到做得到的行動。", card2Title: "照片優先的參與方式", card2Body: "上傳一張照片就能記錄一個選擇。影像比勾選題更有溫度，也更容易成為日後展覽、社群或電子書的素材。", highlight1: "🍀 不限順序", highlight2: "📷 可重複維度", highlight3: "🧩 可交叉混搭", highlight4: "🌍 更貼近真實生活"
+          eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", primary: "前往氣候行動者中心登入", submit: "立即提交任務", secondary: "查看五大維度", posterAlt: "7 日綠色提案主視覺", posterImage: "../assets/GA.png", noteTitle: "先做一件，就很好。", noteBody: "走路、自備、節能、減廢，都可以算。"
         },
         dimensions: {
-          title: "The Green Dimensions / 五大維度", body: "只要照片內容符合以下任一維度，就能列入你的 7 日綠色提案。不限先後、可重複、也可以同一天同時命中多個維度。", dietTag: "素 Green Diet", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食、重新利用冰箱食材。", mobilityTag: "行 Low-carbon Mobility", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵、共乘，或今天選擇不開車的證明。", wasteTag: "減 Waste Reduction", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、修補舊物、垃圾分類、拒絕一次性塑膠用品。", energyTag: "能 Energy Saving", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、使用自然光、減少冷氣時間、刪除過期郵件或雲端垃圾。", natureTag: "森 City / Nature Connection", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>城市綠化設施、社區小公園、室內植栽、親近自然、Green Hunt 目標打卡。"
+          title: "The Green Dimensions / 五大維度", body: "不知道怎麼分類也沒關係，先完成今天的一個行動。", dietTag: "素 Green Diet", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食。", mobilityTag: "行 Low-carbon Mobility", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵。", wasteTag: "減 Waste Reduction", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、垃圾分類、拒絕一次性用品。", energyTag: "能 Energy Saving", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、少開冷氣、使用自然光。", natureTag: "森 City / Nature Connection", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>社區公園、室內植栽、親近自然。"
         },
-        flow: {
-          title: "7-Day Flow / 7 天參與節奏", body: "我們把玩法做得很輕巧，你可以用最少壓力開始，卻保留很高的創造空間。", card1Title: "Day 1–7：先拍下真實發生的綠色瞬間", card1Point1: "每天找到一個符合五大維度的瞬間即可。", card1Point2: "如果某天很忙，也可以隔天補上，整體仍以 7 天為一個提案週期。", card1Point3: "同一維度可連續出現，不必追求每天不同。", card2Title: "上傳時加一句簡短說明", card2Point1: "每張照片可附一句簡短說明，描述你做了什麼。", card2Point2: "可標註對應維度，例如今天是行加減。", card2Point3: "如果願意，也可分享背後原因或遇到的挑戰。"
-        },
-        why: {
-          title: "Why This Works / 為什麼這樣設計", body: "比起硬性的任務清單，這種開放式框架更容易被不同城市、不同年齡、不同生活條件的人採用。", card1Title: "壓力更低，參與率更高", card1Body: "參與者不會因為某天失敗就想放棄，因為整個提案允許回彈、補位與重新開始。", card2Title: "更適合後續敘事與展示", card2Body: "五大維度天然形成敘事分類，後續可整理成社群貼文、展覽牆、電子書章節或學校工作坊素材。"
-        },
-        cta: {
-          title: "Next Step / 下一步", body: "如果你想把這個 7 日綠色提案接進現有 Blue Sky Returns 流程，現在就能先從氣候行動者中心登入與步入行動資料更新開始。", card1Title: "先更新步入行動", card1Body: "先完成註冊、登入與基本資料填寫，後續才能串接更多上傳與權限流程。", card1Link: "打開步入行動", card2Title: "查看完整參與路徑", card2Body: "如果你要先看整體專案路徑、上傳權限與審核邏輯，可回到合作與願景導覽頁。", card2Link: "打開合作與願景"
+        taskRule: {
+          title: "正式行動者規則 / Official Action Taker Rule",
+          body: "第一次完成今天的一個行動可獲得 +5。之後每日完成 1 個行動可再 +1；若首次完成連續 7 日，可獲得 1 枚限量代幣。"
         },
         footer: "Blue Sky Returns • 自定義 7 日綠色提案 • 2026"
       },
@@ -1076,28 +998,20 @@
         header: { title: "Blue Sky Returns", subtitle: "7-Day Green Proposal" },
         nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "7-Day Green Proposal", member: "Member Center", form: "Take One Step" },
         mobileNav: {
-          title: "Quick Navigation", concept: "Concept", conceptSub: "Why this format works", task: "Task Submission", taskSub: "Open the upload form", dimensions: "Five Dimensions", dimensionsSub: "Diet, Mobility, Waste, Energy, Nature", flow: "7-Day Flow", flowSub: "How to participate", cta: "Next Step", ctaSub: "Join the action"
+          title: "Quick Navigation", task: "Task Submission", taskSub: "Submit today", dimensions: "Five Dimensions", dimensionsSub: "Check only when needed"
         },
         side: {
-          title: "7-Day Green Proposal", body: "A guide page that gives participants a flexible seven-day green rhythm instead of prescribing the exact task for every day.", linkConcept: "Concept", linkConceptSub: "Why flexible works", linkTask: "Task Submission", linkTaskSub: "Open the upload form", linkDimensions: "Five Dimensions", linkDimensionsSub: "Diet, Mobility, Waste, Energy, Nature", linkFlow: "7-Day Flow", linkFlowSub: "Photo-based participation", linkCta: "Join", linkCtaSub: "Become a Climate Action Partner", tipTitle: "Quick Note", tipBody: "The point is not pressure or perfect streaks. The point is to turn green living into approachable entry points."
+          title: "7-Day Green Proposal", body: "Just log one green action from today.", linkTask: "Task Submission", linkTaskSub: "Open the form", linkDimensions: "Five Dimensions", linkDimensionsSub: "Check when needed", tipTitle: "Quick Note", tipBody: "Starting one action matters more than reading everything first."
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "Build Your Own 7-Day Green Proposal", body: "Instead of telling participants exactly what to do, we offer five green dimensions and let them freely combine, repeat, and remix actions across seven days in a way that feels real and sustainable.", primary: "Open Member Center", submit: "Submit a Task Now", secondary: "See the five dimensions", posterAlt: "7-Day Green Proposal key visual", posterImage: "../assets/GAen.png", noteTitle: "7 days, your own rhythm.", noteBody: "One action a day works. A concentrated burst over a few days also works. What matters is the evidence and story behind your choices."
-        },
-        concept: {
-          title: "Concept", body: "This is not a rigid daily checklist. It is an open participation framework. Think of the five dimensions as five doors: if a participant uploads a photo that matches any one of them within seven days, it counts as part of the proposal.", card1Title: "Not prescriptive", card1Body: "The organizer does not dictate everyone's schedule. Participants start from their own pace, city context, family routines, and real constraints.", card2Title: "Photo-first participation", card2Body: "One photo can capture one conscious choice. That makes participation warmer, easier to share, and more reusable for exhibitions, social posts, or an e-book.", highlight1: "🍀 Any order", highlight2: "📷 Repeat dimensions", highlight3: "🧩 Mix and overlap", highlight4: "🌍 Rooted in real life"
+          eyebrow: "Flexible Climate Participation", title: "One Green Action Today", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", primary: "Open Member Center", submit: "Submit a Task Now", secondary: "See the five dimensions", posterAlt: "7-Day Green Proposal key visual", posterImage: "../assets/GAen.png", noteTitle: "One action is enough to begin.", noteBody: "Walking, reusing, saving energy, or eating greener all count."
         },
         dimensions: {
-          title: "The Green Dimensions", body: "Any photo that fits one of the following dimensions can be part of the seven-day proposal. Order does not matter. Repetition is allowed. One day can even fit more than one dimension.", dietTag: "Green Diet", dietTitle: "Plant-forward food choices", dietBody: "<strong>Examples:</strong> meat-free meals, home-cooked vegetables, reducing food waste, or using ingredients already in the fridge.", mobilityTag: "Low-carbon Mobility", mobilityTitle: "Move with less carbon", mobilityBody: "<strong>Examples:</strong> walking, cycling, buses, metro, carpooling, or proof that you chose not to drive today.", wasteTag: "Waste Reduction", wasteTitle: "Reduce and reuse", wasteBody: "<strong>Examples:</strong> reusable containers, repair habits, sorting recyclables, or refusing single-use plastic.", energyTag: "Energy Saving", energyTitle: "Save energy and trim digital waste", energyBody: "<strong>Examples:</strong> turning off lights, unplugging devices, using natural light, reducing air-conditioning time, or deleting expired emails.", natureTag: "City / Nature Connection", natureTitle: "Reconnect urban life with nature", natureBody: "<strong>Examples:</strong> green infrastructure in the city, community parks, indoor plants, nature walks, or a Green Hunt stop."
+          title: "The Green Dimensions", body: "If you are not sure which dimension fits, just start with the action itself.", dietTag: "Green Diet", dietTitle: "Plant-forward food choices", dietBody: "<strong>Examples:</strong> meat-free meals, home-cooked vegetables, less food waste.", mobilityTag: "Low-carbon Mobility", mobilityTitle: "Move with less carbon", mobilityBody: "<strong>Examples:</strong> walking, cycling, bus, metro.", wasteTag: "Waste Reduction", wasteTitle: "Reduce and reuse", wasteBody: "<strong>Examples:</strong> reusables, repairs, recycling, refusing single-use items.", energyTag: "Energy Saving", energyTitle: "Save energy", energyBody: "<strong>Examples:</strong> lights off, less air-conditioning, natural light.", natureTag: "City / Nature Connection", natureTitle: "Reconnect with nature", natureBody: "<strong>Examples:</strong> parks, indoor plants, nature walks."
         },
-        flow: {
-          title: "7-Day Flow", body: "The participation rhythm is intentionally light. It lowers pressure but keeps creative range wide open.", card1Title: "Day 1–7: capture what feels real", card1Point1: "Find one moment each day that fits one of the five dimensions.", card1Point2: "If a day gets busy, you can make it up the next day and still stay within the seven-day proposal.", card1Point3: "The same dimension can appear on multiple days. Variety is welcome, but not required.", card2Title: "Upload with a short caption", card2Point1: "Each photo can include one short line explaining what happened.", card2Point2: "You can label the matching dimensions, such as Mobility plus Waste.", card2Point3: "If you want, share the reason behind the action or a challenge you faced."
-        },
-        why: {
-          title: "Why This Works", body: "Compared with a rigid task list, an open framework is easier to adopt across different cities, ages, and living conditions.", card1Title: "Lower pressure, higher participation", card1Body: "People are less likely to quit after missing one day because the whole structure allows bounce-back and re-entry.", card2Title: "Better for storytelling", card2Body: "The five dimensions naturally become content categories for social posts, exhibition walls, e-book chapters, or school workshops."
-        },
-        cta: {
-          title: "Next Step", body: "If you want to connect this seven-day proposal to the current Blue Sky Returns flow, start with the member center sign-in and your Take One Step profile update.", card1Title: "Update Take One Step", card1Body: "Register, sign in, and complete the basic profile first so future upload and permission flows can connect smoothly.", card1Link: "Open Take One Step", card2Title: "View the participation journey", card2Body: "If you want to see the broader project structure, upload permissions, and review logic first, go back to the Collaboration & Vision guide.", card2Link: "Open Collaboration & Vision"
+        taskRule: {
+          title: "Official Action Taker Rule",
+          body: "Your first completed action gives +5. Each following day adds +1. Your first completed 7-day streak earns 1 limited token."
         },
         footer: "Blue Sky Returns • 7-Day Green Proposal • 2026"
       }
@@ -1171,6 +1085,8 @@
     const submissionList = document.getElementById("proposalSubmissionList");
     const submissionEmpty = document.getElementById("proposalSubmissionEmpty");
     const taskTermsConsent = document.getElementById("taskTermsConsent");
+    const taskDateInput = document.getElementById("taskDate");
+    const taskCaptionInput = document.getElementById("taskCaption");
     const termsModal = document.getElementById("termsModal");
     const termsOpenBtn = document.getElementById("termsOpenBtn");
     const termsCloseBtn = document.getElementById("termsCloseBtn");
@@ -1180,6 +1096,7 @@
     let acceptedTermsRecord = null;
     const taskFormStartedAt = Date.now();
     const MIN_TASK_FILL_MS = 2000;
+    const DAILY_SLOT_COLLECTION = "greenProposalDailySlots";
 
     const openTermsModal = () => {
       termsModal.classList.add("open");
@@ -1217,13 +1134,45 @@
       taskStatus.textContent = message;
     };
 
+    const buildDailySlotId = (uid, taskDate) => `${uid}__${taskDate}`;
+    const getDailySlotRef = (uid, taskDate) => doc(db, DAILY_SLOT_COLLECTION, buildDailySlotId(uid, taskDate));
+    const getDailySlot = async (uid, taskDate) => {
+      const slotSnap = await getDoc(getDailySlotRef(uid, taskDate));
+      return slotSnap.exists() ? slotSnap.data() : null;
+    };
+    const evaluateDailySubmit = ({ slot, editingId = "" }) => {
+      if (!slot) {
+        return { ok: true, submitCount: 1, deleteCount: 0 };
+      }
+
+      const activeSubmissionId = String(slot.activeSubmissionId || "").trim();
+      const submitCount = Number(slot.submitCount || 0);
+      const deleteCount = Number(slot.deleteCount || 0);
+
+      if (editingId) {
+        if (activeSubmissionId && activeSubmissionId !== editingId) {
+          return { ok: false, message: "這一天已有另一筆任務，請先處理原本的提交。" };
+        }
+        return { ok: true, submitCount, deleteCount, editing: true };
+      }
+
+      if (activeSubmissionId) {
+        return { ok: false, message: "今天已經提交過 1 筆任務。如要修改，請直接編輯原內容。" };
+      }
+
+      if (submitCount >= 2) {
+        return { ok: false, message: "今天的補傳機會已用完，請明天再提交新的任務。" };
+      }
+
+      return { ok: true, submitCount: submitCount + 1, deleteCount };
+    };
+
     const populateFormForEdit = (submission) => {
       editingSubmissionId = submission.id;
       editingSubmissionData = submission;
-      document.getElementById("taskTitle").value = submission.title || "";
-      document.getElementById("taskDate").value = submission.taskDate || "";
-      document.getElementById("taskCaption").value = submission.caption || "";
-      document.getElementById("taskReflection").value = submission.reflection || "";
+      taskDateInput.value = submission.taskDate || "";
+      taskCaptionInput.value = submission.caption || "";
+      taskDateInput.disabled = true;
       Array.from(taskForm.querySelectorAll('input[name="dimensions"]')).forEach((checkbox) => {
         checkbox.checked = (submission.dimensions || []).includes(checkbox.value);
       });
@@ -1236,6 +1185,8 @@
       editingSubmissionId = null;
       editingSubmissionData = null;
       taskForm.reset();
+      taskDateInput.disabled = false;
+      taskDateInput.value = new Date().toISOString().slice(0, 10);
       taskSubmitBtn.textContent = "提交任務 / Submit";
     };
 
@@ -1244,7 +1195,7 @@
       article.className = "submission-item";
 
       const title = document.createElement("h3");
-      title.textContent = submission.title || "未命名任務";
+      title.textContent = submission.title || submission.caption || "未命名任務";
       article.appendChild(title);
 
       const tagWrap = document.createElement("div");
@@ -1260,12 +1211,6 @@
       const caption = document.createElement("p");
       caption.textContent = submission.caption || "沒有補充內容。";
       article.appendChild(caption);
-
-      if (submission.reflection) {
-        const reflection = document.createElement("p");
-        reflection.textContent = `心得：${submission.reflection}`;
-        article.appendChild(reflection);
-      }
 
       if (submission.image?.downloadURL) {
         const img = document.createElement("img");
@@ -1291,12 +1236,29 @@
         if (!confirm("確定要刪除這筆 7-Day 任務嗎？")) return;
         try {
           setTaskStatus("warn", "正在刪除任務與圖片...");
+          const slotRef = getDailySlotRef(submission.uid, submission.taskDate);
+          const slot = await getDailySlot(submission.uid, submission.taskDate);
           await deleteTaskImage(submission.image);
           await deleteDoc(doc(db, "greenProposalSubmissions", submission.id));
+          await setDoc(slotRef, {
+            uid: submission.uid,
+            taskDate: submission.taskDate,
+            activeSubmissionId: "",
+            submitCount: Math.max(1, Number(slot?.submitCount || 1)),
+            deleteCount: Number(slot?.deleteCount || 0) + 1,
+            lastDeletedAt: new Date().toISOString()
+          }, { merge: true });
           if (editingSubmissionId === submission.id) {
             resetTaskForm();
           }
-          setTaskStatus("ok", "任務已刪除。");
+          const nextDeleteCount = Number(slot?.deleteCount || 0) + 1;
+          const submitCount = Math.max(1, Number(slot?.submitCount || 1));
+          setTaskStatus(
+            "ok",
+            submitCount < 2 && nextDeleteCount <= 1
+              ? "任務已刪除；當天分數與完成資格會一併失效。今天還可以補傳 1 次。"
+              : "任務已刪除；當天分數與完成資格會一併失效。今天不可再重新上傳。"
+          );
           await loadMySubmissions(auth.currentUser.uid);
         } catch (error) {
           console.error(error);
@@ -1383,6 +1345,9 @@
       taskForm.querySelectorAll("input, textarea, button").forEach((el) => {
         el.disabled = false;
       });
+      if (!taskDateInput.value) {
+        taskDateInput.value = new Date().toISOString().slice(0, 10);
+      }
       await loadMySubmissions(user.uid);
     });
 
@@ -1405,9 +1370,17 @@
         return;
       }
 
+      const taskDate = String(formData.get("taskDate") || "").trim();
+      const caption = String(formData.get("taskCaption") || "").trim();
       const dimensions = formData.getAll("dimensions");
-      if (!dimensions.length) {
-        setTaskStatus("error", "請至少選擇一個綠色維度。");
+
+      if (!taskDate) {
+        setTaskStatus("error", "請先選擇日期。");
+        return;
+      }
+
+      if (!caption) {
+        setTaskStatus("error", "請簡單寫下今天做了什麼。");
         return;
       }
 
@@ -1435,17 +1408,23 @@
           });
         }
 
+        const slot = await getDailySlot(user.uid, taskDate);
+        const submitState = evaluateDailySubmit({ slot, editingId: editingSubmissionId });
+        if (!submitState.ok) {
+          setTaskStatus("error", submitState.message);
+          return;
+        }
+
         const uploadedImage = await uploadTaskImage(user.uid, formData.get("taskImage"));
         const image = uploadedImage || editingSubmissionData?.image || null;
         const payload = {
           uid: user.uid,
           email: user.email || "",
           memberName: user.displayName || "",
-          title: String(formData.get("taskTitle") || "").trim(),
-          taskDate: String(formData.get("taskDate") || ""),
+          title: caption.slice(0, 40),
+          taskDate,
           dimensions,
-          caption: String(formData.get("taskCaption") || "").trim(),
-          reflection: String(formData.get("taskReflection") || "").trim(),
+          caption,
           image,
           createdAt: editingSubmissionData?.createdAt || new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -1456,10 +1435,32 @@
             await deleteTaskImage(editingSubmissionData.image);
           }
           await updateDoc(doc(db, "greenProposalSubmissions", editingSubmissionId), payload);
+          await setDoc(getDailySlotRef(user.uid, taskDate), {
+            uid: user.uid,
+            taskDate,
+            activeSubmissionId: editingSubmissionId,
+            submitCount: Math.max(1, Number(submitState.submitCount || slot?.submitCount || 1)),
+            deleteCount: Number(submitState.deleteCount || slot?.deleteCount || 0),
+            lastSubmittedAt: new Date().toISOString()
+          }, { merge: true });
           setTaskStatus("ok", "7-Day 任務已更新。");
         } else {
-          await addDoc(collection(db, "greenProposalSubmissions"), payload);
-          setTaskStatus("ok", "7-Day 任務已成功提交。");
+          const submissionRef = doc(collection(db, "greenProposalSubmissions"));
+          await setDoc(submissionRef, payload);
+          await setDoc(getDailySlotRef(user.uid, taskDate), {
+            uid: user.uid,
+            taskDate,
+            activeSubmissionId: submissionRef.id,
+            submitCount: Number(submitState.submitCount || 1),
+            deleteCount: Number(submitState.deleteCount || 0),
+            lastSubmittedAt: new Date().toISOString()
+          }, { merge: true });
+          setTaskStatus(
+            "ok",
+            Number(submitState.submitCount || 1) > 1
+              ? "7-Day 任務已成功補傳。今天不可再重新上傳。"
+              : "7-Day 任務已成功提交。"
+          );
         }
 
         resetTaskForm();

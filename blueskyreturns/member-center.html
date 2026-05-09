@@ -311,6 +311,36 @@
       gap: 10px;
     }
 
+    .leaderboard-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .leaderboard-rank {
+      min-width: 72px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .leaderboard-name {
+      flex: 1;
+      min-width: 0;
+      font-weight: 700;
+      color: var(--ink);
+      word-break: break-word;
+    }
+
     .badge {
       display: inline-flex;
       width: fit-content;
@@ -792,7 +822,8 @@
             <div class="summary-list">
               <p id="summaryRole">角色卡：-</p>
               <p id="summaryEcoMbti">Eco-MBTI：-</p>
-              <p id="summaryScore">總分：-</p>
+              <p id="summaryScore">步入行動分數：-</p>
+              <p id="summaryRank">集氣排名：-</p>
               <p id="summaryRegion">地區 / 分會：-</p>
               <p id="summaryUpdatedAt">更新時間：-</p>
             </div>
@@ -800,8 +831,17 @@
         </div>
         <div class="actions">
           <button id="copyInviteLinkBtn" class="pill" type="button">複製我的分享連結</button>
-          <span id="inviteLinkStatus" class="status">登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次步入行動，就會加一位影響人數。</span>
+          <span id="inviteLinkStatus" class="status">登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次步入行動，會額外獲得一次分享加成並影響你的排名。</span>
         </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2 id="leaderboardSectionTitle">集氣排行榜 / Top 10</h2>
+          <p id="leaderboardSectionBody">只顯示名次與名字，不顯示分數。</p>
+        </div>
+        <div id="leaderboardEmpty" class="muted">目前還沒有排行榜資料。</div>
+        <div id="leaderboardList" class="leaderboard-list" hidden></div>
       </section>
 
       <section class="panel">
@@ -1062,6 +1102,8 @@
           summaryBody: "這裡會顯示你目前的基本資訊、帳號身分與問卷結果。",
           basicCard: "基本資料",
           resultCard: "步入行動結果",
+          leaderboardTitle: "集氣排行榜 / Top 10",
+          leaderboardBody: "只顯示名次與名字，不顯示分數。",
           tasksTitle: "目前功能 / What You Have",
           tasksBody: "依照你的帳號身分，氣候行動者中心會整理目前可以直接進行的任務。",
           proposalTitle: "7-Day 任務紀錄 / Proposal Submissions",
@@ -1076,8 +1118,8 @@
           stepHint: "建立或更新問卷結果",
           ecoLabel: "完成 Eco-MBTI",
           ecoHint: "已產生並儲存人格結果",
-          proposalLabel: "7-Day Green Proposal 完成 7 天可獲得 1 枚代幣",
-          proposalHint: "完成 7 天即可解鎖 1 枚代幣",
+          proposalLabel: "7-Day Green Proposal 首次完成 7 天可獲得 1 枚代幣",
+          proposalHint: "每個帳號首次完成 7 天可獲得 1 枚代幣，數量有限。",
           claim: "領取 2026 氣候行動資格",
           resultTitle: "已領取內容 / Reward Details",
           resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的代幣。",
@@ -1115,10 +1157,14 @@
         },
         loginModal: { title: "會員登入 / Member Sign In", email: "Email", password: "Password", submit: "登入 / Sign In", forgot: "忘記密碼 / Reset Password", cancel: "取消 / Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", impact: "影響人數：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "總分：", region: "地區 / 分會：", updatedAt: "更新時間：" },
+        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", impact: "影響人數：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "步入行動分數：", rank: "集氣排名：", region: "地區 / 分會：", updatedAt: "更新時間：" },
+        leaderboard: {
+          empty: "目前還沒有排行榜資料。",
+          anonymous: "匿名氣候行動者"
+        },
         invite: {
           copy: "複製我的分享連結",
-          guest: "登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次步入行動，就會加一位影響人數。",
+          guest: "登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次步入行動，會額外獲得一次分享加成並影響你的排名。",
           copied: "已複製你的專屬分享連結。",
           copiedFallback: "無法自動複製，請手動複製：",
           failed: "建立分享連結失敗，請稍後再試。"
@@ -1166,6 +1212,8 @@
           summaryBody: "This section shows your current profile, account access, and questionnaire result.",
           basicCard: "Profile Basics",
           resultCard: "Take One Step Result",
+          leaderboardTitle: "Boost Leaderboard / Top 10",
+          leaderboardBody: "Only ranks and names are shown. Scores stay hidden.",
           tasksTitle: "Current Features",
           tasksBody: "The member center organizes the actions you can take based on your current account access.",
           proposalTitle: "7-Day Task Records",
@@ -1180,8 +1228,8 @@
           stepHint: "Create or update your questionnaire result",
           ecoLabel: "Complete Eco-MBTI",
           ecoHint: "Your personality result has been generated and saved",
-          proposalLabel: "Complete 7 days in 7-Day Green Proposal to earn 1 token",
-          proposalHint: "1 token unlocks after 7 completed days",
+          proposalLabel: "Complete your first 7 days in 7-Day Green Proposal to earn 1 token",
+          proposalHint: "Each account can earn 1 token on its first 7-day completion. Limited quantity.",
           claim: "Claim 2026 Climate Action Reward",
           resultTitle: "Reward Details",
           resultBody: "After you meet the requirements and claim the reward, your certificate code and current token status will appear here.",
@@ -1219,10 +1267,14 @@
         },
         loginModal: { title: "Member Sign In", email: "Email", password: "Password", submit: "Sign In", forgot: "Reset Password", cancel: "Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", impact: "People Reached: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Score: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
+        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", impact: "People Reached: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Take One Step Score: ", rank: "Boost Rank: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
+        leaderboard: {
+          empty: "No leaderboard data yet.",
+          anonymous: "Anonymous Climate Action Partner"
+        },
         invite: {
           copy: "Copy My Share Link",
-          guest: "Sign in to copy your personal share link. Each new account that completes its first Take One Step through your link adds one person reached.",
+          guest: "Sign in to copy your personal share link. Each new account that completes its first Take One Step through your link adds one share bonus and affects your rank.",
           copied: "Your personal share link has been copied.",
           copiedFallback: "Copy this link manually:",
           failed: "Failed to create the share link. Please try again later."
@@ -1320,8 +1372,11 @@
     const summaryRole = document.getElementById("summaryRole");
     const summaryEcoMbti = document.getElementById("summaryEcoMbti");
     const summaryScore = document.getElementById("summaryScore");
+    const summaryRank = document.getElementById("summaryRank");
     const summaryRegion = document.getElementById("summaryRegion");
     const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
+    const leaderboardList = document.getElementById("leaderboardList");
+    const leaderboardEmpty = document.getElementById("leaderboardEmpty");
     const copyInviteLinkBtn = document.getElementById("copyInviteLinkBtn");
     const inviteLinkStatus = document.getElementById("inviteLinkStatus");
     const statCompletedDays = document.getElementById("statCompletedDays");
@@ -1330,6 +1385,8 @@
     const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
     let currentMemberData = {};
     let currentUserSubmissions = [];
+    let currentUserCompletionDates = [];
+    let currentLeaderboardEntries = [];
     const MAX_CERTIFICATE_COUNT = 5000;
     const buildInviteLink = (userId) => {
       const url = new URL("./climate-action-form.html", window.location.href);
@@ -1341,6 +1398,190 @@
         query(collection(db, "memberReferrals"), where("referredBy", "==", userId))
       );
       return snap.size;
+    };
+    const getUniqueCompletedDayCount = (submissions = []) => (
+      new Set(submissions.map((item) => item.taskDate || "").filter(Boolean)).size
+    );
+    const normalizeCreditedDates = (dates = []) => Array.from(new Set(
+      dates
+        .map((value) => String(value || "").trim())
+        .filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value))
+    )).sort();
+    const hasSevenDayStreak = (dates = []) => {
+      const uniqueDates = normalizeCreditedDates(dates);
+      if (uniqueDates.length < 7) return false;
+
+      let streak = 1;
+      for (let i = 1; i < uniqueDates.length; i += 1) {
+        const prev = new Date(`${uniqueDates[i - 1]}T00:00:00Z`);
+        const current = new Date(`${uniqueDates[i]}T00:00:00Z`);
+        const diffDays = Math.round((current - prev) / 86400000);
+        if (diffDays === 1) {
+          streak += 1;
+          if (streak >= 7) return true;
+        } else {
+          streak = 1;
+        }
+      }
+      return false;
+    };
+    const calculateBoostScore = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+      let total = 0;
+      if (member?.ecoMbti?.type) total += 1;
+      if (completedDays > 0) {
+        total += 5;
+        total += Math.max(0, completedDays - 1);
+      }
+      if (hasWeeklyStreak) {
+        total += 5;
+      }
+      total += Math.max(0, Number(impactCount || 0));
+      return total;
+    };
+    const formatRankValue = (rank) => {
+      if (!Number.isFinite(rank) || rank <= 0) return "-";
+      return currentLang === "zh" ? `第 ${rank} 名` : `#${rank}`;
+    };
+    const loadBoostRank = async (userId) => {
+      const [memberSnap, submissionSnap, referralSnap] = await Promise.all([
+        getDocs(collection(db, "members")),
+        getDocs(collection(db, "greenProposalSubmissions")),
+        getDocs(collection(db, "memberReferrals"))
+      ]);
+
+      const members = memberSnap.docs.map((docSnap) => ({ uid: docSnap.id, ...docSnap.data() }));
+      const submissionDays = new Map();
+      submissionSnap.docs.forEach((docSnap) => {
+        const data = docSnap.data() || {};
+        const uid = String(data.uid || "").trim();
+        const taskDate = String(data.taskDate || "").trim();
+        if (!uid || !taskDate) return;
+        if (!submissionDays.has(uid)) submissionDays.set(uid, new Set());
+        submissionDays.get(uid).add(taskDate);
+      });
+
+      const referralCounts = new Map();
+      referralSnap.docs.forEach((docSnap) => {
+        const data = docSnap.data() || {};
+        const referredBy = String(data.referredBy || "").trim();
+        if (!referredBy) return;
+        referralCounts.set(referredBy, (referralCounts.get(referredBy) || 0) + 1);
+      });
+
+      const ranked = members
+        .map((member) => ({
+          uid: member.uid,
+          score: calculateBoostScore({
+            member,
+            completedDays: submissionDays.get(member.uid)?.size || 0,
+            hasWeeklyStreak: hasSevenDayStreak(Array.from(submissionDays.get(member.uid) || [])),
+            impactCount: referralCounts.get(member.uid) || 0
+          })
+        }))
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score || a.uid.localeCompare(b.uid));
+
+      let previousScore = null;
+      let currentRank = 0;
+      ranked.forEach((item, index) => {
+        if (item.score !== previousScore) {
+          currentRank = index + 1;
+          previousScore = item.score;
+        }
+        item.rank = currentRank;
+      });
+
+      const current = ranked.find((item) => item.uid === userId);
+      return current?.rank || null;
+    };
+    const getLeaderboardName = (member = {}) => String(
+      member?.name ||
+      member?.memberName ||
+      member?.organizationName ||
+      member?.profile?.name ||
+      member?.displayName ||
+      ""
+    ).trim() || t("leaderboard.anonymous");
+    const renderLeaderboard = (entries = []) => {
+      currentLeaderboardEntries = entries;
+      leaderboardList.innerHTML = "";
+      if (!entries.length) {
+        leaderboardList.hidden = true;
+        leaderboardEmpty.hidden = false;
+        leaderboardEmpty.textContent = t("leaderboard.empty");
+        return;
+      }
+
+      entries.forEach((entry) => {
+        const item = document.createElement("article");
+        item.className = "leaderboard-item";
+
+        const rank = document.createElement("div");
+        rank.className = "leaderboard-rank";
+        rank.textContent = formatRankValue(entry.rank);
+
+        const name = document.createElement("div");
+        name.className = "leaderboard-name";
+        name.textContent = entry.name;
+
+        item.append(rank, name);
+        leaderboardList.appendChild(item);
+      });
+
+      leaderboardEmpty.hidden = true;
+      leaderboardList.hidden = false;
+    };
+    const loadLeaderboard = async () => {
+      const [memberSnap, submissionSnap, referralSnap] = await Promise.all([
+        getDocs(collection(db, "members")),
+        getDocs(collection(db, "greenProposalSubmissions")),
+        getDocs(collection(db, "memberReferrals"))
+      ]);
+
+      const members = memberSnap.docs.map((docSnap) => ({ uid: docSnap.id, ...docSnap.data() }));
+      const submissionDays = new Map();
+      submissionSnap.docs.forEach((docSnap) => {
+        const data = docSnap.data() || {};
+        const uid = String(data.uid || "").trim();
+        const taskDate = String(data.taskDate || "").trim();
+        if (!uid || !taskDate) return;
+        if (!submissionDays.has(uid)) submissionDays.set(uid, new Set());
+        submissionDays.get(uid).add(taskDate);
+      });
+
+      const referralCounts = new Map();
+      referralSnap.docs.forEach((docSnap) => {
+        const data = docSnap.data() || {};
+        const referredBy = String(data.referredBy || "").trim();
+        if (!referredBy) return;
+        referralCounts.set(referredBy, (referralCounts.get(referredBy) || 0) + 1);
+      });
+
+      const ranked = members
+        .map((member) => ({
+          uid: member.uid,
+          name: getLeaderboardName(member),
+          score: calculateBoostScore({
+            member,
+            completedDays: submissionDays.get(member.uid)?.size || 0,
+            hasWeeklyStreak: hasSevenDayStreak(Array.from(submissionDays.get(member.uid) || [])),
+            impactCount: referralCounts.get(member.uid) || 0
+          })
+        }))
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score || a.uid.localeCompare(b.uid));
+
+      let previousScore = null;
+      let currentRank = 0;
+      ranked.forEach((item, index) => {
+        if (item.score !== previousScore) {
+          currentRank = index + 1;
+          previousScore = item.score;
+        }
+        item.rank = currentRank;
+      });
+
+      renderLeaderboard(ranked.slice(0, 10));
     };
 
     const slugify = (value) => String(value || "")
@@ -1589,8 +1830,8 @@
         };
       });
     };
-    const getRewardEligibility = (member, submissions) => {
-      const completedDays = new Set(submissions.map((item) => item.taskDate || "").filter(Boolean)).size;
+    const getRewardEligibility = (member, completionDates = []) => {
+      const completedDays = normalizeCreditedDates(completionDates).length;
       const earnedTokenCount = Math.min(1, Math.floor(completedDays / 7));
       const stepDone = Boolean(member?.resultRole || member?.updatedAt || member?.totalScore != null);
       const ecoDone = Boolean(member?.ecoMbti?.type);
@@ -1671,8 +1912,8 @@
       currentMemberData = { ...currentMemberData, reward2026: updatedReward };
       return updatedReward;
     };
-    const renderRewardStatus = (member, submissions) => {
-      currentRewardEligibility = getRewardEligibility(member, submissions);
+    const renderRewardStatus = (member, completionDates = []) => {
+      currentRewardEligibility = getRewardEligibility(member, completionDates);
       const rewardRecord = getRewardRecord(member);
       setRewardStepState(rewardStepStatus, currentRewardEligibility.stepDone);
       setRewardStepState(rewardEcoStatus, currentRewardEligibility.ecoDone);
@@ -1716,6 +1957,8 @@
       document.getElementById("summarySectionBody").textContent = t("sections.summaryBody");
       document.getElementById("basicCardTitle").textContent = t("sections.basicCard");
       document.getElementById("stepResultCardTitle").textContent = t("sections.resultCard");
+      document.getElementById("leaderboardSectionTitle").textContent = t("sections.leaderboardTitle");
+      document.getElementById("leaderboardSectionBody").textContent = t("sections.leaderboardBody");
       copyInviteLinkBtn.textContent = t("invite.copy");
       document.getElementById("tasksSectionTitle").textContent = t("sections.tasksTitle");
       document.getElementById("tasksSectionBody").textContent = t("sections.tasksBody");
@@ -1770,7 +2013,8 @@
       closeLoginModalBtn.textContent = t("loginModal.cancel");
       document.getElementById("pageFooter").textContent = t("footer");
       langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
-      renderRewardStatus(currentMemberData, currentUserSubmissions);
+      renderRewardStatus(currentMemberData, currentUserCompletionDates);
+      renderLeaderboard(currentLeaderboardEntries);
     };
 
     const openLoginModal = () => {
@@ -1793,6 +2037,7 @@
       summaryRole.textContent = formatSummaryLine("role", "-");
       summaryEcoMbti.textContent = formatSummaryLine("ecoMbti", "-");
       summaryScore.textContent = formatSummaryLine("score", "-");
+      summaryRank.textContent = formatSummaryLine("rank", "-");
       summaryRegion.textContent = formatSummaryLine("region", "-");
       summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", "-");
       submissionList.innerHTML = "";
@@ -1806,6 +2051,7 @@
       reviewerSubmissionEmpty.hidden = false;
       currentMemberData = {};
       currentUserSubmissions = [];
+      currentUserCompletionDates = [];
       currentRewardEligibility = { stepDone: false, ecoDone: false, proposalDone: false, completedDays: 0, earnedTokenCount: 0, eligible: false };
       statCompletedDays.textContent = "0";
       statTotalTasks.textContent = "0";
@@ -1991,10 +2237,10 @@
         .filter((item) => item.uid === uid)
         .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
 
+      currentUserCompletionDates = normalizeCreditedDates(submissions.map((item) => item.taskDate));
       statTotalTasks.textContent = String(submissions.length);
-      const uniqueDays = new Set(submissions.map((item) => item.taskDate || "").filter(Boolean));
-      statCompletedDays.textContent = String(uniqueDays.size);
-      statLatestDate.textContent = submissions[0]?.taskDate || "-";
+      statCompletedDays.textContent = String(currentUserCompletionDates.length);
+      statLatestDate.textContent = currentUserCompletionDates[currentUserCompletionDates.length - 1] || "-";
 
       if (!submissions.length) {
         submissionEmpty.textContent = t("states.noSubmissions");
@@ -2364,7 +2610,7 @@
       }
       const existing = getRewardRecord(currentMemberData);
       if (existing) {
-        renderRewardStatus(currentMemberData, currentUserSubmissions);
+        renderRewardStatus(currentMemberData, currentUserCompletionDates);
         return;
       }
       if (!currentRewardEligibility.eligible) {
@@ -2393,7 +2639,7 @@
         };
         await setDoc(doc(db, "members", user.uid), { reward2026: rewardRecord }, { merge: true });
         currentMemberData = { ...currentMemberData, reward2026: rewardRecord };
-        renderRewardStatus(currentMemberData, currentUserSubmissions);
+        renderRewardStatus(currentMemberData, currentUserCompletionDates);
       } catch (error) {
         console.error(error);
         rewardStatus.textContent = t("states.rewardClaimFailed");
@@ -2409,6 +2655,12 @@
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         renderGuestState();
+        try {
+          await loadLeaderboard();
+        } catch (error) {
+          console.error("Failed to load leaderboard", error);
+          renderLeaderboard([]);
+        }
         return;
       }
 
@@ -2428,6 +2680,12 @@
         } catch (error) {
           console.error("Failed to load impact count", error);
         }
+        let boostRank = null;
+        try {
+          boostRank = await loadBoostRank(user.uid);
+        } catch (error) {
+          console.error("Failed to load boost rank", error);
+        }
 
         summaryName.textContent = formatSummaryLine("name", getMemberDisplayName(member, user) || "-");
         summaryEmail.textContent = formatSummaryLine("email", user.email || "-");
@@ -2442,6 +2700,7 @@
             : "-"
         );
         summaryScore.textContent = formatSummaryLine("score", getMemberScore(member));
+        summaryRank.textContent = formatSummaryLine("rank", formatRankValue(boostRank));
         summaryRegion.textContent = formatSummaryLine("region", getMemberRegionLabel(member));
         summaryUpdatedAt.textContent = formatSummaryLine("updatedAt", formatDate(member.updatedAt));
 
@@ -2465,7 +2724,7 @@
             ? "7-Day 任務紀錄讀取失敗，但會員資料已成功載入。"
             : "7-Day task records could not be loaded, but your member profile loaded successfully.";
         }
-        const rewardEligibility = getRewardEligibility(member, userSubmissions);
+        const rewardEligibility = getRewardEligibility(member, currentUserCompletionDates);
         let syncedReward = getRewardRecord(member);
         try {
           syncedReward = await syncRewardTokensIfNeeded(user, member, rewardEligibility);
@@ -2474,7 +2733,7 @@
         }
         const syncedMember = syncedReward === getRewardRecord(member) ? member : { ...member, reward2026: syncedReward };
         currentMemberData = syncedMember;
-        renderRewardStatus(syncedMember, userSubmissions);
+        renderRewardStatus(syncedMember, currentUserCompletionDates);
         if (permissionLevel === 3) {
           reviewerSubmissionPanel.hidden = false;
           try {
@@ -2492,13 +2751,20 @@
           reviewerSubmissionPanel.hidden = true;
         }
         inviteLinkStatus.textContent = currentLang === "zh"
-          ? "每有一位新帳號透過你的分享連結完成第一次步入行動，就會自動加一位影響人數。"
-          : "Each new account that completes its first Take One Step through your shared link adds one person reached automatically.";
+          ? "每有一位新帳號透過你的分享連結完成第一次步入行動，就會自動增加一次分享加成，並影響你的集氣排名。"
+          : "Each new account that completes its first Take One Step through your shared link adds one share bonus and affects your boost rank.";
         inviteLinkStatus.className = "status";
+        await loadLeaderboard();
       } catch (error) {
         console.error("Failed to load member center data", error);
         abilitySummaryEl.textContent = t("states.readError");
         resetSummary();
+        try {
+          await loadLeaderboard();
+        } catch (leaderboardError) {
+          console.error("Failed to load leaderboard", leaderboardError);
+          renderLeaderboard([]);
+        }
       }
     });
 

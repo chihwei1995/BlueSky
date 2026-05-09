@@ -935,40 +935,6 @@
       font-size: 1.2rem;
     }
 
-    .type-breakdown {
-      display: grid;
-      gap: 12px;
-    }
-
-    .type-row {
-      display: grid;
-      gap: 8px;
-    }
-
-    .type-row-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-weight: 800;
-    }
-
-    .type-bar {
-      position: relative;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(21, 49, 38, 0.08);
-      overflow: hidden;
-    }
-
-    .type-bar-fill {
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 50%;
-      border-radius: inherit;
-      background: linear-gradient(135deg, var(--forest), var(--sky));
-    }
-
     .insight-grid {
       grid-template-columns: 1fr;
     }
@@ -980,6 +946,27 @@
       border-radius: 20px;
       border: 1px solid var(--line);
       background: rgba(250, 252, 250, 0.9);
+    }
+
+    .result-rule-card {
+      display: grid;
+      gap: 6px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(27, 122, 85, 0.08), rgba(112, 193, 146, 0.14));
+      border: 1px solid rgba(27, 122, 85, 0.12);
+      color: var(--forest-deep);
+    }
+
+    .result-rule-card strong {
+      font-size: 0.95rem;
+    }
+
+    .result-rule-card p {
+      margin: 0;
+      color: #45665a;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     .footer {
@@ -1243,10 +1230,6 @@
                 </div>
               </article>
               <div class="result-side-stack">
-                <article class="result-card">
-                  <h3 data-i18n="result.breakdownTitle">維度分佈 / Dimension Breakdown</h3>
-                  <div id="breakdownList" class="type-breakdown"></div>
-                </article>
                 <div class="insight-grid">
                   <article class="insight-card">
                     <span class="small-badge" data-i18n="result.traitTitle">核心特質</span>
@@ -1265,6 +1248,10 @@
               <div class="section-head">
                 <h3 data-i18n="result.shareTitle">分享你的結果 / Share Your Result</h3>
                 <p data-i18n="result.shareBody">下載或分享你的結果卡。</p>
+              </div>
+              <div class="result-rule-card">
+                <strong data-i18n="result.ruleTitle">集氣規則 / Participation Boost</strong>
+                <p data-i18n="result.ruleBody">完成 Eco-MBTI 可為植樹行動集氣 +1。再完成今天的一個行動，可升級成正式行動者並再獲得 +3。</p>
               </div>
               <div class="quiz-actions">
                 <button id="copyResultBtn" type="button" data-i18n="result.copy">複製結果文案</button>
@@ -1745,13 +1732,14 @@
           body: "這是你最自然的氣候行動風格。",
           statStrength: "強項",
           statChallenge: "挑戰",
-          breakdownTitle: "維度分佈 / Dimension Breakdown",
           traitTitle: "核心特質 / Core Trait",
           traitHeadline: "人格解讀",
           actionTitle: "適合的綠色行動建議 / Suggested Green Actions",
           actionHeadline: "行動方向",
           shareTitle: "分享你的結果 / Share Your Result",
           shareBody: "下載或分享你的結果卡。",
+          ruleTitle: "集氣規則 / Participation Boost",
+          ruleBody: "完成 Eco-MBTI 可為植樹行動集氣 +1。第一次完成今天的一個行動可獲得 +5，之後每日完成 1 個行動可再 +1；若連續 7 日完成，額外再 +5。",
           copy: "複製結果文案",
           shareImage: "分享附圖結果",
           download: "下載 PNG 角色卡",
@@ -1841,13 +1829,14 @@
           body: "This is your most natural climate action style.",
           statStrength: "Strengths",
           statChallenge: "Challenges",
-          breakdownTitle: "Dimension Breakdown",
           traitTitle: "Core Trait",
           traitHeadline: "Personality Snapshot",
           actionTitle: "Suggested Green Actions",
           actionHeadline: "Action Direction",
           shareTitle: "Share Your Result",
           shareBody: "Download or share your result card.",
+          ruleTitle: "Participation Boost",
+          ruleBody: "Completing Eco-MBTI adds +1 to the tree planting effort. The first completed daily action gives +5, each following day adds +1, and a 7-day streak gives an extra +5.",
           copy: "Copy Result Text",
           shareImage: "Share with Image",
           download: "Download PNG Card",
@@ -1898,7 +1887,6 @@
     const resultChallengeBody = document.getElementById("resultChallengeBody");
     const resultTraitBody = document.getElementById("resultTraitBody");
     const resultActionBody = document.getElementById("resultActionBody");
-    const breakdownList = document.getElementById("breakdownList");
     const copyResultBtn = document.getElementById("copyResultBtn");
     const shareResultBtn = document.getElementById("shareResultBtn");
     const downloadCardBtn = document.getElementById("downloadCardBtn");
@@ -2046,42 +2034,6 @@
 
     const getProfile = (type) => TYPE_META[type][currentLang];
 
-    const renderBreakdown = (counts) => {
-      breakdownList.innerHTML = "";
-      const rows = [
-        { key: "energy", left: "E", right: "I" },
-        { key: "info", left: "S", right: "N" },
-        { key: "decision", left: "T", right: "F" },
-        { key: "lifestyle", left: "J", right: "P" }
-      ];
-
-      rows.forEach((row) => {
-        const total = counts[row.left] + counts[row.right];
-        const percentLeft = total ? Math.round((counts[row.left] / total) * 100) : 50;
-        const dominant = counts[row.left] === counts[row.right]
-          ? t("result.tie")
-          : (counts[row.left] > counts[row.right] ? row.left : row.right);
-
-        const wrap = document.createElement("div");
-        wrap.className = "type-row";
-
-        const head = document.createElement("div");
-        head.className = "type-row-head";
-        head.innerHTML = `<span>${t(`dimensions.${row.key}`)} • ${row.left} / ${row.right}</span><span>${row.left}: ${counts[row.left]} · ${row.right}: ${counts[row.right]} · ${dominant}</span>`;
-
-        const bar = document.createElement("div");
-        bar.className = "type-bar";
-
-        const fill = document.createElement("div");
-        fill.className = "type-bar-fill";
-        fill.style.width = `${percentLeft}%`;
-
-        bar.appendChild(fill);
-        wrap.append(head, bar);
-        breakdownList.appendChild(wrap);
-      });
-    };
-
     const buildShareText = (type, profile) => {
       if (currentLang === "zh") {
         return `我的 Eco-MBTI 是 ${type}｜${profile.title}\n核心特質：${profile.core}\n強項：${profile.strengths}\n挑戰：${profile.challenge}\n適合的綠色行動建議：${profile.actions}\n來測看看你的永續行動風格：https://www.blue-sky-returns.online/blueskyreturns/eco-mbti.html`;
@@ -2099,7 +2051,6 @@
     const renderResult = ({ counts, type }) => {
       const profile = getProfile(type);
       activeType = type;
-      renderBreakdown(counts);
 
       const theme = applyThemeVars(resultPanel.querySelector(".result-card.primary"), type);
       applyThemeVars(resultPanel.querySelector(".portrait-frame"), type);
