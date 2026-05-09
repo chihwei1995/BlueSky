@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="/Enter.PNG" />
   <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
   <link rel="apple-touch-icon" href="/Enter.PNG" />
-  <meta name="description" content="Discover your environmental action personality with the 20-question Eco-MBTI test and generate a role card connected to sustainable action styles." />
+  <meta name="description" content="Discover your environmental action personality with the 8-question Eco-MBTI test and generate a role card connected to sustainable action styles." />
   <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/eco-mbti.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Blue Sky Returns" />
@@ -193,16 +193,13 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 270px minmax(0, 1fr);
+      grid-template-columns: 1fr;
       gap: 22px;
       align-items: start;
     }
 
     .side-nav {
-      position: sticky;
-      top: 86px;
-      display: grid;
-      gap: 14px;
+      display: none;
     }
 
     .side-card,
@@ -308,6 +305,52 @@
       padding: 24px;
       display: grid;
       gap: 18px;
+    }
+
+    .fold-panel {
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .fold-panel summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      color: var(--forest-deep);
+      padding: 20px 24px;
+    }
+
+    .fold-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .fold-panel summary::after {
+      content: "+";
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(27, 122, 85, 0.08);
+      color: var(--forest-deep);
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    .fold-panel[open] summary::after {
+      content: "-";
+    }
+
+    .fold-content {
+      display: grid;
+      gap: 18px;
+      padding: 0 24px 24px;
     }
 
     .hero {
@@ -453,6 +496,24 @@
       font-size: 1rem;
     }
 
+    .hero-quick-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .quick-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
     .section-head {
       display: grid;
       gap: 6px;
@@ -463,7 +524,6 @@
     }
 
     .section-head p,
-    .dimension-card p,
     .framework-card p,
     .result-copy p,
     .insight-card p,
@@ -476,8 +536,7 @@
 
     .framework-grid,
     .insight-grid,
-    .result-grid,
-    .dimension-grid {
+    .result-grid {
       display: grid;
       gap: 16px;
     }
@@ -487,7 +546,6 @@
     }
 
     .framework-card,
-    .dimension-card,
     .insight-card,
     .question-card,
     .result-card,
@@ -502,7 +560,6 @@
     }
 
     .framework-card h3,
-    .dimension-card h3,
     .insight-card h3,
     .result-card h3,
     .note-card h3 {
@@ -511,7 +568,6 @@
     }
 
     .framework-badge,
-    .dimension-tag,
     .result-type,
     .small-badge {
       display: inline-flex;
@@ -528,15 +584,6 @@
     .framework-badge.info { background: rgba(199, 216, 62, 0.18); color: #687500; }
     .framework-badge.decision { background: rgba(215, 167, 45, 0.16); color: #845c00; }
     .framework-badge.lifestyle { background: rgba(27, 122, 85, 0.14); color: var(--forest-deep); }
-
-    .dimension-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .dimension-tag {
-      background: rgba(27, 122, 85, 0.1);
-      color: var(--forest-deep);
-    }
 
     .dimension-letters {
       display: flex;
@@ -855,84 +902,6 @@
       max-width: none;
     }
 
-    .role-gallery {
-      display: grid;
-      gap: 16px;
-    }
-
-    .role-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .role-card {
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: linear-gradient(180deg, var(--card-top, rgba(255, 255, 255, 0.98)), var(--card-bottom, rgba(245, 250, 247, 0.96)));
-      overflow: hidden;
-      display: grid;
-      gap: 0;
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-
-    .role-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(27, 122, 85, 0.35);
-      box-shadow: 0 16px 28px rgba(21, 49, 38, 0.12);
-    }
-
-    .role-card.active {
-      border-color: var(--card-active, rgba(27, 122, 85, 0.48));
-      box-shadow: 0 18px 30px color-mix(in srgb, var(--card-shadow, rgba(27, 122, 85, 0.16)) 80%, transparent);
-      background: linear-gradient(180deg, var(--card-active-top, rgba(235, 249, 241, 0.95)), rgba(255, 255, 255, 0.98));
-    }
-
-    .role-card img {
-      width: 100%;
-      aspect-ratio: 2 / 3;
-      object-fit: cover;
-      display: block;
-      background: rgba(21, 49, 38, 0.06);
-      border-radius: 18px;
-      border: 1px solid rgba(20, 63, 48, 0.08);
-      box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.14),
-        0 12px 18px rgba(21, 49, 38, 0.12);
-    }
-
-    .role-card-body {
-      padding: 12px;
-      display: grid;
-      gap: 6px;
-      min-width: 0;
-    }
-
-    .role-code {
-      display: inline-flex;
-      width: fit-content;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: var(--code-bg, rgba(27, 122, 85, 0.12));
-      color: var(--code-fg, var(--forest-deep));
-      font-size: 0.8rem;
-      font-weight: 900;
-    }
-
-    .role-title-zh {
-      font-size: 0.96rem;
-      font-weight: 900;
-      color: var(--ink);
-      line-height: 1.35;
-    }
-
-    .role-title-en {
-      font-size: 0.84rem;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-
     .result-type {
       background: rgba(255, 255, 255, 0.14);
       color: #fff;
@@ -1021,22 +990,6 @@
     }
 
     @media (max-width: 1080px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
-      .side-nav {
-        display: none;
-      }
-
-      .mobile-side-nav {
-        display: block;
-      }
-
-      .role-gallery-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
       .result-hero {
         grid-template-columns: 1fr;
       }
@@ -1047,9 +1000,7 @@
       .result-grid,
       .result-hero,
       .framework-grid,
-      .dimension-grid,
-      .insight-grid,
-      .role-gallery-grid {
+      .insight-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -1060,7 +1011,6 @@
 
     @media (max-width: 760px) {
       .framework-grid,
-      .dimension-grid,
       .insight-grid,
       .result-stat-grid {
         grid-template-columns: 1fr;
@@ -1086,6 +1036,14 @@
       .hero {
         padding: 20px 18px;
         border-radius: 24px;
+      }
+
+      .fold-panel summary {
+        padding: 18px;
+      }
+
+      .fold-content {
+        padding: 0 18px 18px;
       }
 
       .hero-actions,
@@ -1122,13 +1080,8 @@
       }
 
       .result-name-en,
-      .role-title-en,
       .side-link small {
         font-size: 0.9rem;
-      }
-
-      .role-gallery-grid {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1144,10 +1097,8 @@
         </div>
       </div>
       <div class="nav-actions">
-        <a class="pill" href="../index.html" data-i18n="nav.main">Main Globe</a>
         <a class="pill" href="./index.html" data-i18n="nav.about">About</a>
         <a class="pill" href="./member-center.html" data-i18n="nav.member">Member Center</a>
-        <a class="pill active" href="./eco-mbti.html" data-i18n="nav.eco">Eco-MBTI</a>
         <div class="lang-toggle" role="group" aria-label="Language switcher">
           <button class="lang-btn active" type="button" data-lang="zh">中文</button>
           <button class="lang-btn" type="button" data-lang="en">EN</button>
@@ -1158,43 +1109,21 @@
 
   <main>
     <div class="shell">
-      <div class="mobile-side-nav">
-        <details class="mobile-nav-card side-card">
-          <summary data-i18n="mobileNav.title">Quick Navigation</summary>
-          <div class="mobile-nav-links">
-            <a class="side-link" href="#framework"><span><span data-i18n="mobileNav.framework">Framework</span><small data-i18n="mobileNav.frameworkSub">4 sustainability dimensions</small></span></a>
-            <a class="side-link" href="#quiz"><span><span data-i18n="mobileNav.quiz">20 Questions</span><small data-i18n="mobileNav.quizSub">Answer and score</small></span></a>
-            <a class="side-link" href="#resultPanel"><span><span data-i18n="mobileNav.result">Your Result</span><small data-i18n="mobileNav.resultSub">4-letter Eco-MBTI</small></span></a>
-          </div>
-        </details>
-      </div>
-
       <div class="layout">
-        <aside class="side-nav">
-          <div class="side-card">
-            <h2 data-i18n="side.title">Eco-MBTI</h2>
-            <p data-i18n="side.body">A playful framework that turns environmental action styles into a four-letter sustainability personality profile.</p>
-            <div class="side-links">
-              <a class="side-link" href="#framework"><span><span data-i18n="side.linkFramework">Framework</span><small data-i18n="side.linkFrameworkSub">4 sustainability dimensions</small></span></a>
-              <a class="side-link" href="#quiz"><span><span data-i18n="side.linkQuiz">20 Questions</span><small data-i18n="side.linkQuizSub">Answer and calculate</small></span></a>
-              <a class="side-link" href="#resultPanel"><span><span data-i18n="side.linkResult">Result Card</span><small data-i18n="side.linkResultSub">Your Eco-MBTI output</small></span></a>
-            </div>
-          </div>
-          <div class="side-card">
-            <h3 data-i18n="side.tipTitle">Quick Tip</h3>
-            <p data-i18n="side.tipBody">This page is not judging who is more green. It helps people see which kind of climate action style feels most natural to them.</p>
-          </div>
-        </aside>
-
         <div class="stack">
           <section class="hero panel">
             <div class="hero-copy">
               <div class="eyebrow" data-i18n="hero.eyebrow">Interactive Sustainability Personality</div>
               <h1 data-i18n="hero.title">環保 MBTI / Eco-MBTI</h1>
-              <p data-i18n="hero.body">把 MBTI 的底層邏輯重新轉譯成永續行動風格。這不是傳統性格測驗，而是一個幫助大家理解自己如何參與環境保護、又適合用什麼方式擴大影響力的互動頁面。</p>
+              <p data-i18n="hero.body">用 8 題快速找到你的 Climate Type。</p>
+              <div class="hero-quick-actions">
+                <span class="quick-chip" data-i18n="hero.chip1">8 題快測</span>
+                <span class="quick-chip" data-i18n="hero.chip2">不用登入</span>
+                <span class="quick-chip" data-i18n="hero.chip3">立即出結果</span>
+              </div>
               <div class="hero-actions">
-                <a class="button primary" href="#quiz" data-i18n="hero.primary">開始 20 題測驗</a>
-                <a class="button" href="#framework" data-i18n="hero.secondary">先看四大維度</a>
+                <a class="button primary" href="#quiz" data-i18n="hero.primary">開始 8 題測驗</a>
+                <a class="button" href="#guide" data-i18n="hero.secondary">看簡短說明</a>
               </div>
             </div>
             <div class="hero-art">
@@ -1206,89 +1135,19 @@
                 <div class="trait-node lifestyle" data-i18n-html="hero.nodeLifestyle">執行<br>J / P</div>
               </div>
               <div class="hero-note">
-                <strong data-i18n="hero.noteTitle">20 questions, 4 letters, 1 climate action style.</strong>
-                <span data-i18n="hero.noteBody">每一題沒有標準答案，只有更貼近你自然習慣的環保選擇。測驗完成後，你會得到專屬的 Eco-MBTI 類型、行動優勢與下一步建議。</span>
+                <strong data-i18n="hero.noteTitle">8 questions, 4 letters, 1 climate action style.</strong>
+                <span data-i18n="hero.noteBody">選最像你的答案，完成後立即看到結果。</span>
               </div>
-            </div>
-          </section>
-
-          <section id="framework" class="panel">
-            <div class="section-head">
-              <h2 data-i18n="framework.title">四大核心維度 / The Four Core Dimensions</h2>
-              <p data-i18n="framework.body">我們把 MBTI 的四個底層維度重新定義成「個人參與永續行動的四項核心指標」，讓它更貼近環境保護、社群倡議與低碳生活場景。</p>
-            </div>
-            <div class="framework-grid">
-              <article class="framework-card">
-                <span class="framework-badge energy" data-i18n="framework.energy.badge">能量來源 / Energy</span>
-                <h3 data-i18n="framework.energy.title">E 社群倡議 vs. I 個人實踐</h3>
-                <p data-i18n="framework.energy.body">你更習慣在群體中號召、連結與推廣，還是從自己的生活細節開始落實低碳選擇，並用穩定實踐來影響他人？</p>
-              </article>
-              <article class="framework-card">
-                <span class="framework-badge info" data-i18n="framework.info.badge">資訊處理 / Information</span>
-                <h3 data-i18n="framework.info.title">S 務實行動 vs. N 系統創新</h3>
-                <p data-i18n="framework.info.body">你更重視看得見、立刻可做的環保任務，還是更傾向思考底層結構、未來系統與跨領域創新解方？</p>
-              </article>
-              <article class="framework-card">
-                <span class="framework-badge decision" data-i18n="framework.decision.badge">決策依據 / Decision</span>
-                <h3 data-i18n="framework.decision.title">T 數據驅動 vs. F 情感共鳴</h3>
-                <p data-i18n="framework.decision.body">你做環保決策時，是更依賴科學數據、效率與結構，還是更容易被生態關懷、人的故事與代際責任所推動？</p>
-              </article>
-              <article class="framework-card">
-                <span class="framework-badge lifestyle" data-i18n="framework.lifestyle.badge">執行方式 / Lifestyle</span>
-                <h3 data-i18n="framework.lifestyle.title">J 嚴謹規劃 vs. P 彈性適應</h3>
-                <p data-i18n="framework.lifestyle.body">你的永續行動是偏向目標導向、紀律執行，還是更喜歡在現場隨機應變，以彈性與創意維持環保習慣？</p>
-              </article>
-            </div>
-          </section>
-
-          <section class="panel">
-            <div class="section-head">
-              <h2 data-i18n="letters.title">八個字母代表什麼 / What Each Letter Signals</h2>
-              <p data-i18n="letters.body">每一個字母不是能力高低，而是你在永續參與中的自然傾向。結果會從四組對應字母中選出最貼近你的那一邊。</p>
-            </div>
-            <div class="dimension-grid">
-              <article class="dimension-card">
-                <span class="dimension-tag">E / I</span>
-                <h3 data-i18n="letters.energy.title">能量來源</h3>
-                <div class="dimension-letters">
-                  <span class="letter-chip" data-i18n="letters.energy.e">E 社群倡議</span>
-                  <span class="letter-chip" data-i18n="letters.energy.i">I 個人實踐</span>
-                </div>
-              </article>
-              <article class="dimension-card">
-                <span class="dimension-tag">S / N</span>
-                <h3 data-i18n="letters.info.title">資訊處理</h3>
-                <div class="dimension-letters">
-                  <span class="letter-chip" data-i18n="letters.info.s">S 務實行動</span>
-                  <span class="letter-chip" data-i18n="letters.info.n">N 系統創新</span>
-                </div>
-              </article>
-              <article class="dimension-card">
-                <span class="dimension-tag">T / F</span>
-                <h3 data-i18n="letters.decision.title">決策依據</h3>
-                <div class="dimension-letters">
-                  <span class="letter-chip" data-i18n="letters.decision.t">T 數據驅動</span>
-                  <span class="letter-chip" data-i18n="letters.decision.f">F 情感共鳴</span>
-                </div>
-              </article>
-              <article class="dimension-card">
-                <span class="dimension-tag">J / P</span>
-                <h3 data-i18n="letters.lifestyle.title">執行方式</h3>
-                <div class="dimension-letters">
-                  <span class="letter-chip" data-i18n="letters.lifestyle.j">J 嚴謹規劃</span>
-                  <span class="letter-chip" data-i18n="letters.lifestyle.p">P 彈性適應</span>
-                </div>
-              </article>
             </div>
           </section>
 
           <section id="quiz" class="panel quiz-panel">
             <div class="section-head">
-              <h2 data-i18n="quiz.title">20 題環保 MBTI 測驗 / 20-Question Eco-MBTI Quiz</h2>
-              <p data-i18n="quiz.body">20 題平均分配到四個維度，每個維度 5 題。請依照「你平常更自然的反應」選擇，而不是你覺得最理想的答案。</p>
+              <h2 data-i18n="quiz.title">8 題環保 MBTI 測驗 / 8-Question Eco-MBTI Quiz</h2>
+              <p data-i18n="quiz.body">依直覺作答即可。</p>
             </div>
             <div class="progress-head">
-              <div class="small-badge" id="progressLabel" data-i18n="quiz.progress">已完成 0 / 20 題</div>
+              <div class="small-badge" id="progressLabel" data-i18n="quiz.progress">已完成 0 / 8 題</div>
               <div class="small-badge" data-i18n="quiz.tip">所有題目都選完後，就會解鎖專屬結果卡。</div>
             </div>
             <div class="progress-bar" aria-hidden="true">
@@ -1304,10 +1163,58 @@
             </form>
           </section>
 
+          <details id="guide" class="panel fold-panel">
+            <summary data-i18n="guide.summary">先看簡短說明</summary>
+            <div class="fold-content">
+              <section id="framework" class="section-head">
+                <h2 data-i18n="framework.title">四大核心維度 / The Four Core Dimensions</h2>
+                <p data-i18n="framework.body">四個維度，快速看懂你的行動傾向。</p>
+              </section>
+              <div class="framework-grid">
+                <article class="framework-card">
+                  <span class="framework-badge energy" data-i18n="framework.energy.badge">能量來源 / Energy</span>
+                  <h3 data-i18n="framework.energy.title">E 社群倡議 vs. I 個人實踐</h3>
+                  <p data-i18n="framework.energy.body">你更習慣在群體中號召、連結與推廣，還是從自己的生活細節開始落實低碳選擇，並用穩定實踐來影響他人？</p>
+                  <div class="dimension-letters">
+                    <span class="letter-chip" data-i18n="letters.energy.e">E 社群倡議</span>
+                    <span class="letter-chip" data-i18n="letters.energy.i">I 個人實踐</span>
+                  </div>
+                </article>
+                <article class="framework-card">
+                  <span class="framework-badge info" data-i18n="framework.info.badge">資訊處理 / Information</span>
+                  <h3 data-i18n="framework.info.title">S 務實行動 vs. N 系統創新</h3>
+                  <p data-i18n="framework.info.body">你更重視看得見、立刻可做的環保任務，還是更傾向思考底層結構、未來系統與跨領域創新解方？</p>
+                  <div class="dimension-letters">
+                    <span class="letter-chip" data-i18n="letters.info.s">S 務實行動</span>
+                    <span class="letter-chip" data-i18n="letters.info.n">N 系統創新</span>
+                  </div>
+                </article>
+                <article class="framework-card">
+                  <span class="framework-badge decision" data-i18n="framework.decision.badge">決策依據 / Decision</span>
+                  <h3 data-i18n="framework.decision.title">T 數據驅動 vs. F 情感共鳴</h3>
+                  <p data-i18n="framework.decision.body">你做環保決策時，是更依賴科學數據、效率與結構，還是更容易被生態關懷、人的故事與代際責任所推動？</p>
+                  <div class="dimension-letters">
+                    <span class="letter-chip" data-i18n="letters.decision.t">T 數據驅動</span>
+                    <span class="letter-chip" data-i18n="letters.decision.f">F 情感共鳴</span>
+                  </div>
+                </article>
+                <article class="framework-card">
+                  <span class="framework-badge lifestyle" data-i18n="framework.lifestyle.badge">執行方式 / Lifestyle</span>
+                  <h3 data-i18n="framework.lifestyle.title">J 嚴謹規劃 vs. P 彈性適應</h3>
+                  <p data-i18n="framework.lifestyle.body">你的永續行動是偏向目標導向、紀律執行，還是更喜歡在現場隨機應變，以彈性與創意維持環保習慣？</p>
+                  <div class="dimension-letters">
+                    <span class="letter-chip" data-i18n="letters.lifestyle.j">J 嚴謹規劃</span>
+                    <span class="letter-chip" data-i18n="letters.lifestyle.p">P 彈性適應</span>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </details>
+
           <section id="resultPanel" class="panel" hidden>
             <div class="section-head">
               <h2 data-i18n="result.title">你的結果 / Your Result</h2>
-              <p data-i18n="result.body">你的 4 碼 Eco-MBTI 不代表唯一正確的環保方式，而是指出你最自然、最容易持續放大的永續參與風格。</p>
+              <p data-i18n="result.body">這是你最自然的氣候行動風格。</p>
             </div>
             <div class="result-grid">
               <article class="result-card primary">
@@ -1354,24 +1261,17 @@
                 </div>
               </div>
             </div>
-            <div class="role-gallery">
-              <div class="section-head">
-                <h3 data-i18n="result.galleryTitle">16 型角色總覽 / Eco-MBTI Role Gallery</h3>
-                <p data-i18n="result.galleryBody">每張角色卡都包含 4 碼類型、中文稱號與英文稱號。你也可以點選其他卡片查看完整個人角色版面。</p>
-              </div>
-              <div id="roleGalleryGrid" class="role-gallery-grid"></div>
-            </div>
             <div class="share-box">
               <div class="section-head">
                 <h3 data-i18n="result.shareTitle">分享你的結果 / Share Your Result</h3>
-                <p data-i18n="result.shareBody">你可以把結果文字複製出去，拿來做社群貼文、活動互動或引導更多人來測。</p>
+                <p data-i18n="result.shareBody">下載或分享你的結果卡。</p>
               </div>
               <div class="quiz-actions">
                 <button id="copyResultBtn" type="button" data-i18n="result.copy">複製結果文案</button>
                 <button id="shareResultBtn" type="button" data-i18n="result.shareImage">分享附圖結果</button>
                 <button id="downloadCardBtn" type="button" data-i18n="result.download">下載 PNG 角色卡</button>
                 <a class="button" href="./member-center.html" data-i18n="result.member">打開氣候行動者中心</a>
-                <a class="button" href="./climate-action-form.html" data-i18n="result.step">前往步入行動</a>
+                <a class="button primary" href="./green-action-7day.html" data-i18n="result.step">做今天的一個行動</a>
                 <span id="shareStatus" class="status" aria-live="polite"></span>
               </div>
             </div>
@@ -1405,7 +1305,7 @@
     const db = getFirestore(app, "default");
 
     const LANG_STORAGE_KEY = "bsr_lang";
-    const QUESTIONS = [
+    const QUESTION_BANK = [
       {
         id: 1,
         dimension: "energy",
@@ -1708,6 +1608,8 @@
       }
     ];
 
+    const QUESTIONS = QUESTION_BANK.filter((question) => [1, 3, 6, 8, 11, 14, 16, 19].includes(question.id));
+
     const TYPE_META = {
       INTJ: {
         zh: { title: "永續系統架構師", core: "理性前瞻，喜歡用數據和創新技術解決系統性問題。", strengths: "碳追蹤、生命週期評估、設計循環經濟模式。", challenge: "可能追求完美或過於專注技術，忽略情感共鳴。", actions: "參與綠色金融投資、研究 Web3 碳追蹤工具、擔任企業永續顧問。" },
@@ -1780,35 +1682,39 @@
         page: { title: "Eco-MBTI | 環保 MBTI" },
         header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI 環保行動人格互動頁" },
         nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "7 日綠色提案", form: "步入行動", member: "氣候行動者中心", eco: "Eco-MBTI" },
-        mobileNav: { title: "快速導覽", framework: "四大維度", frameworkSub: "永續行動核心指標", quiz: "20 題測驗", quizSub: "開始作答", result: "結果卡", resultSub: "4 碼 Eco-MBTI" },
+        mobileNav: { title: "快速導覽", framework: "四大維度", frameworkSub: "永續行動核心指標", quiz: "8 題測驗", quizSub: "開始作答", result: "結果卡", resultSub: "4 碼 Eco-MBTI" },
         side: {
           title: "Eco-MBTI",
-          body: "一個把環保參與方式轉譯成四碼人格傾向的互動頁，適合做活動、社群和教育推廣。",
+          body: "8 題快速看出你的氣候行動類型。",
           linkFramework: "四大維度",
           linkFrameworkSub: "永續參與底層框架",
-          linkQuiz: "20 題測驗",
+          linkQuiz: "8 題測驗",
           linkQuizSub: "開始作答與計分",
           linkResult: "結果卡",
-          linkResultSub: "你的專屬類型",
-          tipTitle: "快速提醒",
-          tipBody: "這份測驗不是要判斷誰比較環保，而是幫你找到最自然、最容易持續的氣候行動方式。"
+          linkResultSub: "你的專屬類型"
         },
         hero: {
           eyebrow: "Interactive Sustainability Personality",
           title: "環保 MBTI / Eco-MBTI",
-          body: "把 MBTI 的底層邏輯重新轉譯成永續行動風格。這不是傳統性格測驗，而是一個幫助大家理解自己如何參與環境保護、又適合用什麼方式擴大影響力的互動頁面。",
-          primary: "開始 20 題測驗",
-          secondary: "先看四大維度",
+          body: "用 8 題快速找到你的 Climate Type。",
+          primary: "開始 8 題測驗",
+          secondary: "看簡短說明",
+          chip1: "8 題快測",
+          chip2: "不用登入",
+          chip3: "立即出結果",
           nodeEnergy: "能量<br>E / I",
           nodeInfo: "資訊<br>S / N",
           nodeDecision: "決策<br>T / F",
           nodeLifestyle: "執行<br>J / P",
-          noteTitle: "20 題、4 個字母、1 種環保行動風格。",
-          noteBody: "每一題沒有標準答案，只有更貼近你自然習慣的環保選擇。測驗完成後，你會得到專屬的 Eco-MBTI 類型、行動優勢與下一步建議。"
+          noteTitle: "8 題、4 個字母、1 種環保行動風格。",
+          noteBody: "選最像你的答案，完成後立即看到結果。"
+        },
+        guide: {
+          summary: "先看簡短說明"
         },
         framework: {
           title: "四大核心維度 / The Four Core Dimensions",
-          body: "我們把 MBTI 的四個底層維度重新定義成「個人參與永續行動的四項核心指標」，讓它更貼近環境保護、社群倡議與低碳生活場景。",
+          body: "四個維度，快速看懂你的行動傾向。",
           energy: { badge: "能量來源 / Energy", title: "E 社群倡議 vs. I 個人實踐", body: "你更習慣在群體中號召、連結與推廣，還是從自己的生活細節開始落實低碳選擇，並用穩定實踐來影響他人？" },
           info: { badge: "資訊處理 / Information", title: "S 務實行動 vs. N 系統創新", body: "你更重視看得見、立刻可做的環保任務，還是更傾向思考底層結構、未來系統與跨領域創新解方？" },
           decision: { badge: "決策依據 / Decision", title: "T 數據驅動 vs. F 情感共鳴", body: "你做環保決策時，是更依賴科學數據、效率與結構，還是更容易被生態關懷、人的故事與代際責任所推動？" },
@@ -1816,27 +1722,27 @@
         },
         letters: {
           title: "八個字母代表什麼 / What Each Letter Signals",
-          body: "每一個字母不是能力高低，而是你在永續參與中的自然傾向。結果會從四組對應字母中選出最貼近你的那一邊。",
+          body: "結果會從四組字母中各選一個。",
           energy: { title: "能量來源", e: "E 社群倡議", i: "I 個人實踐" },
           info: { title: "資訊處理", s: "S 務實行動", n: "N 系統創新" },
           decision: { title: "決策依據", t: "T 數據驅動", f: "F 情感共鳴" },
           lifestyle: { title: "執行方式", j: "J 嚴謹規劃", p: "P 彈性適應" }
         },
         quiz: {
-          title: "20 題環保 MBTI 測驗 / 20-Question Eco-MBTI Quiz",
-          body: "20 題平均分配到四個維度，每個維度 5 題。請依照你平常更自然的反應作答，而不是你覺得最理想的答案。",
-          progress: "已完成 0 / 20 題",
+          title: "8 題環保 MBTI 測驗 / 8-Question Eco-MBTI Quiz",
+          body: "依直覺作答即可。",
+          progress: "已完成 0 / 8 題",
           tip: "所有題目都選完後，就會解鎖專屬結果卡。",
           submit: "查看我的 Eco-MBTI",
           reset: "重新作答",
-          missing: "還有題目尚未作答，請先完成全部 20 題。",
+          missing: "還有題目尚未作答，請先完成全部 8 題。",
           ready: "已完成，往下查看你的結果。",
           optionA: "選項 A",
           optionB: "選項 B"
         },
         result: {
           title: "你的結果 / Your Result",
-          body: "你的 4 碼 Eco-MBTI 不代表唯一正確的環保方式，而是指出你最自然、最容易持續放大的永續參與風格。",
+          body: "這是你最自然的氣候行動風格。",
           statStrength: "強項",
           statChallenge: "挑戰",
           breakdownTitle: "維度分佈 / Dimension Breakdown",
@@ -1844,15 +1750,13 @@
           traitHeadline: "人格解讀",
           actionTitle: "適合的綠色行動建議 / Suggested Green Actions",
           actionHeadline: "行動方向",
-          galleryTitle: "16 型角色總覽 / Eco-MBTI Role Gallery",
-          galleryBody: "每張角色卡都包含 4 碼類型、中文稱號與英文稱號。你也可以點選其他卡片查看完整個人角色版面。",
           shareTitle: "分享你的結果 / Share Your Result",
-          shareBody: "你可以把結果文字複製出去，拿來做社群貼文、活動互動或引導更多人來測。",
+          shareBody: "下載或分享你的結果卡。",
           copy: "複製結果文案",
           shareImage: "分享附圖結果",
           download: "下載 PNG 角色卡",
           member: "打開氣候行動者中心",
-          step: "前往步入行動",
+          step: "做今天的一個行動",
           copied: "結果文案已複製。",
           shared: "已開啟附圖分享。",
           shareUnsupported: "這個瀏覽器目前不支援附圖分享，已為你下載 PNG 角色卡。",
@@ -1874,35 +1778,39 @@
         page: { title: "Eco-MBTI | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI environmental action personality" },
         nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "7-Day Green Proposal", form: "Take One Step", member: "Member Center", eco: "Eco-MBTI" },
-        mobileNav: { title: "Quick Navigation", framework: "Framework", frameworkSub: "4 sustainability dimensions", quiz: "20 Questions", quizSub: "Answer and score", result: "Result Card", resultSub: "Your 4-letter Eco-MBTI" },
+        mobileNav: { title: "Quick Navigation", framework: "Framework", frameworkSub: "4 sustainability dimensions", quiz: "8 Questions", quizSub: "Answer and score", result: "Result Card", resultSub: "Your 4-letter Eco-MBTI" },
         side: {
           title: "Eco-MBTI",
-          body: "An interactive page that translates environmental participation style into a four-letter sustainability personality profile.",
+          body: "A quick 8-question climate action type test.",
           linkFramework: "Framework",
           linkFrameworkSub: "The core sustainability logic",
-          linkQuiz: "20 Questions",
+          linkQuiz: "8 Questions",
           linkQuizSub: "Answer and calculate",
           linkResult: "Result Card",
-          linkResultSub: "Your personal output",
-          tipTitle: "Quick Tip",
-          tipBody: "This test is not deciding who is greener. It helps people discover which climate action style feels most natural and sustainable for them."
+          linkResultSub: "Your personal output"
         },
         hero: {
           eyebrow: "Interactive Sustainability Personality",
           title: "Eco-MBTI / Environmental Action Style",
-          body: "This page reinterprets MBTI through sustainability participation. It is not a traditional personality test. It is a playful tool for understanding how someone naturally joins environmental action and how they may best amplify their impact.",
-          primary: "Start the 20-question quiz",
-          secondary: "See the 4 dimensions first",
+          body: "Find your Climate Type in 8 quick questions.",
+          primary: "Start the 8-question quiz",
+          secondary: "See the quick guide",
+          chip1: "8 quick questions",
+          chip2: "No sign-in",
+          chip3: "Instant result",
           nodeEnergy: "Energy<br>E / I",
           nodeInfo: "Information<br>S / N",
           nodeDecision: "Decision<br>T / F",
           nodeLifestyle: "Lifestyle<br>J / P",
-          noteTitle: "20 questions, 4 letters, 1 environmental action style.",
-          noteBody: "There are no ideal answers here. The goal is to find the choice that feels most natural to you. When you finish, you will get a personal Eco-MBTI type, strengths, and suggested next steps."
+          noteTitle: "8 questions, 4 letters, 1 environmental action style.",
+          noteBody: "Choose what feels most like you and get your result right away."
+        },
+        guide: {
+          summary: "See the quick guide"
         },
         framework: {
           title: "The Four Core Dimensions",
-          body: "The traditional MBTI dimensions are redefined here as four core indicators of sustainable participation, making them easier to use in environmental action, public campaigns, and low-carbon living.",
+          body: "Four dimensions that shape your action style.",
           energy: { badge: "Energy", title: "E Engagement vs. I Individual Practice", body: "Do you naturally create impact through group energy, outreach, and coordination, or through personal low-carbon practice and consistent example-setting?" },
           info: { badge: "Information", title: "S Practical Action vs. N Systems Innovation", body: "Do you focus on visible, immediate tasks, or do you prefer rethinking systems, long-term structures, and cross-disciplinary innovation?" },
           decision: { badge: "Decision", title: "T Data-Driven vs. F Empathy-Driven", body: "Do you make environmental decisions through science, efficiency, and evidence, or through care, ecological feeling, and intergenerational concern?" },
@@ -1910,27 +1818,27 @@
         },
         letters: {
           title: "What Each Letter Signals",
-          body: "Each letter reflects a natural preference rather than a better-or-worse ability. Your final type selects one side from each of the four pairs.",
+          body: "Your result picks one letter from each pair.",
           energy: { title: "Energy", e: "E Engagement", i: "I Individual Practice" },
           info: { title: "Information", s: "S Practical Action", n: "N Systems Innovation" },
           decision: { title: "Decision", t: "T Data-Driven", f: "F Empathy-Driven" },
           lifestyle: { title: "Lifestyle", j: "J Planned Discipline", p: "P Adaptive Flexibility" }
         },
         quiz: {
-          title: "20-Question Eco-MBTI Quiz",
-          body: "The 20 questions are evenly distributed across the four dimensions, with five questions in each group. Choose what feels most natural to you, not what sounds most ideal.",
-          progress: "Completed 0 / 20 questions",
+          title: "8-Question Eco-MBTI Quiz",
+          body: "Answer with your first instinct.",
+          progress: "Completed 0 / 8 questions",
           tip: "Your result card unlocks once all questions are answered.",
           submit: "Show My Eco-MBTI",
           reset: "Reset Answers",
-          missing: "Some questions are still unanswered. Please complete all 20 first.",
+          missing: "Some questions are still unanswered. Please complete all 8 first.",
           ready: "All answered. Scroll down to see your result.",
           optionA: "Option A",
           optionB: "Option B"
         },
         result: {
           title: "Your Result",
-          body: "Your 4-letter Eco-MBTI does not represent the only correct environmental style. It highlights the sustainability participation pattern you are most likely to sustain and amplify naturally.",
+          body: "This is your most natural climate action style.",
           statStrength: "Strengths",
           statChallenge: "Challenges",
           breakdownTitle: "Dimension Breakdown",
@@ -1938,15 +1846,13 @@
           traitHeadline: "Personality Snapshot",
           actionTitle: "Suggested Green Actions",
           actionHeadline: "Action Direction",
-          galleryTitle: "Eco-MBTI Role Gallery",
-          galleryBody: "Each role card includes the 4-letter type, Chinese title, and English title. Click any card to open its full character layout.",
           shareTitle: "Share Your Result",
-          shareBody: "You can copy the result text and use it in social posts, event interaction, or invitation flows.",
+          shareBody: "Download or share your result card.",
           copy: "Copy Result Text",
           shareImage: "Share with Image",
           download: "Download PNG Card",
           member: "Open Member Center",
-          step: "Open Take One Step",
+          step: "Do one action today",
           copied: "Result text copied.",
           shared: "Image share opened.",
           shareUnsupported: "This browser does not support image sharing. The PNG card has been downloaded instead.",
@@ -1993,7 +1899,6 @@
     const resultTraitBody = document.getElementById("resultTraitBody");
     const resultActionBody = document.getElementById("resultActionBody");
     const breakdownList = document.getElementById("breakdownList");
-    const roleGalleryGrid = document.getElementById("roleGalleryGrid");
     const copyResultBtn = document.getElementById("copyResultBtn");
     const shareResultBtn = document.getElementById("shareResultBtn");
     const downloadCardBtn = document.getElementById("downloadCardBtn");
@@ -2191,64 +2096,10 @@
 
     const getFullPortraitPath = (type) => `../assets/eco-mbti-full/${type}.png`;
 
-    const renderRoleGallery = (selectedType) => {
-      roleGalleryGrid.innerHTML = "";
-      Object.keys(TYPE_META).forEach((type) => {
-        const card = document.createElement("article");
-        card.className = "role-card";
-        card.tabIndex = 0;
-        card.setAttribute("role", "button");
-        if (type === selectedType) card.classList.add("active");
-
-        const img = document.createElement("img");
-        img.src = getFullPortraitPath(type);
-        img.alt = `${type} ${TYPE_META[type].en.title}`;
-        img.loading = "lazy";
-        const theme = applyThemeVars(card, type);
-
-        const body = document.createElement("div");
-        body.className = "role-card-body";
-
-        const code = document.createElement("span");
-        code.className = "role-code";
-        code.textContent = type;
-
-        const zhTitle = document.createElement("div");
-        zhTitle.className = "role-title-zh";
-        zhTitle.textContent = TYPE_META[type].zh.title;
-
-        const enTitle = document.createElement("div");
-        enTitle.className = "role-title-en";
-        enTitle.textContent = TYPE_META[type].en.title;
-
-        body.append(code, zhTitle, enTitle);
-        const media = document.createElement("div");
-        media.className = "role-card-media";
-        applyThemeVars(media, type);
-        const badge = document.createElement("span");
-        badge.className = "frame-leaf";
-        badge.textContent = theme.badge;
-        media.append(badge, img);
-
-        card.append(media, body);
-        card.addEventListener("click", () => {
-          renderResult({ counts: calculateResult().counts, type });
-        });
-        card.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            renderResult({ counts: calculateResult().counts, type });
-          }
-        });
-        roleGalleryGrid.appendChild(card);
-      });
-    };
-
     const renderResult = ({ counts, type }) => {
       const profile = getProfile(type);
       activeType = type;
       renderBreakdown(counts);
-      renderRoleGallery(type);
 
       const theme = applyThemeVars(resultPanel.querySelector(".result-card.primary"), type);
       applyThemeVars(resultPanel.querySelector(".portrait-frame"), type);
