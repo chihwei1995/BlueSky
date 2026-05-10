@@ -566,7 +566,7 @@
       <article class="panel intro">
         <span id="eyebrow" class="eyebrow">TREE PROGRESS</span>
         <h1 id="heroTitle">植樹森林</h1>
-        <p id="heroBody">這個互動畫面會依照目前的氣候行動者人數與全站 Climate Points 總分，即時換算出對應的植樹名額，並以樹林方式展示。</p>
+        <p id="heroBody">看目前已累積多少植樹名額。</p>
 
         <div class="stats">
           <div class="stat">
@@ -589,11 +589,11 @@
 
         <div class="formula">
           <div class="formula-row"><span id="formulaPartnersLabel">每 100 位氣候行動者</span><strong id="formulaPartnersValue">= 0 個名額</strong></div>
-          <div class="formula-row"><span id="formulaPointsLabel">每 100 分 Climate Points</span><strong id="formulaPointsValue">= 0 個名額</strong></div>
+          <div class="formula-row"><span id="formulaPointsLabel">每 150 分 Climate Points</span><strong id="formulaPointsValue">= 0 個名額</strong></div>
           <div class="formula-row"><span id="formulaCapLabel">總上限</span><strong id="formulaCapValue">321 個名額</strong></div>
         </div>
 
-        <div class="target-note">
+        <div class="target-note" hidden>
           <h2 id="targetTitle">321 棵樹怎麼累積</h2>
           <p id="targetBody">若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 32,100 分。實際上可由兩者一起累積，慢慢長出整座森林。</p>
         </div>
@@ -601,7 +601,7 @@
         <div class="my-forest">
           <div class="my-forest-head">
             <h2 id="myForestTitle">我的森林 / My Forest</h2>
-            <p id="myForestBody">登入後可查看你的氣候點數、行動天數、影響人數與個人成長摘要。</p>
+            <p id="myForestBody">登入後可查看你的累積。</p>
           </div>
           <div id="myForestStatus" class="my-forest-status">尚未登入，先到氣候行動者中心登入即可查看。</div>
           <div class="my-forest-grid">
@@ -626,7 +626,7 @@
               <strong id="myForestNextValue">-</strong>
             </div>
           </div>
-          <p id="myForestNote" class="my-forest-note">個人成長樹會用你的 Climate Points 換算，方便看到自己的累積進度。</p>
+          <p id="myForestNote" class="my-forest-note" hidden>個人成長樹會用你的 Climate Points 換算，方便看到自己的累積進度。</p>
         </div>
       </article>
 
@@ -635,8 +635,8 @@
         <div class="scene-overlay">
           <div class="scene-top">
             <div class="scene-note">
-              <h2 id="sceneTitle">互動森林視角</h2>
-              <p id="sceneBody">拖曳可旋轉視角，滾輪可縮放，點擊任一棵樹可查看這棵樹代表的是哪一種名額來源。</p>
+              <h2 id="sceneTitle">互動森林</h2>
+              <p id="sceneBody">拖曳旋轉，點樹查看來源。</p>
             </div>
             <div class="legend">
               <div class="legend-item"><span class="dot partners"></span><span id="legendPartners">由氣候行動者累積的名額</span></div>
@@ -655,14 +655,6 @@
           </div>
         </div>
       </article>
-    </section>
-
-    <section class="foot">
-      <div class="panel">
-        <h3 id="footTitle">計算方式</h3>
-        <p id="footBody">目前會以 Firebase 內的氣候行動者總數與全站 Climate Points 總分換算植樹名額。每 100 位氣候行動者捐款植 1 棵樹，每 100 分 Climate Points 捐款植 1 棵樹；最多顯示 321 棵樹。</p>
-      </div>
-      <a id="footAction" class="chip active" href="./member-center.html">回到氣候行動者中心</a>
     </section>
 
     <section class="panel leaderboard-panel">
@@ -692,21 +684,21 @@
         navForest: "植樹森林",
         eyebrow: "TREE PROGRESS",
         heroTitle: "植樹森林",
-        heroBody: "這個互動畫面會依照目前的氣候行動者人數與全站 Climate Points 總分，即時換算出對應的植樹名額，並以樹林方式展示。",
+        heroBody: "看目前已累積多少植樹名額。",
         participantsLabel: "目前氣候行動者",
         pointsLabel: "目前 Climate Points",
         treesLabel: "目前對應植樹名額",
         remainingLabel: "距離上限剩餘",
         formulaPartnersLabel: "每 100 位氣候行動者",
-        formulaPointsLabel: "每 100 分 Climate Points",
+        formulaPointsLabel: "每 150 分 Climate Points",
         formulaCapLabel: "總上限",
         formulaPartnersValue: (value) => `= ${value} 個名額`,
         formulaPointsValue: (value) => `= ${value} 個名額`,
         formulaCapValue: "321 個名額",
         targetTitle: "321 棵樹怎麼累積",
-        targetBody: "若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 32,100 分。實際上可由兩者一起累積，慢慢長出整座森林。",
+        targetBody: "若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 48,150 分。實際上可由兩者一起累積，慢慢長出整座森林。",
         myForestTitle: "我的森林 / My Forest",
-        myForestBody: "登入後可查看你的氣候點數、行動天數、影響人數與個人成長摘要。",
+        myForestBody: "登入後可查看你的累積。",
         myForestGuest: "尚未登入，先到氣候行動者中心登入即可查看。",
         myForestSignedIn: (name) => `${name}，這是你目前的森林成長摘要。`,
         myForestPointsLabel: "Climate Points",
@@ -715,25 +707,22 @@
         myForestTreesLabel: "個人成長樹",
         myForestNextLabel: "距離下一棵樹",
         myForestNote: "個人成長樹會用你的 Climate Points 換算，方便看到自己的累積進度。",
-        sceneTitle: "互動森林視角",
-        sceneBody: "拖曳可旋轉視角，滾輪可縮放，點擊任一棵樹可查看這棵樹代表的是哪一種名額來源。",
+        sceneTitle: "互動森林",
+        sceneBody: "拖曳旋轉，點樹查看來源。",
         legendPartners: "由氣候行動者累積的名額",
         legendPoints: "由 Climate Points 累積的名額",
         sceneStatusText: "棵樹正在場景中生長",
         treeDetailTitle: "樹木名額詳情",
         treeDetailBody: "載入後，點擊畫面中的樹木即可查看它對應的名額來源。",
-        footTitle: "計算方式",
-        footBody: "目前會以 Firebase 內的氣候行動者總數與全站 Climate Points 總分換算植樹名額。每 100 位氣候行動者捐款植 1 棵樹，每 100 分 Climate Points 捐款植 1 棵樹；最多顯示 321 棵樹。",
-        footAction: "回到氣候行動者中心",
         leaderboardTitle: "Climate Heroes / Top 10",
-        leaderboardBody: "只顯示名次與名字，不顯示分數。",
+        leaderboardBody: "只顯示名次與名字。",
         leaderboardEmpty: "目前還沒有排行榜資料。",
         leaderboardAnonymous: "匿名氣候行動者",
         loading: "正在讀取 Firebase 植樹資料...",
         noTrees: "目前尚未累積到植樹名額",
         treeInfoTitle: (slot) => `第 ${slot} 個植樹名額`,
         treeInfoPartner: (order) => `這棵樹來自氣候行動者累積名額，第 ${order} 棵由每 100 位氣候行動者換算而來。`,
-        treeInfoPoints: (order) => `這棵樹來自 Climate Points 累積名額，第 ${order} 棵由每 100 分 Climate Points 換算而來。`,
+        treeInfoPoints: (order) => `這棵樹來自 Climate Points 累積名額，第 ${order} 棵由每 150 分 Climate Points 換算而來。`,
         treeInfoMeta: (source, cap) => `<ul><li>來源：${source}</li><li>名額序號：${cap} / 321</li></ul>`,
         sourcePartner: "氣候行動者人數",
         sourcePoints: "Climate Points",
@@ -751,21 +740,21 @@
         navForest: "Tree Forest",
         eyebrow: "TREE PROGRESS",
         heroTitle: "Tree Planting Forest",
-        heroBody: "This interactive forest converts the current number of climate action partners and the total Climate Points across the platform into live tree planting slots, then visualizes them as a growing forest.",
+        heroBody: "See how many tree planting slots have been unlocked.",
         participantsLabel: "Climate Action Partners",
         pointsLabel: "Climate Points",
         treesLabel: "Current Tree Planting Slots",
         remainingLabel: "Remaining to Cap",
         formulaPartnersLabel: "Every 100 Climate Action Partners",
-        formulaPointsLabel: "Every 100 Climate Points",
+        formulaPointsLabel: "Every 150 Climate Points",
         formulaCapLabel: "Cap",
         formulaPartnersValue: (value) => `= ${value} slots`,
         formulaPointsValue: (value) => `= ${value} slots`,
         formulaCapValue: "321 slots",
         targetTitle: "How 321 trees can be reached",
-        targetBody: "If this goal came only from people, it would take about 32,100 Climate Action Partners. If it came only from Climate Points, it would take about 32,100 points. In practice, both can grow the forest together.",
+        targetBody: "If this goal came only from people, it would take about 32,100 Climate Action Partners. If it came only from Climate Points, it would take about 48,150 points. In practice, both can grow the forest together.",
         myForestTitle: "My Forest",
-        myForestBody: "Sign in to view your Climate Points, action days, people reached, and personal growth summary.",
+        myForestBody: "Sign in to view your progress.",
         myForestGuest: "Sign in from the member center to view your personal forest summary.",
         myForestSignedIn: (name) => `${name}, this is your current forest growth summary.`,
         myForestPointsLabel: "Climate Points",
@@ -774,25 +763,22 @@
         myForestTreesLabel: "Personal Trees",
         myForestNextLabel: "To Your Next Tree",
         myForestNote: "Personal trees are estimated from your Climate Points so you can see your own growth progress.",
-        sceneTitle: "Interactive Forest View",
-        sceneBody: "Drag to rotate, use the wheel to zoom, and click any tree to see which slot source it represents.",
+        sceneTitle: "Interactive Forest",
+        sceneBody: "Drag to rotate. Click a tree to see its source.",
         legendPartners: "Slots accumulated from climate action partners",
         legendPoints: "Slots accumulated from Climate Points",
         sceneStatusText: "trees are currently growing in the scene",
         treeDetailTitle: "Tree Slot Details",
         treeDetailBody: "After loading, click a tree in the scene to see which slot source it represents.",
-        footTitle: "How the count is calculated",
-        footBody: "This page reads the total number of climate action partners in Firebase and the total Climate Points across the platform. Every 100 climate action partners funds 1 tree, and every 100 Climate Points funds 1 tree. The display is capped at 321 trees.",
-        footAction: "Back to Member Center",
         leaderboardTitle: "Climate Heroes / Top 10",
-        leaderboardBody: "Only ranks and names are shown. Scores stay hidden.",
+        leaderboardBody: "Only ranks and names are shown.",
         leaderboardEmpty: "No leaderboard data yet.",
         leaderboardAnonymous: "Anonymous Climate Action Partner",
         loading: "Loading tree planting data from Firebase...",
         noTrees: "No tree planting slots have been accumulated yet.",
         treeInfoTitle: (slot) => `Tree Planting Slot ${slot}`,
         treeInfoPartner: (order) => `This tree comes from the climate action partner count. It is slot ${order} created by the “every 100 partners” rule.`,
-        treeInfoPoints: (order) => `This tree comes from Climate Points. It is slot ${order} created by the “every 100 Climate Points” rule.`,
+        treeInfoPoints: (order) => `This tree comes from Climate Points. It is slot ${order} created by the “every 150 Climate Points” rule.`,
         treeInfoMeta: (source, cap) => `<ul><li>Source: ${source}</li><li>Slot number: ${cap} / 321</li></ul>`,
         sourcePartner: "Climate action partner count",
         sourcePoints: "Climate Points",
@@ -881,9 +867,6 @@
       sceneStatusText: document.getElementById("sceneStatusText"),
       treeDetailTitle: document.getElementById("treeDetailTitle"),
       treeDetailBody: document.getElementById("treeDetailBody"),
-      footTitle: document.getElementById("footTitle"),
-      footBody: document.getElementById("footBody"),
-      footAction: document.getElementById("footAction"),
       leaderboardTitle: document.getElementById("leaderboardTitle"),
       leaderboardBody: document.getElementById("leaderboardBody"),
       leaderboardEmpty: document.getElementById("leaderboardEmpty"),
@@ -927,9 +910,6 @@
       els.legendPartners.textContent = t("legendPartners");
       els.legendPoints.textContent = t("legendPoints");
       els.treeDetailTitle.textContent = t("treeDetailTitle");
-      els.footTitle.textContent = t("footTitle");
-      els.footBody.textContent = t("footBody");
-      els.footAction.textContent = t("footAction");
       els.leaderboardTitle.textContent = t("leaderboardTitle");
       els.leaderboardBody.textContent = t("leaderboardBody");
       els.langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
@@ -1369,7 +1349,7 @@
         });
 
         const partnerTrees = Math.floor(participants / 100);
-        const pointTrees = Math.floor(points / 100);
+        const pointTrees = Math.floor(points / 150);
         const totalTrees = Math.min(MAX_SLOTS, partnerTrees + pointTrees);
         const remaining = Math.max(0, MAX_SLOTS - totalTrees);
 
@@ -1449,7 +1429,7 @@
           points,
           actionDays,
           impactCount,
-          personalTrees: Math.floor(points / 100),
+          personalTrees: Math.floor(points / 150),
           nextTreeGap: points > 0 && points % 100 !== 0 ? 100 - (points % 100) : (points === 0 ? 100 : 0)
         });
       } catch (error) {
