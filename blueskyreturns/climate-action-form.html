@@ -1382,7 +1382,7 @@
         if (auth.currentUser.email !== email) {
           throw new Error("signed-in-with-different-email");
         }
-        if (!auth.currentUser.displayName && name) {
+        if (name && auth.currentUser.displayName !== name) {
           await updateProfile(auth.currentUser, { displayName: name });
         }
         return { user: auth.currentUser, created: false };

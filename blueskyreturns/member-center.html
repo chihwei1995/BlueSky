@@ -1756,6 +1756,11 @@
       user?.email?.split("@")[0] ||
       ""
     ).trim();
+    const isEmailPrefixName = (value = "", email = "") => {
+      const normalizedValue = String(value || "").trim().toLowerCase();
+      const emailPrefix = String(email || "").trim().split("@")[0]?.toLowerCase() || "";
+      return Boolean(normalizedValue && emailPrefix && normalizedValue === emailPrefix);
+    };
     const getMemberRoleLabel = (member = {}) => String(
       member?.resultRole ||
       member?.role ||
@@ -2697,6 +2702,11 @@
       try {
         const memberSnap = await getDoc(doc(db, "members", user.uid));
         const member = memberSnap.exists() ? memberSnap.data() : {};
+        const normalizedName = String(member.name || member.memberName || "").trim();
+        if (user.displayName && (!normalizedName || isEmailPrefixName(normalizedName, user.email || ""))) {
+          await setDoc(doc(db, "members", user.uid), { name: user.displayName.trim() }, { merge: true });
+          member.name = user.displayName.trim();
+        }
         currentMemberData = member;
         const permissionLevel = Number(member.permissionLevel || 1);
         let impactCount = 0;
