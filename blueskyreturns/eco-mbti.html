@@ -1100,6 +1100,12 @@
         padding: 0 16px;
       }
 
+      .hero-copy > .eyebrow,
+      .hero-copy > h1,
+      .hero-copy > p {
+        display: none;
+      }
+
       .panel,
       .hero {
         padding: 20px 18px;
@@ -2066,6 +2072,7 @@
     let lastResultText = "";
     let activeType = "INTJ";
     let currentUser = null;
+    let authReady = false;
     let lastRenderedCounts = null;
 
     const TYPE_THEMES = {
@@ -2222,6 +2229,11 @@
 
     const syncResultActions = () => {
       const hasResult = !resultPanel.hidden && Boolean(lastResultText);
+      if (!authReady) {
+        authCtaCard.hidden = true;
+        dailyActionLink.hidden = true;
+        return;
+      }
       authCtaCard.hidden = !hasResult || Boolean(currentUser);
       dailyActionLink.hidden = !hasResult || !currentUser;
     };
@@ -2632,6 +2644,7 @@
     });
 
     onAuthStateChanged(auth, (user) => {
+      authReady = true;
       currentUser = user || null;
       if (currentUser) {
         loadSavedResultFromMember(currentUser);
