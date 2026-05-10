@@ -737,6 +737,56 @@
     .status.warn { color: var(--warn); }
     .status.ok { color: var(--ok); }
 
+    .auth-cta-card {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+    }
+
+    .auth-cta-head {
+      display: grid;
+      gap: 6px;
+    }
+
+    .auth-cta-head p,
+    .auth-cta-note {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .auth-inline-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .auth-field {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .auth-field span {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--forest-deep);
+    }
+
+    .auth-field input {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(250, 253, 251, 0.96);
+      color: var(--ink);
+      font: inherit;
+    }
+
     .result-panel[hidden] {
       display: none !important;
     }
@@ -1012,6 +1062,10 @@
       .nav-actions .button {
         max-width: 100%;
       }
+
+      .auth-inline-form {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 640px) {
@@ -1102,14 +1156,14 @@
             <div class="hero-copy">
               <div class="eyebrow" data-i18n="hero.eyebrow">Interactive Sustainability Personality</div>
               <h1 data-i18n="hero.title">環保 MBTI / Eco-MBTI</h1>
-              <p data-i18n="hero.body">用 8 題快速找到你的 Climate Type。</p>
+              <p data-i18n="hero.body">用 12 題快速找到你的 Climate Type。</p>
               <div class="hero-quick-actions">
-                <span class="quick-chip" data-i18n="hero.chip1">8 題快測</span>
-                <span class="quick-chip" data-i18n="hero.chip2">不用登入</span>
+                <span class="quick-chip" data-i18n="hero.chip1">12 題快測</span>
+                <span class="quick-chip" data-i18n="hero.chip2">先測後註冊</span>
                 <span class="quick-chip" data-i18n="hero.chip3">立即出結果</span>
               </div>
               <div class="hero-actions">
-                <a class="button primary" href="#quiz" data-i18n="hero.primary">開始 8 題測驗</a>
+                <a class="button primary" href="#quiz" data-i18n="hero.primary">開始 12 題測驗</a>
                 <a class="button" href="#guide" data-i18n="hero.secondary">看簡短說明</a>
               </div>
             </div>
@@ -1122,7 +1176,7 @@
                 <div class="trait-node lifestyle" data-i18n-html="hero.nodeLifestyle">執行<br>J / P</div>
               </div>
               <div class="hero-note">
-                <strong data-i18n="hero.noteTitle">8 questions, 4 letters, 1 climate action style.</strong>
+                <strong data-i18n="hero.noteTitle">12 questions, 4 letters, 1 climate action style.</strong>
                 <span data-i18n="hero.noteBody">選最像你的答案，完成後立即看到結果。</span>
               </div>
             </div>
@@ -1130,11 +1184,11 @@
 
           <section id="quiz" class="panel quiz-panel">
             <div class="section-head">
-              <h2 data-i18n="quiz.title">8 題環保 MBTI 測驗 / 8-Question Eco-MBTI Quiz</h2>
+              <h2 data-i18n="quiz.title">12 題環保 MBTI 測驗 / 12-Question Eco-MBTI Quiz</h2>
               <p data-i18n="quiz.body">依直覺作答即可。</p>
             </div>
             <div class="progress-head">
-              <div class="small-badge" id="progressLabel" data-i18n="quiz.progress">已完成 0 / 8 題</div>
+              <div class="small-badge" id="progressLabel" data-i18n="quiz.progress">已完成 0 / 12 題</div>
               <div class="small-badge" data-i18n="quiz.tip">所有題目都選完後，就會解鎖專屬結果卡。</div>
             </div>
             <div class="progress-bar" aria-hidden="true">
@@ -1251,14 +1305,31 @@
               </div>
               <div class="result-rule-card">
                 <strong data-i18n="result.ruleTitle">集氣規則 / Participation Boost</strong>
-                <p data-i18n="result.ruleBody">完成 Eco-MBTI 可為植樹行動集氣 +1。再完成今天的一個行動，可升級成正式行動者並再獲得 +3。</p>
+                <p data-i18n="result.ruleBody">完成 Eco-MBTI 後，登入會員並完成今天的一個行動，才會開始累積集氣與 Daily Green Actions 紀錄；若有人透過你的 MBTI 分享註冊成為氣候行動者，你也會增加一次分享加成。</p>
+              </div>
+              <div id="authCtaCard" class="auth-cta-card" hidden>
+                <div class="auth-cta-head">
+                  <strong data-i18n="result.authTitle">先用 Email 開始</strong>
+                  <p data-i18n="result.authBody">未註冊前，結果不會開始累積集氣，也不能正式記錄今天的行動。</p>
+                </div>
+                <form id="authInlineForm" class="auth-inline-form">
+                  <label class="auth-field">
+                    <span data-i18n="result.authEmail">Email</span>
+                    <input id="authEmailInput" type="email" autocomplete="email" required />
+                  </label>
+                  <label class="auth-field">
+                    <span data-i18n="result.authPassword">密碼</span>
+                    <input id="authPasswordInput" type="password" autocomplete="new-password" minlength="6" required />
+                  </label>
+                  <button id="authInlineSubmit" class="primary" type="submit" data-i18n="result.authSubmit">註冊後做今天的行動</button>
+                </form>
+                <p class="auth-cta-note" data-i18n="result.authNote">只要 Email 和密碼即可開始，系統會同步保存你的 Eco-MBTI。</p>
               </div>
               <div class="quiz-actions">
                 <button id="copyResultBtn" type="button" data-i18n="result.copy">複製結果文案</button>
                 <button id="shareResultBtn" type="button" data-i18n="result.shareImage">分享附圖結果</button>
                 <button id="downloadCardBtn" type="button" data-i18n="result.download">下載 PNG 角色卡</button>
-                <a class="button" href="./member-center.html" data-i18n="result.member">打開氣候行動者中心</a>
-                <a class="button primary" href="./green-action-7day.html" data-i18n="result.step">做今天的一個行動</a>
+                <a id="dailyActionLink" class="button primary" href="./green-action-7day.html" data-i18n="result.step" hidden>做今天的一個行動</a>
                 <span id="shareStatus" class="status" aria-live="polite"></span>
               </div>
             </div>
@@ -1273,7 +1344,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
@@ -1292,6 +1363,21 @@
     const db = getFirestore(app, "default");
 
     const LANG_STORAGE_KEY = "bsr_lang";
+    const sanitizeReferralUid = (value) => {
+      const trimmed = String(value || "").trim();
+      return /^[A-Za-z0-9_-]{10,128}$/.test(trimmed) ? trimmed : "";
+    };
+    const referralUid = sanitizeReferralUid(new URLSearchParams(window.location.search).get("ref"));
+    const buildMbtiInviteUrl = (shareUid = auth.currentUser?.uid) => {
+      const url = new URL("./eco-mbti.html", window.location.href);
+      const safeUid = sanitizeReferralUid(shareUid);
+      if (safeUid) {
+        url.searchParams.set("ref", safeUid);
+      } else {
+        url.searchParams.delete("ref");
+      }
+      return url.toString();
+    };
     const QUESTION_BANK = [
       {
         id: 1,
@@ -1595,7 +1681,29 @@
       }
     ];
 
-    const QUESTIONS = QUESTION_BANK.filter((question) => [1, 3, 6, 8, 11, 14, 16, 19].includes(question.id));
+    const QUESTION_SEQUENCE = [
+      { id: 1, order: ["A", "B"] },
+      { id: 7, order: ["B", "A"] },
+      { id: 11, order: ["A", "B"] },
+      { id: 17, order: ["B", "A"] },
+      { id: 3, order: ["B", "A"] },
+      { id: 9, order: ["A", "B"] },
+      { id: 14, order: ["B", "A"] },
+      { id: 19, order: ["A", "B"] },
+      { id: 5, order: ["A", "B"] },
+      { id: 10, order: ["B", "A"] },
+      { id: 15, order: ["A", "B"] },
+      { id: 20, order: ["B", "A"] }
+    ];
+
+    const QUESTIONS = QUESTION_SEQUENCE.map((item) => {
+      const question = QUESTION_BANK.find((entry) => entry.id === item.id);
+      return {
+        ...question,
+        displayIndex: QUESTION_SEQUENCE.indexOf(item) + 1,
+        options: item.order.map((key) => question.options.find((option) => option.key === key))
+      };
+    });
 
     const TYPE_META = {
       INTJ: {
@@ -1668,14 +1776,14 @@
       zh: {
         page: { title: "Eco-MBTI | 環保 MBTI" },
         header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI 環保行動人格互動頁" },
-        nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "7 日綠色提案", form: "步入行動", member: "氣候行動者中心", eco: "Eco-MBTI" },
-        mobileNav: { title: "快速導覽", framework: "四大維度", frameworkSub: "永續行動核心指標", quiz: "8 題測驗", quizSub: "開始作答", result: "結果卡", resultSub: "4 碼 Eco-MBTI" },
+        nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "Daily Green Actions", form: "步入行動", member: "氣候行動者中心", eco: "Eco-MBTI" },
+        mobileNav: { title: "快速導覽", framework: "四大維度", frameworkSub: "永續行動核心指標", quiz: "12 題測驗", quizSub: "開始作答", result: "結果卡", resultSub: "4 碼 Eco-MBTI" },
         side: {
           title: "Eco-MBTI",
-          body: "8 題快速看出你的氣候行動類型。",
+          body: "12 題快速看出你的氣候行動類型。",
           linkFramework: "四大維度",
           linkFrameworkSub: "永續參與底層框架",
-          linkQuiz: "8 題測驗",
+          linkQuiz: "12 題測驗",
           linkQuizSub: "開始作答與計分",
           linkResult: "結果卡",
           linkResultSub: "你的專屬類型"
@@ -1683,17 +1791,17 @@
         hero: {
           eyebrow: "Interactive Sustainability Personality",
           title: "環保 MBTI / Eco-MBTI",
-          body: "用 8 題快速找到你的 Climate Type。",
-          primary: "開始 8 題測驗",
+          body: "用 12 題快速找到你的 Climate Type。",
+          primary: "開始 12 題測驗",
           secondary: "看簡短說明",
-          chip1: "8 題快測",
-          chip2: "不用登入",
+          chip1: "12 題快測",
+          chip2: "先測後註冊",
           chip3: "立即出結果",
           nodeEnergy: "能量<br>E / I",
           nodeInfo: "資訊<br>S / N",
           nodeDecision: "決策<br>T / F",
           nodeLifestyle: "執行<br>J / P",
-          noteTitle: "8 題、4 個字母、1 種環保行動風格。",
+          noteTitle: "12 題、4 個字母、1 種環保行動風格。",
           noteBody: "選最像你的答案，完成後立即看到結果。"
         },
         guide: {
@@ -1716,13 +1824,13 @@
           lifestyle: { title: "執行方式", j: "J 嚴謹規劃", p: "P 彈性適應" }
         },
         quiz: {
-          title: "8 題環保 MBTI 測驗 / 8-Question Eco-MBTI Quiz",
+          title: "12 題環保 MBTI 測驗 / 12-Question Eco-MBTI Quiz",
           body: "依直覺作答即可。",
-          progress: "已完成 0 / 8 題",
+          progress: "已完成 0 / 12 題",
           tip: "所有題目都選完後，就會解鎖專屬結果卡。",
           submit: "查看我的 Eco-MBTI",
           reset: "重新作答",
-          missing: "還有題目尚未作答，請先完成全部 8 題。",
+          missing: "還有題目尚未作答，請先完成全部 12 題。",
           ready: "已完成，往下查看你的結果。",
           optionA: "選項 A",
           optionB: "選項 B"
@@ -1739,16 +1847,27 @@
           shareTitle: "分享你的結果 / Share Your Result",
           shareBody: "下載或分享你的結果卡。",
           ruleTitle: "集氣規則 / Participation Boost",
-          ruleBody: "完成 Eco-MBTI 可為植樹行動集氣 +1。第一次完成今天的一個行動可獲得 +5，之後每日完成 1 個行動可再 +1；若連續 7 日完成，額外再 +5。",
+          ruleBody: "完成 Eco-MBTI 後，登入會員並完成今天的一個行動，才會開始累積集氣與 Daily Green Actions 紀錄；若有人透過你的 MBTI 分享註冊成為氣候行動者，你也會增加一次分享加成。",
+          authTitle: "先用 Email 開始",
+          authBody: "未註冊前，結果不會開始累積集氣，也不能正式記錄今天的行動。",
+          authEmail: "Email",
+          authPassword: "密碼",
+          authSubmit: "註冊後做今天的行動",
+          authNote: "只要 Email 和密碼即可開始，系統會同步保存你的 Eco-MBTI。",
           copy: "複製結果文案",
           shareImage: "分享附圖結果",
           download: "下載 PNG 角色卡",
-          member: "打開氣候行動者中心",
           step: "做今天的一個行動",
           copied: "結果文案已複製。",
           shared: "已開啟附圖分享。",
           shareUnsupported: "這個瀏覽器目前不支援附圖分享，已為你下載 PNG 角色卡。",
           saved: "已同步儲存到你的會員資料。",
+          authReady: "已登入，現在可以開始今天的行動。",
+          authCreated: "已完成註冊，正在帶你去做今天的行動。",
+          authSigningIn: "這個 Email 已存在，正在幫你登入。",
+          authFailed: "註冊失敗，請稍後再試。",
+          authWrongPassword: "這個 Email 已註冊，請改用正確密碼登入。",
+          authInvalid: "請輸入有效的 Email 與至少 6 碼密碼。",
           downloaded: "PNG 角色卡已下載。",
           copiedFallback: "請手動複製下方結果。",
           typeLabel: "你的 Eco-MBTI",
@@ -1765,14 +1884,14 @@
       en: {
         page: { title: "Eco-MBTI | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI environmental action personality" },
-        nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "7-Day Green Proposal", form: "Take One Step", member: "Member Center", eco: "Eco-MBTI" },
-        mobileNav: { title: "Quick Navigation", framework: "Framework", frameworkSub: "4 sustainability dimensions", quiz: "8 Questions", quizSub: "Answer and score", result: "Result Card", resultSub: "Your 4-letter Eco-MBTI" },
+        nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "Daily Green Actions", form: "Take One Step", member: "Member Center", eco: "Eco-MBTI" },
+        mobileNav: { title: "Quick Navigation", framework: "Framework", frameworkSub: "4 sustainability dimensions", quiz: "12 Questions", quizSub: "Answer and score", result: "Result Card", resultSub: "Your 4-letter Eco-MBTI" },
         side: {
           title: "Eco-MBTI",
-          body: "A quick 8-question climate action type test.",
+          body: "A quick 12-question climate action type test.",
           linkFramework: "Framework",
           linkFrameworkSub: "The core sustainability logic",
-          linkQuiz: "8 Questions",
+          linkQuiz: "12 Questions",
           linkQuizSub: "Answer and calculate",
           linkResult: "Result Card",
           linkResultSub: "Your personal output"
@@ -1780,17 +1899,17 @@
         hero: {
           eyebrow: "Interactive Sustainability Personality",
           title: "Eco-MBTI / Environmental Action Style",
-          body: "Find your Climate Type in 8 quick questions.",
-          primary: "Start the 8-question quiz",
+          body: "Find your Climate Type in 12 quick questions.",
+          primary: "Start the 12-question quiz",
           secondary: "See the quick guide",
-          chip1: "8 quick questions",
-          chip2: "No sign-in",
+          chip1: "12 quick questions",
+          chip2: "Test first, sign up later",
           chip3: "Instant result",
           nodeEnergy: "Energy<br>E / I",
           nodeInfo: "Information<br>S / N",
           nodeDecision: "Decision<br>T / F",
           nodeLifestyle: "Lifestyle<br>J / P",
-          noteTitle: "8 questions, 4 letters, 1 environmental action style.",
+          noteTitle: "12 questions, 4 letters, 1 environmental action style.",
           noteBody: "Choose what feels most like you and get your result right away."
         },
         guide: {
@@ -1813,13 +1932,13 @@
           lifestyle: { title: "Lifestyle", j: "J Planned Discipline", p: "P Adaptive Flexibility" }
         },
         quiz: {
-          title: "8-Question Eco-MBTI Quiz",
+          title: "12-Question Eco-MBTI Quiz",
           body: "Answer with your first instinct.",
-          progress: "Completed 0 / 8 questions",
+          progress: "Completed 0 / 12 questions",
           tip: "Your result card unlocks once all questions are answered.",
           submit: "Show My Eco-MBTI",
           reset: "Reset Answers",
-          missing: "Some questions are still unanswered. Please complete all 8 first.",
+          missing: "Some questions are still unanswered. Please complete all 12 first.",
           ready: "All answered. Scroll down to see your result.",
           optionA: "Option A",
           optionB: "Option B"
@@ -1836,16 +1955,27 @@
           shareTitle: "Share Your Result",
           shareBody: "Download or share your result card.",
           ruleTitle: "Participation Boost",
-          ruleBody: "Completing Eco-MBTI adds +1 to the tree planting effort. The first completed daily action gives +5, each following day adds +1, and a 7-day streak gives an extra +5.",
+          ruleBody: "After Eco-MBTI, you need a member sign-in and one completed daily action before your boost and Daily Green Actions record begin. If someone becomes a Climate Action Partner through your MBTI share link, you also gain one share bonus.",
+          authTitle: "Start with Email",
+          authBody: "Before registration, your result does not start collecting boost and you cannot officially record today's action yet.",
+          authEmail: "Email",
+          authPassword: "Password",
+          authSubmit: "Register and do one action today",
+          authNote: "Only email and password are needed. Your Eco-MBTI result will be saved automatically.",
           copy: "Copy Result Text",
           shareImage: "Share with Image",
           download: "Download PNG Card",
-          member: "Open Member Center",
           step: "Do one action today",
           copied: "Result text copied.",
           shared: "Image share opened.",
           shareUnsupported: "This browser does not support image sharing. The PNG card has been downloaded instead.",
           saved: "Saved to your member profile.",
+          authReady: "You are signed in. You can start today's action now.",
+          authCreated: "Registration complete. Taking you to today's action now.",
+          authSigningIn: "This email already exists. Signing you in now.",
+          authFailed: "Registration failed. Please try again later.",
+          authWrongPassword: "This email already exists. Please sign in with the correct password.",
+          authInvalid: "Please enter a valid email and a password with at least 6 characters.",
           downloaded: "PNG role card downloaded.",
           copiedFallback: "Please copy the result text manually.",
           typeLabel: "Your Eco-MBTI",
@@ -1890,12 +2020,19 @@
     const copyResultBtn = document.getElementById("copyResultBtn");
     const shareResultBtn = document.getElementById("shareResultBtn");
     const downloadCardBtn = document.getElementById("downloadCardBtn");
+    const dailyActionLink = document.getElementById("dailyActionLink");
+    const authCtaCard = document.getElementById("authCtaCard");
+    const authInlineForm = document.getElementById("authInlineForm");
+    const authEmailInput = document.getElementById("authEmailInput");
+    const authPasswordInput = document.getElementById("authPasswordInput");
+    const authInlineSubmit = document.getElementById("authInlineSubmit");
     const shareStatus = document.getElementById("shareStatus");
 
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
     let lastResultText = "";
     let activeType = "INTJ";
     let currentUser = null;
+    let lastRenderedCounts = null;
 
     const TYPE_THEMES = {
       INTJ: { soft: "rgba(109, 198, 220, 0.38)", deep: "rgba(47, 106, 170, 0.26)", accent: "rgba(92, 224, 206, 0.34)", codeBg: "rgba(91, 169, 224, 0.16)", codeFg: "#0c4f72", cardTop: "rgba(240, 248, 255, 0.98)", cardBottom: "rgba(229, 242, 250, 0.96)", active: "rgba(69, 146, 215, 0.5)", activeTop: "rgba(228, 242, 255, 0.96)", shadow: "rgba(69, 146, 215, 0.18)", badge: "Systems" },
@@ -1943,7 +2080,7 @@
 
       const number = document.createElement("div");
       number.className = "question-number";
-      number.textContent = question.id;
+      number.textContent = question.displayIndex;
 
       const copy = document.createElement("div");
       copy.className = "question-copy";
@@ -2035,10 +2172,11 @@
     const getProfile = (type) => TYPE_META[type][currentLang];
 
     const buildShareText = (type, profile) => {
+      const inviteUrl = buildMbtiInviteUrl(currentUser?.uid);
       if (currentLang === "zh") {
-        return `我的 Eco-MBTI 是 ${type}｜${profile.title}\n核心特質：${profile.core}\n強項：${profile.strengths}\n挑戰：${profile.challenge}\n適合的綠色行動建議：${profile.actions}\n來測看看你的永續行動風格：https://www.blue-sky-returns.online/blueskyreturns/eco-mbti.html`;
+        return `我的 Eco-MBTI 是 ${type}｜${profile.title}\n核心特質：${profile.core}\n強項：${profile.strengths}\n挑戰：${profile.challenge}\n適合的綠色行動建議：${profile.actions}\n來測看看你的永續行動風格：${inviteUrl}`;
       }
-      return `My Eco-MBTI is ${type} | ${profile.title}\nCore trait: ${profile.core}\nStrengths: ${profile.strengths}\nChallenge: ${profile.challenge}\nSuggested green actions: ${profile.actions}\nTry your own sustainability style here: https://www.blue-sky-returns.online/blueskyreturns/eco-mbti.html`;
+      return `My Eco-MBTI is ${type} | ${profile.title}\nCore trait: ${profile.core}\nStrengths: ${profile.strengths}\nChallenge: ${profile.challenge}\nSuggested green actions: ${profile.actions}\nTry your own sustainability style here: ${inviteUrl}`;
     };
 
     const getPortraitAlt = (type, profile) => {
@@ -2048,9 +2186,16 @@
 
     const getFullPortraitPath = (type) => `../assets/eco-mbti-full/${type}.png`;
 
+    const syncResultActions = () => {
+      const hasResult = !resultPanel.hidden && Boolean(lastResultText);
+      authCtaCard.hidden = !hasResult || Boolean(currentUser);
+      dailyActionLink.hidden = !hasResult || !currentUser;
+    };
+
     const renderResult = ({ counts, type }) => {
       const profile = getProfile(type);
       activeType = type;
+      lastRenderedCounts = counts;
 
       const theme = applyThemeVars(resultPanel.querySelector(".result-card.primary"), type);
       applyThemeVars(resultPanel.querySelector(".portrait-frame"), type);
@@ -2068,6 +2213,7 @@
       resultActionBody.textContent = profile.actions;
       lastResultText = buildShareText(type, profile);
       resultPanel.hidden = false;
+      syncResultActions();
       resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
       saveResultToMember(type, profile, counts);
     };
@@ -2076,6 +2222,11 @@
       if (!currentUser) return;
       try {
         await setDoc(doc(db, "members", currentUser.uid), {
+          email: currentUser.email || "",
+          name: currentUser.email?.split("@")[0] || "",
+          partnerType: "individual",
+          permissionLevel: 1,
+          createdFrom: "eco-mbti",
           ecoMbti: {
             type,
             titleZh: TYPE_META[type].zh.title,
@@ -2086,7 +2237,8 @@
             actionsEn: TYPE_META[type].en.actions,
             counts,
             updatedAt: new Date().toISOString()
-          }
+          },
+          updatedAt: new Date().toISOString()
         }, { merge: true });
         shareStatus.className = "status ok";
         shareStatus.textContent = t("result.saved");
@@ -2305,8 +2457,9 @@
       });
       renderQuestions();
       if (!resultPanel.hidden && lastResultText) {
-        renderResult({ counts: calculateResult().counts, type: activeType });
+        renderResult({ counts: lastRenderedCounts || calculateResult().counts, type: activeType });
       }
+      syncResultActions();
     };
 
     quizForm.addEventListener("submit", (event) => {
@@ -2326,7 +2479,9 @@
       questionList.querySelectorAll(".choice").forEach((node) => node.classList.remove("active"));
       resultPanel.hidden = true;
       lastResultText = "";
+      lastRenderedCounts = null;
       shareStatus.textContent = "";
+      syncResultActions();
       updateProgress();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -2374,6 +2529,70 @@
       }
     });
 
+    authInlineForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      shareStatus.className = "status";
+      const email = String(authEmailInput.value || "").trim();
+      const password = String(authPasswordInput.value || "");
+      if (!email || !password || password.length < 6) {
+        shareStatus.classList.add("warn");
+        shareStatus.textContent = t("result.authInvalid");
+        return;
+      }
+
+      authInlineSubmit.disabled = true;
+      try {
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+          if (error?.code === "auth/email-already-in-use") {
+            shareStatus.className = "status ok";
+            shareStatus.textContent = t("result.authSigningIn");
+            await signInWithEmailAndPassword(auth, email, password);
+          } else {
+            throw error;
+          }
+        }
+
+        if (auth.currentUser && lastRenderedCounts && TYPE_META[activeType]) {
+          currentUser = auth.currentUser;
+          await saveResultToMember(activeType, getProfile(activeType), lastRenderedCounts);
+          if (referralUid && referralUid !== currentUser.uid) {
+            const referrerSnap = await getDoc(doc(db, "members", referralUid));
+            if (referrerSnap.exists()) {
+              await setDoc(doc(db, "memberReferrals", currentUser.uid), {
+                referredUid: currentUser.uid,
+                referredBy: referralUid,
+                acceptedAt: new Date().toISOString(),
+                source: "eco-mbti-share"
+              }, { merge: true });
+              await setDoc(doc(db, "members", currentUser.uid), {
+                referral: {
+                  referredBy: referralUid,
+                  acceptedAt: new Date().toISOString(),
+                  source: "eco-mbti-share"
+                }
+              }, { merge: true });
+            }
+          }
+        }
+        shareStatus.className = "status ok";
+        shareStatus.textContent = t("result.authCreated");
+        syncResultActions();
+        setTimeout(() => {
+          window.location.href = dailyActionLink.href;
+        }, 240);
+      } catch (error) {
+        console.error("Inline auth failed:", error);
+        shareStatus.className = "status warn";
+        shareStatus.textContent = error?.code === "auth/wrong-password"
+          ? t("result.authWrongPassword")
+          : t("result.authFailed");
+      } finally {
+        authInlineSubmit.disabled = false;
+      }
+    });
+
     document.querySelectorAll(".lang-btn").forEach((button) => {
       button.addEventListener("click", () => applyLanguage(button.dataset.lang));
     });
@@ -2383,6 +2602,7 @@
       if (currentUser) {
         loadSavedResultFromMember(currentUser);
       }
+      syncResultActions();
     });
 
     applyLanguage(currentLang);

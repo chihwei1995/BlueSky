@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="/Enter.PNG" />
   <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
   <link rel="apple-touch-icon" href="/Enter.PNG" />
-  <meta name="description" content="Open the Blue Sky Returns member center to review your profile, 7-Day Green Proposal tasks, Eco-MBTI result, and climate action tools available to your account." />
+  <meta name="description" content="Open the Blue Sky Returns member center to review your profile, Daily Green Actions records, Eco-MBTI result, and climate action tools available to your account." />
   <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/member-center.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Blue Sky Returns" />
@@ -783,9 +783,9 @@
         <div class="hero-copy">
           <span id="heroBadge" class="badge">Member Dashboard</span>
           <h1 id="heroTitle">氣候行動者中心</h1>
-          <p id="heroBody">登入後，你可以看到自己的氣候行動者資料、步入行動問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。</p>
+          <p id="heroBody">登入後，你可以看到自己的氣候行動者資料、步入行動問卷結果、Daily Green Actions 紀錄，以及目前有哪些可用功能。</p>
           <div class="actions">
-            <a id="heroActionProposal" class="pill primary" href="./green-action-7day.html">前往 7-Day Green Proposal</a>
+            <a id="heroActionProposal" class="pill primary" href="./green-action-7day.html">前往 Daily Green Actions</a>
             <a id="heroActionStep" class="pill" href="./climate-action-form.html">修改步入行動</a>
           </div>
         </div>
@@ -823,13 +823,15 @@
               <p id="summaryRole">角色卡：-</p>
               <p id="summaryEcoMbti">Eco-MBTI：-</p>
               <p id="summaryScore">步入行動分數：-</p>
-              <p id="summaryRank">集氣排名：-</p>
+              <p id="summaryRank">Climate Heroes 名次：-</p>
               <p id="summaryRegion">地區 / 分會：-</p>
               <p id="summaryUpdatedAt">更新時間：-</p>
             </div>
           </article>
         </div>
         <div class="actions">
+          <button id="inviteModeStepBtn" class="pill active" type="button" data-i18n="invite.modeStep">步入行動分享</button>
+          <button id="inviteModeMbtiBtn" class="pill" type="button" data-i18n="invite.modeMbti">MBTI 分享</button>
           <button id="copyInviteLinkBtn" class="pill" type="button">複製我的分享連結</button>
           <span id="inviteLinkStatus" class="status">登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次步入行動，會額外獲得一次分享加成並影響你的排名。</span>
         </div>
@@ -837,7 +839,7 @@
 
       <section class="panel">
         <div class="section-head">
-          <h2 id="leaderboardSectionTitle">集氣排行榜 / Top 10</h2>
+          <h2 id="leaderboardSectionTitle">Climate Heroes / Top 10</h2>
           <p id="leaderboardSectionBody">只顯示名次與名字，不顯示分數。</p>
         </div>
         <div id="leaderboardEmpty" class="muted">目前還沒有排行榜資料。</div>
@@ -856,7 +858,7 @@
             </div>
             <div class="task-body">
               <h3 id="taskStepTitle">步入行動</h3>
-              <p id="taskStepBody">建立或更新你的氣候行動者資料，並重跑問卷結果。</p>
+              <p id="taskStepBody">建立或更新你的氣候行動者資料，並測驗自己的關注度。</p>
               <a id="taskStepLink" class="pill" href="./climate-action-form.html">前往修改</a>
             </div>
           </article>
@@ -866,16 +868,16 @@
             </div>
             <div class="task-body">
               <h3 id="taskEcoTitle">Eco-MBTI</h3>
-              <p id="taskEcoBody">完成 20 題環保人格測驗，產出角色卡，並在登入時同步儲存到會員資料。</p>
+              <p id="taskEcoBody">完成環保人格測驗，產出角色卡，知道自己適合怎樣的方向參與。</p>
               <a id="taskEcoLink" class="pill" href="./eco-mbti.html">開始測驗</a>
             </div>
           </article>
           <article class="task-card">
             <div class="task-cover">
-              <img src="../assets/GA.png" alt="7-Day Green Proposal cover">
+              <img src="../assets/GA.png" alt="Daily Green Actions cover">
             </div>
             <div class="task-body">
-              <h3 id="taskProposalTitle">7-Day Green Proposal</h3>
+              <h3 id="taskProposalTitle">Daily Green Actions</h3>
               <p id="taskProposalBody">填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。</p>
               <a id="taskProposalLink" class="pill" href="./green-action-7day.html">開始任務</a>
             </div>
@@ -886,7 +888,7 @@
             </div>
             <div class="task-body">
               <h3>植樹森林 / Tree Planting Forest</h3>
-              <p>用 3D 森林畫面查看目前參與人數、完成全部任務人數，以及已累積的植樹名額。</p>
+              <p>用 3D 森林畫面查看目前氣候行動者、Climate Points，以及已累積的植樹進度。</p>
               <a class="pill" href="./tree-planting-forest.html">開啟畫面 / Open View</a>
             </div>
           </article>
@@ -918,7 +920,7 @@
       <section class="panel reward-panel">
         <div class="section-head">
           <h2 id="rewardSectionTitle">2026 氣候行動證書 / 2026 Climate Action Certificate</h2>
-          <p id="rewardSectionBody">同一帳號只要完成指定條件一次，就可領取電子 2026 年氣候行動證書，並累積對應代幣；植樹森林互動畫面則獨立保留，可另外查看整體進度。</p>
+          <p id="rewardSectionBody">同一帳號只要完成指定條件一次，就可領取電子 2026 年氣候行動證書，並累積對應的限量氣候行動徽章；植樹森林互動畫面則獨立保留，可另外查看整體進度。</p>
         </div>
         <div class="reward-grid">
           <article class="reward-card">
@@ -939,7 +941,7 @@
               </div>
               <div class="reward-item">
                 <div>
-                  <strong id="rewardProposalLabel">完成 7-Day Green Proposal 7 次紀錄</strong>
+                  <strong id="rewardProposalLabel">Daily Green Actions 首次完成 7 天</strong>
                   <span id="rewardProposalHint">以不同日期完成 7 次紀錄</span>
                 </div>
                 <span id="rewardProposalStatus" class="reward-pill pending">未完成</span>
@@ -952,14 +954,14 @@
           </article>
           <article class="reward-result">
             <h3 id="rewardResultTitle">已領取內容 / Reward Details</h3>
-            <p id="rewardResultBody">達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的代幣。</p>
+            <p id="rewardResultBody">達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的限量氣候行動徽章。</p>
             <div id="rewardResultList" class="reward-result-list" hidden>
               <div class="reward-result-item">
                 <span id="rewardCertCodeLabel">電子證書編號</span>
                 <strong id="rewardCertCode">-</strong>
               </div>
               <div class="reward-result-item">
-                <span id="rewardTokenLabel">代幣編號</span>
+                <span id="rewardTokenLabel">Climate Badge 編號</span>
                 <strong id="rewardTokenCode">-</strong>
               </div>
             </div>
@@ -980,7 +982,7 @@
       <section class="panel">
         <div class="section-head">
           <h2 id="proposalSectionTitle">7-Day 任務紀錄 / Proposal Submissions</h2>
-          <p id="proposalSectionBody">最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。</p>
+          <p id="proposalSectionBody">最近上傳的 Daily Green Actions 紀錄會顯示在這裡，方便你回看目前做了哪些內容。</p>
         </div>
         <div class="stats-strip">
           <div class="stat-box">
@@ -991,7 +993,7 @@
           <div class="stat-box">
             <span id="statTasksLabel">任務總數 / Total Tasks</span>
             <strong id="statTotalTasks">0</strong>
-            <p id="statTasksBody">包含所有已提交的 7-Day Green Proposal 紀錄。</p>
+            <p id="statTasksBody">包含所有已提交的 Daily Green Actions 紀錄。</p>
           </div>
           <div class="stat-box">
             <span id="statLatestLabel">最近提交 / Latest Submission</span>
@@ -1093,8 +1095,8 @@
       zh: {
         pageTitle: "氣候行動者中心 | Blue Sky Returns",
         brandSubtitle: "氣候行動者中心 / Member Center",
-        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "7 日綠色提案", eco: "Eco-MBTI", step: "步入行動", member: "氣候行動者中心", signIn: "登入 / Sign In", signOut: "登出 / Sign Out" },
-        hero: { badge: "Member Dashboard", title: "氣候行動者中心", body: "登入後，你可以看到自己的氣候行動者資料、步入行動問卷結果、7-Day Green Proposal 任務紀錄，以及目前有哪些可用功能。", proposal: "前往 7-Day Green Proposal", step: "修改步入行動" },
+        nav: { main: "主地球首頁", about: "項目介紹", regions: "合作與願景", proposal: "Daily Green Actions", eco: "Eco-MBTI", step: "步入行動", member: "氣候行動者中心", signIn: "登入 / Sign In", signOut: "登出 / Sign Out" },
+        hero: { badge: "Member Dashboard", title: "氣候行動者中心", body: "登入後，你可以看到自己的氣候行動者資料、步入行動問卷結果、Daily Green Actions 紀錄，以及目前有哪些可用功能。", proposal: "前往 Daily Green Actions", step: "修改步入行動" },
         stateCardTitle: "目前登入狀態",
         abilityCardTitle: "目前可做的事",
         sections: {
@@ -1102,42 +1104,42 @@
           summaryBody: "這裡會顯示你目前的基本資訊、帳號身分與問卷結果。",
           basicCard: "基本資料",
           resultCard: "步入行動結果",
-          leaderboardTitle: "集氣排行榜 / Top 10",
+          leaderboardTitle: "Climate Heroes / Top 10",
           leaderboardBody: "只顯示名次與名字，不顯示分數。",
           tasksTitle: "目前功能 / What You Have",
           tasksBody: "依照你的帳號身分，氣候行動者中心會整理目前可以直接進行的任務。",
-          proposalTitle: "7-Day 任務紀錄 / Proposal Submissions",
-          proposalBody: "最近上傳的 7-Day Green Proposal 任務會顯示在這裡，方便你回看目前做了哪些內容。",
+          proposalTitle: "Daily Green Actions 紀錄 / Action Records",
+          proposalBody: "最近上傳的 Daily Green Actions 紀錄會顯示在這裡，方便你回看目前做了哪些內容。",
           reviewTitle: "希望與威脅審核台 / Hope & Crisis Review Desk",
           reviewBody: "具備協作管理功能的帳號，可在這裡審核其他氣候行動者提交的 Hope / Crisis 首頁候選資料，並更新狀態。"
         },
         rewards: {
           title: "2026 氣候行動證書 / 2026 Climate Action Certificate",
-          body: "同一帳號完成指定條件後可領取電子 2026 年氣候行動證書，並累積對應代幣；植樹森林互動畫面則獨立保留，可另外查看整體進度。",
+          body: "同一帳號完成指定條件後可領取電子 2026 年氣候行動證書，並累積對應的限量氣候行動徽章；植樹森林互動畫面則獨立保留，可另外查看整體進度。",
           stepLabel: "完成步入行動",
           stepHint: "建立或更新問卷結果",
           ecoLabel: "完成 Eco-MBTI",
           ecoHint: "已產生並儲存人格結果",
-          proposalLabel: "7-Day Green Proposal 首次完成 7 天可獲得 1 枚代幣",
-          proposalHint: "每個帳號首次完成 7 天可獲得 1 枚代幣，數量有限。",
+          proposalLabel: "Daily Green Actions 首次完成 7 天可獲得 1 枚限量氣候行動徽章",
+          proposalHint: "每個帳號首次完成 7 天可獲得 1 枚限量氣候行動徽章，數量有限。",
           claim: "領取 2026 氣候行動資格",
           resultTitle: "已領取內容 / Reward Details",
-          resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的代幣。",
+          resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的限量氣候行動徽章。",
           cert: "電子證書編號",
-          token: "代幣狀態",
+          token: "Climate Badge 狀態",
           thumbBody: "已生成的 AI 證書主視覺會顯示在這裡。",
           studioLink: "開啟 AI 證書工作室",
-          studioHintReady: "你可以上傳自己的照片，帶入證書編號與代幣，使用 AI 生成專屬證書設計。",
+          studioHintReady: "你可以上傳自己的照片，帶入證書編號與 Climate Badge，使用 AI 生成專屬證書設計。",
           studioHintLocked: "完成領取後，即可上傳自己的照片，用 AI 生成專屬證書設計。"
         },
         tasks: {
           stepTitle: "步入行動",
-          stepBody: "建立或更新你的氣候行動者資料，並重跑問卷結果。",
+          stepBody: "建立或更新你的氣候行動者資料，並測驗自己的關注度。",
           stepLink: "前往修改",
           ecoTitle: "Eco-MBTI",
-          ecoBody: "完成 20 題環保人格測驗，產出角色卡，並在登入時同步儲存到會員資料。",
+          ecoBody: "完成環保人格測驗，產出角色卡，知道自己適合怎樣的方向參與。",
           ecoLink: "開始測驗",
-          proposalTitle: "7-Day Green Proposal",
+          proposalTitle: "Daily Green Actions",
           proposalBody: "填寫今天完成的綠色行動內容，並上傳照片作為任務紀錄。",
           proposalLink: "開始任務",
           uploadTitle: "上傳希望與威脅",
@@ -1151,21 +1153,26 @@
           daysLabel: "完成天數 / Days Completed",
           daysBody: "以不同日期計算，方便看目前完成了幾天。",
           tasksLabel: "任務總數 / Total Tasks",
-          tasksBody: "包含所有已提交的 7-Day Green Proposal 紀錄。",
+          tasksBody: "包含所有已提交的 Daily Green Actions 紀錄。",
           latestLabel: "最近提交 / Latest Submission",
           latestBody: "最後一次提交任務的日期。"
         },
         loginModal: { title: "會員登入 / Member Sign In", email: "Email", password: "Password", submit: "登入 / Sign In", forgot: "忘記密碼 / Reset Password", cancel: "取消 / Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", impact: "影響人數：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "步入行動分數：", rank: "集氣排名：", region: "地區 / 分會：", updatedAt: "更新時間：" },
+        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", impact: "影響人數：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "步入行動分數：", rank: "Climate Heroes 名次：", region: "地區 / 分會：", updatedAt: "更新時間：" },
         leaderboard: {
           empty: "目前還沒有排行榜資料。",
           anonymous: "匿名氣候行動者"
         },
         invite: {
+          modeStep: "步入行動分享",
+          modeMbti: "MBTI 分享",
           copy: "複製我的分享連結",
-          guest: "登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次步入行動，會額外獲得一次分享加成並影響你的排名。",
-          copied: "已複製你的專屬分享連結。",
+          guest: "登入後可複製你的專屬分享連結；每有一位新帳號透過你的分享連結完成第一次步入行動，或透過你的 MBTI 分享註冊成為氣候行動者，都會額外獲得一次分享加成並影響你的 Climate Heroes 名次。",
+          stepHint: "目前是步入行動分享。新帳號透過這個連結完成第一次步入行動，會增加一次分享加成。",
+          mbtiHint: "目前是 MBTI 分享。新帳號透過這個連結註冊成為氣候行動者，會增加一次分享加成。",
+          copiedStep: "已複製步入行動分享連結。",
+          copiedMbti: "已複製 MBTI 分享連結。",
           copiedFallback: "無法自動複製，請手動複製：",
           failed: "建立分享連結失敗，請稍後再試。"
         },
@@ -1178,11 +1185,11 @@
           signedInPrefix: "已登入：",
           dashboard: {
             level3: "你可以修改步入行動、提交 7-Day 任務，也可以前往審核別人的希望與威脅資料。",
-            level2: "你可以修改步入行動，並提交 7-Day Green Proposal 與其他上傳內容。",
-            level1: "你可以修改步入行動，並提交 7-Day Green Proposal 任務。"
+            level2: "你可以修改步入行動，並提交 Daily Green Actions 與其他上傳內容。",
+            level1: "你可以修改步入行動，並提交 Daily Green Actions 任務。"
           },
           rewardGuest: "登入後即可查看目前資格進度。",
-          rewardReady: "你已符合條件，可以領取 2026 氣候行動證書；代幣會依 7-Day 完成進度自動累積，植樹森林則維持獨立互動功能。",
+          rewardReady: "你已符合條件，可以領取 2026 氣候行動證書；限量氣候行動徽章會依 Daily Green Actions 完成進度自動累積，植樹森林則維持獨立互動功能。",
           rewardPending: "尚未符合領取條件，請先完成所有指定任務。",
           rewardClaiming: "正在建立你的 2026 氣候行動資格...",
           rewardClaimed: "你已完成領取，每個帳號限領一次。",
@@ -1203,8 +1210,8 @@
       en: {
         pageTitle: "Member Center | Blue Sky Returns",
         brandSubtitle: "Member Center",
-        nav: { main: "Main Globe", about: "About", regions: "Collaboration & Vision", proposal: "7-Day Green Proposal", eco: "Eco-MBTI", step: "Take One Step", member: "Member Center", signIn: "Sign In", signOut: "Sign Out" },
-        hero: { badge: "Member Dashboard", title: "Climate Action Partner Center", body: "After signing in, you can view your climate action partner profile, Take One Step results, 7-Day Green Proposal records, and the features currently available to you.", proposal: "Open 7-Day Green Proposal", step: "Edit Take One Step" },
+        nav: { main: "Main Globe", about: "About", regions: "Collaboration & Vision", proposal: "Daily Green Actions", eco: "Eco-MBTI", step: "Take One Step", member: "Member Center", signIn: "Sign In", signOut: "Sign Out" },
+        hero: { badge: "Member Dashboard", title: "Climate Action Partner Center", body: "After signing in, you can view your climate action partner profile, Take One Step results, Daily Green Actions records, and the features currently available to you.", proposal: "Open Daily Green Actions", step: "Edit Take One Step" },
         stateCardTitle: "Current Sign-In Status",
         abilityCardTitle: "What You Can Do Now",
         sections: {
@@ -1212,32 +1219,32 @@
           summaryBody: "This section shows your current profile, account access, and questionnaire result.",
           basicCard: "Profile Basics",
           resultCard: "Take One Step Result",
-          leaderboardTitle: "Boost Leaderboard / Top 10",
+          leaderboardTitle: "Climate Heroes / Top 10",
           leaderboardBody: "Only ranks and names are shown. Scores stay hidden.",
           tasksTitle: "Current Features",
           tasksBody: "The member center organizes the actions you can take based on your current account access.",
-          proposalTitle: "7-Day Task Records",
-          proposalBody: "Your recent 7-Day Green Proposal uploads appear here so you can review what you have completed so far.",
+          proposalTitle: "Daily Green Actions Records",
+          proposalBody: "Your recent Daily Green Actions uploads appear here so you can review what you have completed so far.",
           reviewTitle: "Hope & Crisis Review Desk",
           reviewBody: "Accounts with coordination access can review other climate action partners' Hope / Crisis homepage candidate submissions here and update their status."
         },
         rewards: {
           title: "2026 Climate Action Certificate",
-          body: "Once the same account completes the required steps, it can claim one 2026 digital climate action certificate and the related token progress. The tree planting forest remains available separately as its own interactive experience.",
+          body: "Once the same account completes the required steps, it can claim one 2026 digital climate action certificate and the related Climate Badge progress. The tree planting forest remains available separately as its own interactive experience.",
           stepLabel: "Complete Take One Step",
           stepHint: "Create or update your questionnaire result",
           ecoLabel: "Complete Eco-MBTI",
           ecoHint: "Your personality result has been generated and saved",
-          proposalLabel: "Complete your first 7 days in 7-Day Green Proposal to earn 1 token",
-          proposalHint: "Each account can earn 1 token on its first 7-day completion. Limited quantity.",
+          proposalLabel: "Complete your first 7 days in Daily Green Actions to earn 1 limited Climate Badge",
+          proposalHint: "Each account can earn 1 limited Climate Badge on its first 7-day completion.",
           claim: "Claim 2026 Climate Action Reward",
           resultTitle: "Reward Details",
-          resultBody: "After you meet the requirements and claim the reward, your certificate code and current token status will appear here.",
+          resultBody: "After you meet the requirements and claim the reward, your certificate code and current Climate Badge status will appear here.",
           cert: "Certificate Code",
-          token: "Token Status",
+          token: "Climate Badge Status",
           thumbBody: "Your generated AI certificate visual appears here.",
           studioLink: "Open AI Certificate Studio",
-          studioHintReady: "Upload your photo, bring in your certificate code and token, and use AI to generate a personalized certificate design.",
+          studioHintReady: "Upload your photo, bring in your certificate code and Climate Badge, and use AI to generate a personalized certificate design.",
           studioHintLocked: "Claim the reward first, then you can upload your photo and use AI to generate your personalized certificate design."
         },
         tasks: {
@@ -1247,7 +1254,7 @@
           ecoTitle: "Eco-MBTI",
           ecoBody: "Complete the 20-question environmental personality quiz, generate your role card, and save it to your member profile when signed in.",
           ecoLink: "Start Quiz",
-          proposalTitle: "7-Day Green Proposal",
+          proposalTitle: "Daily Green Actions",
           proposalBody: "Log today's green action and upload a photo as part of your task record.",
           proposalLink: "Start Task",
           uploadTitle: "Upload Hope & Crisis",
@@ -1261,21 +1268,26 @@
           daysLabel: "Days Completed",
           daysBody: "Counted by unique dates so you can see how many days are already completed.",
           tasksLabel: "Total Tasks",
-          tasksBody: "Includes every submitted 7-Day Green Proposal entry.",
+          tasksBody: "Includes every submitted Daily Green Actions entry.",
           latestLabel: "Latest Submission",
           latestBody: "The date of your most recent task submission."
         },
         loginModal: { title: "Member Sign In", email: "Email", password: "Password", submit: "Sign In", forgot: "Reset Password", cancel: "Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", impact: "People Reached: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Take One Step Score: ", rank: "Boost Rank: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
+        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", impact: "People Reached: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Take One Step Score: ", rank: "Climate Heroes Rank: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
         leaderboard: {
           empty: "No leaderboard data yet.",
           anonymous: "Anonymous Climate Action Partner"
         },
         invite: {
+          modeStep: "Take One Step Share",
+          modeMbti: "MBTI Share",
           copy: "Copy My Share Link",
-          guest: "Sign in to copy your personal share link. Each new account that completes its first Take One Step through your link adds one share bonus and affects your rank.",
-          copied: "Your personal share link has been copied.",
+          guest: "Sign in to copy your personal share link. Each new account that completes its first Take One Step through your link, or registers as a Climate Action Partner through your MBTI share, adds one share bonus and affects your Climate Heroes rank.",
+          stepHint: "Take One Step share is selected. When a new account completes its first Take One Step through this link, you gain one share bonus.",
+          mbtiHint: "MBTI share is selected. When a new account registers as a Climate Action Partner through this link, you gain one share bonus.",
+          copiedStep: "Take One Step share link copied.",
+          copiedMbti: "MBTI share link copied.",
           copiedFallback: "Copy this link manually:",
           failed: "Failed to create the share link. Please try again later."
         },
@@ -1288,11 +1300,11 @@
           signedInPrefix: "Signed in: ",
           dashboard: {
             level3: "You can edit Take One Step, submit 7-Day tasks, and review other members' Hope and Crisis submissions.",
-            level2: "You can edit Take One Step and submit 7-Day Green Proposal tasks and other uploads.",
-            level1: "You can edit Take One Step and submit 7-Day Green Proposal tasks."
+            level2: "You can edit Take One Step and submit Daily Green Actions tasks and other uploads.",
+            level1: "You can edit Take One Step and submit Daily Green Actions tasks."
           },
           rewardGuest: "Sign in to see your current reward progress.",
-          rewardReady: "You have met the requirements and can now claim your 2026 climate action certificate. Tokens accumulate automatically based on your 7-Day progress, while the tree planting forest remains a separate interactive feature.",
+          rewardReady: "You have met the requirements and can now claim your 2026 climate action certificate. Climate Badges accumulate automatically based on your Daily Green Actions progress, while the tree planting forest remains a separate interactive feature.",
           rewardPending: "The requirements are not complete yet. Please finish every required task first.",
           rewardClaiming: "Creating your 2026 climate action reward...",
           rewardClaimed: "This account has already claimed the reward. Each account can claim only once.",
@@ -1377,6 +1389,8 @@
     const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
     const leaderboardList = document.getElementById("leaderboardList");
     const leaderboardEmpty = document.getElementById("leaderboardEmpty");
+    const inviteModeStepBtn = document.getElementById("inviteModeStepBtn");
+    const inviteModeMbtiBtn = document.getElementById("inviteModeMbtiBtn");
     const copyInviteLinkBtn = document.getElementById("copyInviteLinkBtn");
     const inviteLinkStatus = document.getElementById("inviteLinkStatus");
     const statCompletedDays = document.getElementById("statCompletedDays");
@@ -1387,11 +1401,24 @@
     let currentUserSubmissions = [];
     let currentUserCompletionDates = [];
     let currentLeaderboardEntries = [];
+    let currentInviteMode = "step";
     const MAX_CERTIFICATE_COUNT = 5000;
-    const buildInviteLink = (userId) => {
-      const url = new URL("./climate-action-form.html", window.location.href);
+    const buildInviteLink = (userId, mode = currentInviteMode) => {
+      const target = mode === "mbti" ? "./eco-mbti.html" : "./climate-action-form.html";
+      const url = new URL(target, window.location.href);
       url.searchParams.set("ref", userId);
       return url.toString();
+    };
+    const updateInviteModeUi = () => {
+      inviteModeStepBtn.classList.toggle("active", currentInviteMode === "step");
+      inviteModeMbtiBtn.classList.toggle("active", currentInviteMode === "mbti");
+      if (!auth.currentUser) {
+        inviteLinkStatus.textContent = t("invite.guest");
+        inviteLinkStatus.className = "status warn";
+        return;
+      }
+      inviteLinkStatus.textContent = currentInviteMode === "mbti" ? t("invite.mbtiHint") : t("invite.stepHint");
+      inviteLinkStatus.className = "status";
     };
     const loadImpactCount = async (userId) => {
       const snap = await getDocs(
@@ -1876,7 +1903,7 @@
         const article = document.createElement("article");
         article.className = `token-slot ${slot.state}`;
         const title = document.createElement("strong");
-        title.textContent = currentLang === "zh" ? `第 ${slot.index} 枚代幣` : `Token ${slot.index}`;
+        title.textContent = currentLang === "zh" ? `第 ${slot.index} 枚徽章` : `Badge ${slot.index}`;
         const chip = document.createElement("span");
         chip.className = `token-chip ${slot.state}`;
         chip.textContent = slot.label;
@@ -1919,8 +1946,8 @@
       setRewardStepState(rewardEcoStatus, currentRewardEligibility.ecoDone);
       setRewardStepState(rewardProposalStatus, currentRewardEligibility.proposalDone);
       rewardProposalHint.textContent = currentLang === "zh"
-        ? `目前已完成 ${currentRewardEligibility.completedDays} 天，已獲得 ${currentRewardEligibility.earnedTokenCount} / 1 枚代幣`
-        : `${currentRewardEligibility.completedDays} days completed, ${currentRewardEligibility.earnedTokenCount} / 1 token earned`;
+        ? `目前已完成 ${currentRewardEligibility.completedDays} 天，已獲得 ${currentRewardEligibility.earnedTokenCount} / 1 枚限量氣候行動徽章`
+        : `${currentRewardEligibility.completedDays} days completed, ${currentRewardEligibility.earnedTokenCount} / 1 limited Climate Badge earned`;
       claimRewardBtn.disabled = !currentRewardEligibility.eligible || Boolean(rewardRecord) || !auth.currentUser;
       if (rewardRecord) {
         rewardStatus.textContent = t("states.rewardAlreadyClaimed");
@@ -2118,7 +2145,7 @@
       if (submission.image?.downloadURL) {
         const img = document.createElement("img");
         img.src = submission.image.downloadURL;
-        img.alt = submission.title || "7-Day Green Proposal submission";
+        img.alt = submission.title || "Daily Green Actions submission";
         article.appendChild(img);
       }
 
@@ -2750,10 +2777,7 @@
         } else {
           reviewerSubmissionPanel.hidden = true;
         }
-        inviteLinkStatus.textContent = currentLang === "zh"
-          ? "每有一位新帳號透過你的分享連結完成第一次步入行動，就會自動增加一次分享加成，並影響你的集氣排名。"
-          : "Each new account that completes its first Take One Step through your shared link adds one share bonus and affects your boost rank.";
-        inviteLinkStatus.className = "status";
+        updateInviteModeUi();
         await loadLeaderboard();
       } catch (error) {
         console.error("Failed to load member center data", error);
@@ -2779,7 +2803,7 @@
       try {
         if (navigator.clipboard?.writeText) {
           await navigator.clipboard.writeText(inviteUrl);
-          inviteLinkStatus.textContent = t("invite.copied");
+          inviteLinkStatus.textContent = currentInviteMode === "mbti" ? t("invite.copiedMbti") : t("invite.copiedStep");
           inviteLinkStatus.className = "status ok";
           return;
         }
@@ -2793,9 +2817,20 @@
       }
     });
 
+    inviteModeStepBtn.addEventListener("click", () => {
+      currentInviteMode = "step";
+      updateInviteModeUi();
+    });
+
+    inviteModeMbtiBtn.addEventListener("click", () => {
+      currentInviteMode = "mbti";
+      updateInviteModeUi();
+    });
+
     langButtons.forEach((button) => {
       button.addEventListener("click", () => {
         applyLanguage(button.dataset.lang);
+        updateInviteModeUi();
         if (!auth.currentUser) {
           renderGuestState();
         }
@@ -2803,6 +2838,7 @@
     });
 
     applyLanguage(currentLang);
+    updateInviteModeUi();
     renderGuestState();
   </script>
 </body>

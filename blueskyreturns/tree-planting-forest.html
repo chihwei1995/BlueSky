@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2026 植樹互動畫面 | Blue Sky Returns</title>
+  <title>植樹森林 | Blue Sky Returns</title>
   <link rel="icon" type="image/png" href="/Enter.PNG" />
   <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
   <link rel="apple-touch-icon" href="/Enter.PNG" />
-  <meta name="description" content="Explore the Blue Sky Returns tree planting forest view and see how many climate action partners and completed missions have contributed to the current tree planting slots." />
+  <meta name="description" content="Explore the Blue Sky Returns tree planting forest, see live tree progress from Climate Action Partners and Climate Points, and view your own forest growth summary." />
   <link rel="canonical" href="https://www.blue-sky-returns.online/blueskyreturns/tree-planting-forest.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Blue Sky Returns" />
-  <meta property="og:title" content="2026 Tree Planting Forest | Blue Sky Returns" />
-  <meta property="og:description" content="An interactive forest scene showing current participants, completed missions, and the tree planting slots accumulated by Blue Sky Returns." />
+  <meta property="og:title" content="Tree Planting Forest | Blue Sky Returns" />
+  <meta property="og:description" content="A live forest view that turns Climate Action Partners and Climate Points into tree planting progress." />
   <meta property="og:url" content="https://www.blue-sky-returns.online/blueskyreturns/tree-planting-forest.html" />
   <meta property="og:image" content="https://www.blue-sky-returns.online/assets/2026植樹計劃.png" />
   <meta property="og:image:alt" content="Blue Sky Returns tree planting forest cover" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="2026 Tree Planting Forest | Blue Sky Returns" />
-  <meta name="twitter:description" content="See the current tree planting forest built from participant counts and completed missions in Blue Sky Returns." />
+  <meta name="twitter:title" content="Tree Planting Forest | Blue Sky Returns" />
+  <meta name="twitter:description" content="See the current tree planting forest built from Climate Action Partners and Climate Points in Blue Sky Returns." />
   <meta name="twitter:image" content="https://www.blue-sky-returns.online/assets/2026植樹計劃.png" />
   <style>
     :root {
@@ -253,6 +253,67 @@
       color: #fff;
     }
 
+    .my-forest {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(208, 241, 224, 0.12);
+    }
+
+    .my-forest-head {
+      display: grid;
+      gap: 6px;
+    }
+
+    .my-forest-head p,
+    .my-forest-status,
+    .my-forest-note {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .my-forest-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .target-note {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(244, 223, 143, 0.08), rgba(94, 209, 109, 0.09));
+      border: 1px solid rgba(244, 223, 143, 0.16);
+    }
+
+    .target-note p {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .my-forest-item {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(208, 241, 224, 0.1);
+    }
+
+    .my-forest-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-bottom: 6px;
+    }
+
+    .my-forest-item strong {
+      display: block;
+      font-size: 1.28rem;
+      color: #fff;
+    }
+
     .scene-panel {
       position: relative;
       min-height: 720px;
@@ -384,6 +445,58 @@
       color: var(--muted);
     }
 
+    .leaderboard-panel {
+      margin-top: 22px;
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .leaderboard-head {
+      display: grid;
+      gap: 6px;
+    }
+
+    .leaderboard-head p {
+      color: var(--muted);
+    }
+
+    .leaderboard-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(208, 241, 224, 0.12);
+    }
+
+    .leaderboard-rank {
+      min-width: 72px;
+      font-weight: 800;
+      color: var(--mint);
+    }
+
+    .leaderboard-name {
+      flex: 1;
+      min-width: 0;
+      font-weight: 700;
+      color: #fff;
+      word-break: break-word;
+      text-align: right;
+    }
+
+    .leaderboard-empty {
+      color: var(--muted);
+      padding: 4px 0;
+    }
+
     @media (max-width: 1080px) {
       .hero {
         grid-template-columns: 1fr;
@@ -432,7 +545,7 @@
         <img src="../Enter.PNG" alt="Blue Sky Returns" />
         <div class="brand-copy">
           <strong>Blue Sky Returns</strong>
-          <span id="brandSubtitle">2026 植樹互動畫面</span>
+          <span id="brandSubtitle">Tree Planting Forest</span>
         </div>
       </a>
       <div class="nav-actions">
@@ -452,8 +565,8 @@
     <section class="hero">
       <article class="panel intro">
         <span id="eyebrow" class="eyebrow">TREE PROGRESS</span>
-        <h1 id="heroTitle">2026 植樹森林</h1>
-        <p id="heroBody">這個互動畫面會依照目前的氣候行動者人數與完成全部任務的人數，即時換算出對應的植樹名額，並以樹林方式展示。</p>
+        <h1 id="heroTitle">植樹森林</h1>
+        <p id="heroBody">這個互動畫面會依照目前的氣候行動者人數與全站 Climate Points 總分，即時換算出對應的植樹名額，並以樹林方式展示。</p>
 
         <div class="stats">
           <div class="stat">
@@ -461,8 +574,8 @@
             <strong id="participantsValue">-</strong>
           </div>
           <div class="stat">
-            <div id="completedLabel" class="stat-label">完成全部任務</div>
-            <strong id="completedValue">-</strong>
+            <div id="pointsLabel" class="stat-label">目前 Climate Points</div>
+            <strong id="pointsValue">-</strong>
           </div>
           <div class="stat">
             <div id="treesLabel" class="stat-label">目前對應植樹名額</div>
@@ -476,8 +589,44 @@
 
         <div class="formula">
           <div class="formula-row"><span id="formulaPartnersLabel">每 100 位氣候行動者</span><strong id="formulaPartnersValue">= 0 個名額</strong></div>
-          <div class="formula-row"><span id="formulaCompletedLabel">每 1 位完成全部任務</span><strong id="formulaCompletedValue">= 0 個名額</strong></div>
+          <div class="formula-row"><span id="formulaPointsLabel">每 100 分 Climate Points</span><strong id="formulaPointsValue">= 0 個名額</strong></div>
           <div class="formula-row"><span id="formulaCapLabel">總上限</span><strong id="formulaCapValue">321 個名額</strong></div>
+        </div>
+
+        <div class="target-note">
+          <h2 id="targetTitle">321 棵樹怎麼累積</h2>
+          <p id="targetBody">若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 32,100 分。實際上可由兩者一起累積，慢慢長出整座森林。</p>
+        </div>
+
+        <div class="my-forest">
+          <div class="my-forest-head">
+            <h2 id="myForestTitle">我的森林 / My Forest</h2>
+            <p id="myForestBody">登入後可查看你的氣候點數、行動天數、影響人數與個人成長摘要。</p>
+          </div>
+          <div id="myForestStatus" class="my-forest-status">尚未登入，先到氣候行動者中心登入即可查看。</div>
+          <div class="my-forest-grid">
+            <div class="my-forest-item">
+              <span id="myForestPointsLabel">Climate Points</span>
+              <strong id="myForestPointsValue">-</strong>
+            </div>
+            <div class="my-forest-item">
+              <span id="myForestActionsLabel">行動天數</span>
+              <strong id="myForestActionsValue">-</strong>
+            </div>
+            <div class="my-forest-item">
+              <span id="myForestImpactLabel">影響人數</span>
+              <strong id="myForestImpactValue">-</strong>
+            </div>
+            <div class="my-forest-item">
+              <span id="myForestTreesLabel">個人成長樹</span>
+              <strong id="myForestTreesValue">-</strong>
+            </div>
+            <div class="my-forest-item">
+              <span id="myForestNextLabel">距離下一棵樹</span>
+              <strong id="myForestNextValue">-</strong>
+            </div>
+          </div>
+          <p id="myForestNote" class="my-forest-note">個人成長樹會用你的 Climate Points 換算，方便看到自己的累積進度。</p>
         </div>
       </article>
 
@@ -491,7 +640,7 @@
             </div>
             <div class="legend">
               <div class="legend-item"><span class="dot partners"></span><span id="legendPartners">由氣候行動者累積的名額</span></div>
-              <div class="legend-item"><span class="dot completed"></span><span id="legendCompleted">由完成全部任務累積的名額</span></div>
+              <div class="legend-item"><span class="dot completed"></span><span id="legendPoints">由 Climate Points 累積的名額</span></div>
             </div>
           </div>
 
@@ -511,9 +660,18 @@
     <section class="foot">
       <div class="panel">
         <h3 id="footTitle">計算方式</h3>
-        <p id="footBody">目前會以 Firebase 內的氣候行動者總數、已完成步入行動 + Eco-MBTI + 7-Day 7 天紀錄的帳號數，換算出本頁顯示的植樹名額。最多顯示 321 個名額。</p>
+        <p id="footBody">目前會以 Firebase 內的氣候行動者總數與全站 Climate Points 總分換算植樹名額。每 100 位氣候行動者捐款植 1 棵樹，每 100 分 Climate Points 捐款植 1 棵樹；最多顯示 321 棵樹。</p>
       </div>
       <a id="footAction" class="chip active" href="./member-center.html">回到氣候行動者中心</a>
+    </section>
+
+    <section class="panel leaderboard-panel">
+      <div class="leaderboard-head">
+        <h2 id="leaderboardTitle">Climate Heroes / Top 10</h2>
+        <p id="leaderboardBody">只顯示名次與名字，不顯示分數。</p>
+      </div>
+      <div id="leaderboardEmpty" class="leaderboard-empty">目前還沒有排行榜資料。</div>
+      <div id="leaderboardList" class="leaderboard-list" hidden></div>
     </section>
   </main>
 
@@ -522,89 +680,122 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 
     const translations = {
       zh: {
-        title: "2026 植樹互動畫面 | Blue Sky Returns",
-        brandSubtitle: "2026 植樹互動畫面",
+        title: "植樹森林 | Blue Sky Returns",
+        brandSubtitle: "Tree Planting Forest",
         navMain: "主地球首頁",
         navAbout: "項目介紹",
         navMember: "氣候行動者中心",
         navForest: "植樹森林",
         eyebrow: "TREE PROGRESS",
-        heroTitle: "2026 植樹森林",
-        heroBody: "這個互動畫面會依照目前的氣候行動者人數與完成全部任務的人數，即時換算出對應的植樹名額，並以樹林方式展示。",
+        heroTitle: "植樹森林",
+        heroBody: "這個互動畫面會依照目前的氣候行動者人數與全站 Climate Points 總分，即時換算出對應的植樹名額，並以樹林方式展示。",
         participantsLabel: "目前氣候行動者",
-        completedLabel: "完成全部任務",
+        pointsLabel: "目前 Climate Points",
         treesLabel: "目前對應植樹名額",
         remainingLabel: "距離上限剩餘",
         formulaPartnersLabel: "每 100 位氣候行動者",
-        formulaCompletedLabel: "每 1 位完成全部任務",
+        formulaPointsLabel: "每 100 分 Climate Points",
         formulaCapLabel: "總上限",
         formulaPartnersValue: (value) => `= ${value} 個名額`,
-        formulaCompletedValue: (value) => `= ${value} 個名額`,
+        formulaPointsValue: (value) => `= ${value} 個名額`,
         formulaCapValue: "321 個名額",
+        targetTitle: "321 棵樹怎麼累積",
+        targetBody: "若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 32,100 分。實際上可由兩者一起累積，慢慢長出整座森林。",
+        myForestTitle: "我的森林 / My Forest",
+        myForestBody: "登入後可查看你的氣候點數、行動天數、影響人數與個人成長摘要。",
+        myForestGuest: "尚未登入，先到氣候行動者中心登入即可查看。",
+        myForestSignedIn: (name) => `${name}，這是你目前的森林成長摘要。`,
+        myForestPointsLabel: "Climate Points",
+        myForestActionsLabel: "行動天數",
+        myForestImpactLabel: "影響人數",
+        myForestTreesLabel: "個人成長樹",
+        myForestNextLabel: "距離下一棵樹",
+        myForestNote: "個人成長樹會用你的 Climate Points 換算，方便看到自己的累積進度。",
         sceneTitle: "互動森林視角",
         sceneBody: "拖曳可旋轉視角，滾輪可縮放，點擊任一棵樹可查看這棵樹代表的是哪一種名額來源。",
         legendPartners: "由氣候行動者累積的名額",
-        legendCompleted: "由完成全部任務累積的名額",
+        legendPoints: "由 Climate Points 累積的名額",
         sceneStatusText: "棵樹正在場景中生長",
         treeDetailTitle: "樹木名額詳情",
         treeDetailBody: "載入後，點擊畫面中的樹木即可查看它對應的名額來源。",
         footTitle: "計算方式",
-        footBody: "目前會以 Firebase 內的氣候行動者總數、已完成步入行動 + Eco-MBTI + 7-Day 7 天紀錄的帳號數，換算出本頁顯示的植樹名額。最多顯示 321 個名額。",
+        footBody: "目前會以 Firebase 內的氣候行動者總數與全站 Climate Points 總分換算植樹名額。每 100 位氣候行動者捐款植 1 棵樹，每 100 分 Climate Points 捐款植 1 棵樹；最多顯示 321 棵樹。",
         footAction: "回到氣候行動者中心",
+        leaderboardTitle: "Climate Heroes / Top 10",
+        leaderboardBody: "只顯示名次與名字，不顯示分數。",
+        leaderboardEmpty: "目前還沒有排行榜資料。",
+        leaderboardAnonymous: "匿名氣候行動者",
         loading: "正在讀取 Firebase 植樹資料...",
         noTrees: "目前尚未累積到植樹名額",
         treeInfoTitle: (slot) => `第 ${slot} 個植樹名額`,
         treeInfoPartner: (order) => `這棵樹來自氣候行動者累積名額，第 ${order} 棵由每 100 位氣候行動者換算而來。`,
-        treeInfoCompleted: (order) => `這棵樹來自完成全部任務的累積名額，第 ${order} 棵由 1 位完成全部任務的氣候行動者直接對應。`,
+        treeInfoPoints: (order) => `這棵樹來自 Climate Points 累積名額，第 ${order} 棵由每 100 分 Climate Points 換算而來。`,
         treeInfoMeta: (source, cap) => `<ul><li>來源：${source}</li><li>名額序號：${cap} / 321</li></ul>`,
         sourcePartner: "氣候行動者人數",
-        sourceCompleted: "完成全部任務",
+        sourcePoints: "Climate Points",
         statusText: (count) => `${count} 棵樹正在場景中生長`,
         countsSuffix: "人",
         treeSuffix: "棵",
         error: "目前無法載入植樹資料，請稍後再試。"
       },
       en: {
-        title: "2026 Tree Planting Forest | Blue Sky Returns",
-        brandSubtitle: "2026 Tree Planting Forest",
+        title: "Tree Planting Forest | Blue Sky Returns",
+        brandSubtitle: "Tree Planting Forest",
         navMain: "Main Globe",
         navAbout: "About",
         navMember: "Member Center",
         navForest: "Tree Forest",
         eyebrow: "TREE PROGRESS",
-        heroTitle: "2026 Tree Planting Forest",
-        heroBody: "This interactive forest converts the current number of climate action partners and the number of people who completed all tasks into live tree planting slots, then visualizes them as a growing forest.",
+        heroTitle: "Tree Planting Forest",
+        heroBody: "This interactive forest converts the current number of climate action partners and the total Climate Points across the platform into live tree planting slots, then visualizes them as a growing forest.",
         participantsLabel: "Climate Action Partners",
-        completedLabel: "Completed All Tasks",
+        pointsLabel: "Climate Points",
         treesLabel: "Current Tree Planting Slots",
         remainingLabel: "Remaining to Cap",
         formulaPartnersLabel: "Every 100 Climate Action Partners",
-        formulaCompletedLabel: "Every 1 Full Completion",
+        formulaPointsLabel: "Every 100 Climate Points",
         formulaCapLabel: "Cap",
         formulaPartnersValue: (value) => `= ${value} slots`,
-        formulaCompletedValue: (value) => `= ${value} slots`,
+        formulaPointsValue: (value) => `= ${value} slots`,
         formulaCapValue: "321 slots",
+        targetTitle: "How 321 trees can be reached",
+        targetBody: "If this goal came only from people, it would take about 32,100 Climate Action Partners. If it came only from Climate Points, it would take about 32,100 points. In practice, both can grow the forest together.",
+        myForestTitle: "My Forest",
+        myForestBody: "Sign in to view your Climate Points, action days, people reached, and personal growth summary.",
+        myForestGuest: "Sign in from the member center to view your personal forest summary.",
+        myForestSignedIn: (name) => `${name}, this is your current forest growth summary.`,
+        myForestPointsLabel: "Climate Points",
+        myForestActionsLabel: "Action Days",
+        myForestImpactLabel: "People Reached",
+        myForestTreesLabel: "Personal Trees",
+        myForestNextLabel: "To Your Next Tree",
+        myForestNote: "Personal trees are estimated from your Climate Points so you can see your own growth progress.",
         sceneTitle: "Interactive Forest View",
         sceneBody: "Drag to rotate, use the wheel to zoom, and click any tree to see which slot source it represents.",
         legendPartners: "Slots accumulated from climate action partners",
-        legendCompleted: "Slots accumulated from full task completion",
+        legendPoints: "Slots accumulated from Climate Points",
         sceneStatusText: "trees are currently growing in the scene",
         treeDetailTitle: "Tree Slot Details",
         treeDetailBody: "After loading, click a tree in the scene to see which slot source it represents.",
         footTitle: "How the count is calculated",
-        footBody: "This page reads the total number of climate action partners in Firebase and the number of accounts that completed Take One Step + Eco-MBTI + 7-Day (7 distinct days), then converts them into tree planting slots. The display is capped at 321 slots.",
+        footBody: "This page reads the total number of climate action partners in Firebase and the total Climate Points across the platform. Every 100 climate action partners funds 1 tree, and every 100 Climate Points funds 1 tree. The display is capped at 321 trees.",
         footAction: "Back to Member Center",
+        leaderboardTitle: "Climate Heroes / Top 10",
+        leaderboardBody: "Only ranks and names are shown. Scores stay hidden.",
+        leaderboardEmpty: "No leaderboard data yet.",
+        leaderboardAnonymous: "Anonymous Climate Action Partner",
         loading: "Loading tree planting data from Firebase...",
         noTrees: "No tree planting slots have been accumulated yet.",
         treeInfoTitle: (slot) => `Tree Planting Slot ${slot}`,
         treeInfoPartner: (order) => `This tree comes from the climate action partner count. It is slot ${order} created by the “every 100 partners” rule.`,
-        treeInfoCompleted: (order) => `This tree comes from a full completion. It is slot ${order} created directly by 1 person who completed all tasks.`,
+        treeInfoPoints: (order) => `This tree comes from Climate Points. It is slot ${order} created by the “every 100 Climate Points” rule.`,
         treeInfoMeta: (source, cap) => `<ul><li>Source: ${source}</li><li>Slot number: ${cap} / 321</li></ul>`,
         sourcePartner: "Climate action partner count",
-        sourceCompleted: "Full task completion",
+        sourcePoints: "Climate Points",
         statusText: (count) => `${count} trees are currently growing in the scene`,
         countsSuffix: "",
         treeSuffix: "",
@@ -631,6 +822,7 @@
     const app = initializeApp(firebaseConfig);
     setupBlueSkyAppCheck(app, { pageName: "tree-planting-forest" });
     const db = getFirestore(app, "default");
+    const auth = getAuth(app);
 
     const state = {
       lang: currentLang,
@@ -653,22 +845,38 @@
       heroBody: document.getElementById("heroBody"),
       participantsLabel: document.getElementById("participantsLabel"),
       participantsValue: document.getElementById("participantsValue"),
-      completedLabel: document.getElementById("completedLabel"),
-      completedValue: document.getElementById("completedValue"),
+      pointsLabel: document.getElementById("pointsLabel"),
+      pointsValue: document.getElementById("pointsValue"),
       treesLabel: document.getElementById("treesLabel"),
       treesValue: document.getElementById("treesValue"),
       remainingLabel: document.getElementById("remainingLabel"),
       remainingValue: document.getElementById("remainingValue"),
       formulaPartnersLabel: document.getElementById("formulaPartnersLabel"),
-      formulaCompletedLabel: document.getElementById("formulaCompletedLabel"),
+      formulaPointsLabel: document.getElementById("formulaPointsLabel"),
       formulaCapLabel: document.getElementById("formulaCapLabel"),
       formulaPartnersValue: document.getElementById("formulaPartnersValue"),
-      formulaCompletedValue: document.getElementById("formulaCompletedValue"),
+      formulaPointsValue: document.getElementById("formulaPointsValue"),
+      targetTitle: document.getElementById("targetTitle"),
+      targetBody: document.getElementById("targetBody"),
+      myForestTitle: document.getElementById("myForestTitle"),
+      myForestBody: document.getElementById("myForestBody"),
+      myForestStatus: document.getElementById("myForestStatus"),
+      myForestPointsLabel: document.getElementById("myForestPointsLabel"),
+      myForestPointsValue: document.getElementById("myForestPointsValue"),
+      myForestActionsLabel: document.getElementById("myForestActionsLabel"),
+      myForestActionsValue: document.getElementById("myForestActionsValue"),
+      myForestImpactLabel: document.getElementById("myForestImpactLabel"),
+      myForestImpactValue: document.getElementById("myForestImpactValue"),
+      myForestTreesLabel: document.getElementById("myForestTreesLabel"),
+      myForestTreesValue: document.getElementById("myForestTreesValue"),
+      myForestNextLabel: document.getElementById("myForestNextLabel"),
+      myForestNextValue: document.getElementById("myForestNextValue"),
+      myForestNote: document.getElementById("myForestNote"),
       formulaCapValue: document.getElementById("formulaCapValue"),
       sceneTitle: document.getElementById("sceneTitle"),
       sceneBody: document.getElementById("sceneBody"),
       legendPartners: document.getElementById("legendPartners"),
-      legendCompleted: document.getElementById("legendCompleted"),
+      legendPoints: document.getElementById("legendPoints"),
       sceneStatus: document.getElementById("sceneStatus"),
       sceneStatusText: document.getElementById("sceneStatusText"),
       treeDetailTitle: document.getElementById("treeDetailTitle"),
@@ -676,6 +884,10 @@
       footTitle: document.getElementById("footTitle"),
       footBody: document.getElementById("footBody"),
       footAction: document.getElementById("footAction"),
+      leaderboardTitle: document.getElementById("leaderboardTitle"),
+      leaderboardBody: document.getElementById("leaderboardBody"),
+      leaderboardEmpty: document.getElementById("leaderboardEmpty"),
+      leaderboardList: document.getElementById("leaderboardList"),
       langButtons: Array.from(document.querySelectorAll(".lang-btn"))
     };
 
@@ -693,28 +905,42 @@
       els.heroTitle.textContent = t("heroTitle");
       els.heroBody.textContent = t("heroBody");
       els.participantsLabel.textContent = t("participantsLabel");
-      els.completedLabel.textContent = t("completedLabel");
+      els.pointsLabel.textContent = t("pointsLabel");
       els.treesLabel.textContent = t("treesLabel");
       els.remainingLabel.textContent = t("remainingLabel");
       els.formulaPartnersLabel.textContent = t("formulaPartnersLabel");
-      els.formulaCompletedLabel.textContent = t("formulaCompletedLabel");
+      els.formulaPointsLabel.textContent = t("formulaPointsLabel");
       els.formulaCapLabel.textContent = t("formulaCapLabel");
       els.formulaCapValue.textContent = t("formulaCapValue");
+      els.targetTitle.textContent = t("targetTitle");
+      els.targetBody.textContent = t("targetBody");
+      els.myForestTitle.textContent = t("myForestTitle");
+      els.myForestBody.textContent = t("myForestBody");
+      els.myForestPointsLabel.textContent = t("myForestPointsLabel");
+      els.myForestActionsLabel.textContent = t("myForestActionsLabel");
+      els.myForestImpactLabel.textContent = t("myForestImpactLabel");
+      els.myForestTreesLabel.textContent = t("myForestTreesLabel");
+      els.myForestNextLabel.textContent = t("myForestNextLabel");
+      els.myForestNote.textContent = t("myForestNote");
       els.sceneTitle.textContent = t("sceneTitle");
       els.sceneBody.textContent = t("sceneBody");
       els.legendPartners.textContent = t("legendPartners");
-      els.legendCompleted.textContent = t("legendCompleted");
+      els.legendPoints.textContent = t("legendPoints");
       els.treeDetailTitle.textContent = t("treeDetailTitle");
       els.footTitle.textContent = t("footTitle");
       els.footBody.textContent = t("footBody");
       els.footAction.textContent = t("footAction");
+      els.leaderboardTitle.textContent = t("leaderboardTitle");
+      els.leaderboardBody.textContent = t("leaderboardBody");
       els.langButtons.forEach((button) => button.classList.toggle("active", button.dataset.lang === lang));
       renderStats(lastStats);
       renderSelectedTree(selectedTreeIndex);
+      renderLeaderboard(currentLeaderboardEntries);
     };
 
     let lastStats = null;
     let selectedTreeIndex = -1;
+    let currentLeaderboardEntries = [];
 
     const renderer = new THREE.WebGLRenderer({
       canvas: document.getElementById("forestCanvas"),
@@ -915,8 +1141,8 @@
       els.treeDetailTitle.textContent = t("treeInfoTitle", info.slotNumber);
       const lead = info.source === "partners"
         ? t("treeInfoPartner", info.sourceOrder)
-        : t("treeInfoCompleted", info.sourceOrder);
-      const meta = t("treeInfoMeta", info.source === "partners" ? t("sourcePartner") : t("sourceCompleted"), info.slotNumber);
+        : t("treeInfoPoints", info.sourceOrder);
+      const meta = t("treeInfoMeta", info.source === "partners" ? t("sourcePartner") : t("sourcePoints"), info.slotNumber);
       els.treeDetailBody.innerHTML = `${lead}${meta}`;
     };
 
@@ -939,11 +1165,11 @@
       if (!stats) return;
       lastStats = stats;
       els.participantsValue.textContent = `${stats.participants}${t("countsSuffix")}`;
-      els.completedValue.textContent = `${stats.completed}${t("countsSuffix")}`;
+      els.pointsValue.textContent = `${stats.points}${state.lang === "zh" ? " 分" : ""}`;
       els.treesValue.textContent = `${stats.totalTrees}${state.lang === "zh" ? "棵" : ""}`;
       els.remainingValue.textContent = `${stats.remaining}${state.lang === "zh" ? "棵" : ""}`;
       els.formulaPartnersValue.textContent = t("formulaPartnersValue", stats.partnerTrees);
-      els.formulaCompletedValue.textContent = t("formulaCompletedValue", stats.completedTrees);
+      els.formulaPointsValue.textContent = t("formulaPointsValue", stats.pointTrees);
       els.sceneStatus.innerHTML = `<strong>${stats.totalTrees}</strong><span>${t("statusText", stats.totalTrees)}</span>`;
       if (stats.totalTrees === 0) {
         renderSelectedTree(-1);
@@ -955,10 +1181,10 @@
       }
     };
 
-    const setVisibleTrees = (count, partnerTrees, completedTrees) => {
+    const setVisibleTrees = (count, partnerTrees, pointTrees) => {
       state.visibleTreeCount = count;
       state.participantTrees = partnerTrees;
-      state.completedTrees = completedTrees;
+      state.completedTrees = pointTrees;
       state.totalTrees = count;
       state.treeMeta = [];
 
@@ -966,7 +1192,7 @@
         const group = state.treeGroups[i];
         if (i < count) {
           group.visible = true;
-          const source = i < partnerTrees ? "partners" : "completed";
+          const source = i < partnerTrees ? "partners" : "points";
           const sourceOrder = source === "partners" ? i + 1 : i - partnerTrees + 1;
           state.treeMeta.push({
             slotNumber: i + 1,
@@ -980,25 +1206,115 @@
       }
     };
 
-    const getRewardEligibility = (member, submissions) => {
-      const completedDays = new Set(submissions.map((item) => item.taskDate || "").filter(Boolean)).size;
-      const earnedTokenCount = Math.min(2, Math.floor(completedDays / 7));
-      const stepDone = Boolean(member?.resultRole || member?.updatedAt || member?.totalScore != null);
-      const ecoDone = Boolean(member?.ecoMbti?.type);
-      return stepDone && ecoDone && earnedTokenCount >= 1;
+    const normalizeCreditedDates = (dates = []) => Array.from(new Set(
+      dates
+        .map((value) => String(value || "").trim())
+        .filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value))
+    )).sort();
+
+    const hasSevenDayStreak = (dates = []) => {
+      const uniqueDates = normalizeCreditedDates(dates);
+      if (uniqueDates.length < 7) return false;
+      let streak = 1;
+      for (let i = 1; i < uniqueDates.length; i += 1) {
+        const prev = new Date(`${uniqueDates[i - 1]}T00:00:00Z`);
+        const current = new Date(`${uniqueDates[i]}T00:00:00Z`);
+        const diffDays = Math.round((current - prev) / 86400000);
+        if (diffDays === 1) {
+          streak += 1;
+          if (streak >= 7) return true;
+        } else {
+          streak = 1;
+        }
+      }
+      return false;
+    };
+
+    const calculateClimatePoints = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+      let total = 0;
+      if (member?.ecoMbti?.type) total += 1;
+      if (completedDays > 0) {
+        total += 5;
+        total += Math.max(0, completedDays - 1);
+      }
+      if (hasWeeklyStreak) total += 5;
+      total += Math.max(0, Number(impactCount || 0));
+      return total;
+    };
+
+    const getDisplayName = (member = {}, fallback = "") => String(
+      member?.name ||
+      member?.memberName ||
+      member?.organizationName ||
+      member?.profile?.name ||
+      member?.displayName ||
+      fallback
+    ).trim() || fallback || "Climate Action Partner";
+
+    const formatRankValue = (rank) => (
+      state.lang === "zh" ? `第 ${rank} 名` : `#${rank}`
+    );
+
+    const renderLeaderboard = (entries = []) => {
+      currentLeaderboardEntries = entries;
+      els.leaderboardList.innerHTML = "";
+      if (!entries.length) {
+        els.leaderboardList.hidden = true;
+        els.leaderboardEmpty.hidden = false;
+        els.leaderboardEmpty.textContent = t("leaderboardEmpty");
+        return;
+      }
+      entries.forEach((entry) => {
+        const item = document.createElement("article");
+        item.className = "leaderboard-item";
+
+        const rank = document.createElement("div");
+        rank.className = "leaderboard-rank";
+        rank.textContent = formatRankValue(entry.rank);
+
+        const name = document.createElement("div");
+        name.className = "leaderboard-name";
+        name.textContent = entry.name || t("leaderboardAnonymous");
+
+        item.append(rank, name);
+        els.leaderboardList.appendChild(item);
+      });
+      els.leaderboardEmpty.hidden = true;
+      els.leaderboardList.hidden = false;
+    };
+
+    const renderMyForestGuest = () => {
+      els.myForestStatus.textContent = t("myForestGuest");
+      els.myForestPointsValue.textContent = "-";
+      els.myForestActionsValue.textContent = "-";
+      els.myForestImpactValue.textContent = "-";
+      els.myForestTreesValue.textContent = "-";
+      els.myForestNextValue.textContent = "-";
+    };
+
+    const renderMyForest = ({ name, points, actionDays, impactCount, personalTrees, nextTreeGap }) => {
+      els.myForestStatus.textContent = t("myForestSignedIn", name);
+      els.myForestPointsValue.textContent = state.lang === "zh" ? `${points} 分` : String(points);
+      els.myForestActionsValue.textContent = String(actionDays);
+      els.myForestImpactValue.textContent = String(impactCount);
+      els.myForestTreesValue.textContent = personalTrees < 1
+        ? (state.lang === "zh" ? `${points}/100` : `${points}/100`)
+        : (state.lang === "zh" ? `${personalTrees} 棵` : `${personalTrees}`);
+      els.myForestNextValue.textContent = state.lang === "zh" ? `${nextTreeGap} 分` : `${nextTreeGap}`;
     };
 
     const loadStats = async () => {
       els.participantsValue.textContent = "…";
-      els.completedValue.textContent = "…";
+      els.pointsValue.textContent = "…";
       els.treesValue.textContent = "…";
       els.remainingValue.textContent = "…";
       els.treeDetailBody.textContent = t("loading");
 
       try {
-        const [memberSnap, submissionSnap] = await Promise.all([
+        const [memberSnap, submissionSnap, referralSnap] = await Promise.all([
           getDocs(collection(db, "members")),
-          getDocs(collection(db, "greenProposalSubmissions"))
+          getDocs(collection(db, "greenProposalSubmissions")),
+          getDocs(collection(db, "memberReferrals"))
         ]);
 
         const members = memberSnap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
@@ -1010,24 +1326,61 @@
           submissionsByUid.set(data.uid, list);
         });
 
+        const referralCounts = new Map();
+        referralSnap.docs.forEach((docSnap) => {
+          const data = docSnap.data() || {};
+          const referredBy = String(data.referredBy || "").trim();
+          if (!referredBy) return;
+          referralCounts.set(referredBy, (referralCounts.get(referredBy) || 0) + 1);
+        });
+
         const participants = members.length;
-        let completed = 0;
+        let points = 0;
+        const ranked = [];
         members.forEach((member) => {
           const submissions = submissionsByUid.get(member.id) || [];
-          if (getRewardEligibility(member, submissions)) completed += 1;
+          const completedDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
+          const score = calculateClimatePoints({
+            member,
+            completedDays,
+            impactCount: referralCounts.get(member.id) || 0,
+            hasWeeklyStreak: hasSevenDayStreak(submissions.map((item) => item.taskDate))
+          });
+          points += score;
+          ranked.push({
+            uid: member.id,
+            name: getDisplayName(member, t("leaderboardAnonymous")),
+            score
+          });
+        });
+
+        const rankedPositive = ranked
+          .filter((item) => item.score > 0)
+          .sort((a, b) => b.score - a.score || a.uid.localeCompare(b.uid));
+
+        let previousScore = null;
+        let currentRank = 0;
+        rankedPositive.forEach((item, index) => {
+          if (item.score !== previousScore) {
+            currentRank = index + 1;
+            previousScore = item.score;
+          }
+          item.rank = currentRank;
         });
 
         const partnerTrees = Math.floor(participants / 100);
-        const completedTrees = completed;
-        const totalTrees = Math.min(MAX_SLOTS, partnerTrees + completedTrees);
+        const pointTrees = Math.floor(points / 100);
+        const totalTrees = Math.min(MAX_SLOTS, partnerTrees + pointTrees);
         const remaining = Math.max(0, MAX_SLOTS - totalTrees);
 
         setVisibleTrees(totalTrees, Math.min(partnerTrees, totalTrees), Math.max(0, totalTrees - Math.min(partnerTrees, totalTrees)));
-        renderStats({ participants, completed, partnerTrees, completedTrees, totalTrees, remaining });
+        renderStats({ participants, points, partnerTrees, pointTrees, totalTrees, remaining });
+        renderLeaderboard(rankedPositive.slice(0, 10));
       } catch (error) {
         console.error(error);
         els.treeDetailTitle.textContent = t("treeDetailTitle");
         els.treeDetailBody.textContent = t("error");
+        renderLeaderboard([]);
       }
     };
 
@@ -1062,6 +1415,48 @@
     });
 
     setLanguage(state.lang);
+    renderMyForestGuest();
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        renderMyForestGuest();
+        return;
+      }
+      try {
+        const [memberSnap, submissionSnap, referralSnap] = await Promise.all([
+          getDocs(collection(db, "members")),
+          getDocs(collection(db, "greenProposalSubmissions")),
+          getDocs(collection(db, "memberReferrals"))
+        ]);
+        const memberDoc = memberSnap.docs.find((docSnap) => docSnap.id === user.uid);
+        const member = memberDoc ? { id: memberDoc.id, ...memberDoc.data() } : {};
+        const submissions = submissionSnap.docs
+          .map((docSnap) => docSnap.data() || {})
+          .filter((item) => String(item.uid || "").trim() === user.uid);
+        let impactCount = 0;
+        referralSnap.docs.forEach((docSnap) => {
+          const data = docSnap.data() || {};
+          if (String(data.referredBy || "").trim() === user.uid) impactCount += 1;
+        });
+        const actionDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
+        const points = calculateClimatePoints({
+          member,
+          completedDays: actionDays,
+          impactCount,
+          hasWeeklyStreak: hasSevenDayStreak(submissions.map((item) => item.taskDate))
+        });
+        renderMyForest({
+          name: getDisplayName(member, user.displayName || user.email || "Climate Action Partner"),
+          points,
+          actionDays,
+          impactCount,
+          personalTrees: Math.floor(points / 100),
+          nextTreeGap: points > 0 && points % 100 !== 0 ? 100 - (points % 100) : (points === 0 ? 100 : 0)
+        });
+      } catch (error) {
+        console.error(error);
+        renderMyForestGuest();
+      }
+    });
     loadStats();
     animate();
   </script>
