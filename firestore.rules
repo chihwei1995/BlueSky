@@ -44,6 +44,16 @@ service cloud.firestore {
         (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
     }
 
+    match /greenProposalDailySlots/{slotId} {
+      allow create: if isSignedIn() &&
+        request.resource.data.uid == request.auth.uid;
+      allow read: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow update: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow delete: if false;
+    }
+
     match /memberGlobeSubmissions/{submissionId} {
       allow create: if isSignedIn() &&
         hasMinPermissionLevel(2) &&

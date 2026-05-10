@@ -826,7 +826,8 @@
       completedTrees: 0,
       totalTrees: 0,
       authResolved: false,
-      myForestLoading: false
+      myForestLoading: false,
+      statsLoading: false
     };
 
     const els = {
@@ -1309,6 +1310,7 @@
     };
 
     const loadStats = async () => {
+      state.statsLoading = true;
       els.participantsValue.textContent = "…";
       els.pointsValue.textContent = "…";
       els.treesValue.textContent = "…";
@@ -1381,8 +1383,10 @@
         setVisibleTrees(totalTrees, Math.min(partnerTrees, totalTrees), Math.max(0, totalTrees - Math.min(partnerTrees, totalTrees)));
         renderStats({ participants, points, partnerTrees, pointTrees, totalTrees, remaining });
         renderLeaderboard(rankedPositive.slice(0, 10));
+        state.statsLoading = false;
       } catch (error) {
         console.error(error);
+        state.statsLoading = false;
         els.treeDetailTitle.textContent = t("treeDetailTitle");
         els.treeDetailBody.textContent = t("error");
         renderLeaderboard([]);
@@ -1423,8 +1427,16 @@
     onAuthStateChanged(auth, async (user) => {
       state.authResolved = true;
       if (!user) {
+        els.participantsValue.textContent = "-";
+        els.pointsValue.textContent = "-";
+        els.treesValue.textContent = "-";
+        els.remainingValue.textContent = "-";
+        renderLeaderboard([]);
         renderMyForestGuest();
         return;
+      }
+      if (!state.statsLoading && !lastStats) {
+        loadStats();
       }
       state.myForestLoading = true;
       els.myForestStatus.textContent = t("myForestLoading");
@@ -1495,7 +1507,6 @@
         });
       }
     });
-    loadStats();
     animate();
   </script>
 </body>
