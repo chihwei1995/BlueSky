@@ -1150,6 +1150,32 @@
     };
 
     const taskText = (zh, en) => document.documentElement.lang === "en" ? en : zh;
+    const getTaskSubmitErrorMessage = (error) => {
+      const code = String(error?.code || "");
+      const message = String(error?.message || "").trim();
+      if (code === "storage/unauthorized") {
+        return taskText("圖片上傳權限不足，請重新登入後再試。", "Image upload permission was denied. Please sign in again and try.");
+      }
+      if (code === "storage/canceled") {
+        return taskText("圖片上傳已取消，請再試一次。", "The image upload was canceled. Please try again.");
+      }
+      if (code === "storage/unknown") {
+        return taskText("圖片上傳失敗，請稍後再試。", "The image upload failed. Please try again later.");
+      }
+      if (code === "permission-denied") {
+        return taskText("資料寫入權限不足，請重新登入後再試。", "Data write permission was denied. Please sign in again and try.");
+      }
+      if (code === "unauthenticated") {
+        return taskText("登入狀態已失效，請重新登入後再提交。", "Your sign-in session expired. Please sign in again and submit.");
+      }
+      if (code || message) {
+        return taskText(
+          `提交失敗：${code || "unknown"}${message ? ` / ${message}` : ""}`,
+          `Submission failed: ${code || "unknown"}${message ? ` / ${message}` : ""}`
+        );
+      }
+      return taskText("提交失敗，請稍後再試。", "Submission failed. Please try again later.");
+    };
 
     syncTaskEntryUi(null);
 
@@ -1534,7 +1560,7 @@
         await loadMySubmissions(user.uid);
       } catch (error) {
         console.error(error);
-        setTaskStatus("error", taskText("提交失敗，請稍後再試。", "Submission failed. Please try again later."));
+        setTaskStatus("error", getTaskSubmitErrorMessage(error));
       } finally {
         taskSubmitBtn.disabled = false;
       }

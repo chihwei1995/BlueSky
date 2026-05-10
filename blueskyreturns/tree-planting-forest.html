@@ -722,6 +722,8 @@
         leaderboardEmpty: "目前還沒有排行榜資料。",
         leaderboardAnonymous: "匿名氣候行動者",
         loading: "正在讀取 Firebase 植樹資料...",
+        statsGuest: "登入後即可查看植樹森林的全站統計。",
+        statsError: "植樹森林統計暫時無法讀取，請稍後重新整理再試。",
         noTrees: "目前尚未累積到植樹名額",
         treeInfoTitle: (slot) => `第 ${slot} 個植樹名額`,
         treeInfoPartner: (order) => `這棵樹來自註冊人數累積名額，第 ${order} 棵由每 100 位註冊氣候行動者換算而來。`,
@@ -779,6 +781,8 @@
         leaderboardEmpty: "No leaderboard data yet.",
         leaderboardAnonymous: "Anonymous Climate Action Partner",
         loading: "Loading tree planting data from Firebase...",
+        statsGuest: "Sign in to view the live forest statistics.",
+        statsError: "The forest statistics could not be loaded right now. Please refresh and try again later.",
         noTrees: "No tree planting slots have been accumulated yet.",
         treeInfoTitle: (slot) => `Tree Planting Slot ${slot}`,
         treeInfoPartner: (order) => `This tree comes from the registered member count. It is slot ${order} created by the “every 100 registered partners” rule.`,
@@ -1182,6 +1186,20 @@
       }
     };
 
+    const renderStatsUnavailable = (message) => {
+      lastStats = null;
+      els.participantsValue.textContent = "-";
+      els.pointsValue.textContent = "-";
+      els.treesValue.textContent = "-";
+      els.remainingValue.textContent = "-";
+      els.formulaPartnersValue.textContent = t("formulaPartnersValue", 0);
+      els.formulaPointsValue.textContent = t("formulaPointsValue", 0);
+      els.sceneStatus.innerHTML = `<strong>0</strong><span>${t("statusText", 0)}</span>`;
+      renderSelectedTree(-1);
+      els.treeDetailBody.textContent = message;
+      renderLeaderboard([]);
+    };
+
     const setVisibleTrees = (count, partnerTrees, pointTrees) => {
       state.visibleTreeCount = count;
       state.participantTrees = partnerTrees;
@@ -1388,8 +1406,7 @@
         console.error(error);
         state.statsLoading = false;
         els.treeDetailTitle.textContent = t("treeDetailTitle");
-        els.treeDetailBody.textContent = t("error");
-        renderLeaderboard([]);
+        renderStatsUnavailable(t("statsError"));
       }
     };
 
@@ -1427,16 +1444,12 @@
     onAuthStateChanged(auth, async (user) => {
       state.authResolved = true;
       if (!user) {
-        els.participantsValue.textContent = "-";
-        els.pointsValue.textContent = "-";
-        els.treesValue.textContent = "-";
-        els.remainingValue.textContent = "-";
-        renderLeaderboard([]);
+        renderStatsUnavailable(t("statsGuest"));
         renderMyForestGuest();
         return;
       }
-      if (!state.statsLoading && !lastStats) {
-        loadStats();
+      if (!state.statsLoading) {
+        await loadStats();
       }
       state.myForestLoading = true;
       els.myForestStatus.textContent = t("myForestLoading");
