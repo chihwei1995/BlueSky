@@ -1396,6 +1396,7 @@
     let currentUserSubmissions = [];
     let currentUserCompletionDates = [];
     let currentLeaderboardEntries = [];
+    let authResolved = false;
     const MAX_CERTIFICATE_COUNT = 5000;
     const buildInviteLink = (userId, mode = "step") => {
       const target = mode === "mbti" ? "./eco-mbti.html" : "./climate-action-form.html";
@@ -2672,6 +2673,7 @@
     });
 
     onAuthStateChanged(auth, async (user) => {
+      authResolved = true;
       if (!user) {
         renderGuestState();
         try {
@@ -2838,7 +2840,7 @@
       button.addEventListener("click", () => {
         applyLanguage(button.dataset.lang);
         updateInviteModeUi();
-        if (!auth.currentUser) {
+        if (authResolved && !auth.currentUser) {
           renderGuestState();
         }
       });
@@ -2846,7 +2848,7 @@
 
     applyLanguage(currentLang);
     updateInviteModeUi();
-    renderGuestState();
+    resetSummary();
   </script>
 </body>
 </html>

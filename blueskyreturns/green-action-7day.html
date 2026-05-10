@@ -1169,6 +1169,7 @@
     let editingSubmissionData = null;
     let acceptedTermsRecord = null;
     let pendingTaskAuthSubmit = false;
+    let authReady = false;
     const taskFormStartedAt = Date.now();
     const MIN_TASK_FILL_MS = 2000;
     const DAILY_SLOT_COLLECTION = "greenProposalDailySlots";
@@ -1443,6 +1444,7 @@
     };
 
     onAuthStateChanged(auth, async (user) => {
+      authReady = true;
       if (!user) {
         updateTermsConsentUI(null);
         taskAuthCard.hidden = !pendingTaskAuthSubmit;
@@ -1569,6 +1571,11 @@
       event.preventDefault();
       const formData = validateTaskDraft();
       if (!formData) return;
+
+      if (!authReady) {
+        setTaskStatus("warn", taskText("正在確認登入狀態，請稍候一下再送出。", "Checking your sign-in status. Please wait a moment and submit again."));
+        return;
+      }
 
       const user = auth.currentUser;
       if (!user) {
