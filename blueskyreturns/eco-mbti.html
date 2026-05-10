@@ -2263,21 +2263,28 @@
 
     const getFullPortraitPath = (type) => `../assets/eco-mbti-full/${type}.png`;
 
+    const setVisibleState = (node, visible, displayValue = "") => {
+      if (!node) return;
+      node.hidden = !visible;
+      node.setAttribute("aria-hidden", visible ? "false" : "true");
+      node.style.display = visible ? displayValue : "none";
+    };
+
     const syncResultActions = () => {
       const hasResult = !resultPanel.hidden && Boolean(lastResultText);
       if (!authReady) {
-        resultStateCard.hidden = true;
-        authCtaCard.hidden = true;
-        dailyActionLink.hidden = true;
+        setVisibleState(resultStateCard, false);
+        setVisibleState(authCtaCard, false);
+        setVisibleState(dailyActionLink, false);
         return;
       }
-      resultStateCard.hidden = !hasResult;
+      setVisibleState(resultStateCard, hasResult, "grid");
       if (hasResult) {
         resultStateTitle.textContent = currentUser ? t("result.stateLoggedInTitle") : t("result.stateLoggedOutTitle");
         resultStateBody.textContent = currentUser ? t("result.stateLoggedInBody") : t("result.stateLoggedOutBody");
       }
-      authCtaCard.hidden = !hasResult || Boolean(currentUser);
-      dailyActionLink.hidden = !hasResult || !currentUser;
+      setVisibleState(authCtaCard, hasResult && !currentUser, "grid");
+      setVisibleState(dailyActionLink, hasResult && !!currentUser, "inline-flex");
     };
 
     const renderResult = ({ counts, type }) => {
