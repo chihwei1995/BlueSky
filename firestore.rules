@@ -20,6 +20,11 @@ service cloud.firestore {
         get(/databases/$(database)/documents/members/$(request.auth.uid)).data.permissionLevel >= level;
     }
 
+    function isOwnDailySlot(slotId) {
+      return isSignedIn() &&
+        slotId.matches('^' + request.auth.uid + '__.*$');
+    }
+
     match /globeEvents/{eventId} {
       allow read: if true;
       allow create, update, delete: if hasPermissionLevel(3);
@@ -47,8 +52,9 @@ service cloud.firestore {
     match /greenProposalDailySlots/{slotId} {
       allow create: if isSignedIn() &&
         request.resource.data.uid == request.auth.uid;
-      allow read: if isSignedIn() &&
-        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow read: if isOwnDailySlot(slotId) ||
+        (isSignedIn() && resource != null &&
+          (resource.data.uid == request.auth.uid || hasPermissionLevel(3)));
       allow update: if isSignedIn() &&
         (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
       allow delete: if false;
