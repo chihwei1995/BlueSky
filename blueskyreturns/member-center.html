@@ -983,7 +983,7 @@
 
       <section class="panel">
         <div class="section-head">
-          <h2 id="proposalSectionTitle">7-Day 任務紀錄 / Proposal Submissions</h2>
+          <h2 id="proposalSectionTitle">Daily Green Actions 紀錄 / Action Records</h2>
           <p id="proposalSectionBody">最近上傳的 Daily Green Actions 紀錄會顯示在這裡，方便你回看目前做了哪些內容。</p>
         </div>
         <div class="stats-strip">
@@ -1234,7 +1234,7 @@
           stepHint: "Create or update your questionnaire result",
           ecoLabel: "Complete Eco-MBTI",
           ecoHint: "Your personality result has been generated and saved",
-          proposalLabel: "Complete your first 7 days in Daily Green Actions to earn 1 limited Climate Badge",
+          proposalLabel: "Complete your first 7 days of Daily Green Actions to earn 1 limited Climate Badge",
           proposalHint: "Each account can earn 1 limited Climate Badge on its first 7-day completion.",
           claim: "Claim 2026 Climate Action Reward",
           resultTitle: "Reward Details",
@@ -1830,7 +1830,7 @@
             index: index + 1,
             state: "pending",
             label: currentLang === "zh" ? "尚未獲得" : "Not earned yet",
-            code: currentLang === "zh" ? "完成更多 7-Day 紀錄後解鎖" : "Unlock by completing more 7-Day records"
+            code: currentLang === "zh" ? "完成更多 Daily Green Actions 紀錄後解鎖" : "Unlock by completing more Daily Green Actions records"
           };
         }
         if (code && consumedTokenCodes.includes(code)) {
@@ -2251,10 +2251,11 @@
       submissionEmpty.hidden = false;
       submissionList.hidden = true;
 
-      const snapshot = await getDocs(collection(db, "greenProposalSubmissions"));
+      const snapshot = await getDocs(
+        query(collection(db, "greenProposalSubmissions"), where("uid", "==", uid))
+      );
       const submissions = snapshot.docs
         .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-        .filter((item) => item.uid === uid)
         .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
 
       currentUserCompletionDates = normalizeCreditedDates(submissions.map((item) => item.taskDate));
@@ -2737,13 +2738,13 @@
         try {
           userSubmissions = await loadSubmissions(user.uid);
         } catch (error) {
-          console.error("Failed to load 7-Day submissions", error);
+          console.error("Failed to load Daily Green Actions submissions", error);
           submissionList.innerHTML = "";
           submissionList.hidden = true;
           submissionEmpty.hidden = false;
           submissionEmpty.textContent = currentLang === "zh"
-            ? "7-Day 任務紀錄讀取失敗，但會員資料已成功載入。"
-            : "7-Day task records could not be loaded, but your member profile loaded successfully.";
+            ? "Daily Green Actions 紀錄讀取失敗，但會員資料已成功載入。"
+            : "Daily Green Actions records could not be loaded, but your member profile loaded successfully.";
         }
         const rewardEligibility = getRewardEligibility(member, currentUserCompletionDates);
         let syncedReward = getRewardRecord(member);

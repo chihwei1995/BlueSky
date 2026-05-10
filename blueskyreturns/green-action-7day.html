@@ -740,7 +740,7 @@
         <img src="../Enter.PNG" alt="JCI Peninsula logo" />
         <div class="brand-copy">
           <strong data-i18n="header.title">Blue Sky Returns</strong>
-          <span data-i18n="header.subtitle">7-Day flexible green challenge</span>
+          <span data-i18n="header.subtitle">Daily Green Actions</span>
         </div>
       </div>
       <div class="nav-actions">
@@ -1033,7 +1033,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc, query, setDoc, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
     const firebaseConfig = {
@@ -1278,7 +1278,7 @@
       if (submission.image?.downloadURL) {
         const img = document.createElement("img");
         img.src = submission.image.downloadURL;
-        img.alt = submission.title || "7-Day submission image";
+        img.alt = submission.title || "Daily Green Actions submission image";
         article.appendChild(img);
       }
 
@@ -1340,10 +1340,11 @@
       submissionList.hidden = true;
       submissionEmpty.hidden = false;
 
-      const snapshot = await getDocs(collection(db, "greenProposalSubmissions"));
+      const snapshot = await getDocs(
+        query(collection(db, "greenProposalSubmissions"), where("uid", "==", uid))
+      );
       const submissions = snapshot.docs
         .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-        .filter((item) => item.uid === uid)
         .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
 
       if (!submissions.length) {
