@@ -1113,8 +1113,6 @@
       if (event.target === termsModal) closeTermsModal();
     });
 
-    syncTaskEntryUi(null);
-
     const setTaskStatus = (type, message) => {
       taskStatus.className = "task-status";
       if (type) taskStatus.classList.add(type);
@@ -1149,6 +1147,8 @@
     };
 
     const taskText = (zh, en) => document.documentElement.lang === "en" ? en : zh;
+
+    syncTaskEntryUi(null);
 
     const ensureMemberProfile = async (user) => {
       if (!user) return;
