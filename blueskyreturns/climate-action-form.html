@@ -1461,6 +1461,20 @@
       if (!document.getElementById("name").value && user.displayName) {
         document.getElementById("name").value = user.displayName;
       }
+      if (!regionInput.value && memberData?.region) {
+        regionInput.value = String(memberData.region || "").trim();
+      }
+      if (memberData?.isJci) {
+        const isJciValue = String(memberData.isJci).trim();
+        const matchedRadio = form.querySelector(`input[name="is_jci"][value="${isJciValue}"]`);
+        if (matchedRadio) {
+          matchedRadio.checked = true;
+          setJciFields(isJciValue);
+        }
+      }
+      if (!chapterInput.value && memberData?.chapter) {
+        chapterInput.value = String(memberData.chapter || "").trim();
+      }
     });
 
     form.addEventListener("submit", async (event) => {

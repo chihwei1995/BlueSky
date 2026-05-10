@@ -998,6 +998,33 @@
       background: rgba(250, 252, 250, 0.9);
     }
 
+    .result-main-action {
+      justify-content: flex-start;
+    }
+
+    .share-more {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      overflow: hidden;
+    }
+
+    .share-more summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 14px 16px;
+      font-weight: 800;
+      color: var(--forest-deep);
+    }
+
+    .share-more summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .share-more-actions {
+      padding: 0 16px 16px;
+    }
+
     .result-rule-card {
       display: grid;
       gap: 6px;
@@ -1325,13 +1352,18 @@
                 </form>
                 <p class="auth-cta-note" data-i18n="result.authNote">只要 Email 和密碼即可開始，系統會同步保存你的 Eco-MBTI。</p>
               </div>
-              <div class="quiz-actions">
-                <button id="copyResultBtn" type="button" data-i18n="result.copy">複製結果文案</button>
-                <button id="shareResultBtn" type="button" data-i18n="result.shareImage">分享附圖結果</button>
-                <button id="downloadCardBtn" type="button" data-i18n="result.download">下載 PNG 角色卡</button>
+              <div class="quiz-actions result-main-action">
                 <a id="dailyActionLink" class="button primary" href="./green-action-7day.html" data-i18n="result.step" hidden>做今天的一個行動</a>
                 <span id="shareStatus" class="status" aria-live="polite"></span>
               </div>
+              <details class="share-more">
+                <summary data-i18n="result.more">更多結果選項</summary>
+                <div class="quiz-actions share-more-actions">
+                  <button id="copyResultBtn" type="button" data-i18n="result.copy">複製結果文案</button>
+                  <button id="shareResultBtn" type="button" data-i18n="result.shareImage">分享附圖結果</button>
+                  <button id="downloadCardBtn" type="button" data-i18n="result.download">下載 PNG 角色卡</button>
+                </div>
+              </details>
             </div>
           </section>
         </div>
@@ -1854,6 +1886,7 @@
           authPassword: "密碼",
           authSubmit: "註冊後做今天的行動",
           authNote: "只要 Email 和密碼即可開始，系統會同步保存你的 Eco-MBTI。",
+          more: "更多結果選項",
           copy: "複製結果文案",
           shareImage: "分享附圖結果",
           download: "下載 PNG 角色卡",
@@ -1962,6 +1995,7 @@
           authPassword: "Password",
           authSubmit: "Register and do one action today",
           authNote: "Only email and password are needed. Your Eco-MBTI result will be saved automatically.",
+          more: "More result options",
           copy: "Copy Result Text",
           shareImage: "Share with Image",
           download: "Download PNG Card",

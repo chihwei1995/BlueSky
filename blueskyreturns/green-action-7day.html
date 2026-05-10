@@ -595,6 +595,53 @@
       align-items: center;
     }
 
+    .task-auth-card {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(31, 143, 88, 0.18);
+      background: linear-gradient(135deg, rgba(31, 143, 88, 0.08), rgba(140, 198, 63, 0.12));
+    }
+
+    .task-auth-card strong {
+      color: var(--green-deep);
+      font-size: 0.96rem;
+    }
+
+    .task-auth-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .task-auth-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .task-auth-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .task-auth-field span {
+      color: var(--green-deep);
+      font-size: 0.84rem;
+      font-weight: 800;
+    }
+
+    .task-auth-field input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #c8d9cb;
+      font: inherit;
+      background: #fff;
+    }
+
     .consent-box {
       padding: 14px 16px;
       border: 1px solid var(--line);
@@ -757,6 +804,7 @@
       }
       .dimension-grid { grid-template-columns: 1fr; }
       .checkbox-grid { grid-template-columns: 1fr; }
+      .task-auth-form { grid-template-columns: 1fr; }
       .hero h1 { font-size: 2.25rem; }
     }
   </style>
@@ -789,8 +837,8 @@
         <details class="mobile-nav-card side-card">
           <summary data-i18n="mobileNav.title">Quick Navigation</summary>
           <div class="mobile-nav-links">
-            <a class="side-link" href="#task"><span><span data-i18n="mobileNav.task">Task Submission</span><small data-i18n="mobileNav.taskSub">Submit today right away</small></span></a>
-            <a class="side-link" href="#dimensions"><span><span data-i18n="mobileNav.dimensions">Five Dimensions</span><small data-i18n="mobileNav.dimensionsSub">Free combination in 7 days</small></span></a>
+            <a class="side-link" href="#task"><span><span data-i18n="mobileNav.task">Task Submission</span></span></a>
+            <a class="side-link" href="#dimensions"><span><span data-i18n="mobileNav.dimensions">Five Dimensions</span></span></a>
           </div>
         </details>
       </div>
@@ -798,15 +846,10 @@
         <aside class="side-nav">
           <div class="side-card">
             <h2 data-i18n="side.title">Daily Green Actions</h2>
-            <p data-i18n="side.body">A flexible guide page for a seven-day green rhythm.</p>
             <div class="side-links">
-              <a class="side-link" href="#task"><span><span data-i18n="side.linkTask">Task Submission</span><small data-i18n="side.linkTaskSub">Open the upload form</small></span></a>
-              <a class="side-link" href="#dimensions"><span><span data-i18n="side.linkDimensions">Five Dimensions</span><small data-i18n="side.linkDimensionsSub">Diet, Mobility, Waste, Energy, Nature</small></span></a>
+              <a class="side-link" href="#task"><span><span data-i18n="side.linkTask">Task Submission</span></span></a>
+              <a class="side-link" href="#dimensions"><span><span data-i18n="side.linkDimensions">Five Dimensions</span></span></a>
             </div>
-          </div>
-          <div class="side-card">
-            <h3 data-i18n="side.tipTitle">Quick Note</h3>
-            <p data-i18n="side.tipBody">The point is not pressure. The point is to make green living easier to enter.</p>
           </div>
         </aside>
         <div class="stack">
@@ -816,9 +859,7 @@
               <h1 data-i18n="hero.title">今天的一個綠色行動</h1>
               <p data-i18n="hero.body">不用一次完成很多事。先記下今天做的一個行動，就算開始。</p>
               <div class="hero-actions">
-              <a class="button primary" href="./member-center.html" data-i18n="hero.primary">前往氣候行動者中心登入</a>
               <a class="button primary" href="#task" data-i18n="hero.submit">立即提交任務</a>
-              <a class="button" href="#dimensions" data-i18n="hero.secondary">查看五大維度</a>
               </div>
             </div>
             <div class="hero-art">
@@ -894,7 +935,6 @@
               <strong data-i18n="taskRule.title">正式行動者規則 / Official Action Taker Rule</strong>
               <p data-i18n="taskRule.body">第一次完成今天的一個行動可獲得 +5。之後每日完成 1 個行動可再 +1；若連續 7 日完成，額外再 +5。</p>
             </div>
-            <div id="taskAuthState" class="task-auth">請先到氣候行動者中心登入，才可提交任務與查看自己的紀錄。</div>
             <div class="task-grid">
               <article class="task-card task-form-card">
                 <h3>提交今天的綠色任務</h3>
@@ -935,10 +975,26 @@
                   </div>
                   <div class="task-actions">
                     <button id="taskSubmitBtn" class="pill primary" type="submit">提交任務 / Submit</button>
-                    <a class="pill" href="./member-center.html">打開氣候行動者中心 / Open Member Center</a>
                     <span id="taskStatus" class="task-status" aria-live="polite"></span>
                   </div>
                 </form>
+                <div id="taskAuthCard" class="task-auth-card" hidden>
+                  <div>
+                    <strong data-i18n="taskAuth.title">先用 Email 開始</strong>
+                    <p data-i18n="taskAuth.body">送出前只要補上 Email 和密碼，註冊成功後會直接提交今天的行動。</p>
+                  </div>
+                  <form id="taskAuthForm" class="task-auth-form">
+                    <label class="task-auth-field">
+                      <span data-i18n="taskAuth.email">Email</span>
+                      <input id="taskAuthEmail" type="email" autocomplete="email" required />
+                    </label>
+                    <label class="task-auth-field">
+                      <span data-i18n="taskAuth.password">密碼</span>
+                      <input id="taskAuthPassword" type="password" autocomplete="new-password" minlength="6" required />
+                    </label>
+                    <button id="taskAuthSubmit" class="pill primary" type="submit" data-i18n="taskAuth.submit">註冊後直接提交</button>
+                  </form>
+                </div>
               </article>
               <article class="task-card">
                 <h3>我的任務紀錄 / My Recent Submissions</h3>
@@ -976,13 +1032,13 @@
         header: { title: "Blue Sky Returns", subtitle: "Daily Green Actions" },
         nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "Daily Green Actions", member: "氣候行動者中心", form: "步入行動" },
         mobileNav: {
-          title: "快速導覽", task: "任務提交", taskSub: "今天交一筆", dimensions: "五大維度", dimensionsSub: "需要時再看"
+          title: "快速導覽", task: "任務提交", dimensions: "五大維度"
         },
         side: {
-          title: "Daily Green Actions", body: "今天完成一個綠色行動，記下來就可以。", linkTask: "任務提交", linkTaskSub: "直接進入上傳區", linkDimensions: "五大維度", linkDimensionsSub: "需要時再看", tipTitle: "快速提醒", tipBody: "先提交今天的一個行動，比看完所有說明更重要。"
+          title: "Daily Green Actions", linkTask: "任務提交", linkDimensions: "五大維度"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", primary: "前往氣候行動者中心登入", submit: "立即提交任務", secondary: "查看五大維度", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "先做一件，就很好。", noteBody: "走路、自備、節能、減廢，都可以算。"
+          eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", submit: "立即提交任務", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "先做一件，就很好。", noteBody: "走路、自備、節能、減廢，都可以算。"
         },
         dimensions: {
           title: "The Green Dimensions / 五大維度", body: "不知道怎麼分類也沒關係，先完成今天的一個行動。", dietTag: "素 Green Diet", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食。", mobilityTag: "行 Low-carbon Mobility", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵。", wasteTag: "減 Waste Reduction", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、垃圾分類、拒絕一次性用品。", energyTag: "能 Energy Saving", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、少開冷氣、使用自然光。", natureTag: "森 City / Nature Connection", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>社區公園、室內植栽、親近自然。"
@@ -991,6 +1047,13 @@
           title: "正式行動者規則 / Official Action Taker Rule",
           body: "第一次完成今天的一個行動可獲得 +5。之後每日完成 1 個行動可再 +1；若首次完成連續 7 日，可獲得 1 枚限量氣候行動徽章。"
         },
+        taskAuth: {
+          title: "先用 Email 開始",
+          body: "送出前只要補上 Email 和密碼，註冊成功後會直接提交今天的行動。",
+          email: "Email",
+          password: "密碼",
+          submit: "註冊後直接提交"
+        },
         footer: "Blue Sky Returns • Daily Green Actions • 2026"
       },
       en: {
@@ -998,13 +1061,13 @@
         header: { title: "Blue Sky Returns", subtitle: "Daily Green Actions" },
         nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "Daily Green Actions", member: "Member Center", form: "Take One Step" },
         mobileNav: {
-          title: "Quick Navigation", task: "Task Submission", taskSub: "Submit today", dimensions: "Five Dimensions", dimensionsSub: "Check only when needed"
+          title: "Quick Navigation", task: "Task Submission", dimensions: "Five Dimensions"
         },
         side: {
-          title: "Daily Green Actions", body: "Just log one green action from today.", linkTask: "Task Submission", linkTaskSub: "Open the form", linkDimensions: "Five Dimensions", linkDimensionsSub: "Check when needed", tipTitle: "Quick Note", tipBody: "Starting one action matters more than reading everything first."
+          title: "Daily Green Actions", linkTask: "Task Submission", linkDimensions: "Five Dimensions"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "One Green Action Today", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", primary: "Open Member Center", submit: "Submit a Task Now", secondary: "See the five dimensions", posterAlt: "Daily Green Actions key visual", posterImage: "../assets/GAen.png", noteTitle: "One action is enough to begin.", noteBody: "Walking, reusing, saving energy, or eating greener all count."
+          eyebrow: "Flexible Climate Participation", title: "One Green Action Today", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", submit: "Submit a Task Now", posterAlt: "Daily Green Actions key visual", posterImage: "../assets/GAen.png", noteTitle: "One action is enough to begin.", noteBody: "Walking, reusing, saving energy, or eating greener all count."
         },
         dimensions: {
           title: "The Green Dimensions", body: "If you are not sure which dimension fits, just start with the action itself.", dietTag: "Green Diet", dietTitle: "Plant-forward food choices", dietBody: "<strong>Examples:</strong> meat-free meals, home-cooked vegetables, less food waste.", mobilityTag: "Low-carbon Mobility", mobilityTitle: "Move with less carbon", mobilityBody: "<strong>Examples:</strong> walking, cycling, bus, metro.", wasteTag: "Waste Reduction", wasteTitle: "Reduce and reuse", wasteBody: "<strong>Examples:</strong> reusables, repairs, recycling, refusing single-use items.", energyTag: "Energy Saving", energyTitle: "Save energy", energyBody: "<strong>Examples:</strong> lights off, less air-conditioning, natural light.", natureTag: "City / Nature Connection", natureTitle: "Reconnect with nature", natureBody: "<strong>Examples:</strong> parks, indoor plants, nature walks."
@@ -1012,6 +1075,13 @@
         taskRule: {
           title: "Official Action Taker Rule",
           body: "Your first completed action gives +5. Each following day adds +1. Your first completed 7-day streak earns 1 limited Climate Badge."
+        },
+        taskAuth: {
+          title: "Start with Email",
+          body: "Add your email and password before sending. Once registration succeeds, today's action will be submitted automatically.",
+          email: "Email",
+          password: "Password",
+          submit: "Register and Submit"
         },
         footer: "Blue Sky Returns • Daily Green Actions • 2026"
       }
@@ -1056,7 +1126,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
@@ -1077,10 +1147,14 @@
     const storage = getStorage(app);
     const TERMS_VERSION = "2026-04-22";
 
-    const taskAuthState = document.getElementById("taskAuthState");
     const taskForm = document.getElementById("proposalTaskForm");
     const taskSubmitBtn = document.getElementById("taskSubmitBtn");
     const taskStatus = document.getElementById("taskStatus");
+    const taskAuthCard = document.getElementById("taskAuthCard");
+    const taskAuthForm = document.getElementById("taskAuthForm");
+    const taskAuthEmail = document.getElementById("taskAuthEmail");
+    const taskAuthPassword = document.getElementById("taskAuthPassword");
+    const taskAuthSubmit = document.getElementById("taskAuthSubmit");
     const taskWebsiteField = document.getElementById("taskWebsiteField");
     const submissionList = document.getElementById("proposalSubmissionList");
     const submissionEmpty = document.getElementById("proposalSubmissionEmpty");
@@ -1094,6 +1168,7 @@
     let editingSubmissionId = null;
     let editingSubmissionData = null;
     let acceptedTermsRecord = null;
+    let pendingTaskAuthSubmit = false;
     const taskFormStartedAt = Date.now();
     const MIN_TASK_FILL_MS = 2000;
     const DAILY_SLOT_COLLECTION = "greenProposalDailySlots";
@@ -1132,6 +1207,55 @@
       taskStatus.className = "task-status";
       if (type) taskStatus.classList.add(type);
       taskStatus.textContent = message;
+    };
+
+    const taskText = (zh, en) => document.documentElement.lang === "en" ? en : zh;
+
+    const ensureMemberProfile = async (user) => {
+      if (!user) return;
+      await setDoc(doc(db, "members", user.uid), {
+        uid: user.uid,
+        email: user.email || "",
+        name: (user.email || "").split("@")[0] || "",
+        partnerType: "individual",
+        partnerMultiplier: 1,
+        permissionLevel: 1,
+        createdFrom: "daily-green-actions",
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    };
+
+    const validateTaskDraft = () => {
+      const formData = new FormData(taskForm);
+      if (String(formData.get("website") || "").trim()) {
+        setTaskStatus("error", taskText("提交失敗，請重新整理頁面後再試。", "Submission failed. Please refresh and try again."));
+        return null;
+      }
+
+      if (Date.now() - taskFormStartedAt < MIN_TASK_FILL_MS) {
+        setTaskStatus("error", taskText("送出速度過快，請稍候再試。", "Submission was too fast. Please try again in a moment."));
+        return null;
+      }
+
+      const taskDate = String(formData.get("taskDate") || "").trim();
+      const caption = String(formData.get("taskCaption") || "").trim();
+
+      if (!taskDate) {
+        setTaskStatus("error", taskText("請先選擇日期。", "Please choose a date first."));
+        return null;
+      }
+
+      if (!caption) {
+        setTaskStatus("error", taskText("請簡單寫下今天做了什麼。", "Please briefly describe what you did today."));
+        return null;
+      }
+
+      if (!taskTermsConsent.checked) {
+        setTaskStatus("error", "請先閱讀並同意隱私與規範條款。 / Please agree to the Privacy & Terms before submitting.");
+        return null;
+      }
+
+      return formData;
     };
 
     const buildDailySlotId = (uid, taskDate) => `${uid}__${taskDate}`;
@@ -1233,7 +1357,7 @@
       deleteBtn.className = "pill";
       deleteBtn.textContent = "刪除 / Delete";
       deleteBtn.addEventListener("click", async () => {
-        if (!confirm("確定要刪除這筆 7-Day 任務嗎？")) return;
+        if (!confirm("確定要刪除這筆 Daily Green Actions 紀錄嗎？")) return;
         try {
           setTaskStatus("warn", "正在刪除任務與圖片...");
           const slotRef = getDailySlotRef(submission.uid, submission.taskDate);
@@ -1284,7 +1408,7 @@
         .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
 
       if (!submissions.length) {
-        submissionEmpty.textContent = "你目前還沒有提交任何 7-Day 任務。";
+        submissionEmpty.textContent = "你目前還沒有提交任何 Daily Green Actions 紀錄。";
         return;
       }
 
@@ -1321,14 +1445,11 @@
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         updateTermsConsentUI(null);
-        taskAuthState.textContent = "請先到氣候行動者中心登入，才可提交任務與查看自己的紀錄。";
-        taskForm.querySelectorAll("input, textarea, button").forEach((el) => {
-          if (el.id !== "taskSubmitBtn") el.disabled = true;
-        });
-        taskSubmitBtn.disabled = true;
+        taskAuthCard.hidden = !pendingTaskAuthSubmit;
+        taskSubmitBtn.disabled = false;
         submissionList.hidden = true;
         submissionEmpty.hidden = false;
-        submissionEmpty.textContent = "登入後，這裡會顯示你最近提交的 7-Day 任務。";
+        submissionEmpty.textContent = "登入後，這裡會顯示你最近提交的 Daily Green Actions 紀錄。";
         return;
       }
 
@@ -1341,7 +1462,8 @@
       }
 
       updateTermsConsentUI(memberData?.termsConsent || null);
-      taskAuthState.textContent = `已登入 ${user.displayName || user.email}，現在可以提交今天的 7-Day 任務。`;
+      taskAuthCard.hidden = true;
+      pendingTaskAuthSubmit = false;
       taskForm.querySelectorAll("input, textarea, button").forEach((el) => {
         el.disabled = false;
       });
@@ -1351,48 +1473,18 @@
       await loadMySubmissions(user.uid);
     });
 
-    taskForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const user = auth.currentUser;
-      if (!user) {
-        setTaskStatus("error", "請先登入氣候行動者中心。");
-        return;
-      }
-
-      const formData = new FormData(taskForm);
-      if (String(formData.get("website") || "").trim()) {
-        setTaskStatus("error", "提交失敗，請重新整理頁面後再試。");
-        return;
-      }
-
-      if (Date.now() - taskFormStartedAt < MIN_TASK_FILL_MS) {
-        setTaskStatus("error", "送出速度過快，請稍候再試。 / Submission was too fast. Please try again in a moment.");
-        return;
-      }
-
+    const submitTaskDraft = async (user) => {
+      const formData = validateTaskDraft();
+      if (!formData) return;
       const taskDate = String(formData.get("taskDate") || "").trim();
       const caption = String(formData.get("taskCaption") || "").trim();
       const dimensions = formData.getAll("dimensions");
 
-      if (!taskDate) {
-        setTaskStatus("error", "請先選擇日期。");
-        return;
-      }
-
-      if (!caption) {
-        setTaskStatus("error", "請簡單寫下今天做了什麼。");
-        return;
-      }
-
-      if (!taskTermsConsent.checked) {
-        setTaskStatus("error", "請先閱讀並同意隱私與規範條款。 / Please agree to the Privacy & Terms before submitting.");
-        return;
-      }
-
       taskSubmitBtn.disabled = true;
-      setTaskStatus("warn", "正在上傳任務資料...");
+      setTaskStatus("warn", taskText("正在上傳任務資料...", "Uploading your action..."));
 
       try {
+        await ensureMemberProfile(user);
         if (!hasAcceptedTerms(acceptedTermsRecord) && taskTermsConsent.checked) {
           await setDoc(doc(db, "members", user.uid), {
             termsConsent: {
@@ -1443,7 +1535,7 @@
             deleteCount: Number(submitState.deleteCount || slot?.deleteCount || 0),
             lastSubmittedAt: new Date().toISOString()
           }, { merge: true });
-          setTaskStatus("ok", "7-Day 任務已更新。");
+          setTaskStatus("ok", "Daily Green Actions 紀錄已更新。");
         } else {
           const submissionRef = doc(collection(db, "greenProposalSubmissions"));
           await setDoc(submissionRef, payload);
@@ -1458,8 +1550,8 @@
           setTaskStatus(
             "ok",
             Number(submitState.submitCount || 1) > 1
-              ? "7-Day 任務已成功補傳。今天不可再重新上傳。"
-              : "7-Day 任務已成功提交。"
+              ? "Daily Green Actions 已成功補傳。今天不可再重新上傳。"
+              : "Daily Green Actions 已成功提交。"
           );
         }
 
@@ -1467,9 +1559,70 @@
         await loadMySubmissions(user.uid);
       } catch (error) {
         console.error(error);
-        setTaskStatus("error", "提交失敗，請稍後再試。");
+        setTaskStatus("error", taskText("提交失敗，請稍後再試。", "Submission failed. Please try again later."));
       } finally {
         taskSubmitBtn.disabled = false;
+      }
+    };
+
+    taskForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = validateTaskDraft();
+      if (!formData) return;
+
+      const user = auth.currentUser;
+      if (!user) {
+        pendingTaskAuthSubmit = true;
+        taskAuthCard.hidden = false;
+        setTaskStatus("warn", taskText("先用 Email 開始，註冊成功後會直接提交今天的行動。", "Start with email first. Once registration succeeds, today's action will be submitted automatically."));
+        taskAuthEmail.focus();
+        return;
+      }
+
+      await submitTaskDraft(user);
+    });
+
+    taskAuthForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = validateTaskDraft();
+      if (!formData) return;
+
+      const email = String(taskAuthEmail.value || "").trim();
+      const password = String(taskAuthPassword.value || "");
+      if (!email || !password || password.length < 6) {
+        setTaskStatus("error", taskText("請輸入有效 Email 與至少 6 碼密碼。", "Please enter a valid email and a password with at least 6 characters."));
+        return;
+      }
+
+      taskAuthSubmit.disabled = true;
+      try {
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+          if (error?.code === "auth/email-already-in-use") {
+            await signInWithEmailAndPassword(auth, email, password);
+          } else {
+            throw error;
+          }
+        }
+
+        if (!auth.currentUser) {
+          throw new Error("No authenticated user after quick signup");
+        }
+
+        taskAuthCard.hidden = true;
+        pendingTaskAuthSubmit = false;
+        await submitTaskDraft(auth.currentUser);
+      } catch (error) {
+        console.error("Quick signup failed:", error);
+        setTaskStatus(
+          "error",
+          error?.code === "auth/wrong-password"
+            ? taskText("這個 Email 已存在，請輸入正確密碼登入。", "This email already exists. Please sign in with the correct password.")
+            : taskText("註冊失敗，請檢查 Email 與密碼後再試。", "Registration failed. Please check your email and password and try again.")
+        );
+      } finally {
+        taskAuthSubmit.disabled = false;
       }
     });
   </script>

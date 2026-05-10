@@ -834,9 +834,8 @@
           </article>
         </div>
         <div class="actions">
-          <button id="inviteModeStepBtn" class="pill active" type="button" data-i18n="invite.modeStep">步入行動分享</button>
-          <button id="inviteModeMbtiBtn" class="pill" type="button" data-i18n="invite.modeMbti">MBTI 分享</button>
-          <button id="copyInviteLinkBtn" class="pill" type="button">複製我的分享連結</button>
+          <button id="inviteModeStepBtn" class="pill primary" type="button" data-i18n="invite.modeStepCopy">複製步入行動分享連結</button>
+          <button id="inviteModeMbtiBtn" class="pill" type="button" data-i18n="invite.modeMbtiCopy">複製 MBTI 分享連結</button>
           <span id="inviteLinkStatus" class="status">登入後可複製你的專屬分享連結；每有一位新帳號透過你的連結完成第一次步入行動，會額外獲得一次分享加成並影響你的排名。</span>
         </div>
       </section>
@@ -1168,12 +1167,9 @@
           anonymous: "匿名氣候行動者"
         },
         invite: {
-          modeStep: "步入行動分享",
-          modeMbti: "MBTI 分享",
-          copy: "複製我的分享連結",
+          modeStepCopy: "複製步入行動分享連結",
+          modeMbtiCopy: "複製 MBTI 分享連結",
           guest: "登入後可複製你的專屬分享連結；每有一位新帳號透過你的分享連結完成第一次步入行動，或透過你的 MBTI 分享註冊成為氣候行動者，都會額外獲得一次分享加成並影響你的 Climate Heroes 名次。",
-          stepHint: "目前是步入行動分享。新帳號透過這個連結完成第一次步入行動，會增加一次分享加成。",
-          mbtiHint: "目前是 MBTI 分享。新帳號透過這個連結註冊成為氣候行動者，會增加一次分享加成。",
           copiedStep: "已複製步入行動分享連結。",
           copiedMbti: "已複製 MBTI 分享連結。",
           copiedFallback: "無法自動複製，請手動複製：",
@@ -1283,12 +1279,9 @@
           anonymous: "Anonymous Climate Action Partner"
         },
         invite: {
-          modeStep: "Take One Step Share",
-          modeMbti: "MBTI Share",
-          copy: "Copy My Share Link",
+          modeStepCopy: "Copy Take One Step Link",
+          modeMbtiCopy: "Copy MBTI Share Link",
           guest: "Sign in to copy your personal share link. Each new account that completes its first Take One Step through your link, or registers as a Climate Action Partner through your MBTI share, adds one share bonus and affects your Climate Heroes rank.",
-          stepHint: "Take One Step share is selected. When a new account completes its first Take One Step through this link, you gain one share bonus.",
-          mbtiHint: "MBTI share is selected. When a new account registers as a Climate Action Partner through this link, you gain one share bonus.",
           copiedStep: "Take One Step share link copied.",
           copiedMbti: "MBTI share link copied.",
           copiedFallback: "Copy this link manually:",
@@ -1394,7 +1387,6 @@
     const leaderboardList = document.getElementById("leaderboardList");
     const inviteModeStepBtn = document.getElementById("inviteModeStepBtn");
     const inviteModeMbtiBtn = document.getElementById("inviteModeMbtiBtn");
-    const copyInviteLinkBtn = document.getElementById("copyInviteLinkBtn");
     const inviteLinkStatus = document.getElementById("inviteLinkStatus");
     const statCompletedDays = document.getElementById("statCompletedDays");
     const statTotalTasks = document.getElementById("statTotalTasks");
@@ -1404,23 +1396,20 @@
     let currentUserSubmissions = [];
     let currentUserCompletionDates = [];
     let currentLeaderboardEntries = [];
-    let currentInviteMode = "step";
     const MAX_CERTIFICATE_COUNT = 5000;
-    const buildInviteLink = (userId, mode = currentInviteMode) => {
+    const buildInviteLink = (userId, mode = "step") => {
       const target = mode === "mbti" ? "./eco-mbti.html" : "./climate-action-form.html";
       const url = new URL(target, window.location.href);
       url.searchParams.set("ref", userId);
       return url.toString();
     };
     const updateInviteModeUi = () => {
-      inviteModeStepBtn.classList.toggle("active", currentInviteMode === "step");
-      inviteModeMbtiBtn.classList.toggle("active", currentInviteMode === "mbti");
       if (!auth.currentUser) {
         inviteLinkStatus.textContent = t("invite.guest");
         inviteLinkStatus.className = "status warn";
         return;
       }
-      inviteLinkStatus.textContent = currentInviteMode === "mbti" ? t("invite.mbtiHint") : t("invite.stepHint");
+      inviteLinkStatus.textContent = t("invite.guest");
       inviteLinkStatus.className = "status";
     };
     const loadImpactCount = async (userId) => {
@@ -1988,7 +1977,8 @@
       document.getElementById("stepResultCardTitle").textContent = t("sections.resultCard");
       document.getElementById("leaderboardSectionTitle").textContent = t("sections.leaderboardTitle");
       document.getElementById("leaderboardSectionBody").textContent = t("sections.leaderboardBody");
-      copyInviteLinkBtn.textContent = t("invite.copy");
+      inviteModeStepBtn.textContent = t("invite.modeStepCopy");
+      inviteModeMbtiBtn.textContent = t("invite.modeMbtiCopy");
       document.getElementById("tasksSectionTitle").textContent = t("sections.tasksTitle");
       document.getElementById("tasksSectionBody").textContent = t("sections.tasksBody");
       document.getElementById("taskStepTitle").textContent = t("tasks.stepTitle");
@@ -2794,18 +2784,18 @@
       }
     });
 
-    copyInviteLinkBtn.addEventListener("click", async () => {
+    inviteModeStepBtn.addEventListener("click", async () => {
       if (!auth.currentUser) {
         inviteLinkStatus.textContent = t("invite.guest");
         inviteLinkStatus.className = "status warn";
         return;
       }
 
-      const inviteUrl = buildInviteLink(auth.currentUser.uid);
+      const inviteUrl = buildInviteLink(auth.currentUser.uid, "step");
       try {
         if (navigator.clipboard?.writeText) {
           await navigator.clipboard.writeText(inviteUrl);
-          inviteLinkStatus.textContent = currentInviteMode === "mbti" ? t("invite.copiedMbti") : t("invite.copiedStep");
+          inviteLinkStatus.textContent = t("invite.copiedStep");
           inviteLinkStatus.className = "status ok";
           return;
         }
@@ -2819,14 +2809,29 @@
       }
     });
 
-    inviteModeStepBtn.addEventListener("click", () => {
-      currentInviteMode = "step";
-      updateInviteModeUi();
-    });
+    inviteModeMbtiBtn.addEventListener("click", async () => {
+      if (!auth.currentUser) {
+        inviteLinkStatus.textContent = t("invite.guest");
+        inviteLinkStatus.className = "status warn";
+        return;
+      }
 
-    inviteModeMbtiBtn.addEventListener("click", () => {
-      currentInviteMode = "mbti";
-      updateInviteModeUi();
+      const inviteUrl = buildInviteLink(auth.currentUser.uid, "mbti");
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(inviteUrl);
+          inviteLinkStatus.textContent = t("invite.copiedMbti");
+          inviteLinkStatus.className = "status ok";
+          return;
+        }
+
+        inviteLinkStatus.textContent = `${t("invite.copiedFallback")} ${inviteUrl}`;
+        inviteLinkStatus.className = "status warn";
+      } catch (error) {
+        console.error(error);
+        inviteLinkStatus.textContent = `${t("invite.failed")} ${inviteUrl}`;
+        inviteLinkStatus.className = "status error";
+      }
     });
 
     langButtons.forEach((button) => {
