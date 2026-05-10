@@ -1014,6 +1014,7 @@
     const db = getFirestore(app, "default");
     const LANG_STORAGE_KEY = "bsr_lang";
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
+    let authResolved = false;
     const langButtons = Array.from(document.querySelectorAll(".lang-btn"));
     const I18N = {
       zh: {
@@ -1114,6 +1115,7 @@
     });
 
     onAuthStateChanged(auth, async (user) => {
+      authResolved = true;
       if (!user) {
         setGuestState();
         return;
@@ -1156,13 +1158,12 @@
     langButtons.forEach((button) => {
       button.addEventListener("click", () => {
         applyLanguage(button.dataset.lang);
-        if (!auth.currentUser) {
+        if (authResolved && !auth.currentUser) {
           setGuestState();
         }
       });
     });
     applyLanguage(currentLang);
-    setGuestState();
   </script>
 </body>
 </html>

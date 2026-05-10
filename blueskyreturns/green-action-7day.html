@@ -162,86 +162,13 @@
     }
     main { padding: 28px 0 70px; }
     .layout {
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      gap: 22px;
-      align-items: start;
+      display: block;
     }
-    .side-nav {
-      position: sticky;
-      top: 86px;
-      display: grid;
-      gap: 14px;
-    }
-    .side-card,
     .panel {
       border: 1px solid rgba(210, 228, 216, 0.95);
       background: var(--surface);
       box-shadow: var(--shadow);
       border-radius: 26px;
-    }
-    .side-card { padding: 18px; }
-    .side-card h2,
-    .side-card h3 {
-      margin: 0 0 8px;
-      font-size: 1rem;
-    }
-    .side-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-    .side-links {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .side-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 12px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: rgba(252, 255, 252, 0.92);
-      color: var(--green-deep);
-      font-weight: 700;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-    .side-link:hover {
-      transform: translateX(2px);
-      border-color: rgba(31, 143, 88, 0.35);
-      background: rgba(223, 245, 209, 0.85);
-    }
-    .side-link span {
-      display: grid;
-      gap: 1px;
-    }
-    .side-link small {
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 600;
-    }
-    .mobile-side-nav {
-      display: none;
-      margin-bottom: 18px;
-    }
-    .mobile-nav-card { padding: 14px; }
-    .mobile-nav-card summary {
-      list-style: none;
-      cursor: pointer;
-      font-weight: 800;
-      color: var(--green-deep);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .mobile-nav-card summary::-webkit-details-marker { display: none; }
-    .mobile-nav-links {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
     }
     .stack { display: grid; gap: 22px; }
     .hero {
@@ -778,9 +705,6 @@
       font-size: 0.92rem;
     }
     @media (max-width: 1100px) {
-      .layout { grid-template-columns: 1fr; }
-      .side-nav { display: none; }
-      .mobile-side-nav { display: block; }
       .dimension-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 820px) {
@@ -833,25 +757,7 @@
   </header>
   <main>
     <div class="shell">
-      <div class="mobile-side-nav">
-        <details class="mobile-nav-card side-card">
-          <summary data-i18n="mobileNav.title">Quick Navigation</summary>
-          <div class="mobile-nav-links">
-            <a class="side-link" href="#task"><span><span data-i18n="mobileNav.task">Task Submission</span></span></a>
-            <a class="side-link" href="#dimensions"><span><span data-i18n="mobileNav.dimensions">Five Dimensions</span></span></a>
-          </div>
-        </details>
-      </div>
       <div class="layout">
-        <aside class="side-nav">
-          <div class="side-card">
-            <h2 data-i18n="side.title">Daily Green Actions</h2>
-            <div class="side-links">
-              <a class="side-link" href="#task"><span><span data-i18n="side.linkTask">Task Submission</span></span></a>
-              <a class="side-link" href="#dimensions"><span><span data-i18n="side.linkDimensions">Five Dimensions</span></span></a>
-            </div>
-          </div>
-        </aside>
         <div class="stack">
           <section class="hero panel">
             <div class="hero-copy">
@@ -1204,10 +1110,32 @@
       if (event.target === termsModal) closeTermsModal();
     });
 
+    syncTaskEntryUi(null);
+
     const setTaskStatus = (type, message) => {
       taskStatus.className = "task-status";
       if (type) taskStatus.classList.add(type);
       taskStatus.textContent = message;
+    };
+
+    const syncTaskEntryUi = (user) => {
+      if (!authReady) {
+        taskSubmitBtn.hidden = true;
+        taskSubmitBtn.disabled = true;
+        taskAuthCard.hidden = true;
+        return;
+      }
+
+      if (user) {
+        taskSubmitBtn.hidden = false;
+        taskSubmitBtn.disabled = false;
+        taskAuthCard.hidden = true;
+        return;
+      }
+
+      taskSubmitBtn.hidden = true;
+      taskSubmitBtn.disabled = true;
+      taskAuthCard.hidden = false;
     };
 
     const taskText = (zh, en) => document.documentElement.lang === "en" ? en : zh;
@@ -1447,8 +1375,8 @@
       authReady = true;
       if (!user) {
         updateTermsConsentUI(null);
-        taskAuthCard.hidden = !pendingTaskAuthSubmit;
-        taskSubmitBtn.disabled = false;
+        pendingTaskAuthSubmit = false;
+        syncTaskEntryUi(null);
         submissionList.hidden = true;
         submissionEmpty.hidden = false;
         submissionEmpty.textContent = "登入後，這裡會顯示你最近提交的 Daily Green Actions 紀錄。";
@@ -1464,8 +1392,8 @@
       }
 
       updateTermsConsentUI(memberData?.termsConsent || null);
-      taskAuthCard.hidden = true;
       pendingTaskAuthSubmit = false;
+      syncTaskEntryUi(user);
       taskForm.querySelectorAll("input, textarea, button").forEach((el) => {
         el.disabled = false;
       });
@@ -1580,7 +1508,7 @@
       const user = auth.currentUser;
       if (!user) {
         pendingTaskAuthSubmit = true;
-        taskAuthCard.hidden = false;
+        syncTaskEntryUi(null);
         setTaskStatus("warn", taskText("先用 Email 開始，註冊成功後會直接提交今天的行動。", "Start with email first. Once registration succeeds, today's action will be submitted automatically."));
         taskAuthEmail.focus();
         return;
@@ -1617,8 +1545,8 @@
           throw new Error("No authenticated user after quick signup");
         }
 
-        taskAuthCard.hidden = true;
         pendingTaskAuthSubmit = false;
+        syncTaskEntryUi(auth.currentUser);
         await submitTaskDraft(auth.currentUser);
       } catch (error) {
         console.error("Quick signup failed:", error);

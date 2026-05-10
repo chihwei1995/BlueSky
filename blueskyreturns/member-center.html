@@ -2772,7 +2772,12 @@
           reviewerSubmissionPanel.hidden = true;
         }
         updateInviteModeUi();
-        await loadLeaderboard();
+        try {
+          await loadLeaderboard();
+        } catch (error) {
+          console.error("Failed to load leaderboard", error);
+          renderLeaderboard([]);
+        }
       } catch (error) {
         console.error("Failed to load member center data", error);
         abilitySummaryEl.textContent = t("states.readError");
