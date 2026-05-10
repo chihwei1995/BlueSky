@@ -837,12 +837,11 @@
         </div>
       </section>
 
-      <section class="panel">
+      <section id="leaderboardPanel" class="panel" hidden>
         <div class="section-head">
           <h2 id="leaderboardSectionTitle">Climate Heroes / Top 10</h2>
           <p id="leaderboardSectionBody">只顯示名次與名字，不顯示分數。</p>
         </div>
-        <div id="leaderboardEmpty" class="muted">目前還沒有排行榜資料。</div>
         <div id="leaderboardList" class="leaderboard-list" hidden></div>
       </section>
 
@@ -1274,7 +1273,7 @@
         },
         loginModal: { title: "Member Sign In", email: "Email", password: "Password", submit: "Sign In", forgot: "Reset Password", cancel: "Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "Name / Organization: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", impact: "People Reached: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Take One Step Score: ", rank: "Climate Heroes Rank: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
+        summaryLabels: { name: "Name: ", email: "Email: ", partnerType: "Type: ", permission: "Permission: ", impact: "People Reached: ", role: "Role Card: ", ecoMbti: "Eco-MBTI: ", score: "Take One Step Score: ", rank: "Climate Heroes Rank: ", region: "Region / Chapter: ", updatedAt: "Updated At: " },
         leaderboard: {
           empty: "No leaderboard data yet.",
           anonymous: "Anonymous Climate Action Partner"
@@ -1387,8 +1386,8 @@
     const summaryRank = document.getElementById("summaryRank");
     const summaryRegion = document.getElementById("summaryRegion");
     const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
+    const leaderboardPanel = document.getElementById("leaderboardPanel");
     const leaderboardList = document.getElementById("leaderboardList");
-    const leaderboardEmpty = document.getElementById("leaderboardEmpty");
     const inviteModeStepBtn = document.getElementById("inviteModeStepBtn");
     const inviteModeMbtiBtn = document.getElementById("inviteModeMbtiBtn");
     const copyInviteLinkBtn = document.getElementById("copyInviteLinkBtn");
@@ -1533,11 +1532,11 @@
       currentLeaderboardEntries = entries;
       leaderboardList.innerHTML = "";
       if (!entries.length) {
+        leaderboardPanel.hidden = true;
         leaderboardList.hidden = true;
-        leaderboardEmpty.hidden = false;
-        leaderboardEmpty.textContent = t("leaderboard.empty");
         return;
       }
+      leaderboardPanel.hidden = false;
 
       entries.forEach((entry) => {
         const item = document.createElement("article");
@@ -1555,7 +1554,6 @@
         leaderboardList.appendChild(item);
       });
 
-      leaderboardEmpty.hidden = true;
       leaderboardList.hidden = false;
     };
     const loadLeaderboard = async () => {
