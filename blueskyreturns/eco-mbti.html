@@ -1046,6 +1046,27 @@
       line-height: 1.6;
     }
 
+    .result-state-card {
+      display: grid;
+      gap: 6px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(18, 56, 45, 0.1);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .result-state-card strong {
+      color: var(--forest-deep);
+      font-size: 0.95rem;
+    }
+
+    .result-state-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.6;
+    }
+
     .footer {
       text-align: center;
       padding: 0 20px 36px;
@@ -1339,6 +1360,10 @@
               <div class="result-rule-card">
                 <strong data-i18n="result.ruleTitle">集氣規則 / Participation Boost</strong>
                 <p data-i18n="result.ruleBody">完成 Eco-MBTI 後，登入會員並完成今天的一個行動，才會開始累積集氣與 Daily Green Actions 紀錄；若有人透過你的 MBTI 分享註冊成為氣候行動者，你也會增加一次分享加成。</p>
+              </div>
+              <div id="resultStateCard" class="result-state-card" hidden>
+                <strong id="resultStateTitle">-</strong>
+                <p id="resultStateBody">-</p>
               </div>
               <div id="authCtaCard" class="auth-cta-card" hidden>
                 <div class="auth-cta-head">
@@ -1886,6 +1911,10 @@
           shareBody: "下載或分享你的結果卡。",
           ruleTitle: "集氣規則 / Participation Boost",
           ruleBody: "完成 Eco-MBTI 後，登入會員並完成今天的一個行動，才會開始累積集氣與 Daily Green Actions 紀錄；若有人透過你的 MBTI 分享註冊成為氣候行動者，你也會增加一次分享加成。",
+          stateLoggedOutTitle: "你還沒登入",
+          stateLoggedOutBody: "先用 Email 開始，系統才會保存你的 Eco-MBTI，並開始累積集氣與今天的行動紀錄。",
+          stateLoggedInTitle: "你已登入",
+          stateLoggedInBody: "你的 Eco-MBTI 結果會保存到會員資料。現在可以直接去做今天的一個行動。",
           authTitle: "先用 Email 開始",
           authBody: "未註冊前，結果不會開始累積集氣，也不能正式記錄今天的行動。",
           authEmail: "Email",
@@ -1995,6 +2024,10 @@
           shareBody: "Download or share your result card.",
           ruleTitle: "Participation Boost",
           ruleBody: "After Eco-MBTI, you need a member sign-in and one completed daily action before your boost and Daily Green Actions record begin. If someone becomes a Climate Action Partner through your MBTI share link, you also gain one share bonus.",
+          stateLoggedOutTitle: "You are not signed in yet",
+          stateLoggedOutBody: "Start with email first so your Eco-MBTI can be saved and your boost plus today's action record can begin.",
+          stateLoggedInTitle: "You are signed in",
+          stateLoggedInBody: "Your Eco-MBTI result will be saved to your member profile. You can go do one action today now.",
           authTitle: "Start with Email",
           authBody: "Before registration, your result does not start collecting boost and you cannot officially record today's action yet.",
           authEmail: "Email",
@@ -2061,6 +2094,9 @@
     const shareResultBtn = document.getElementById("shareResultBtn");
     const downloadCardBtn = document.getElementById("downloadCardBtn");
     const dailyActionLink = document.getElementById("dailyActionLink");
+    const resultStateCard = document.getElementById("resultStateCard");
+    const resultStateTitle = document.getElementById("resultStateTitle");
+    const resultStateBody = document.getElementById("resultStateBody");
     const authCtaCard = document.getElementById("authCtaCard");
     const authInlineForm = document.getElementById("authInlineForm");
     const authEmailInput = document.getElementById("authEmailInput");
@@ -2230,9 +2266,15 @@
     const syncResultActions = () => {
       const hasResult = !resultPanel.hidden && Boolean(lastResultText);
       if (!authReady) {
+        resultStateCard.hidden = true;
         authCtaCard.hidden = true;
         dailyActionLink.hidden = true;
         return;
+      }
+      resultStateCard.hidden = !hasResult;
+      if (hasResult) {
+        resultStateTitle.textContent = currentUser ? t("result.stateLoggedInTitle") : t("result.stateLoggedOutTitle");
+        resultStateBody.textContent = currentUser ? t("result.stateLoggedInBody") : t("result.stateLoggedOutBody");
       }
       authCtaCard.hidden = !hasResult || Boolean(currentUser);
       dailyActionLink.hidden = !hasResult || !currentUser;
