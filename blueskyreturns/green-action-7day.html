@@ -1077,6 +1077,8 @@
     let pendingTaskAuthSubmit = false;
     let authReady = false;
     let currentMemberProfile = null;
+    let submissionLoadToken = 0;
+    let authSyncToken = 0;
     const taskFormStartedAt = Date.now();
     const MIN_TASK_FILL_MS = 2000;
     const DAILY_SLOT_COLLECTION = "greenProposalDailySlots";
@@ -1336,25 +1338,36 @@
     };
 
     const loadMySubmissions = async (uid) => {
+      const loadToken = ++submissionLoadToken;
       submissionList.innerHTML = "";
       submissionList.hidden = true;
       submissionEmpty.hidden = false;
 
-      const snapshot = await getDocs(
-        query(collection(db, "greenProposalSubmissions"), where("uid", "==", uid))
-      );
-      const submissions = snapshot.docs
-        .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-        .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+      try {
+        const snapshot = await getDocs(
+          query(collection(db, "greenProposalSubmissions"), where("uid", "==", uid))
+        );
+        if (loadToken !== submissionLoadToken) return;
 
-      if (!submissions.length) {
-        submissionEmpty.textContent = "你目前還沒有提交任何 Daily Green Actions 紀錄。";
-        return;
+        const submissions = snapshot.docs
+          .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+          .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+
+        if (!submissions.length) {
+          submissionEmpty.textContent = "你目前還沒有提交任何 Daily Green Actions 紀錄。";
+          return;
+        }
+
+        submissions.forEach((submission) => submissionList.appendChild(renderSubmission(submission)));
+        submissionEmpty.hidden = true;
+        submissionList.hidden = false;
+      } catch (error) {
+        if (loadToken !== submissionLoadToken) return;
+        console.error("Failed to load Daily Green Actions:", error);
+        submissionList.hidden = true;
+        submissionEmpty.hidden = false;
+        submissionEmpty.textContent = "Daily Green Actions 紀錄讀取失敗，請稍後再試。";
       }
-
-      submissions.forEach((submission) => submissionList.appendChild(renderSubmission(submission)));
-      submissionEmpty.hidden = true;
-      submissionList.hidden = false;
     };
 
     const uploadTaskImage = async (uid, file) => {
@@ -1383,8 +1396,10 @@
     };
 
     onAuthStateChanged(auth, async (user) => {
+      const syncToken = ++authSyncToken;
       authReady = true;
       if (!user) {
+        submissionLoadToken += 1;
         currentMemberProfile = null;
         updateTermsConsentUI(null);
         pendingTaskAuthSubmit = false;
@@ -1398,10 +1413,12 @@
       let memberData = null;
       try {
         const memberSnap = await getDoc(doc(db, "members", user.uid));
+        if (syncToken !== authSyncToken) return;
         memberData = memberSnap.exists() ? memberSnap.data() : null;
       } catch (error) {
         console.error("Failed to load member terms", error);
       }
+      if (syncToken !== authSyncToken) return;
 
       currentMemberProfile = memberData || null;
       updateTermsConsentUI(memberData?.termsConsent || null);

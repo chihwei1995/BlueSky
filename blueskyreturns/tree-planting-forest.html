@@ -570,7 +570,7 @@
 
         <div class="stats">
           <div class="stat">
-            <div id="participantsLabel" class="stat-label">目前氣候行動者</div>
+            <div id="participantsLabel" class="stat-label">目前註冊人數</div>
             <strong id="participantsValue">-</strong>
           </div>
           <div class="stat">
@@ -588,7 +588,7 @@
         </div>
 
         <div class="formula">
-          <div class="formula-row"><span id="formulaPartnersLabel">每 100 位氣候行動者</span><strong id="formulaPartnersValue">= 0 個名額</strong></div>
+          <div class="formula-row"><span id="formulaPartnersLabel">每 100 位註冊氣候行動者</span><strong id="formulaPartnersValue">= 0 個名額</strong></div>
           <div class="formula-row"><span id="formulaPointsLabel">每 150 分 Climate Points</span><strong id="formulaPointsValue">= 0 個名額</strong></div>
           <div class="formula-row"><span id="formulaCapLabel">總上限</span><strong id="formulaCapValue">321 個名額</strong></div>
         </div>
@@ -600,7 +600,7 @@
 
         <div class="my-forest">
           <div class="my-forest-head">
-            <h2 id="myForestTitle">我的森林 / My Forest</h2>
+            <h2 id="myForestTitle">我的四葉草 / My Clover</h2>
             <p id="myForestBody">登入後可查看你的累積。</p>
           </div>
           <div id="myForestStatus" class="my-forest-status">尚未登入，先到氣候行動者中心登入即可查看。</div>
@@ -618,15 +618,15 @@
               <strong id="myForestImpactValue">-</strong>
             </div>
             <div class="my-forest-item">
-              <span id="myForestTreesLabel">個人成長樹</span>
+              <span id="myForestTreesLabel">我的四葉草</span>
               <strong id="myForestTreesValue">-</strong>
             </div>
             <div class="my-forest-item">
-              <span id="myForestNextLabel">距離下一棵樹</span>
+              <span id="myForestNextLabel">距離下一片四葉草</span>
               <strong id="myForestNextValue">-</strong>
             </div>
           </div>
-          <p id="myForestNote" class="my-forest-note" hidden>個人成長樹會用你的 Climate Points 換算，方便看到自己的累積進度。</p>
+          <p id="myForestNote" class="my-forest-note" hidden>我的四葉草會用你的 Climate Points 換算，方便看到自己的累積進度。</p>
         </div>
       </article>
 
@@ -639,7 +639,7 @@
               <p id="sceneBody">拖曳旋轉，點樹查看來源。</p>
             </div>
             <div class="legend">
-              <div class="legend-item"><span class="dot partners"></span><span id="legendPartners">由氣候行動者累積的名額</span></div>
+              <div class="legend-item"><span class="dot partners"></span><span id="legendPartners">由註冊人數累積的名額</span></div>
               <div class="legend-item"><span class="dot completed"></span><span id="legendPoints">由 Climate Points 累積的名額</span></div>
             </div>
           </div>
@@ -685,31 +685,31 @@
         eyebrow: "TREE PROGRESS",
         heroTitle: "植樹森林",
         heroBody: "看目前已累積多少植樹名額。",
-        participantsLabel: "目前氣候行動者",
+        participantsLabel: "目前註冊人數",
         pointsLabel: "目前 Climate Points",
         treesLabel: "目前對應植樹名額",
         remainingLabel: "距離上限剩餘",
-        formulaPartnersLabel: "每 100 位氣候行動者",
+        formulaPartnersLabel: "每 100 位註冊氣候行動者",
         formulaPointsLabel: "每 150 分 Climate Points",
         formulaCapLabel: "總上限",
         formulaPartnersValue: (value) => `= ${value} 個名額`,
         formulaPointsValue: (value) => `= ${value} 個名額`,
         formulaCapValue: "321 個名額",
         targetTitle: "321 棵樹怎麼累積",
-        targetBody: "若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 48,150 分。實際上可由兩者一起累積，慢慢長出整座森林。",
-        myForestTitle: "我的森林 / My Forest",
-        myForestBody: "登入後可查看你的累積。",
+        targetBody: "若只靠註冊人數，約需 32,100 位註冊氣候行動者；若只靠 Climate Points，約需 48,150 分。實際上可由兩者一起累積，慢慢長出整座森林。",
+        myForestTitle: "我的四葉草 / My Clover",
+        myForestBody: "登入後可查看你的四葉草累積與進度。",
         myForestGuest: "尚未登入，先到氣候行動者中心登入即可查看。",
-        myForestSignedIn: (name) => `${name}，這是你目前的森林成長摘要。`,
+        myForestSignedIn: (name) => `${name}，這是你目前的四葉草成長摘要。`,
         myForestPointsLabel: "Climate Points",
         myForestActionsLabel: "行動天數",
         myForestImpactLabel: "影響人數",
-        myForestTreesLabel: "個人成長樹",
-        myForestNextLabel: "距離下一棵樹",
-        myForestNote: "個人成長樹會用你的 Climate Points 換算，方便看到自己的累積進度。",
+        myForestTreesLabel: "四葉草進度",
+        myForestNextLabel: "距離下一片葉",
+        myForestNote: "每 1 分推進一點；每 4 分長出 1 片葉；每 4 片葉組成 1 組完整幸運草。",
         sceneTitle: "互動森林",
         sceneBody: "拖曳旋轉，點樹查看來源。",
-        legendPartners: "由氣候行動者累積的名額",
+        legendPartners: "由註冊人數累積的名額",
         legendPoints: "由 Climate Points 累積的名額",
         sceneStatusText: "棵樹正在場景中生長",
         treeDetailTitle: "樹木名額詳情",
@@ -721,10 +721,10 @@
         loading: "正在讀取 Firebase 植樹資料...",
         noTrees: "目前尚未累積到植樹名額",
         treeInfoTitle: (slot) => `第 ${slot} 個植樹名額`,
-        treeInfoPartner: (order) => `這棵樹來自氣候行動者累積名額，第 ${order} 棵由每 100 位氣候行動者換算而來。`,
+        treeInfoPartner: (order) => `這棵樹來自註冊人數累積名額，第 ${order} 棵由每 100 位註冊氣候行動者換算而來。`,
         treeInfoPoints: (order) => `這棵樹來自 Climate Points 累積名額，第 ${order} 棵由每 150 分 Climate Points 換算而來。`,
         treeInfoMeta: (source, cap) => `<ul><li>來源：${source}</li><li>名額序號：${cap} / 321</li></ul>`,
-        sourcePartner: "氣候行動者人數",
+        sourcePartner: "註冊人數",
         sourcePoints: "Climate Points",
         statusText: (count) => `${count} 棵樹正在場景中生長`,
         countsSuffix: "人",
@@ -741,31 +741,31 @@
         eyebrow: "TREE PROGRESS",
         heroTitle: "Tree Planting Forest",
         heroBody: "See how many tree planting slots have been unlocked.",
-        participantsLabel: "Climate Action Partners",
+        participantsLabel: "Registered Members",
         pointsLabel: "Climate Points",
         treesLabel: "Current Tree Planting Slots",
         remainingLabel: "Remaining to Cap",
-        formulaPartnersLabel: "Every 100 Climate Action Partners",
+        formulaPartnersLabel: "Every 100 Registered Climate Action Partners",
         formulaPointsLabel: "Every 150 Climate Points",
         formulaCapLabel: "Cap",
         formulaPartnersValue: (value) => `= ${value} slots`,
         formulaPointsValue: (value) => `= ${value} slots`,
         formulaCapValue: "321 slots",
         targetTitle: "How 321 trees can be reached",
-        targetBody: "If this goal came only from people, it would take about 32,100 Climate Action Partners. If it came only from Climate Points, it would take about 48,150 points. In practice, both can grow the forest together.",
-        myForestTitle: "My Forest",
-        myForestBody: "Sign in to view your progress.",
-        myForestGuest: "Sign in from the member center to view your personal forest summary.",
-        myForestSignedIn: (name) => `${name}, this is your current forest growth summary.`,
+        targetBody: "If this goal came only from registrations, it would take about 32,100 registered climate action partners. If it came only from Climate Points, it would take about 48,150 points. In practice, both can grow the forest together.",
+        myForestTitle: "My Clover",
+        myForestBody: "Sign in to view your clover progress.",
+        myForestGuest: "Sign in from the member center to view your personal clover summary.",
+        myForestSignedIn: (name) => `${name}, this is your current clover growth summary.`,
         myForestPointsLabel: "Climate Points",
         myForestActionsLabel: "Action Days",
         myForestImpactLabel: "People Reached",
-        myForestTreesLabel: "Personal Trees",
-        myForestNextLabel: "To Your Next Tree",
-        myForestNote: "Personal trees are estimated from your Climate Points so you can see your own growth progress.",
+        myForestTreesLabel: "Clover Progress",
+        myForestNextLabel: "To Your Next Leaf",
+        myForestNote: "Every 1 point adds progress. Every 4 points grows 1 leaf. Every 4 leaves become 1 full clover.",
         sceneTitle: "Interactive Forest",
         sceneBody: "Drag to rotate. Click a tree to see its source.",
-        legendPartners: "Slots accumulated from climate action partners",
+        legendPartners: "Slots accumulated from registered members",
         legendPoints: "Slots accumulated from Climate Points",
         sceneStatusText: "trees are currently growing in the scene",
         treeDetailTitle: "Tree Slot Details",
@@ -777,10 +777,10 @@
         loading: "Loading tree planting data from Firebase...",
         noTrees: "No tree planting slots have been accumulated yet.",
         treeInfoTitle: (slot) => `Tree Planting Slot ${slot}`,
-        treeInfoPartner: (order) => `This tree comes from the climate action partner count. It is slot ${order} created by the “every 100 partners” rule.`,
+        treeInfoPartner: (order) => `This tree comes from the registered member count. It is slot ${order} created by the “every 100 registered partners” rule.`,
         treeInfoPoints: (order) => `This tree comes from Climate Points. It is slot ${order} created by the “every 150 Climate Points” rule.`,
         treeInfoMeta: (source, cap) => `<ul><li>Source: ${source}</li><li>Slot number: ${cap} / 321</li></ul>`,
-        sourcePartner: "Climate action partner count",
+        sourcePartner: "Registered member count",
         sourcePoints: "Climate Points",
         statusText: (count) => `${count} trees are currently growing in the scene`,
         countsSuffix: "",
@@ -1281,16 +1281,18 @@
       els.myForestNextValue.textContent = "-";
     };
 
-    const renderMyForest = ({ name, points, actionDays, impactCount, personalTrees, nextTreeGap }) => {
-      currentMyForestData = { name, points, actionDays, impactCount, personalTrees, nextTreeGap };
+    const renderMyForest = ({ name, points, actionDays, impactCount, fullClovers, leafCount, leafProgress, nextLeafGap }) => {
+      currentMyForestData = { name, points, actionDays, impactCount, fullClovers, leafCount, leafProgress, nextLeafGap };
       els.myForestStatus.textContent = t("myForestSignedIn", name);
       els.myForestPointsValue.textContent = state.lang === "zh" ? `${points} 分` : String(points);
       els.myForestActionsValue.textContent = String(actionDays);
       els.myForestImpactValue.textContent = String(impactCount);
-      els.myForestTreesValue.textContent = personalTrees < 1
-        ? (state.lang === "zh" ? `${points}/100` : `${points}/100`)
-        : (state.lang === "zh" ? `${personalTrees} 棵` : `${personalTrees}`);
-      els.myForestNextValue.textContent = state.lang === "zh" ? `${nextTreeGap} 分` : `${nextTreeGap}`;
+      const parts = [];
+      if (fullClovers > 0) parts.push(state.lang === "zh" ? `${fullClovers} 組` : `${fullClovers} full`);
+      if (leafCount > 0) parts.push(state.lang === "zh" ? `${leafCount} 片` : `${leafCount} leaves`);
+      const progressText = state.lang === "zh" ? `${leafProgress}/4` : `${leafProgress}/4`;
+      els.myForestTreesValue.textContent = parts.length ? `${parts.join(" + ")} (${progressText})` : progressText;
+      els.myForestNextValue.textContent = state.lang === "zh" ? `${nextLeafGap} 分` : `${nextLeafGap}`;
     };
 
     const loadStats = async () => {
@@ -1434,13 +1436,21 @@
           impactCount,
           hasWeeklyStreak: hasSevenDayStreak(submissions.map((item) => item.taskDate))
         });
+        const totalLeaves = Math.floor(points / 4);
+        const fullClovers = Math.floor(totalLeaves / 4);
+        const leafCount = totalLeaves % 4;
+        const leafProgress = points % 4;
+        const nextLeafGap = leafProgress === 0 ? 4 : 4 - leafProgress;
+
         renderMyForest({
           name: getDisplayName(member, user.displayName || user.email || "Climate Action Partner"),
           points,
           actionDays,
           impactCount,
-          personalTrees: Math.floor(points / 150),
-          nextTreeGap: points > 0 && points % 100 !== 0 ? 100 - (points % 100) : (points === 0 ? 100 : 0)
+          fullClovers,
+          leafCount,
+          leafProgress,
+          nextLeafGap
         });
       } catch (error) {
         console.error(error);
