@@ -1417,7 +1417,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
-    import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
@@ -1433,6 +1433,9 @@
     const app = initializeApp(firebaseConfig);
     setupBlueSkyAppCheck(app, { pageName: "eco-mbti" });
     const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence).catch((error) => {
+      console.error("Failed to enable local auth persistence:", error);
+    });
     const db = getFirestore(app, "default");
 
     const LANG_STORAGE_KEY = "bsr_lang";

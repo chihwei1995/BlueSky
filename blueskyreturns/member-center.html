@@ -814,7 +814,7 @@
           <article class="summary-card">
             <h3 id="basicCardTitle">基本資料</h3>
             <div class="summary-list">
-              <p id="summaryName">姓名 / 單位：-</p>
+              <p id="summaryName">姓名：-</p>
               <p id="summaryEmail">Email：-</p>
               <p id="summaryPartnerType">類型：-</p>
               <p id="summaryPermission">權限：-</p>
@@ -1057,8 +1057,10 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import {
+      browserLocalPersistence,
       getAuth,
       onAuthStateChanged,
+      setPersistence,
       signInWithEmailAndPassword,
       signOut,
       sendPasswordResetEmail
@@ -1090,6 +1092,9 @@
     const app = initializeApp(firebaseConfig);
     setupBlueSkyAppCheck(app, { pageName: "member-center" });
     const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence).catch((error) => {
+      console.error("Failed to enable local auth persistence:", error);
+    });
     const db = getFirestore(app, "default");
     const LANG_STORAGE_KEY = "bsr_lang";
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
@@ -1161,7 +1166,7 @@
         },
         loginModal: { title: "會員登入 / Member Sign In", email: "Email", password: "Password", submit: "登入 / Sign In", forgot: "忘記密碼 / Reset Password", cancel: "取消 / Cancel" },
         footer: "Blue Sky Returns • Member Center • 2026",
-        summaryLabels: { name: "姓名 / 單位：", email: "Email：", partnerType: "類型：", permission: "權限：", impact: "影響人數：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "步入行動分數：", rank: "Climate Heroes 名次：", region: "地區 / 分會：", updatedAt: "更新時間：" },
+        summaryLabels: { name: "姓名：", email: "Email：", partnerType: "類型：", permission: "權限：", impact: "影響人數：", role: "角色卡：", ecoMbti: "Eco-MBTI：", score: "步入行動分數：", rank: "Climate Heroes 名次：", region: "地區 / 分會：", updatedAt: "更新時間：" },
         leaderboard: {
           empty: "目前還沒有排行榜資料。",
           anonymous: "匿名氣候行動者"
@@ -1517,7 +1522,6 @@
     const getLeaderboardName = (member = {}) => String(
       member?.name ||
       member?.memberName ||
-      member?.organizationName ||
       member?.profile?.name ||
       member?.displayName ||
       ""
@@ -1747,7 +1751,6 @@
     const getMemberDisplayName = (member = {}, user = null) => String(
       member?.name ||
       member?.memberName ||
-      member?.organizationName ||
       member?.profile?.name ||
       user?.displayName ||
       user?.email?.split("@")[0] ||

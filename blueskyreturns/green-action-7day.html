@@ -1032,7 +1032,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
-    import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc, query, setDoc, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
@@ -1049,6 +1049,9 @@
     const app = initializeApp(firebaseConfig);
     setupBlueSkyAppCheck(app, { pageName: "green-action-7day" });
     const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence).catch((error) => {
+      console.error("Failed to enable local auth persistence:", error);
+    });
     const db = getFirestore(app, "default");
     const storage = getStorage(app);
     const TERMS_VERSION = "2026-04-22";

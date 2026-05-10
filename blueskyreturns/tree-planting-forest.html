@@ -314,130 +314,6 @@
       color: #fff;
     }
 
-    .spirit-collection {
-      display: grid;
-      gap: 14px;
-      padding: 18px;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(208, 241, 224, 0.12);
-    }
-
-    .spirit-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .spirit-head p,
-    .spirit-summary,
-    .spirit-empty {
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .spirit-count {
-      white-space: nowrap;
-      align-self: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(157, 243, 187, 0.1);
-      border: 1px solid rgba(157, 243, 187, 0.18);
-      color: #fff;
-      font-weight: 700;
-    }
-
-    .spirit-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .spirit-card {
-      position: relative;
-      overflow: hidden;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(208, 241, 224, 0.12);
-      min-height: 258px;
-    }
-
-    .spirit-art {
-      position: absolute;
-      inset: 0;
-      background-image: url("../assets/clover-spirits-poster.png");
-      background-repeat: no-repeat;
-      background-size: 520% 230%;
-      filter: saturate(1.1) brightness(1.02);
-    }
-
-    .spirit-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(4, 15, 10, 0.02) 0%, rgba(4, 15, 10, 0.18) 42%, rgba(4, 15, 10, 0.88) 100%);
-    }
-
-    .spirit-copy {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      gap: 8px;
-      align-content: end;
-      min-height: 258px;
-      padding: 16px;
-    }
-
-    .spirit-order {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.14);
-      border: 1px solid rgba(255,255,255,0.18);
-      color: #fff;
-      font-weight: 800;
-    }
-
-    .spirit-card h3 {
-      font-size: 1rem;
-      margin: 0;
-    }
-
-    .spirit-role {
-      color: #d0f1e0;
-      font-size: 0.86rem;
-      font-weight: 600;
-    }
-
-    .spirit-desc {
-      color: var(--muted);
-      font-size: 0.84rem;
-      line-height: 1.45;
-    }
-
-    .spirit-card.locked .spirit-art {
-      filter: grayscale(1) brightness(0.35);
-    }
-
-    .spirit-card.locked .spirit-overlay {
-      background: linear-gradient(180deg, rgba(3, 8, 6, 0.4) 0%, rgba(3, 8, 6, 0.94) 100%);
-    }
-
-    .spirit-lock {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 20px;
-      color: #fff;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-    }
 
     .scene-panel {
       position: relative;
@@ -644,16 +520,6 @@
       .stats {
         grid-template-columns: 1fr 1fr;
       }
-      .spirit-head {
-        grid-template-columns: 1fr;
-        display: grid;
-      }
-      .spirit-count {
-        justify-self: start;
-      }
-      .spirit-grid {
-        grid-template-columns: 1fr;
-      }
       .scene-panel {
         min-height: 580px;
       }
@@ -764,17 +630,6 @@
           <p id="myForestNote" class="my-forest-note" hidden>我的四葉草會用你的 Climate Points 換算，方便看到自己的累積進度。</p>
         </div>
 
-        <div class="spirit-collection">
-          <div class="spirit-head">
-            <div>
-              <h2 id="spiritCollectionTitle">四葉草精靈收藏 / Clover Spirits</h2>
-              <p id="spiritCollectionBody">每完成 1 組完整幸運草，就解鎖 1 種四葉草精靈。</p>
-            </div>
-            <div id="spiritCollectionCount" class="spirit-count">0 / 10</div>
-          </div>
-          <div id="spiritCollectionSummary" class="spirit-summary">登入後可查看你已解鎖的四葉草精靈。</div>
-          <div id="spiritCollectionGrid" class="spirit-grid"></div>
-        </div>
       </article>
 
       <article class="panel scene-panel">
@@ -816,11 +671,10 @@
 
   <script src="../assets/vendor/three.min.js"></script>
   <script type="module">
-    import { CLOVER_POSTER_URL, CLOVER_SPIRITS } from "./tree.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import { getFirestore, collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { browserLocalPersistence, getAuth, onAuthStateChanged, setPersistence } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 
     const translations = {
       zh: {
@@ -856,12 +710,6 @@
         myForestTreesLabel: "四葉草進度",
         myForestNextLabel: "距離下一片葉",
         myForestNote: "每 1 分推進一點；每 4 分長出 1 片葉；每 4 片葉組成 1 組完整幸運草。",
-        spiritCollectionTitle: "四葉草精靈收藏 / Clover Spirits",
-        spiritCollectionBody: "每完成 1 組完整幸運草，就解鎖 1 種四葉草精靈。",
-        spiritCollectionSummaryGuest: "登入後可查看你已解鎖的四葉草精靈。",
-        spiritCollectionSummarySignedIn: (count) => `你目前已解鎖 ${count} / 10 種四葉草精靈。`,
-        spiritCollectionCount: (count) => `${count} / 10`,
-        spiritLocked: "尚未解鎖",
         sceneTitle: "互動森林",
         sceneBody: "拖曳旋轉，點樹查看來源。",
         legendPartners: "由註冊人數累積的名額",
@@ -919,12 +767,6 @@
         myForestTreesLabel: "Clover Progress",
         myForestNextLabel: "To Your Next Leaf",
         myForestNote: "Every 1 point adds progress. Every 4 points grows 1 leaf. Every 4 leaves become 1 full clover.",
-        spiritCollectionTitle: "Clover Spirits Collection",
-        spiritCollectionBody: "Each full clover unlocks 1 clover spirit.",
-        spiritCollectionSummaryGuest: "Sign in to see which clover spirits you have unlocked.",
-        spiritCollectionSummarySignedIn: (count) => `You have unlocked ${count} / 10 clover spirits.`,
-        spiritCollectionCount: (count) => `${count} / 10`,
-        spiritLocked: "Locked",
         sceneTitle: "Interactive Forest",
         sceneBody: "Drag to rotate. Click a tree to see its source.",
         legendPartners: "Slots accumulated from registered members",
@@ -971,6 +813,9 @@
     setupBlueSkyAppCheck(app, { pageName: "tree-planting-forest" });
     const db = getFirestore(app, "default");
     const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence).catch((error) => {
+      console.error("Failed to enable local auth persistence:", error);
+    });
 
     const state = {
       lang: currentLang,
@@ -1022,11 +867,6 @@
       myForestNextLabel: document.getElementById("myForestNextLabel"),
       myForestNextValue: document.getElementById("myForestNextValue"),
       myForestNote: document.getElementById("myForestNote"),
-      spiritCollectionTitle: document.getElementById("spiritCollectionTitle"),
-      spiritCollectionBody: document.getElementById("spiritCollectionBody"),
-      spiritCollectionSummary: document.getElementById("spiritCollectionSummary"),
-      spiritCollectionCount: document.getElementById("spiritCollectionCount"),
-      spiritCollectionGrid: document.getElementById("spiritCollectionGrid"),
       formulaCapValue: document.getElementById("formulaCapValue"),
       sceneTitle: document.getElementById("sceneTitle"),
       sceneBody: document.getElementById("sceneBody"),
@@ -1074,8 +914,6 @@
       els.myForestTreesLabel.textContent = t("myForestTreesLabel");
       els.myForestNextLabel.textContent = t("myForestNextLabel");
       els.myForestNote.textContent = t("myForestNote");
-      els.spiritCollectionTitle.textContent = t("spiritCollectionTitle");
-      els.spiritCollectionBody.textContent = t("spiritCollectionBody");
       els.sceneTitle.textContent = t("sceneTitle");
       els.sceneBody.textContent = t("sceneBody");
       els.legendPartners.textContent = t("legendPartners");
@@ -1090,8 +928,6 @@
       if (!state.authResolved) return;
       if (state.myForestLoading) {
         els.myForestStatus.textContent = t("myForestLoading");
-        els.spiritCollectionSummary.textContent = t("spiritCollectionSummaryGuest");
-        els.spiritCollectionCount.textContent = t("spiritCollectionCount", 0);
         return;
       }
       if (currentMyForestData) {
@@ -1409,7 +1245,6 @@
     const getDisplayName = (member = {}, fallback = "") => String(
       member?.name ||
       member?.memberName ||
-      member?.organizationName ||
       member?.profile?.name ||
       member?.displayName ||
       fallback
@@ -1456,60 +1291,6 @@
       els.myForestImpactValue.textContent = "-";
       els.myForestTreesValue.textContent = "-";
       els.myForestNextValue.textContent = "-";
-      renderSpiritCollection(0, false);
-    };
-
-    const renderSpiritCollection = (fullClovers = 0, signedIn = false) => {
-      const unlockedCount = signedIn ? Math.max(0, Math.min(CLOVER_SPIRITS.length, fullClovers)) : 0;
-      els.spiritCollectionSummary.textContent = signedIn
-        ? t("spiritCollectionSummarySignedIn", unlockedCount)
-        : t("spiritCollectionSummaryGuest");
-      els.spiritCollectionCount.textContent = t("spiritCollectionCount", unlockedCount);
-      els.spiritCollectionGrid.innerHTML = "";
-
-      CLOVER_SPIRITS.forEach((spirit, index) => {
-        const unlocked = index < unlockedCount;
-        const card = document.createElement("article");
-        card.className = `spirit-card${unlocked ? "" : " locked"}`;
-
-        const art = document.createElement("div");
-        art.className = "spirit-art";
-        art.style.backgroundImage = `url("${CLOVER_POSTER_URL}")`;
-        art.style.backgroundPosition = spirit.position;
-
-        const overlay = document.createElement("div");
-        overlay.className = "spirit-overlay";
-
-        const copy = document.createElement("div");
-        copy.className = "spirit-copy";
-
-        const order = document.createElement("span");
-        order.className = "spirit-order";
-        order.textContent = String(spirit.order).padStart(2, "0");
-
-        const title = document.createElement("h3");
-        title.textContent = state.lang === "zh" ? spirit.nameZh : spirit.nameEn;
-
-        const role = document.createElement("div");
-        role.className = "spirit-role";
-        role.textContent = state.lang === "zh" ? spirit.roleZh : spirit.roleEn;
-
-        const desc = document.createElement("div");
-        desc.className = "spirit-desc";
-        desc.textContent = state.lang === "zh" ? spirit.copyZh : spirit.copyEn;
-
-        copy.append(order, title, role, desc);
-        card.append(art, overlay, copy);
-
-        if (!unlocked) {
-          const lock = document.createElement("div");
-          lock.className = "spirit-lock";
-          lock.textContent = t("spiritLocked");
-          card.appendChild(lock);
-        }
-
-        els.spiritCollectionGrid.appendChild(card);
-      });
     };
 
     const renderMyForest = ({ name, points, actionDays, impactCount, fullClovers, leafCount, leafProgress, nextLeafGap }) => {
@@ -1525,7 +1306,6 @@
       const progressText = state.lang === "zh" ? `${leafProgress}/4` : `${leafProgress}/4`;
       els.myForestTreesValue.textContent = parts.length ? `${parts.join(" + ")} (${progressText})` : progressText;
       els.myForestNextValue.textContent = state.lang === "zh" ? `${nextLeafGap} 分` : `${nextLeafGap}`;
-      renderSpiritCollection(fullClovers, true);
     };
 
     const loadStats = async () => {
@@ -1639,7 +1419,6 @@
       button.addEventListener("click", () => setLanguage(button.dataset.lang));
     });
 
-    renderSpiritCollection(0, false);
     setLanguage(state.lang);
     onAuthStateChanged(auth, async (user) => {
       state.authResolved = true;
@@ -1649,8 +1428,6 @@
       }
       state.myForestLoading = true;
       els.myForestStatus.textContent = t("myForestLoading");
-      els.spiritCollectionSummary.textContent = t("myForestLoading");
-      els.spiritCollectionCount.textContent = t("spiritCollectionCount", 0);
       try {
         let member = {};
         let submissions = [];

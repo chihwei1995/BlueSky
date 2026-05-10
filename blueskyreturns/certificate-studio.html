@@ -962,7 +962,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { browserLocalPersistence, getAuth, onAuthStateChanged, setPersistence, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
     import { getAI, getGenerativeModel, GoogleAIBackend, ResponseModality } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-ai.js";
@@ -980,6 +980,9 @@
     const app = initializeApp(firebaseConfig);
     setupBlueSkyAppCheck(app, { pageName: "certificate-studio" });
     const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence).catch((error) => {
+      console.error("Failed to enable local auth persistence:", error);
+    });
     const db = getFirestore(app, "default");
     const storage = getStorage(app);
     const ai = getAI(app, { backend: new GoogleAIBackend() });

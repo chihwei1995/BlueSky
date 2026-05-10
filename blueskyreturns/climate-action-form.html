@@ -864,10 +864,12 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import {
+      browserLocalPersistence,
       getAuth,
       createUserWithEmailAndPassword,
       signOut,
       sendEmailVerification,
+      setPersistence,
       updateProfile,
       onAuthStateChanged,
       connectAuthEmulator
@@ -894,6 +896,9 @@
     const app = initializeApp(firebaseConfig);
     setupBlueSkyAppCheck(app, { pageName: "climate-action-form" });
     const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence).catch((error) => {
+      console.error("Failed to enable local auth persistence:", error);
+    });
     const db = getFirestore(app, "default");
     const TERMS_VERSION = "2026-04-22";
     const LANG_STORAGE_KEY = "bsr_lang";
