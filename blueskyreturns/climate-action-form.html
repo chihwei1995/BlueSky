@@ -702,6 +702,9 @@
         />
         <p class="helper">至少 6 個字元。</p>
 
+        <label for="region">所屬地區 / 國家 (Region/Country)</label>
+        <input id="region" name="region" type="text" placeholder="例：Japan, Hong Kong, Taiwan" />
+
         <fieldset>
           <label>是否為 JCI（國際青年商會）會友？（選填）<br>Are you a JCI member? (Optional)</label>
           <div class="options">
@@ -711,9 +714,6 @@
         </fieldset>
 
         <div id="jciDetails" hidden>
-          <label class="required" for="region">所屬地區 / 國家 (Region/Country)</label>
-          <input id="region" name="region" type="text" placeholder="例：Japan, Hong Kong, Taiwan" />
-
           <label class="required" for="chapter">所屬分會 (LOM / Chapter)</label>
           <input id="chapter" name="chapter" type="text" placeholder="例：Peninsula" />
         </div>
@@ -1105,10 +1105,9 @@
     const setJciFields = (isJci) => {
       const show = isJci === "是";
       jciDetails.hidden = !show;
-      regionInput.required = show;
-      chapterInput.required = show;
+      regionInput.required = false;
+      chapterInput.required = false;
       if (!show) {
-        regionInput.value = "";
         chapterInput.value = "";
       }
     };
@@ -1306,7 +1305,7 @@
         partnerMultiplier: 1,
         permissionLevel: 1,
         isJci,
-        region: isJci === "是" ? (formData.get("region") || "") : "",
+        region: formData.get("region") || "",
         chapter: isJci === "是" ? (formData.get("chapter") || "") : "",
         answers: {
           q1: Number(formData.get("q1")),
