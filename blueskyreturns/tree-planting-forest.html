@@ -671,7 +671,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 
     const translations = {
@@ -1415,20 +1415,13 @@
       }
       try {
         const [memberSnap, submissionSnap, referralSnap] = await Promise.all([
-          getDocs(collection(db, "members")),
-          getDocs(collection(db, "greenProposalSubmissions")),
-          getDocs(collection(db, "memberReferrals"))
+          getDoc(doc(db, "members", user.uid)),
+          getDocs(query(collection(db, "greenProposalSubmissions"), where("uid", "==", user.uid))),
+          getDocs(query(collection(db, "memberReferrals"), where("referredBy", "==", user.uid)))
         ]);
-        const memberDoc = memberSnap.docs.find((docSnap) => docSnap.id === user.uid);
-        const member = memberDoc ? { id: memberDoc.id, ...memberDoc.data() } : {};
-        const submissions = submissionSnap.docs
-          .map((docSnap) => docSnap.data() || {})
-          .filter((item) => String(item.uid || "").trim() === user.uid);
-        let impactCount = 0;
-        referralSnap.docs.forEach((docSnap) => {
-          const data = docSnap.data() || {};
-          if (String(data.referredBy || "").trim() === user.uid) impactCount += 1;
-        });
+        const member = memberSnap.exists() ? { id: memberSnap.id, ...memberSnap.data() } : {};
+        const submissions = submissionSnap.docs.map((docSnap) => docSnap.data() || {});
+        const impactCount = referralSnap.size;
         const actionDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
         const points = calculateClimatePoints({
           member,
