@@ -37,8 +37,7 @@ service cloud.firestore {
     match /greenProposalSubmissions/{submissionId} {
       allow create: if isSignedIn() &&
         request.resource.data.uid == request.auth.uid;
-      allow read: if isSignedIn() &&
-        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow read: if isSignedIn();
       allow update: if isSignedIn() &&
         (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
       allow delete: if isSignedIn() &&
@@ -69,17 +68,13 @@ service cloud.firestore {
         request.resource.data.referredUid == request.auth.uid &&
         request.resource.data.referredBy is string &&
         request.resource.data.referredBy != request.auth.uid;
-      allow read: if isSignedIn() &&
-        (
-          resource.data.referredUid == request.auth.uid ||
-          resource.data.referredBy == request.auth.uid ||
-          hasPermissionLevel(3)
-        );
+      allow read: if isSignedIn();
       allow update, delete: if false;
     }
 
     match /members/{userId} {
-      allow read, create, update: if isOwner(userId) || hasPermissionLevel(3);
+      allow read: if isSignedIn();
+      allow create, update: if isOwner(userId) || hasPermissionLevel(3);
       allow delete: if false;
     }
   }

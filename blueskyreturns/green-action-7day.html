@@ -880,7 +880,7 @@
                     <p id="taskTermsState" class="terms-copy">請只提交你有權提供的內容。首次同意後，同帳號可沿用。 / Please only submit content you have the right to provide. Once accepted, the same account can reuse this consent.</p>
                   </div>
                   <div class="task-actions">
-                    <button id="taskSubmitBtn" class="pill primary" type="submit">提交任務 / Submit</button>
+                    <button id="taskSubmitBtn" class="pill primary" type="submit" hidden aria-hidden="true" style="display:none;">提交任務 / Submit</button>
                     <span id="taskStatus" class="task-status" aria-live="polite"></span>
                   </div>
                 </form>
@@ -904,7 +904,7 @@
               </article>
               <article class="task-card">
                 <h3>我的任務紀錄 / My Recent Submissions</h3>
-                <div id="proposalSubmissionEmpty" class="submission-empty">登入後，這裡會顯示你最近提交的 Daily Green Actions 紀錄。</div>
+                <div id="proposalSubmissionEmpty" class="submission-empty">正在確認登入狀態... / Checking sign-in status...</div>
                 <div id="proposalSubmissionList" class="submission-list" hidden></div>
               </article>
             </div>
@@ -1417,6 +1417,7 @@
         memberData = memberSnap.exists() ? memberSnap.data() : null;
       } catch (error) {
         console.error("Failed to load member terms", error);
+        memberData = null;
       }
       if (syncToken !== authSyncToken) return;
 
