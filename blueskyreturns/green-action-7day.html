@@ -1076,6 +1076,7 @@
     let acceptedTermsRecord = null;
     let pendingTaskAuthSubmit = false;
     let authReady = false;
+    let currentMemberProfile = null;
     const taskFormStartedAt = Date.now();
     const MIN_TASK_FILL_MS = 2000;
     const DAILY_SLOT_COLLECTION = "greenProposalDailySlots";
@@ -1118,40 +1119,49 @@
       taskStatus.textContent = message;
     };
 
+    const setVisibleState = (node, visible, displayValue = "") => {
+      if (!node) return;
+      node.hidden = !visible;
+      node.setAttribute("aria-hidden", visible ? "false" : "true");
+      node.style.display = visible ? displayValue : "none";
+    };
+
     const syncTaskEntryUi = (user) => {
       if (!authReady) {
-        taskSubmitBtn.hidden = true;
+        setVisibleState(taskSubmitBtn, false);
         taskSubmitBtn.disabled = true;
-        taskAuthCard.hidden = true;
+        setVisibleState(taskAuthCard, false);
         return;
       }
 
       if (user) {
-        taskSubmitBtn.hidden = false;
+        setVisibleState(taskSubmitBtn, true, "");
         taskSubmitBtn.disabled = false;
-        taskAuthCard.hidden = true;
+        setVisibleState(taskAuthCard, false);
         return;
       }
 
-      taskSubmitBtn.hidden = true;
+      setVisibleState(taskSubmitBtn, false);
       taskSubmitBtn.disabled = true;
-      taskAuthCard.hidden = false;
+      setVisibleState(taskAuthCard, true, "grid");
     };
 
     const taskText = (zh, en) => document.documentElement.lang === "en" ? en : zh;
 
     const ensureMemberProfile = async (user) => {
       if (!user) return;
-      await setDoc(doc(db, "members", user.uid), {
+      const nextProfile = {
         uid: user.uid,
         email: user.email || "",
-        name: (user.email || "").split("@")[0] || "",
+        name: currentMemberProfile?.name || (user.email || "").split("@")[0] || "",
         partnerType: "individual",
         partnerMultiplier: 1,
         permissionLevel: 1,
         createdFrom: "daily-green-actions",
         updatedAt: new Date().toISOString()
-      }, { merge: true });
+      };
+      await setDoc(doc(db, "members", user.uid), nextProfile, { merge: true });
+      currentMemberProfile = { ...(currentMemberProfile || {}), ...nextProfile };
     };
 
     const validateTaskDraft = () => {
@@ -1374,6 +1384,7 @@
     onAuthStateChanged(auth, async (user) => {
       authReady = true;
       if (!user) {
+        currentMemberProfile = null;
         updateTermsConsentUI(null);
         pendingTaskAuthSubmit = false;
         syncTaskEntryUi(null);
@@ -1391,6 +1402,7 @@
         console.error("Failed to load member terms", error);
       }
 
+      currentMemberProfile = memberData || null;
       updateTermsConsentUI(memberData?.termsConsent || null);
       pendingTaskAuthSubmit = false;
       syncTaskEntryUi(user);
@@ -1400,6 +1412,9 @@
       if (!taskDateInput.value) {
         taskDateInput.value = new Date().toISOString().slice(0, 10);
       }
+      submissionList.hidden = true;
+      submissionEmpty.hidden = false;
+      submissionEmpty.textContent = "正在載入你的 Daily Green Actions 紀錄...";
       await loadMySubmissions(user.uid);
     });
 
@@ -1442,7 +1457,15 @@
         const payload = {
           uid: user.uid,
           email: user.email || "",
-          memberName: user.displayName || "",
+          memberName: String(
+            currentMemberProfile?.name ||
+            currentMemberProfile?.memberName ||
+            user.displayName ||
+            (user.email || "").split("@")[0] ||
+            ""
+          ).trim(),
+          memberRegion: String(currentMemberProfile?.region || "").trim(),
+          memberChapter: String(currentMemberProfile?.chapter || "").trim(),
           title: caption.slice(0, 40),
           taskDate,
           dimensions,
