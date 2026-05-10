@@ -2650,6 +2650,7 @@
 
       authInlineSubmit.disabled = true;
       try {
+        await setPersistence(auth, browserLocalPersistence);
         try {
           await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {

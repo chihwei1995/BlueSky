@@ -817,7 +817,7 @@
     setupBlueSkyAppCheck(app, { pageName: "tree-planting-forest" });
     const db = getFirestore(app, "default");
     const auth = getAuth(app);
-    setPersistence(auth, browserLocalPersistence).catch((error) => {
+    const authPersistenceReady = setPersistence(auth, browserLocalPersistence).catch((error) => {
       console.error("Failed to enable local auth persistence:", error);
     });
 
@@ -830,6 +830,7 @@
       completedTrees: 0,
       totalTrees: 0,
       authResolved: false,
+      authSyncToken: 0,
       myForestLoading: false,
       statsLoading: false
     };
@@ -1441,7 +1442,8 @@
     });
 
     setLanguage(state.lang);
-    onAuthStateChanged(auth, async (user) => {
+    const applyAuthState = async (user, syncToken) => {
+      if (syncToken !== state.authSyncToken) return;
       state.authResolved = true;
       if (!user) {
         renderStatsUnavailable(t("statsGuest"));
@@ -1451,6 +1453,7 @@
       if (!state.statsLoading) {
         await loadStats();
       }
+      if (syncToken !== state.authSyncToken) return;
       state.myForestLoading = true;
       els.myForestStatus.textContent = t("myForestLoading");
       try {
@@ -1490,6 +1493,7 @@
           impactCount,
           hasWeeklyStreak: hasSevenDayStreak(submissions.map((item) => item.taskDate))
         });
+        if (syncToken !== state.authSyncToken) return;
         const totalLeaves = Math.floor(points / 4);
         const fullClovers = Math.floor(totalLeaves / 4);
         const leafCount = totalLeaves % 4;
@@ -1508,6 +1512,7 @@
         });
       } catch (error) {
         console.error(error);
+        if (syncToken !== state.authSyncToken) return;
         renderMyForest({
           name: getDisplayName({}, user.displayName || user.email || "Climate Action Partner"),
           points: 0,
@@ -1519,7 +1524,22 @@
           nextLeafGap: 4
         });
       }
-    });
+    };
+
+    const initAuthState = async () => {
+      try {
+        await authPersistenceReady;
+      } catch (error) {
+        console.error("Auth persistence setup failed:", error);
+      }
+
+      onAuthStateChanged(auth, (user) => {
+        const syncToken = ++state.authSyncToken;
+        applyAuthState(user, syncToken);
+      });
+    };
+
+    initAuthState();
     animate();
   </script>
 </body>

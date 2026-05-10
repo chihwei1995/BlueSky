@@ -2603,6 +2603,7 @@
       loginStatusEl.textContent = "";
       loginSubmitBtn.disabled = true;
       try {
+        await setPersistence(auth, browserLocalPersistence);
         await signInWithEmailAndPassword(auth, loginEmailInput.value.trim(), loginPasswordInput.value);
         closeLoginModal();
       } catch (error) {

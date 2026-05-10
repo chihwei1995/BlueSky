@@ -1150,9 +1150,17 @@
     };
 
     const taskText = (zh, en) => document.documentElement.lang === "en" ? en : zh;
+    const wrapTaskStepError = (step, error) => {
+      if (error && typeof error === "object") {
+        error.step = step;
+      }
+      return error;
+    };
     const getTaskSubmitErrorMessage = (error) => {
       const code = String(error?.code || "");
       const message = String(error?.message || "").trim();
+      const step = String(error?.step || "").trim();
+      const stepLabel = step ? `${step} / ` : "";
       if (code === "storage/unauthorized") {
         return taskText("圖片上傳權限不足，請重新登入後再試。", "Image upload permission was denied. Please sign in again and try.");
       }
@@ -1163,15 +1171,18 @@
         return taskText("圖片上傳失敗，請稍後再試。", "The image upload failed. Please try again later.");
       }
       if (code === "permission-denied") {
-        return taskText("資料寫入權限不足，請重新登入後再試。", "Data write permission was denied. Please sign in again and try.");
+        return taskText(
+          `資料寫入權限不足：${stepLabel}請重新登入後再試。`,
+          `Data write permission was denied: ${stepLabel}please sign in again and try.`
+        );
       }
       if (code === "unauthenticated") {
         return taskText("登入狀態已失效，請重新登入後再提交。", "Your sign-in session expired. Please sign in again and submit.");
       }
       if (code || message) {
         return taskText(
-          `提交失敗：${code || "unknown"}${message ? ` / ${message}` : ""}`,
-          `Submission failed: ${code || "unknown"}${message ? ` / ${message}` : ""}`
+          `提交失敗：${stepLabel}${code || "unknown"}${message ? ` / ${message}` : ""}`,
+          `Submission failed: ${stepLabel}${code || "unknown"}${message ? ` / ${message}` : ""}`
         );
       }
       return taskText("提交失敗，請稍後再試。", "Submission failed. Please try again later.");
@@ -1191,7 +1202,11 @@
         createdFrom: "daily-green-actions",
         updatedAt: new Date().toISOString()
       };
-      await setDoc(doc(db, "members", user.uid), nextProfile, { merge: true });
+      try {
+        await setDoc(doc(db, "members", user.uid), nextProfile, { merge: true });
+      } catch (error) {
+        throw wrapTaskStepError("members profile", error);
+      }
       currentMemberProfile = { ...(currentMemberProfile || {}), ...nextProfile };
     };
 
@@ -1479,13 +1494,17 @@
       try {
         await ensureMemberProfile(user);
         if (!hasAcceptedTerms(acceptedTermsRecord) && taskTermsConsent.checked) {
-          await setDoc(doc(db, "members", user.uid), {
-            termsConsent: {
-              acceptedAt: new Date().toISOString(),
-              acceptedVersion: TERMS_VERSION,
-              source: "green-action-7day"
-            }
-          }, { merge: true });
+          try {
+            await setDoc(doc(db, "members", user.uid), {
+              termsConsent: {
+                acceptedAt: new Date().toISOString(),
+                acceptedVersion: TERMS_VERSION,
+                source: "green-action-7day"
+              }
+            }, { merge: true });
+          } catch (error) {
+            throw wrapTaskStepError("terms consent", error);
+          }
           updateTermsConsentUI({
             acceptedAt: new Date().toISOString(),
             acceptedVersion: TERMS_VERSION,
@@ -1493,7 +1512,12 @@
           });
         }
 
-        const slot = await getDailySlot(user.uid, taskDate);
+        let slot;
+        try {
+          slot = await getDailySlot(user.uid, taskDate);
+        } catch (error) {
+          throw wrapTaskStepError("daily slot read", error);
+        }
         const submitState = evaluateDailySubmit({ slot, editingId: editingSubmissionId });
         if (!submitState.ok) {
           setTaskStatus("error", submitState.message);
@@ -1527,27 +1551,43 @@
           if (uploadedImage && editingSubmissionData?.image?.path && editingSubmissionData.image.path !== uploadedImage.path) {
             await deleteTaskImage(editingSubmissionData.image);
           }
-          await updateDoc(doc(db, "greenProposalSubmissions", editingSubmissionId), payload);
-          await setDoc(getDailySlotRef(user.uid, taskDate), {
-            uid: user.uid,
-            taskDate,
-            activeSubmissionId: editingSubmissionId,
-            submitCount: Math.max(1, Number(submitState.submitCount || slot?.submitCount || 1)),
-            deleteCount: Number(submitState.deleteCount || slot?.deleteCount || 0),
-            lastSubmittedAt: new Date().toISOString()
-          }, { merge: true });
+          try {
+            await updateDoc(doc(db, "greenProposalSubmissions", editingSubmissionId), payload);
+          } catch (error) {
+            throw wrapTaskStepError("submission update", error);
+          }
+          try {
+            await setDoc(getDailySlotRef(user.uid, taskDate), {
+              uid: user.uid,
+              taskDate,
+              activeSubmissionId: editingSubmissionId,
+              submitCount: Math.max(1, Number(submitState.submitCount || slot?.submitCount || 1)),
+              deleteCount: Number(submitState.deleteCount || slot?.deleteCount || 0),
+              lastSubmittedAt: new Date().toISOString()
+            }, { merge: true });
+          } catch (error) {
+            throw wrapTaskStepError("daily slot update", error);
+          }
           setTaskStatus("ok", "Daily Green Actions 紀錄已更新。");
         } else {
           const submissionRef = doc(collection(db, "greenProposalSubmissions"));
-          await setDoc(submissionRef, payload);
-          await setDoc(getDailySlotRef(user.uid, taskDate), {
-            uid: user.uid,
-            taskDate,
-            activeSubmissionId: submissionRef.id,
-            submitCount: Number(submitState.submitCount || 1),
-            deleteCount: Number(submitState.deleteCount || 0),
-            lastSubmittedAt: new Date().toISOString()
-          }, { merge: true });
+          try {
+            await setDoc(submissionRef, payload);
+          } catch (error) {
+            throw wrapTaskStepError("submission create", error);
+          }
+          try {
+            await setDoc(getDailySlotRef(user.uid, taskDate), {
+              uid: user.uid,
+              taskDate,
+              activeSubmissionId: submissionRef.id,
+              submitCount: Number(submitState.submitCount || 1),
+              deleteCount: Number(submitState.deleteCount || 0),
+              lastSubmittedAt: new Date().toISOString()
+            }, { merge: true });
+          } catch (error) {
+            throw wrapTaskStepError("daily slot create", error);
+          }
           setTaskStatus(
             "ok",
             Number(submitState.submitCount || 1) > 1
@@ -1602,6 +1642,7 @@
 
       taskAuthSubmit.disabled = true;
       try {
+        await setPersistence(auth, browserLocalPersistence);
         try {
           await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {
