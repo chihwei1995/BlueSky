@@ -425,40 +425,7 @@
     }
 
     .intro-video-content {
-      display: grid;
-      gap: 16px;
-      max-width: min(100%, 520px);
-      align-self: end;
-    }
-
-    .intro-video-copy {
-      display: grid;
-      gap: 12px;
-      padding: 18px 20px;
-      border-radius: 24px;
-      background: rgba(8, 28, 22, 0.34);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: #fff;
-      backdrop-filter: blur(12px);
-    }
-
-    .intro-video-copy h1,
-    .intro-video-copy p {
-      margin: 0;
-    }
-
-    .intro-video-copy h1 {
-      font-size: clamp(2rem, 4.2vw, 3.8rem);
-      line-height: 0.98;
-      max-width: 9ch;
-      text-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
-    }
-
-    .intro-video-copy p {
-      color: rgba(255, 255, 255, 0.92);
-      font-size: clamp(0.96rem, 1.5vw, 1.06rem);
-      line-height: 1.7;
-      max-width: 36ch;
+      display: contents;
     }
 
     .intro-video-actions {
@@ -516,25 +483,6 @@
 
     .intro-start-btn:focus-visible {
       outline: none;
-    }
-
-    .intro-start-note {
-      position: absolute;
-      left: 50%;
-      top: calc(61.5% + 88px);
-      transform: translateX(-50%);
-      pointer-events: none;
-      display: inline-flex;
-      align-items: center;
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
-      font-size: 0.85rem;
-      font-weight: 700;
-      backdrop-filter: blur(10px);
-      z-index: 2;
     }
 
     .hero-copy {
@@ -1756,16 +1704,6 @@
         padding: 18px;
       }
 
-      .intro-video-copy {
-        padding: 16px;
-        border-radius: 20px;
-      }
-
-      .intro-video-copy h1 {
-        max-width: none;
-        font-size: clamp(1.9rem, 8vw, 2.8rem);
-      }
-
       .intro-video-actions {
         display: contents;
       }
@@ -1774,12 +1712,6 @@
         top: 60%;
         width: min(56vw, 240px);
         height: min(21vw, 118px);
-      }
-
-      .intro-start-note {
-        top: calc(60% + 74px);
-        width: calc(100% - 28px);
-        justify-content: center;
       }
 
       .result-activity-float {
@@ -1909,59 +1841,14 @@
                 <source src="../assets/eco-mbti-intro.mp4" type="video/mp4" />
               </video>
               <div class="intro-video-overlay">
-                <div class="intro-video-top">
-                  <div class="intro-video-badges">
-                    <span class="intro-video-chip" data-i18n="hero.chip1">12 題快測</span>
-                    <span class="intro-video-chip" data-i18n="hero.chip2">先測後註冊</span>
-                    <span class="intro-video-chip" data-i18n="hero.chip3">立即出結果</span>
-                  </div>
-                </div>
                 <div class="intro-video-content">
-                  <div class="intro-video-copy">
-                    <div class="eyebrow" data-i18n="hero.eyebrow">Interactive Sustainability Personality</div>
-                    <h1 data-i18n="hero.title">環保 MBTI / Eco-MBTI</h1>
-                    <p data-i18n="hero.body">用 12 題快速找到你的 Climate Type。</p>
-                  </div>
                   <div class="intro-video-actions">
                     <button id="startQuizBtn" class="intro-start-btn" type="button">START</button>
-                    <span class="intro-start-note" data-i18n="hero.noteBody">選最像你的答案，完成後立即看到結果。</span>
                   </div>
                 </div>
               </div>
             </section>
 
-            <section class="panel intro-guide">
-              <div class="section-head">
-                <h2 data-i18n="guide.title">測驗怎麼看 / Quick Guide</h2>
-                <p data-i18n="guide.body">四組字母、12 題直覺選擇，最後會得到你的 Eco-MBTI 類型。</p>
-              </div>
-              <div class="intro-guide-grid">
-                <article class="intro-guide-item">
-                  <span class="framework-badge energy" data-i18n="framework.energy.badge">能量來源 / Energy</span>
-                  <strong data-i18n="framework.energy.title">E 社群倡議 vs. I 個人實踐</strong>
-                  <p data-i18n="letters.energy.e">E 社群倡議</p>
-                  <p data-i18n="letters.energy.i">I 個人實踐</p>
-                </article>
-                <article class="intro-guide-item">
-                  <span class="framework-badge info" data-i18n="framework.info.badge">資訊處理 / Information</span>
-                  <strong data-i18n="framework.info.title">S 務實行動 vs. N 系統創新</strong>
-                  <p data-i18n="letters.info.s">S 務實行動</p>
-                  <p data-i18n="letters.info.n">N 系統創新</p>
-                </article>
-                <article class="intro-guide-item">
-                  <span class="framework-badge decision" data-i18n="framework.decision.badge">決策依據 / Decision</span>
-                  <strong data-i18n="framework.decision.title">T 數據驅動 vs. F 情感共鳴</strong>
-                  <p data-i18n="letters.decision.t">T 數據驅動</p>
-                  <p data-i18n="letters.decision.f">F 情感共鳴</p>
-                </article>
-                <article class="intro-guide-item">
-                  <span class="framework-badge lifestyle" data-i18n="framework.lifestyle.badge">執行方式 / Lifestyle</span>
-                  <strong data-i18n="framework.lifestyle.title">J 嚴謹規劃 vs. P 彈性適應</strong>
-                  <p data-i18n="letters.lifestyle.j">J 嚴謹規劃</p>
-                  <p data-i18n="letters.lifestyle.p">P 彈性適應</p>
-                </article>
-              </div>
-            </section>
           </section>
 
           <section id="quizScreen" class="flow-screen panel quiz-panel" hidden>
