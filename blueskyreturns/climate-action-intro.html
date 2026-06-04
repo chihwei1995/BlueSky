@@ -74,6 +74,7 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .lang-toggle {
@@ -102,6 +103,12 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
     }
 
+    .button,
+    .slider-nav,
+    .lang-btn {
+      min-width: 0;
+    }
+
     .lang-btn {
       padding: 8px 14px;
       background: transparent;
@@ -125,60 +132,11 @@
       box-shadow: var(--shadow);
     }
 
-    .intro {
-      display: grid;
-      gap: 18px;
-      padding: 24px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      width: fit-content;
-      align-items: center;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(27, 122, 85, 0.1);
-      color: var(--forest);
-      font-size: 0.84rem;
-      font-weight: 900;
-    }
-
     h1,
     h2,
     h3,
     p {
       margin: 0;
-    }
-
-    .intro h1 {
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      line-height: 1.06;
-      color: #103d2f;
-      max-width: 12ch;
-    }
-
-    .intro-body {
-      max-width: 62ch;
-      color: var(--muted);
-      font-size: 1.02rem;
-    }
-
-    .quick-points {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .quick-point {
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid rgba(21, 49, 38, 0.08);
-      color: var(--forest-deep);
-      font-size: 0.9rem;
-      font-weight: 800;
     }
 
     .slideshow {
@@ -235,12 +193,14 @@
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .slide-nav-group {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .slider-nav {
@@ -252,6 +212,7 @@
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .slide-dot {
@@ -286,12 +247,14 @@
       color: #0d7281;
       font-size: 0.84rem;
       font-weight: 900;
+      max-width: 100%;
     }
 
     .slide-copy h2 {
       font-size: clamp(1.55rem, 2.8vw, 2.35rem);
       line-height: 1.12;
       color: var(--forest-deep);
+      overflow-wrap: anywhere;
     }
 
     .slide-lead {
@@ -320,6 +283,7 @@
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.08em;
+      overflow-wrap: anywhere;
     }
 
     .slide-tip {
@@ -367,7 +331,6 @@
       }
 
       .panel,
-      .intro,
       .slideshow {
         padding: 18px;
         border-radius: 22px;
@@ -375,32 +338,99 @@
 
       .topbar-actions {
         width: 100%;
+        flex-direction: column;
+        align-items: stretch;
       }
 
-      .topbar-actions .button {
+      .topbar-actions .button,
+      .topbar-actions .lang-toggle {
         width: 100%;
-      }
-
-      .intro h1 {
-        max-width: none;
       }
     }
 
     @media (max-width: 640px) {
+      .shell {
+        gap: 16px;
+        padding: 14px 12px 32px;
+      }
+
+      .topbar {
+        gap: 10px;
+      }
+
+      .brand span {
+        font-size: 0.82rem;
+      }
+
+      .lang-toggle {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .lang-btn {
+        flex: 1 1 0;
+      }
+
+      .slideshow {
+        gap: 16px;
+      }
+
       .slide-frame img {
         aspect-ratio: 4 / 5.35;
       }
 
+      .slide-counter {
+        top: 12px;
+        left: 12px;
+        padding: 7px 10px;
+        font-size: 0.8rem;
+      }
+
       .slide-controls {
         align-items: stretch;
+        justify-content: stretch;
       }
 
       .slide-nav-group {
         width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
       }
 
       .slider-nav {
-        flex: 1 1 0;
+        width: 100%;
+        min-width: 0;
+        padding: 10px 12px;
+        font-size: 0.92rem;
+      }
+
+      .slide-dots {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .route-badge,
+      .slide-step-label {
+        width: 100%;
+      }
+
+      .slide-copy {
+        gap: 14px;
+      }
+
+      .slide-copy h2 {
+        font-size: clamp(1.3rem, 6.6vw, 1.7rem);
+      }
+
+      .slide-lead,
+      .slide-point,
+      .slide-tip {
+        font-size: 0.92rem;
+      }
+
+      .slide-point,
+      .slide-tip {
+        padding: 13px 14px;
       }
 
       .actions .button {
@@ -424,17 +454,6 @@
         <a class="button" id="backLink" href="./eco-mbti.html" data-i18n="nav.back">返回 Eco-MBTI</a>
       </div>
     </div>
-
-    <section class="panel intro">
-      <span class="eyebrow" data-i18n="hero.badge">活動推薦</span>
-      <h1 data-i18n="hero.title">額外活動導覽</h1>
-      <p class="intro-body" data-i18n="hero.body">用幻燈片快速看懂這次額外活動：從看見香港的綠點、任務路線、參加方式，到最後的集氣成果與紀念獎勵。</p>
-      <div class="quick-points">
-        <span class="quick-point" data-i18n="hero.chip1">6 張活動圖快速看完</span>
-        <span class="quick-point" data-i18n="hero.chip2">可左右切換</span>
-        <span class="quick-point" data-i18n="hero.chip3">手機可滑動</span>
-      </div>
-    </section>
 
     <section class="panel slideshow">
       <div class="slide-visual">
@@ -483,14 +502,6 @@
         pageTitle: "2026 氣候行動介紹 | Blue Sky Returns",
         brand: { subtitle: "2026 氣候行動介紹" },
         nav: { back: "返回 Eco-MBTI" },
-        hero: {
-          badge: "活動推薦",
-          title: "額外活動導覽",
-          body: "用幻燈片快速看懂這次額外活動：從看見香港的綠點、任務路線、參加方式，到最後的集氣成果與紀念獎勵。",
-          chip1: "6 張活動圖快速看完",
-          chip2: "可左右切換",
-          chip3: "手機可滑動"
-        },
         slider: {
           prev: "上一張",
           next: "下一張",
@@ -571,14 +582,6 @@
         pageTitle: "2026 Climate Action Overview | Blue Sky Returns",
         brand: { subtitle: "2026 Climate Action Overview" },
         nav: { back: "Back to Eco-MBTI" },
-        hero: {
-          badge: "Featured Event",
-          title: "Extra Activity Walkthrough",
-          body: "Use this slideshow to quickly understand the extra campaign: from discovering Hong Kong's green spots and route missions to participation, sharing, and the final reward momentum.",
-          chip1: "6 key visuals in sequence",
-          chip2: "Tap through the story",
-          chip3: "Swipe on mobile"
-        },
         slider: {
           prev: "Previous",
           next: "Next",
