@@ -271,6 +271,10 @@
       margin-bottom: 18px;
     }
 
+    .mobile-lang-toggle {
+      display: none;
+    }
+
     .mobile-nav-card {
       padding: 14px;
     }
@@ -1691,6 +1695,21 @@
         padding: 0 16px;
       }
 
+      .mobile-lang-toggle {
+        position: fixed;
+        top: 12px;
+        right: 14px;
+        z-index: 80;
+        display: inline-flex;
+        gap: 6px;
+        padding: 5px;
+        border: 1px solid rgba(216, 231, 221, 0.96);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 12px 24px rgba(21, 49, 38, 0.12);
+      }
+
       .intro-video-hero {
         min-height: 68vh;
         border-radius: 24px;
@@ -1831,6 +1850,11 @@
     </div>
   </header>
 
+  <div class="lang-toggle mobile-lang-toggle" role="group" aria-label="Mobile language switcher">
+    <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+    <button class="lang-btn" type="button" data-lang="en">EN</button>
+  </div>
+
   <main>
     <div class="shell">
       <div class="layout">
@@ -1852,32 +1876,10 @@
           </section>
 
           <section id="quizScreen" class="flow-screen panel quiz-panel" hidden>
-            <div class="section-head">
-              <h2 data-i18n="quiz.title">12 題環保 MBTI 測驗 / 12-Question Eco-MBTI Quiz</h2>
-              <p data-i18n="quiz.body">依直覺作答即可。</p>
-            </div>
-            <div class="progress-head">
-              <div class="small-badge" id="progressLabel" data-i18n="quiz.progress">已完成 0 / 12 題</div>
-              <div class="small-badge" id="questionIndexLabel">第 1 / 12 題</div>
-            </div>
-            <div class="progress-bar" aria-hidden="true">
-              <div id="progressFill" class="progress-fill"></div>
             </div>
             <form id="quizForm">
               <div class="question-stage">
-                <div class="question-stage-head">
-                  <h2 id="questionStageTitle" data-i18n="quiz.stageTitle">目前題目</h2>
-                  <div class="small-badge" id="questionDimensionLabel">-</div>
-                </div>
                 <div id="questionStageCard" class="question-stage-card"></div>
-              </div>
-              <div class="quiz-actions between">
-                <div class="quiz-actions">
-                  <button id="prevQuestionBtn" type="button" data-i18n="quiz.prev">上一題</button>
-                  <button id="nextQuestionBtn" class="primary" type="button" data-i18n="quiz.next">下一題</button>
-                  <button id="resetQuizBtn" type="button" data-i18n="quiz.reset">重新作答</button>
-                </div>
-                <span id="quizStatus" class="status" aria-live="polite"></span>
               </div>
             </form>
           </section>
@@ -2747,16 +2749,8 @@
     const resultScreen = document.getElementById("resultScreen");
     const startQuizBtn = document.getElementById("startQuizBtn");
     const quizForm = document.getElementById("quizForm");
-    const progressFill = document.getElementById("progressFill");
-    const progressLabel = document.getElementById("progressLabel");
     const questionIndexLabel = document.getElementById("questionIndexLabel");
-    const questionStageTitle = document.getElementById("questionStageTitle");
-    const questionDimensionLabel = document.getElementById("questionDimensionLabel");
     const questionStageCard = document.getElementById("questionStageCard");
-    const quizStatus = document.getElementById("quizStatus");
-    const prevQuestionBtn = document.getElementById("prevQuestionBtn");
-    const nextQuestionBtn = document.getElementById("nextQuestionBtn");
-    const resetQuizBtn = document.getElementById("resetQuizBtn");
     const gateForm = document.getElementById("gateForm");
     const gateEmailInput = document.getElementById("gateEmailInput");
     const gateNicknameInput = document.getElementById("gateNicknameInput");
@@ -2892,10 +2886,6 @@
       article.className = "question-card";
       article.dataset.dimension = question.dimension;
 
-      const sticker = document.createElement("div");
-      sticker.className = "question-sticker";
-      sticker.textContent = currentLang === "zh" ? "啪!" : "POW!";
-
       const hero = document.createElement("div");
       hero.className = "question-hero";
 
@@ -2941,15 +2931,6 @@
         input.name = `question-${question.id}`;
         input.value = option.letter;
 
-        const head = document.createElement("div");
-        head.className = "choice-head";
-
-        const choiceLabel = document.createElement("span");
-        choiceLabel.className = "choice-label";
-        choiceLabel.textContent = t(index === 0 ? "quiz.optionA" : "quiz.optionB");
-
-        head.append(choiceLabel);
-
         const body = document.createElement("div");
         body.textContent = question[currentLang][option.key.toLowerCase()];
 
@@ -2963,25 +2944,21 @@
           options.querySelectorAll(".choice").forEach((node) => node.classList.remove("active"));
           label.classList.add("active");
           updateProgress();
-          quizStatus.className = "status ok";
-          quizStatus.textContent = t("quiz.moving");
           window.setTimeout(() => {
             if (currentQuestionIndex < QUESTIONS.length - 1) {
               currentQuestionIndex += 1;
               renderCurrentQuestion();
             } else {
-              quizStatus.className = "status ok";
-              quizStatus.textContent = t("quiz.ready");
               renderResult(calculateResult());
             }
           }, 220);
         });
 
-        label.append(input, head, body);
+        label.append(input, body);
         options.appendChild(label);
       });
 
-      article.append(sticker, hero, options);
+      article.append(hero, options);
       return article;
     };
 
@@ -2990,25 +2967,14 @@
       if (!question) return;
       questionStageCard.innerHTML = "";
       questionStageCard.appendChild(createQuestionCard(question));
-      questionStageTitle.textContent = t("quiz.stageTitle");
-      questionDimensionLabel.textContent = t(`dimensions.${question.dimension}`);
       questionIndexLabel.textContent = currentLang === "zh"
         ? `第 ${currentQuestionIndex + 1} / ${QUESTIONS.length} 題`
         : `Question ${currentQuestionIndex + 1} / ${QUESTIONS.length}`;
-      prevQuestionBtn.disabled = currentQuestionIndex === 0;
-      nextQuestionBtn.textContent = currentQuestionIndex === QUESTIONS.length - 1 ? t("quiz.submit") : t("quiz.next");
       updateProgress();
     };
 
     const updateProgress = () => {
       const answered = getAnsweredCount();
-      const percent = Math.round((answered / QUESTIONS.length) * 100);
-      progressFill.style.width = `${percent}%`;
-      progressLabel.textContent = currentLang === "zh" ? `已完成 ${answered} / ${QUESTIONS.length} 題` : `Completed ${answered} / ${QUESTIONS.length} questions`;
-      if (answered !== QUESTIONS.length && !quizStatus.classList.contains("warn")) {
-        quizStatus.className = "status";
-        quizStatus.textContent = "";
-      }
       return answered;
     };
 
@@ -3381,8 +3347,6 @@
       hideActivityFloat();
       closeActivityModal();
       shareStatus.textContent = "";
-      quizStatus.className = "status";
-      quizStatus.textContent = "";
       gateStatus.className = "status";
       gateStatus.textContent = "";
       gateForm.reset();
@@ -3395,38 +3359,6 @@
       setScreen("quiz");
       renderCurrentQuestion();
     });
-
-    prevQuestionBtn.addEventListener("click", () => {
-      if (currentQuestionIndex === 0) return;
-      currentQuestionIndex -= 1;
-      quizStatus.className = "status";
-      quizStatus.textContent = "";
-      renderCurrentQuestion();
-    });
-
-    nextQuestionBtn.addEventListener("click", () => {
-      const question = QUESTIONS[currentQuestionIndex];
-      if (!answers.has(question.id)) {
-        quizStatus.className = "status warn";
-        quizStatus.textContent = t("quiz.missing");
-        return;
-      }
-      if (currentQuestionIndex < QUESTIONS.length - 1) {
-        currentQuestionIndex += 1;
-        quizStatus.className = "status";
-        quizStatus.textContent = "";
-        renderCurrentQuestion();
-        return;
-      }
-      quizStatus.className = "status ok";
-      quizStatus.textContent = t("quiz.ready");
-      pendingResult = calculateResult();
-      gateStatus.className = "status";
-      gateStatus.textContent = "";
-      setScreen("register");
-    });
-
-    resetQuizBtn.addEventListener("click", resetQuizFlow);
     retakeQuizBtn.addEventListener("click", resetQuizFlow);
     gateBackBtn.addEventListener("click", () => {
       setScreen("quiz");
