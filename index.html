@@ -63,8 +63,8 @@
     }
     a { color: inherit; text-decoration: none; }
 
-    #globe-container { position: fixed; inset: 0; pointer-events: auto; }
-    #globeViz { width: 100vw; height: 100vh; }
+    #globe-container { position: fixed; inset: 0; pointer-events: auto; overflow: hidden; }
+    #globeViz { width: 100vw; height: 100vh; height: 100dvh; }
 
     #modeOverlay{
       position: fixed; inset: 0; pointer-events: none;
@@ -788,7 +788,7 @@
       }
 
       .stats { grid-template-columns: 1fr; }
-      #globe-container { transform: translateY(-12%); }
+      #globe-container { transform: none; }
       header { border-radius: 14px; }
 
       .anchor-panel {

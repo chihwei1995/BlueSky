@@ -69,6 +69,7 @@
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .logo {
@@ -99,6 +100,7 @@
       color: var(--accent-dark);
       font-weight: 600;
       transition: all 0.2s ease;
+      min-width: 0;
     }
 
     .nav-link:hover {
@@ -122,6 +124,7 @@
       padding: 4px;
       gap: 6px;
       background: #fff;
+      min-width: 0;
     }
 
     .lang-btn {
@@ -133,6 +136,7 @@
       color: var(--ink-soft);
       font-weight: 600;
       transition: all 0.2s ease;
+      min-width: 0;
     }
 
     .lang-btn.active {
@@ -453,6 +457,7 @@
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .timeline-slider-head strong {
@@ -464,6 +469,7 @@
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .timeline-slider-count {
@@ -476,6 +482,15 @@
       color: var(--accent-dark);
       font-size: 0.82rem;
       font-weight: 700;
+    }
+
+    .timeline-slider-head strong,
+    .timeline-slider-count,
+    .timeline-ig-head strong,
+    .timeline-ig-count,
+    .timeline-ig-link {
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .timeline-slider-frame {
@@ -600,6 +615,23 @@
 
     @media (max-width: 720px) {
       .header-inner { flex-direction: column; align-items: flex-start; }
+      .header-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+      .nav-link {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+      .lang-toggle {
+        width: 100%;
+        justify-content: center;
+      }
+      .lang-btn {
+        flex: 1 1 0;
+      }
       .hero { padding: 24px; }
       main { padding: 32px 20px 56px; }
       .timeline-item-header { flex-direction: column; }
@@ -608,10 +640,87 @@
       .timeline-ig-panel { padding: 12px; }
       .timeline-ig-card { padding: 6px; }
       .timeline-slider { padding: 12px; }
+      .timeline-slider-head,
+      .timeline-ig-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .timeline-slider-meta,
+      .timeline-ig-meta {
+        width: 100%;
+      }
       .timeline-slider-nav { padding: 0 8px; }
       .timeline-slider-btn {
         width: 38px;
         height: 38px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .header-inner {
+        padding: 14px 16px;
+      }
+      main {
+        padding: 24px 14px 48px;
+        gap: 24px;
+      }
+      .hero,
+      .card,
+      .infographic,
+      .timeline-section,
+      .timeline-item {
+        padding: 18px;
+      }
+      .logo {
+        width: 100%;
+      }
+      .logo span {
+        overflow-wrap: anywhere;
+      }
+      .timeline-toolbar {
+        align-items: stretch;
+      }
+      .timeline-select {
+        width: 100%;
+        min-width: 0;
+      }
+      .timeline-item {
+        gap: 14px;
+      }
+      .timeline-year {
+        min-width: 0;
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .timeline-slider {
+        gap: 12px;
+        padding: 10px;
+      }
+      .timeline-item.has-slides .timeline-slider {
+        padding: 10px;
+      }
+      .timeline-slider-count,
+      .timeline-ig-count,
+      .timeline-ig-link {
+        width: 100%;
+        justify-content: center;
+      }
+      .timeline-slide {
+        aspect-ratio: 4 / 5.4;
+      }
+      .timeline-item.has-slides .timeline-slide {
+        aspect-ratio: 4 / 5.4;
+      }
+      .timeline-slider-nav {
+        padding: 0 6px;
+      }
+      .timeline-slider-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
+      }
+      .timeline-slider-dots {
+        gap: 6px;
       }
     }
   </style>
@@ -1011,7 +1120,18 @@
             'Practice zero-carbon action and visual education',
             'Help SDG 13 take root in the next generation'
           ],
-          igPosts: [],
+          igPosts: [
+            'https://www.instagram.com/p/DYt6EUJjWPP/',
+            'https://www.instagram.com/p/DYowhFUDTDm/',
+            'https://www.instagram.com/p/DYoYfHOgRQx/',
+            'https://www.instagram.com/p/DYi9n8-AYE1/',
+            'https://www.instagram.com/p/DXddofgmDAC/',
+            'https://www.instagram.com/p/DW5ZDklAgUy/',
+            'https://www.instagram.com/p/DWVV7-6Do_B/',
+            'https://www.instagram.com/p/DWId4q_DiKi/',
+            'https://www.instagram.com/p/DVno4Yijyvc/',
+            'https://www.instagram.com/p/DVVnNbIjYHB/'
+          ],
           slideImages: getAbout2026Slides()
         }
       ],
@@ -1118,7 +1238,18 @@
             '實踐零碳行動與可視化教育',
             '讓 SDG 13 在下一代萌芽'
           ],
-          igPosts: [],
+          igPosts: [
+            'https://www.instagram.com/p/DYt6EUJjWPP/',
+            'https://www.instagram.com/p/DYowhFUDTDm/',
+            'https://www.instagram.com/p/DYoYfHOgRQx/',
+            'https://www.instagram.com/p/DYi9n8-AYE1/',
+            'https://www.instagram.com/p/DXddofgmDAC/',
+            'https://www.instagram.com/p/DW5ZDklAgUy/',
+            'https://www.instagram.com/p/DWVV7-6Do_B/',
+            'https://www.instagram.com/p/DWId4q_DiKi/',
+            'https://www.instagram.com/p/DVno4Yijyvc/',
+            'https://www.instagram.com/p/DVVnNbIjYHB/'
+          ],
           slideImages: getAbout2026Slides()
         }
       ]

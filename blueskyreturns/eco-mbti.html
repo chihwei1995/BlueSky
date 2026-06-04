@@ -79,18 +79,24 @@
     }
 
     .nav {
+      display: grid;
+      gap: 12px;
+      padding: 14px 0;
+    }
+
+    .nav-primary {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 14px 0;
-      flex-wrap: wrap;
+      min-width: 0;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
+      min-width: 0;
     }
 
     .brand img {
@@ -120,12 +126,27 @@
       font-size: 0.84rem;
     }
 
+    .nav-mobile-tools {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      min-width: 0;
+    }
+
     .nav-actions {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
       min-width: 0;
+      justify-content: flex-end;
+    }
+
+    .nav-toggle {
+      display: none;
+      padding: 10px 14px;
+      white-space: nowrap;
     }
 
     .pill,
@@ -1614,6 +1635,42 @@
         padding: 0 16px;
       }
 
+      .nav {
+        gap: 10px;
+        padding: 12px 0;
+      }
+
+      .nav-primary {
+        align-items: flex-start;
+      }
+
+      .brand {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .brand-copy span {
+        display: none;
+      }
+
+      .nav-mobile-tools {
+        flex: 0 0 auto;
+        width: auto;
+      }
+
+      .lang-toggle {
+        width: auto;
+        justify-content: flex-end;
+      }
+
+      .lang-btn {
+        padding: 7px 10px;
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+      }
+
       .intro-video-hero {
         min-height: 68vh;
         border-radius: 24px;
@@ -1669,22 +1726,23 @@
       }
 
       .hero-actions,
-      .quiz-actions,
-      .nav-actions {
+      .quiz-actions {
         align-items: stretch;
       }
 
       .nav-actions {
         width: 100%;
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      header.nav-open .nav-actions {
+        display: grid;
       }
 
       .nav-actions > * {
         width: 100%;
-      }
-
-      .lang-toggle {
-        width: 100%;
-        justify-content: center;
       }
 
       .hero-actions .button,
@@ -1731,20 +1789,25 @@
 <body>
   <header>
     <div class="shell nav">
-      <div class="brand">
-        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
-        <div class="brand-copy">
-          <strong data-i18n="header.title">Blue Sky Returns</strong>
-          <span data-i18n="header.subtitle">Eco-MBTI environmental personality test</span>
+      <div class="nav-primary">
+        <div class="brand">
+          <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+          <div class="brand-copy">
+            <strong data-i18n="header.title">Blue Sky Returns</strong>
+            <span data-i18n="header.subtitle">Eco-MBTI environmental personality test</span>
+          </div>
+        </div>
+        <div class="nav-mobile-tools">
+          <div class="lang-toggle" role="group" aria-label="Language switcher">
+            <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false" aria-controls="navActions" data-i18n="nav.menu">Menu</button>
         </div>
       </div>
-      <div class="nav-actions">
+      <div id="navActions" class="nav-actions">
         <a class="pill" href="./index.html" data-i18n="nav.about">About</a>
         <a class="pill" href="./member-center.html" data-i18n="nav.member">Member Center</a>
-        <div class="lang-toggle" role="group" aria-label="Language switcher">
-          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
-          <button class="lang-btn" type="button" data-lang="en">EN</button>
-        </div>
       </div>
     </div>
   </header>
@@ -1910,7 +1973,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
     import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -2340,7 +2403,7 @@
       zh: {
         page: { title: "Eco-MBTI | 環保 MBTI" },
         header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI 環保行動人格互動頁" },
-        nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "Daily Green Actions", form: "步入行動", member: "氣候行動者中心", eco: "Eco-MBTI" },
+        nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "Daily Green Actions", form: "步入行動", member: "氣候行動者中心", eco: "Eco-MBTI", menu: "選單" },
         side: {
           title: "Eco-MBTI",
           body: "12 題快速看出你的氣候行動類型。",
@@ -2468,7 +2531,7 @@
       en: {
         page: { title: "Eco-MBTI | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI environmental action personality" },
-        nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "Daily Green Actions", form: "Take One Step", member: "Member Center", eco: "Eco-MBTI" },
+        nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "Daily Green Actions", form: "Take One Step", member: "Member Center", eco: "Eco-MBTI", menu: "Menu" },
         side: {
           title: "Eco-MBTI",
           body: "A quick 12-question climate action type test.",
@@ -2606,6 +2669,9 @@
     const quizScreen = document.getElementById("quizScreen");
     const registerScreen = document.getElementById("registerScreen");
     const resultScreen = document.getElementById("resultScreen");
+    const siteHeader = document.querySelector("header");
+    const navActions = document.getElementById("navActions");
+    const navToggleBtn = document.getElementById("navToggleBtn");
     const startQuizEnBtn = document.getElementById("startQuizEnBtn");
     const startQuizZhBtn = document.getElementById("startQuizZhBtn");
     const quizForm = document.getElementById("quizForm");
@@ -2698,6 +2764,19 @@
       resultActivityFloat.hidden = true;
     };
 
+    const closeMobileNav = () => {
+      if (!siteHeader || !navToggleBtn) return;
+      siteHeader.classList.remove("nav-open");
+      navToggleBtn.setAttribute("aria-expanded", "false");
+    };
+
+    const toggleMobileNav = () => {
+      if (!siteHeader || !navToggleBtn) return;
+      const nextOpen = !siteHeader.classList.contains("nav-open");
+      siteHeader.classList.toggle("nav-open", nextOpen);
+      navToggleBtn.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+    };
+
     const setScreen = (screen) => {
       currentScreen = screen;
       document.body.dataset.screen = screen;
@@ -2710,6 +2789,7 @@
       } else {
         showActivityFloat();
       }
+      closeMobileNav();
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -2899,22 +2979,30 @@
     const saveRegistrationAndResult = async ({ email, nickname, result, termsAcceptedAt }) => {
       const normalizedEmail = String(email || "").trim().toLowerCase();
       const normalizedNickname = String(nickname || "").trim();
-      const docId = encodeURIComponent(normalizedEmail);
       const profile = TYPE_META[result.type];
       const now = new Date().toISOString();
       const uid = auth.currentUser?.uid || "";
+      if (!uid) {
+        throw new Error("Missing authenticated user after Eco-MBTI registration.");
+      }
 
-      const existing = await getDoc(doc(db, "ecoMbtiRegistrations", docId));
-
-      await setDoc(doc(db, "ecoMbtiRegistrations", docId), {
+      const memberRef = doc(db, "members", uid);
+      const memberPayload = {
         uid,
         email: normalizedEmail,
-        nickname: normalizedNickname,
+        name: normalizedNickname,
+        partnerType: "individual",
+        partnerMultiplier: 1,
+        permissionLevel: 1,
         createdFrom: "eco-mbti",
-        createdAt: existing.exists() ? existing.data()?.createdAt || now : now,
+        createdAt: now,
         updatedAt: now,
-        termsAcceptedAt,
-        referral: referralUid ? {
+        termsConsent: {
+          acceptedAt: termsAcceptedAt,
+          acceptedVersion: "eco-mbti-v1",
+          source: "eco-mbti"
+        },
+        referral: referralUid && referralUid !== uid ? {
           referredBy: referralUid,
           source: "eco-mbti-share",
           updatedAt: now
@@ -2930,27 +3018,22 @@
           counts: result.counts,
           updatedAt: now
         }
-      }, { merge: true });
+      };
 
-      if (uid) {
-        await setDoc(doc(db, "members", uid), {
-          email: normalizedEmail,
-          name: normalizedNickname,
-          createdFrom: "eco-mbti",
-          updatedAt: now,
-          termsAcceptedAt,
-          ecoMbti: {
-            type: result.type,
-            titleZh: profile.zh.title,
-            titleEn: profile.en.title,
-            coreZh: profile.zh.core,
-            coreEn: profile.en.core,
-            actionsZh: profile.zh.actions,
-            actionsEn: profile.en.actions,
-            counts: result.counts,
-            updatedAt: now
-          }
-        }, { merge: true });
+      await setDoc(memberRef, memberPayload, { merge: true });
+
+      // Best-effort sync for referral tracking so share momentum can still count later.
+      if (referralUid && referralUid !== uid) {
+        try {
+          await setDoc(doc(db, "memberReferrals", uid), {
+            referredUid: uid,
+            referredBy: referralUid,
+            acceptedAt: termsAcceptedAt,
+            source: "eco-mbti-share"
+          }, { merge: true });
+        } catch (referralError) {
+          console.warn("Eco-MBTI referral save skipped:", referralError);
+        }
       }
 
       return { email: normalizedEmail, nickname: normalizedNickname };
@@ -3363,6 +3446,16 @@
 
     document.querySelectorAll(".lang-btn").forEach((button) => {
       button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+
+    navToggleBtn?.addEventListener("click", toggleMobileNav);
+
+    navActions?.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMobileNav);
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 640) closeMobileNav();
     });
 
     const localSavedResult = loadLocalResult();
