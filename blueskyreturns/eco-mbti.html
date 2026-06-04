@@ -270,36 +270,6 @@
       font-weight: 600;
     }
 
-    .mobile-side-nav {
-      display: none;
-      margin-bottom: 18px;
-    }
-
-    .mobile-nav-card {
-      padding: 14px;
-    }
-
-    .mobile-nav-card summary {
-      list-style: none;
-      cursor: pointer;
-      font-weight: 800;
-      color: var(--forest-deep);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .mobile-nav-card summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .mobile-nav-links {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
     .stack {
       display: grid;
       gap: 22px;
@@ -1631,7 +1601,6 @@
     }
 
     @media (max-width: 640px) {
-      header,
       .hero,
       #guide {
         display: none;
@@ -2372,7 +2341,6 @@
         page: { title: "Eco-MBTI | 環保 MBTI" },
         header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI 環保行動人格互動頁" },
         nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "Daily Green Actions", form: "步入行動", member: "氣候行動者中心", eco: "Eco-MBTI" },
-        mobileNav: { title: "快速導覽", framework: "四大維度", frameworkSub: "永續行動核心指標", quiz: "12 題測驗", quizSub: "開始作答", result: "結果卡", resultSub: "4 碼 Eco-MBTI" },
         side: {
           title: "Eco-MBTI",
           body: "12 題快速看出你的氣候行動類型。",
@@ -2418,6 +2386,7 @@
           submitting: "正在保存資料並解鎖結果...",
           success: "已完成登記，正在顯示你的結果。",
           failed: "資料保存失敗，請稍後再試。",
+          partialSuccess: "帳號已建立，結果已解鎖；雲端保存稍後再試。",
           signingIn: "這個 Email 已存在，正在幫你登入...",
           wrongPassword: "這個 Email 已註冊，請輸入正確密碼。",
           weakPassword: "密碼至少需要 6 碼。"
@@ -2500,7 +2469,6 @@
         page: { title: "Eco-MBTI | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "Eco-MBTI environmental action personality" },
         nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "Daily Green Actions", form: "Take One Step", member: "Member Center", eco: "Eco-MBTI" },
-        mobileNav: { title: "Quick Navigation", framework: "Framework", frameworkSub: "4 sustainability dimensions", quiz: "12 Questions", quizSub: "Answer and score", result: "Result Card", resultSub: "Your 4-letter Eco-MBTI" },
         side: {
           title: "Eco-MBTI",
           body: "A quick 12-question climate action type test.",
@@ -2546,6 +2514,7 @@
           submitting: "Saving your info and unlocking your result...",
           success: "Registration complete. Showing your result now.",
           failed: "Saving failed. Please try again later.",
+          partialSuccess: "Your account is ready and your result is unlocked. Cloud saving can retry later.",
           signingIn: "This email already exists. Signing you in now...",
           wrongPassword: "This email is already registered. Please enter the correct password.",
           weakPassword: "Password must be at least 6 characters."
@@ -3350,17 +3319,34 @@
           await updateProfile(auth.currentUser, { displayName: nickname });
         }
         const termsAcceptedAt = new Date().toISOString();
-        const registration = await saveRegistrationAndResult({
-          email,
-          nickname,
-          result: pendingResult,
-          termsAcceptedAt
-        });
-        gateStatus.textContent = t("gate.success");
-        shareStatus.className = "status ok";
-        shareStatus.textContent = currentLang === "zh"
-          ? `已為 ${registration.nickname} 解鎖並保存結果。`
-          : `Result unlocked and saved for ${registration.nickname}.`;
+        const fallbackRegistration = {
+          email: String(email || "").trim().toLowerCase(),
+          nickname
+        };
+        let registration = fallbackRegistration;
+
+        try {
+          registration = await saveRegistrationAndResult({
+            email,
+            nickname,
+            result: pendingResult,
+            termsAcceptedAt
+          });
+          gateStatus.textContent = t("gate.success");
+          shareStatus.className = "status ok";
+          shareStatus.textContent = currentLang === "zh"
+            ? `已為 ${registration.nickname} 解鎖並保存結果。`
+            : `Result unlocked and saved for ${registration.nickname}.`;
+        } catch (saveError) {
+          console.error("Eco-MBTI profile save failed after auth:", saveError);
+          gateStatus.className = "status warn";
+          gateStatus.textContent = t("gate.partialSuccess");
+          shareStatus.className = "status warn";
+          shareStatus.textContent = currentLang === "zh"
+            ? `已為 ${registration.nickname} 解鎖結果，但雲端保存失敗。`
+            : `Result unlocked for ${registration.nickname}, but cloud saving failed.`;
+        }
+
         renderResult(pendingResult, { persistLocal: true, registration });
       } catch (error) {
         console.error("Eco-MBTI registration failed:", error);

@@ -7,14 +7,15 @@
   <style>
     :root {
       --bg: #eef6f0;
-      --surface: rgba(255, 255, 255, 0.94);
+      --surface: rgba(255, 255, 255, 0.95);
       --surface-strong: #ffffff;
       --ink: #153126;
-      --muted: #5b7069;
+      --muted: #597068;
       --line: #d8e7dd;
       --forest: #1b7a55;
       --forest-deep: #12513a;
       --sky: #2aa6b5;
+      --gold: #d7a72d;
       --shadow: 0 24px 54px rgba(21, 49, 38, 0.12);
     }
 
@@ -31,15 +32,16 @@
         linear-gradient(180deg, #f6fbf7 0%, var(--bg) 45%, #f8fcf9 100%);
     }
 
+    button,
     a {
       color: inherit;
       text-decoration: none;
     }
 
     .shell {
-      max-width: 1120px;
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 28px 20px 56px;
+      padding: 28px 20px 64px;
       display: grid;
       gap: 22px;
     }
@@ -84,7 +86,8 @@
     }
 
     .lang-btn,
-    .button {
+    .button,
+    .slider-nav {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -96,7 +99,7 @@
       font-weight: 800;
       box-shadow: 0 10px 24px rgba(27, 122, 85, 0.08);
       cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
     }
 
     .lang-btn {
@@ -107,7 +110,8 @@
     }
 
     .lang-btn.active,
-    .button.primary {
+    .button.primary,
+    .slider-nav.primary {
       background: linear-gradient(135deg, var(--forest), var(--sky));
       color: #fff;
       border-color: transparent;
@@ -115,38 +119,19 @@
     }
 
     .panel {
-      display: grid;
-      gap: 22px;
-      padding: 24px;
-      border-radius: 28px;
       background: var(--surface);
       border: 1px solid rgba(216, 231, 221, 0.96);
+      border-radius: 28px;
       box-shadow: var(--shadow);
     }
 
-    .hero {
+    .intro {
       display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
-      gap: 24px;
-      align-items: start;
+      gap: 18px;
+      padding: 24px;
     }
 
-    .poster {
-      width: 100%;
-      display: block;
-      border-radius: 24px;
-      border: 1px solid rgba(21, 49, 38, 0.08);
-      box-shadow: 0 18px 36px rgba(12, 48, 36, 0.12);
-      background: #f1f8f2;
-    }
-
-    .copy {
-      display: grid;
-      gap: 16px;
-      align-content: start;
-    }
-
-    .badge {
+    .eyebrow {
       display: inline-flex;
       width: fit-content;
       align-items: center;
@@ -158,34 +143,195 @@
       font-weight: 900;
     }
 
-    h1, h2, p { margin: 0; }
-
-    h1 {
-      font-size: clamp(2rem, 4vw, 3.3rem);
-      line-height: 1.06;
-      color: #103d2f;
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
     }
 
-    .lead {
+    .intro h1 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.06;
+      color: #103d2f;
+      max-width: 12ch;
+    }
+
+    .intro-body {
+      max-width: 62ch;
       color: var(--muted);
       font-size: 1.02rem;
     }
 
-    .steps {
-      display: grid;
-      gap: 12px;
+    .quick-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .step {
+    .quick-point {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(21, 49, 38, 0.08);
+      color: var(--forest-deep);
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .slideshow {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.78fr);
+      gap: 22px;
+      padding: 24px;
+      align-items: start;
+    }
+
+    .slide-visual {
+      display: grid;
+      gap: 14px;
+    }
+
+    .slide-frame {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      border: 1px solid rgba(21, 49, 38, 0.08);
+      background: #f0f7f1;
+      box-shadow: 0 18px 36px rgba(12, 48, 36, 0.12);
+      touch-action: pan-y;
+      user-select: none;
+    }
+
+    .slide-frame img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      background: #f0f7f1;
+    }
+
+    .slide-counter {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(16, 43, 34, 0.72);
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 900;
+      backdrop-filter: blur(12px);
+    }
+
+    .slide-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .slide-nav-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .slider-nav {
+      min-width: 110px;
+    }
+
+    .slide-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .slide-dot {
+      width: 12px;
+      height: 12px;
+      border: none;
+      border-radius: 999px;
+      padding: 0;
+      background: rgba(27, 122, 85, 0.18);
+      box-shadow: none;
+      cursor: pointer;
+    }
+
+    .slide-dot.active {
+      width: 32px;
+      background: linear-gradient(135deg, var(--forest), var(--sky));
+    }
+
+    .slide-copy {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .route-badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(42, 166, 181, 0.1);
+      color: #0d7281;
+      font-size: 0.84rem;
+      font-weight: 900;
+    }
+
+    .slide-copy h2 {
+      font-size: clamp(1.55rem, 2.8vw, 2.35rem);
+      line-height: 1.12;
+      color: var(--forest-deep);
+    }
+
+    .slide-lead {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .slide-points {
+      display: grid;
+      gap: 10px;
+    }
+
+    .slide-point {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(250, 252, 250, 0.92);
+      border: 1px solid rgba(21, 49, 38, 0.08);
+      color: var(--forest-deep);
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .slide-step-label {
+      color: var(--gold);
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .slide-tip {
       padding: 16px 18px;
       border-radius: 20px;
-      border: 1px solid rgba(21, 49, 38, 0.08);
-      background: rgba(252, 255, 253, 0.9);
+      background: linear-gradient(135deg, rgba(27, 122, 85, 0.08), rgba(42, 166, 181, 0.08));
+      border: 1px solid rgba(27, 122, 85, 0.12);
+      color: var(--forest-deep);
     }
 
-    .step strong {
+    .slide-tip strong {
       display: block;
-      color: var(--forest-deep);
       margin-bottom: 4px;
     }
 
@@ -193,36 +339,71 @@
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      padding-top: 4px;
     }
 
     @media (hover: hover) {
       .lang-btn:hover,
-      .button:hover {
+      .button:hover,
+      .slider-nav:hover {
         transform: translateY(-1px);
         border-color: rgba(27, 122, 85, 0.32);
       }
     }
 
-    @media (max-width: 860px) {
-      .hero {
+    @media (max-width: 980px) {
+      .slideshow {
         grid-template-columns: 1fr;
       }
 
+      .slide-copy {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 860px) {
       .shell {
         padding: 18px 14px 42px;
       }
 
-      .panel {
+      .panel,
+      .intro,
+      .slideshow {
         padding: 18px;
         border-radius: 22px;
       }
 
-      .actions .button,
+      .topbar-actions {
+        width: 100%;
+      }
+
       .topbar-actions .button {
         width: 100%;
       }
 
-      .topbar-actions {
+      .intro h1 {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .slide-frame img {
+        aspect-ratio: 4 / 5.35;
+      }
+
+      .slide-controls {
+        align-items: stretch;
+      }
+
+      .slide-nav-group {
+        width: 100%;
+      }
+
+      .slider-nav {
+        flex: 1 1 0;
+      }
+
+      .actions .button {
         width: 100%;
       }
     }
@@ -244,26 +425,46 @@
       </div>
     </div>
 
-    <section class="panel hero">
-      <img class="poster" src="../assets/eco-mbti-climate-action-poster.png" alt="2026 Climate Action campaign poster" />
-      <div class="copy">
-        <span class="badge" data-i18n="hero.badge">活動推薦</span>
-        <h1 data-i18n="hero.title">2026 氣候行動介紹</h1>
-        <p class="lead" data-i18n="hero.body">這是一個結合問卷註冊、任務打卡、景點拍照與分享的氣候行動企劃，完成指定次數後可兌換限定紀念品。</p>
+    <section class="panel intro">
+      <span class="eyebrow" data-i18n="hero.badge">活動推薦</span>
+      <h1 data-i18n="hero.title">額外活動導覽</h1>
+      <p class="intro-body" data-i18n="hero.body">用幻燈片快速看懂這次額外活動：從看見香港的綠點、任務路線、參加方式，到最後的集氣成果與紀念獎勵。</p>
+      <div class="quick-points">
+        <span class="quick-point" data-i18n="hero.chip1">6 張活動圖快速看完</span>
+        <span class="quick-point" data-i18n="hero.chip2">可左右切換</span>
+        <span class="quick-point" data-i18n="hero.chip3">手機可滑動</span>
+      </div>
+    </section>
 
-        <div class="steps">
-          <div class="step">
-            <strong data-i18n="steps.step1Title">1. 先填寫問卷註冊</strong>
-            <span data-i18n="steps.step1Body">註冊成為「氣候行動者」，完成你的參與身份建立。</span>
+    <section class="panel slideshow">
+      <div class="slide-visual">
+        <div class="slide-frame" id="slideFrame">
+          <div class="slide-counter">
+            <span id="slideCounter">1 / 6</span>
           </div>
-          <div class="step">
-            <strong data-i18n="steps.step2Title">2. 到指定景點或任務站拍照打卡</strong>
-            <span data-i18n="steps.step2Body">依照活動路線，到各站完成拍照或行動任務。</span>
+          <img id="slideImage" src="../assets/climate-action-slides/2.png" alt="Climate Action slide" />
+        </div>
+
+        <div class="slide-controls">
+          <div class="slide-nav-group">
+            <button id="prevSlideBtn" class="slider-nav" type="button" data-i18n="slider.prev">上一張</button>
+            <button id="nextSlideBtn" class="slider-nav primary" type="button" data-i18n="slider.next">下一張</button>
           </div>
-          <div class="step">
-            <strong data-i18n="steps.step3Title">3. 上傳系統並分享成果</strong>
-            <span data-i18n="steps.step3Body">把你的行動成果上傳並分享，累積任務次數與參與紀錄。</span>
-          </div>
+          <div id="slideDots" class="slide-dots" aria-label="Slide navigation"></div>
+        </div>
+      </div>
+
+      <div class="slide-copy">
+        <span class="route-badge" id="slideBadge">九龍綠建築探索篇</span>
+        <div class="slide-step-label" id="slideStepLabel">Step 1</div>
+        <h2 id="slideTitle">從路線任務開始看懂活動內容</h2>
+        <p class="slide-lead" id="slideBody">每一張圖都代表活動中的一個重點，讓使用者知道這不是只有線上測驗，而是可以延伸到真實世界的氣候行動。</p>
+
+        <div id="slidePoints" class="slide-points"></div>
+
+        <div class="slide-tip">
+          <strong data-i18n="tip.title">看完就可以做什麼？</strong>
+          <span data-i18n="tip.body">完成測驗後，你可以再回到活動頁，依照這些路線與任務去參與、拍照、分享與集氣。</span>
         </div>
 
         <div class="actions">
@@ -276,6 +477,7 @@
 
   <script>
     const LANG_STORAGE_KEY = "bsr_lang";
+
     const I18N = {
       zh: {
         pageTitle: "2026 氣候行動介紹 | Blue Sky Returns",
@@ -283,21 +485,87 @@
         nav: { back: "返回 Eco-MBTI" },
         hero: {
           badge: "活動推薦",
-          title: "2026 氣候行動介紹",
-          body: "這是一個結合問卷註冊、任務打卡、景點拍照與分享的氣候行動企劃，完成指定次數後可兌換限定紀念品。"
+          title: "額外活動導覽",
+          body: "用幻燈片快速看懂這次額外活動：從看見香港的綠點、任務路線、參加方式，到最後的集氣成果與紀念獎勵。",
+          chip1: "6 張活動圖快速看完",
+          chip2: "可左右切換",
+          chip3: "手機可滑動"
         },
-        steps: {
-          step1Title: "1. 先填寫問卷註冊",
-          step1Body: "註冊成為「氣候行動者」，完成你的參與身份建立。",
-          step2Title: "2. 到指定景點或任務站拍照打卡",
-          step2Body: "依照活動路線，到各站完成拍照或行動任務。",
-          step3Title: "3. 上傳系統並分享成果",
-          step3Body: "把你的行動成果上傳並分享，累積任務次數與參與紀錄。"
+        slider: {
+          prev: "上一張",
+          next: "下一張",
+          stepLabel: "Step"
+        },
+        tip: {
+          title: "看完就可以做什麼？",
+          body: "完成測驗後，你可以再回到活動頁，依照這些路線與任務去參與、拍照、分享與集氣。"
         },
         actions: {
           join: "立即參與",
           later: "稍後再看"
-        }
+        },
+        slides: [
+          {
+            badge: "九龍綠建築探索篇",
+            title: "先看其中一條任務路線怎麼玩",
+            body: "這張圖把活動拆成具體站點與每日減碳任務，讓使用者知道可以邊走、邊拍、邊完成小挑戰。",
+            points: [
+              "從啟德、西九到海旁，每個站點都有不同主題。",
+              "每站不只是拍照，也搭配一個簡單可做的減碳行動。",
+              "使用者會更容易理解：這是一個線上線下串連的活動。"
+            ]
+          },
+          {
+            badge: "港島低碳海濱篇",
+            title: "第二張延伸到另一條路線，建立活動規模感",
+            body: "切到另一區域後，使用者會明白活動不是單一路線，而是有多個可探索的城市場景與任務選擇。",
+            points: [
+              "海濱、商場、公園、社區場景都可以成為任務點。",
+              "活動更像是一張城市探索地圖，而不是單次打卡。",
+              "這有助於提高參與慾望與停留時間。"
+            ]
+          },
+          {
+            badge: "生態與氣候教育篇",
+            title: "第三張補足自然、生態與教育面向",
+            body: "這一頁讓使用者看到活動不只有城市綠建築，也包含濕地、公園、教育場域與山林步道。",
+            points: [
+              "活動議題從建築延伸到自然與氣候教育。",
+              "不同參與者能找到自己有興趣的任務風格。",
+              "整體活動主題會顯得更完整、更有深度。"
+            ]
+          },
+          {
+            badge: "綠色達人挑戰",
+            title: "接著說明參與方式與完成後能拿到什麼",
+            body: "這張圖把活動參與流程、限定 Pin 與閉幕工作坊放在一起，適合讓使用者快速理解『為什麼值得參加』。",
+            points: [
+              "先填問卷、完成任務、上傳分享，流程一目了然。",
+              "限定紀念 Pin 是很直覺的誘因與轉換點。",
+              "也順帶交代後續線下活動與領取場景。"
+            ]
+          },
+          {
+            badge: "發現綠色香港",
+            title: "再往前一步，讓使用者理解活動背後的意義",
+            body: "這頁不是在講獎勵，而是在建立活動理念：從看見、認識、參與，到產生影響。",
+            points: [
+              "把活動從『任務』提升成『理解城市與氣候』的過程。",
+              "用四個階段幫使用者建立情緒與認知路徑。",
+              "很適合放在中段，補足品牌觀點。"
+            ]
+          },
+          {
+            badge: "集氣成果與目標",
+            title: "最後收在成果願景，讓人知道自己參與後會累積什麼",
+            body: "這一頁把報名人數、任務打卡、集氣植樹與分享效果串起來，讓用戶看到自己的行動會進入更大的集體成果。",
+            points: [
+              "從個人完成任務，連到整體城市成果。",
+              "很適合作為最後一張，強化『一起完成目標』的感覺。",
+              "也能自然銜接回報名、分享或再次參與。"
+            ]
+          }
+        ]
       },
       en: {
         pageTitle: "2026 Climate Action Overview | Blue Sky Returns",
@@ -305,23 +573,98 @@
         nav: { back: "Back to Eco-MBTI" },
         hero: {
           badge: "Featured Event",
-          title: "2026 Climate Action Overview",
-          body: "This campaign combines registration, checkpoint photo tasks, uploads, and sharing. Complete the required actions to unlock a limited commemorative reward."
+          title: "Extra Activity Walkthrough",
+          body: "Use this slideshow to quickly understand the extra campaign: from discovering Hong Kong's green spots and route missions to participation, sharing, and the final reward momentum.",
+          chip1: "6 key visuals in sequence",
+          chip2: "Tap through the story",
+          chip3: "Swipe on mobile"
         },
-        steps: {
-          step1Title: "1. Register first",
-          step1Body: "Sign up as a climate action participant and activate your event profile.",
-          step2Title: "2. Visit checkpoints and take photos",
-          step2Body: "Follow the event route and complete photo tasks or on-site missions at each stop.",
-          step3Title: "3. Upload and share your progress",
-          step3Body: "Upload your action results to the system and share them to build your participation record."
+        slider: {
+          prev: "Previous",
+          next: "Next",
+          stepLabel: "Step"
+        },
+        tip: {
+          title: "What can users do after this?",
+          body: "After finishing the test, they can jump back into the event flow and follow these routes to participate, take photos, share, and build momentum."
         },
         actions: {
           join: "Join Now",
           later: "Maybe Later"
-        }
+        },
+        slides: [
+          {
+            badge: "Kowloon Green Architecture Route",
+            title: "Start by showing how one route works",
+            body: "This visual breaks the campaign into concrete checkpoints and daily low-carbon actions, so users immediately understand that the experience extends into the real city.",
+            points: [
+              "Each stop has its own theme and action prompt.",
+              "Users are guided to both document and do something small.",
+              "It frames the event as an online-to-offline participation flow."
+            ]
+          },
+          {
+            badge: "Harbour & Low Carbon Route",
+            title: "The second slide expands the sense of scale",
+            body: "By switching to another district, users see that the event is not just one route, but a broader network of places, missions, and urban exploration moments.",
+            points: [
+              "Waterfronts, malls, parks, and communities all become action spots.",
+              "The campaign feels more like a city map than a one-time check-in.",
+              "That helps make participation feel bigger and more worth exploring."
+            ]
+          },
+          {
+            badge: "Nature & Climate Route",
+            title: "The third slide adds ecology and education",
+            body: "This part shows that the campaign is not only about green buildings. It also includes wetlands, parks, educational venues, and mountain routes.",
+            points: [
+              "The theme expands from architecture to ecology and climate learning.",
+              "Different users can connect with different styles of mission content.",
+              "The whole campaign feels richer and more complete."
+            ]
+          },
+          {
+            badge: "Green Explorer Challenge",
+            title: "Then explain the participation loop and reward",
+            body: "This poster connects the action flow, the limited commemorative pin, and the closing workshop, making the value of joining much easier to understand.",
+            points: [
+              "Register, complete missions, upload, and share.",
+              "The limited pin works as a clear conversion incentive.",
+              "It also introduces the offline follow-up event and redemption moment."
+            ]
+          },
+          {
+            badge: "Discover Green Hong Kong",
+            title: "Next, explain the deeper meaning behind the event",
+            body: "This slide is less about rewards and more about perspective: seeing, understanding, participating, and creating wider impact.",
+            points: [
+              "It reframes the campaign as a way to understand the city and climate.",
+              "The four-stage structure gives users a clear emotional and learning path.",
+              "It is a strong middle slide for brand storytelling."
+            ]
+          },
+          {
+            badge: "Shared Goal & Momentum",
+            title: "End with the collective result users contribute to",
+            body: "The last slide links registrations, mission check-ins, shared momentum, and tree planting, showing users that their actions roll up into a larger community outcome.",
+            points: [
+              "It connects individual actions to a visible group result.",
+              "It works well as the closing slide for motivation and urgency.",
+              "It naturally leads back into joining, sharing, or returning to the campaign."
+            ]
+          }
+        ]
       }
     };
+
+    const SLIDE_IMAGES = [
+      "../assets/climate-action-slides/2.png",
+      "../assets/climate-action-slides/3.png",
+      "../assets/climate-action-slides/4.png",
+      "../assets/climate-action-slides/5.png",
+      "../assets/climate-action-slides/6.png",
+      "../assets/climate-action-slides/7.png"
+    ];
 
     const params = new URLSearchParams(window.location.search);
     const requestedLang = params.get("lang");
@@ -329,8 +672,61 @@
     let currentLang = requestedLang === "en" || requestedLang === "zh"
       ? requestedLang
       : (savedLang === "en" || savedLang === "zh" ? savedLang : "zh");
+    let currentSlideIndex = 0;
+
+    const slideImage = document.getElementById("slideImage");
+    const slideCounter = document.getElementById("slideCounter");
+    const slideBadge = document.getElementById("slideBadge");
+    const slideStepLabel = document.getElementById("slideStepLabel");
+    const slideTitle = document.getElementById("slideTitle");
+    const slideBody = document.getElementById("slideBody");
+    const slidePoints = document.getElementById("slidePoints");
+    const slideDots = document.getElementById("slideDots");
+    const slideFrame = document.getElementById("slideFrame");
+    const prevSlideBtn = document.getElementById("prevSlideBtn");
+    const nextSlideBtn = document.getElementById("nextSlideBtn");
+    const backLink = document.getElementById("backLink");
+    const laterLink = document.getElementById("laterLink");
 
     const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
+    const getSlides = () => I18N[currentLang].slides;
+
+    const renderDots = () => {
+      slideDots.innerHTML = "";
+      getSlides().forEach((slide, index) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = `slide-dot${index === currentSlideIndex ? " active" : ""}`;
+        dot.setAttribute("aria-label", `${slide.badge} ${index + 1}`);
+        dot.addEventListener("click", () => {
+          currentSlideIndex = index;
+          renderSlide();
+        });
+        slideDots.appendChild(dot);
+      });
+    };
+
+    const renderSlide = () => {
+      const slides = getSlides();
+      const slide = slides[currentSlideIndex];
+      slideImage.src = SLIDE_IMAGES[currentSlideIndex];
+      slideImage.alt = slide.badge;
+      slideCounter.textContent = `${currentSlideIndex + 1} / ${slides.length}`;
+      slideBadge.textContent = slide.badge;
+      slideStepLabel.textContent = `${t("slider.stepLabel")} ${currentSlideIndex + 1}`;
+      slideTitle.textContent = slide.title;
+      slideBody.textContent = slide.body;
+      slidePoints.innerHTML = "";
+      slide.points.forEach((point) => {
+        const item = document.createElement("div");
+        item.className = "slide-point";
+        item.textContent = point;
+        slidePoints.appendChild(item);
+      });
+      prevSlideBtn.disabled = currentSlideIndex === 0;
+      nextSlideBtn.disabled = currentSlideIndex === slides.length - 1;
+      renderDots();
+    };
 
     const applyLanguage = (lang) => {
       currentLang = lang === "en" ? "en" : "zh";
@@ -352,13 +748,46 @@
       window.history.replaceState({}, "", nextUrl);
 
       const backHref = `./eco-mbti.html?lang=${currentLang}`;
-      document.getElementById("backLink").href = backHref;
-      document.getElementById("laterLink").href = backHref;
+      backLink.href = backHref;
+      laterLink.href = backHref;
+      renderSlide();
     };
+
+    prevSlideBtn.addEventListener("click", () => {
+      if (currentSlideIndex === 0) return;
+      currentSlideIndex -= 1;
+      renderSlide();
+    });
+
+    nextSlideBtn.addEventListener("click", () => {
+      if (currentSlideIndex >= getSlides().length - 1) return;
+      currentSlideIndex += 1;
+      renderSlide();
+    });
 
     document.querySelectorAll(".lang-btn").forEach((button) => {
       button.addEventListener("click", () => applyLanguage(button.dataset.lang));
     });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") prevSlideBtn.click();
+      if (event.key === "ArrowRight") nextSlideBtn.click();
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slideFrame.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0]?.clientX || 0;
+    }, { passive: true });
+
+    slideFrame.addEventListener("touchend", (event) => {
+      touchEndX = event.changedTouches[0]?.clientX || 0;
+      const deltaX = touchEndX - touchStartX;
+      if (Math.abs(deltaX) < 42) return;
+      if (deltaX < 0) nextSlideBtn.click();
+      else prevSlideBtn.click();
+    }, { passive: true });
 
     applyLanguage(currentLang);
   </script>
