@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 氣候行動介紹 | Blue Sky Returns</title>
+  <style>
+    :root {
+      --bg: #eef6f0;
+      --surface: rgba(255, 255, 255, 0.94);
+      --surface-strong: #ffffff;
+      --ink: #153126;
+      --muted: #5b7069;
+      --line: #d8e7dd;
+      --forest: #1b7a55;
+      --forest-deep: #12513a;
+      --sky: #2aa6b5;
+      --shadow: 0 24px 54px rgba(21, 49, 38, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at top left, rgba(42, 166, 181, 0.16), transparent 22%),
+        radial-gradient(circle at top right, rgba(139, 209, 102, 0.18), transparent 18%),
+        linear-gradient(180deg, #f6fbf7 0%, var(--bg) 45%, #f8fcf9 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 56px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: grid;
+      gap: 4px;
+    }
+
+    .brand strong {
+      color: var(--forest);
+      font-size: 1rem;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-strong);
+    }
+
+    .lang-btn,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--forest);
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(27, 122, 85, 0.08);
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .lang-btn {
+      padding: 8px 14px;
+      background: transparent;
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    .lang-btn.active,
+    .button.primary {
+      background: linear-gradient(135deg, var(--forest), var(--sky));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 12px 28px rgba(27, 122, 85, 0.18);
+    }
+
+    .panel {
+      display: grid;
+      gap: 22px;
+      padding: 24px;
+      border-radius: 28px;
+      background: var(--surface);
+      border: 1px solid rgba(216, 231, 221, 0.96);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .poster {
+      width: 100%;
+      display: block;
+      border-radius: 24px;
+      border: 1px solid rgba(21, 49, 38, 0.08);
+      box-shadow: 0 18px 36px rgba(12, 48, 36, 0.12);
+      background: #f1f8f2;
+    }
+
+    .copy {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(27, 122, 85, 0.1);
+      color: var(--forest);
+      font-size: 0.84rem;
+      font-weight: 900;
+    }
+
+    h1, h2, p { margin: 0; }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.06;
+      color: #103d2f;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .steps {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      padding: 16px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(21, 49, 38, 0.08);
+      background: rgba(252, 255, 253, 0.9);
+    }
+
+    .step strong {
+      display: block;
+      color: var(--forest-deep);
+      margin-bottom: 4px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (hover: hover) {
+      .lang-btn:hover,
+      .button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(27, 122, 85, 0.32);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .shell {
+        padding: 18px 14px 42px;
+      }
+
+      .panel {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .actions .button,
+      .topbar-actions .button {
+        width: 100%;
+      }
+
+      .topbar-actions {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <strong>Blue Sky Returns</strong>
+        <span data-i18n="brand.subtitle">2026 氣候行動介紹</span>
+      </div>
+      <div class="topbar-actions">
+        <div class="lang-toggle" aria-label="Language switcher">
+          <button class="lang-btn" type="button" data-lang="zh">中</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+        <a class="button" id="backLink" href="./eco-mbti.html" data-i18n="nav.back">返回 Eco-MBTI</a>
+      </div>
+    </div>
+
+    <section class="panel hero">
+      <img class="poster" src="../assets/eco-mbti-climate-action-poster.png" alt="2026 Climate Action campaign poster" />
+      <div class="copy">
+        <span class="badge" data-i18n="hero.badge">活動推薦</span>
+        <h1 data-i18n="hero.title">2026 氣候行動介紹</h1>
+        <p class="lead" data-i18n="hero.body">這是一個結合問卷註冊、任務打卡、景點拍照與分享的氣候行動企劃，完成指定次數後可兌換限定紀念品。</p>
+
+        <div class="steps">
+          <div class="step">
+            <strong data-i18n="steps.step1Title">1. 先填寫問卷註冊</strong>
+            <span data-i18n="steps.step1Body">註冊成為「氣候行動者」，完成你的參與身份建立。</span>
+          </div>
+          <div class="step">
+            <strong data-i18n="steps.step2Title">2. 到指定景點或任務站拍照打卡</strong>
+            <span data-i18n="steps.step2Body">依照活動路線，到各站完成拍照或行動任務。</span>
+          </div>
+          <div class="step">
+            <strong data-i18n="steps.step3Title">3. 上傳系統並分享成果</strong>
+            <span data-i18n="steps.step3Body">把你的行動成果上傳並分享，累積任務次數與參與紀錄。</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a class="button primary" href="./green-action-7day.html" data-i18n="actions.join">立即參與</a>
+          <a class="button" id="laterLink" href="./eco-mbti.html" data-i18n="actions.later">稍後再看</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const LANG_STORAGE_KEY = "bsr_lang";
+    const I18N = {
+      zh: {
+        pageTitle: "2026 氣候行動介紹 | Blue Sky Returns",
+        brand: { subtitle: "2026 氣候行動介紹" },
+        nav: { back: "返回 Eco-MBTI" },
+        hero: {
+          badge: "活動推薦",
+          title: "2026 氣候行動介紹",
+          body: "這是一個結合問卷註冊、任務打卡、景點拍照與分享的氣候行動企劃，完成指定次數後可兌換限定紀念品。"
+        },
+        steps: {
+          step1Title: "1. 先填寫問卷註冊",
+          step1Body: "註冊成為「氣候行動者」，完成你的參與身份建立。",
+          step2Title: "2. 到指定景點或任務站拍照打卡",
+          step2Body: "依照活動路線，到各站完成拍照或行動任務。",
+          step3Title: "3. 上傳系統並分享成果",
+          step3Body: "把你的行動成果上傳並分享，累積任務次數與參與紀錄。"
+        },
+        actions: {
+          join: "立即參與",
+          later: "稍後再看"
+        }
+      },
+      en: {
+        pageTitle: "2026 Climate Action Overview | Blue Sky Returns",
+        brand: { subtitle: "2026 Climate Action Overview" },
+        nav: { back: "Back to Eco-MBTI" },
+        hero: {
+          badge: "Featured Event",
+          title: "2026 Climate Action Overview",
+          body: "This campaign combines registration, checkpoint photo tasks, uploads, and sharing. Complete the required actions to unlock a limited commemorative reward."
+        },
+        steps: {
+          step1Title: "1. Register first",
+          step1Body: "Sign up as a climate action participant and activate your event profile.",
+          step2Title: "2. Visit checkpoints and take photos",
+          step2Body: "Follow the event route and complete photo tasks or on-site missions at each stop.",
+          step3Title: "3. Upload and share your progress",
+          step3Body: "Upload your action results to the system and share them to build your participation record."
+        },
+        actions: {
+          join: "Join Now",
+          later: "Maybe Later"
+        }
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedLang = params.get("lang");
+    const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
+    let currentLang = requestedLang === "en" || requestedLang === "zh"
+      ? requestedLang
+      : (savedLang === "en" || savedLang === "zh" ? savedLang : "zh");
+
+    const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
+
+    const applyLanguage = (lang) => {
+      currentLang = lang === "en" ? "en" : "zh";
+      localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+      document.documentElement.lang = currentLang === "zh" ? "zh-Hant" : "en";
+      document.title = t("pageTitle");
+
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.getAttribute("data-i18n");
+        node.textContent = t(key);
+      });
+
+      document.querySelectorAll(".lang-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === currentLang);
+      });
+
+      const nextUrl = new URL(window.location.href);
+      nextUrl.searchParams.set("lang", currentLang);
+      window.history.replaceState({}, "", nextUrl);
+
+      const backHref = `./eco-mbti.html?lang=${currentLang}`;
+      document.getElementById("backLink").href = backHref;
+      document.getElementById("laterLink").href = backHref;
+    };
+
+    document.querySelectorAll(".lang-btn").forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+
+    applyLanguage(currentLang);
+  </script>
+</body>
+</html>

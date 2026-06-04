@@ -1926,30 +1926,9 @@
               </div>
               <img class="result-activity-poster" src="../assets/eco-mbti-climate-action-poster.png" alt="2026 Climate Action campaign poster" loading="lazy" />
               <div class="result-activity-actions">
-                <button id="openActivityModalBtn" class="primary" type="button" data-i18n="activity.detail">詳細點擊</button>
+                <a id="openActivityPageLink" class="button primary" href="./climate-action-intro.html" target="_blank" rel="noopener" data-i18n="activity.detail">詳細點擊</a>
               </div>
             </aside>
-
-            <div id="activityModal" class="activity-modal" hidden aria-hidden="true">
-              <div class="activity-modal-card" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle">
-                <button id="closeActivityModalBtn" class="activity-modal-close" type="button" aria-label="Close">×</button>
-                <img class="activity-modal-poster" src="../assets/eco-mbti-climate-action-poster.png" alt="2026 Climate Action campaign poster" loading="lazy" />
-                <div class="activity-modal-copy">
-                  <span class="small-badge" data-i18n="activity.badge">活動推薦</span>
-                  <h3 id="activityModalTitle" data-i18n="activity.modalTitle">2026 氣候行動介紹</h3>
-                  <p data-i18n="activity.modalBody">這是一個結合問卷註冊、任務打卡、景點拍照與分享的氣候行動企劃，完成指定次數後可兌換限定紀念品。</p>
-                  <ul class="activity-modal-list">
-                    <li data-i18n="activity.step1">1. 先填寫問卷註冊，成為「氣候行動者」。</li>
-                    <li data-i18n="activity.step2">2. 到指定景點或任務站拍照打卡。</li>
-                    <li data-i18n="activity.step3">3. 上傳系統並分享你的行動成果。</li>
-                  </ul>
-                  <div class="result-activity-actions">
-                    <a class="button primary" href="./green-action-7day.html" data-i18n="activity.join">立即參與</a>
-                    <button id="closeActivityModalSecondaryBtn" type="button" data-i18n="activity.later">稍後再看</button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </section>
         </div>
       </div>
@@ -2507,14 +2486,7 @@
           badge: "活動推薦",
           floatTitle: "測完後，順手加入 2026 氣候行動",
           floatBody: "恭喜成為集氣的一員，順手加入 2026 氣候行動！",
-          detail: "詳細點擊",
-          modalTitle: "2026 氣候行動介紹",
-          modalBody: "這是一個結合問卷註冊、任務打卡、景點拍照與分享的氣候行動企劃，完成指定次數後可兌換限定紀念品。",
-          step1: "1. 先填寫問卷註冊，成為「氣候行動者」。",
-          step2: "2. 到指定景點或任務站拍照打卡。",
-          step3: "3. 上傳系統並分享你的行動成果。",
-          join: "立即參與",
-          later: "稍後再看"
+          detail: "詳細點擊"
         },
         footer: "Blue Sky Returns • Eco-MBTI • 2026",
         dimensions: {
@@ -2642,14 +2614,7 @@
           badge: "Featured Event",
           floatTitle: "Finished your test? Join the 2026 Climate Action event next",
           floatBody: "After getting your result, you can jump straight into offline checkpoints, photo missions, and participation tasks.",
-          detail: "See Details",
-          modalTitle: "2026 Climate Action Overview",
-          modalBody: "This campaign combines registration, checkpoint photo tasks, uploads, and sharing. Complete the required actions to unlock a limited commemorative reward.",
-          step1: "1. Register first and become a climate action participant.",
-          step2: "2. Visit the assigned checkpoint or mission spot and take a photo.",
-          step3: "3. Upload it to the system and share your action result.",
-          join: "Join Now",
-          later: "Maybe Later"
+          detail: "See Details"
         },
         footer: "Blue Sky Returns • Eco-MBTI • 2026",
         dimensions: {
@@ -2706,10 +2671,7 @@
     const shareStatus = document.getElementById("shareStatus");
     const resultActivityFloat = document.getElementById("resultActivityFloat");
     const closeActivityFloatBtn = document.getElementById("closeActivityFloatBtn");
-    const openActivityModalBtn = document.getElementById("openActivityModalBtn");
-    const activityModal = document.getElementById("activityModal");
-    const closeActivityModalBtn = document.getElementById("closeActivityModalBtn");
-    const closeActivityModalSecondaryBtn = document.getElementById("closeActivityModalSecondaryBtn");
+    const openActivityPageLink = document.getElementById("openActivityPageLink");
 
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
     let lastResultText = "";
@@ -2767,20 +2729,6 @@
       resultActivityFloat.hidden = true;
     };
 
-    const openActivityModal = () => {
-      if (!activityModal) return;
-      activityModal.hidden = false;
-      activityModal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    };
-
-    const closeActivityModal = () => {
-      if (!activityModal) return;
-      activityModal.hidden = true;
-      activityModal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    };
-
     const setScreen = (screen) => {
       currentScreen = screen;
       document.body.dataset.screen = screen;
@@ -2790,7 +2738,6 @@
       resultScreen.hidden = screen !== "result";
       if (screen !== "result") {
         hideActivityFloat();
-        closeActivityModal();
       } else {
         showActivityFloat();
       }
@@ -3260,6 +3207,9 @@
       document.querySelectorAll(".lang-btn").forEach((button) => {
         button.classList.toggle("active", button.dataset.lang === currentLang);
       });
+      if (openActivityPageLink) {
+        openActivityPageLink.href = `./climate-action-intro.html?lang=${currentLang}`;
+      }
       renderCurrentQuestion();
       if (!resultScreen.hidden && lastResultText) {
         renderResult({ counts: lastRenderedCounts || calculateResult().counts, type: activeType }, { persistLocal: false });
@@ -3277,7 +3227,6 @@
       pendingResult = null;
       hasDismissedActivityFloat = false;
       hideActivityFloat();
-      closeActivityModal();
       shareStatus.textContent = "";
       gateStatus.className = "status";
       gateStatus.textContent = "";
@@ -3360,26 +3309,9 @@
       }
     });
 
-    openActivityModalBtn?.addEventListener("click", () => {
-      openActivityModal();
-    });
-
     closeActivityFloatBtn?.addEventListener("click", () => {
       hasDismissedActivityFloat = true;
       hideActivityFloat();
-    });
-
-    closeActivityModalBtn?.addEventListener("click", closeActivityModal);
-    closeActivityModalSecondaryBtn?.addEventListener("click", closeActivityModal);
-
-    activityModal?.addEventListener("click", (event) => {
-      if (event.target === activityModal) closeActivityModal();
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && activityModal && !activityModal.hidden) {
-        closeActivityModal();
-      }
     });
 
     gateForm.addEventListener("submit", async (event) => {
