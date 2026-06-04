@@ -449,19 +449,24 @@
       width: clamp(148px, 18vw, 220px);
       height: clamp(64px, 8.5vw, 92px);
       padding: 0 18px;
-      background: transparent;
-      border: none;
-      box-shadow: none;
+      background:
+        linear-gradient(135deg, rgba(19, 90, 64, 0.84), rgba(42, 166, 181, 0.8));
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      box-shadow:
+        0 16px 30px rgba(11, 53, 40, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24);
       color: rgba(255, 255, 255, 0.97);
       font-size: clamp(1.18rem, 1.8vw, 1.7rem);
       font-weight: 900;
       letter-spacing: 0.1em;
       line-height: 1;
       text-transform: none;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
       text-shadow:
         0 4px 18px rgba(0, 0, 0, 0.34),
         0 0 24px rgba(208, 255, 233, 0.24);
-      transition: transform 0.22s ease, text-shadow 0.22s ease, opacity 0.22s ease;
+      transition: transform 0.22s ease, text-shadow 0.22s ease, opacity 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
     }
 
     .intro-start-btn::before {
@@ -499,6 +504,10 @@
     .intro-start-btn:hover,
     .intro-start-btn:focus-visible {
       transform: scale(1.03);
+      border-color: rgba(255, 255, 255, 0.52);
+      box-shadow:
+        0 20px 38px rgba(11, 53, 40, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.32);
       text-shadow:
         0 8px 24px rgba(0, 0, 0, 0.4),
         0 0 30px rgba(218, 255, 240, 0.42);
@@ -1479,22 +1488,19 @@
       padding-right: 42px;
     }
 
-    .result-activity-head h3,
-    .activity-modal-copy h3 {
+    .result-activity-head h3 {
       margin: 0;
       color: var(--forest-deep);
       font-size: 1.12rem;
     }
 
-    .result-activity-head p,
-    .activity-modal-copy p {
+    .result-activity-head p {
       margin: 0;
       color: var(--muted);
       line-height: 1.6;
     }
 
-    .result-activity-poster,
-    .activity-modal-poster {
+    .result-activity-poster {
       display: block;
       width: 100%;
       border-radius: 18px;
@@ -1508,80 +1514,6 @@
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
-    }
-
-    .activity-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      background: rgba(7, 28, 21, 0.58);
-      backdrop-filter: blur(14px);
-    }
-
-    .activity-modal[hidden] {
-      display: none !important;
-    }
-
-    .activity-modal-card {
-      width: min(980px, 100%);
-      max-height: min(92vh, 980px);
-      overflow: auto;
-      display: grid;
-      grid-template-columns: minmax(0, 0.92fr) minmax(320px, 1.08fr);
-      gap: 22px;
-      padding: 24px;
-      border-radius: 32px;
-      background:
-        radial-gradient(circle at top right, rgba(255, 255, 255, 0.56), transparent 32%),
-        linear-gradient(155deg, rgba(247, 253, 250, 0.98), rgba(234, 247, 240, 0.98));
-      border: 1px solid rgba(19, 85, 58, 0.12);
-      box-shadow: 0 30px 80px rgba(8, 34, 26, 0.24);
-      position: relative;
-    }
-
-    .activity-modal-close {
-      position: sticky;
-      top: 0;
-      justify-self: end;
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      padding: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      z-index: 1;
-    }
-
-    .activity-modal-copy {
-      display: grid;
-      gap: 16px;
-      align-content: start;
-    }
-
-    .activity-modal-copy .small-badge {
-      justify-self: start;
-    }
-
-    .activity-modal-list {
-      display: grid;
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .activity-modal-list li {
-      padding: 14px 16px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid rgba(19, 85, 58, 0.08);
-      color: #35564a;
-      line-height: 1.65;
     }
 
     .share-more {
@@ -1684,8 +1616,7 @@
       }
 
       .result-grid,
-      .result-side-stack,
-      .activity-modal-card {
+      .result-side-stack {
         grid-template-columns: 1fr;
       }
 
@@ -1746,15 +1677,6 @@
         right: 14px;
         bottom: 14px;
         width: auto;
-      }
-
-      .activity-modal {
-        padding: 12px;
-      }
-
-      .activity-modal-card {
-        padding: 16px;
-        border-radius: 24px;
       }
 
       .hero-copy > .eyebrow,
@@ -2000,7 +1922,7 @@
               <div class="result-activity-head">
                 <span class="small-badge" data-i18n="activity.badge">活動推薦</span>
                 <h3 data-i18n="activity.floatTitle">測完後，順手加入 2026 氣候行動</h3>
-                <p data-i18n="activity.floatBody">填完測驗拿到結果後，也可以直接參與線下景點任務與打卡活動。</p>
+                <p data-i18n="activity.floatBody">恭喜成為集氣的一員，順手加入 2026 氣候行動！</p>
               </div>
               <img class="result-activity-poster" src="../assets/eco-mbti-climate-action-poster.png" alt="2026 Climate Action campaign poster" loading="lazy" />
               <div class="result-activity-actions">
@@ -2584,7 +2506,7 @@
         activity: {
           badge: "活動推薦",
           floatTitle: "測完後，順手加入 2026 氣候行動",
-          floatBody: "填完測驗拿到結果後，也可以直接參與線下景點任務與打卡活動。",
+          floatBody: "恭喜成為集氣的一員，順手加入 2026 氣候行動！",
           detail: "詳細點擊",
           modalTitle: "2026 氣候行動介紹",
           modalBody: "這是一個結合問卷註冊、任務打卡、景點拍照與分享的氣候行動企劃，完成指定次數後可兌換限定紀念品。",
@@ -2954,7 +2876,10 @@
               currentQuestionIndex += 1;
               renderCurrentQuestion();
             } else {
-              renderResult(calculateResult());
+              pendingResult = calculateResult();
+              gateStatus.className = "status";
+              gateStatus.textContent = "";
+              setScreen("register");
             }
           }, 220);
         });
