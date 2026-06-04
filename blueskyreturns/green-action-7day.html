@@ -99,6 +99,21 @@
       color: var(--muted);
       font-size: 0.84rem;
     }
+    .nav-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .nav-mobile-tools {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
     .nav-actions {
       display: flex;
       align-items: center;
@@ -150,6 +165,13 @@
       background: linear-gradient(135deg, var(--green), var(--lime));
       color: #fff;
       box-shadow: 0 8px 20px rgba(31, 143, 88, 0.18);
+    }
+    .nav-toggle {
+      display: none;
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+      color: var(--green-deep);
+      box-shadow: none;
     }
     .bot-guard {
       position: absolute;
@@ -718,6 +740,23 @@
     @media (max-width: 640px) {
       .shell { padding: 0 16px; }
       .nav { padding: 12px 0; }
+      .brand-copy span { display: none; }
+      .nav-mobile-tools { display: flex; }
+      .nav-toggle { display: inline-flex; }
+      .nav-actions {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 10px;
+      }
+      header.nav-open .nav-actions { display: flex; }
+      .nav-actions .pill,
+      .nav-actions button {
+        width: 100%;
+        justify-content: center;
+      }
+      .nav-actions .lang-toggle { display: none; }
       .panel,
       .hero {
         padding: 22px 18px;
@@ -736,14 +775,23 @@
 <body>
   <header>
     <div class="shell nav">
-      <div class="brand">
-        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
-        <div class="brand-copy">
-          <strong data-i18n="header.title">Blue Sky Returns</strong>
-          <span data-i18n="header.subtitle">Daily Green Actions</span>
+      <div class="nav-primary">
+        <div class="brand">
+          <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+          <div class="brand-copy">
+            <strong data-i18n="header.title">Blue Sky Returns</strong>
+            <span data-i18n="header.subtitle">Daily Green Actions</span>
+          </div>
+        </div>
+        <div class="nav-mobile-tools">
+          <div class="lang-toggle" role="group" aria-label="Language switcher">
+            <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
         </div>
       </div>
-      <div class="nav-actions">
+      <div id="navActions" class="nav-actions">
         <a class="pill" href="../index.html" data-i18n="nav.main">Main Globe</a>
         <a class="pill" href="./index.html" data-i18n="nav.about">About</a>
         <a class="pill active" href="./green-action-7day.html" data-i18n="nav.proposal">Daily Green Actions</a>
@@ -1672,6 +1720,27 @@
         taskAuthSubmit.disabled = false;
       }
     });
+  </script>
+  <script>
+    (() => {
+      const header = document.querySelector("header");
+      const navActions = document.getElementById("navActions");
+      const navToggleBtn = document.getElementById("navToggleBtn");
+      if (!header || !navActions || !navToggleBtn) return;
+      const closeMobileNav = () => {
+        header.classList.remove("nav-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      };
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = !header.classList.contains("nav-open");
+        header.classList.toggle("nav-open", isOpen);
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) closeMobileNav();
+      });
+    })();
   </script>
 </body>
 </html>

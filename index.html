@@ -115,6 +115,21 @@
       gap: 10px;
       flex-wrap: wrap;
     }
+    .header-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .header-mobile-tools {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
        /* 點擊 logo 仍維持像標題，不要底線 */
     .logo { 
@@ -163,6 +178,16 @@
 
     .about-link:hover {
       background: rgba(255, 255, 255, 0.12);
+    }
+    .nav-toggle {
+      display: none;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
     }
     
     /* hover 小效果（可選） */
@@ -673,15 +698,21 @@
           calc(var(--mobile-ui-padding) + env(safe-area-inset-left));
       }
 
-      header { flex-direction: column; align-items: flex-start; width: 100%; gap: 10px; }
+      .header-primary { width: 100%; }
+      .header-mobile-tools { display: flex; }
+      .nav-toggle { display: inline-flex; }
+      header { width: 100%; gap: 10px; }
       .header-actions {
         width: 100%;
         justify-content: flex-start;
+        display: none;
       }
+      header.nav-open .header-actions { display: flex; }
 
       .header-actions > * {
         max-width: 100%;
       }
+      .header-actions .lang-toggle { display: none; }
 
       /* ✅ 手機：時間表固定上方，但「高度受限」且內容可滾動 → 不再撞到底部資訊 */
       .timeline-container {
@@ -823,19 +854,25 @@
 
   <div class="ui-layer" id="ui-layer">
     <header>
-      
+      <div class="header-primary">
         <div class="logo-area">
           <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" data-i18n-aria-label="aria.pjcSite">
             <img src="PJC_LOGO.PNG" alt="PJC logo" class="pjc-logo" />
             <span class="logo-text">Blue Sky Returns</span>
           </a>
-          <span class="logo-divider" aria-hidden="true">｜</span>
-          <a class="about-link" href="blueskyreturns/index.html" data-i18n="header.about" data-i18n-aria-label="aria.about">About</a>
-          <span class="logo-divider" aria-hidden="true">｜</span>
-          <a class="about-link" href="blueskyreturns/countries-regions-hope-crisis.html" data-i18n="header.call">Collaboration & Vision</a>
         </div>
+        <div class="header-mobile-tools">
+          <div class="lang-toggle" role="group" data-i18n-aria-label="aria.languageToggle">
+            <button class="lang-btn active" data-lang="en" type="button">EN</button>
+            <button class="lang-btn" data-lang="zh" type="button">中文</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
+        </div>
+      </div>
 
-      <div class="header-actions">
+      <div id="navActions" class="header-actions">
+        <a class="about-link" href="blueskyreturns/index.html" data-i18n="header.about" data-i18n-aria-label="aria.about">About</a>
+        <a class="about-link" href="blueskyreturns/countries-regions-hope-crisis.html" data-i18n="header.call">Collaboration & Vision</a>
         <a id="headerMemberLink" class="ghost-btn nav-link-btn" href="blueskyreturns/member-center.html">Member Center</a>
         <button id="headerLogoutBtn" class="ghost-btn" type="button" hidden>Sign Out</button>
         <div class="toggle-container" data-i18n-aria-label="aria.modeToggle">
@@ -2455,6 +2492,27 @@
       console.error(err);
       alert(`${getI18n('misc.initFail')}: ${err.message}`);
     });
+  </script>
+  <script>
+    (() => {
+      const header = document.querySelector("header");
+      const navActions = document.getElementById("navActions");
+      const navToggleBtn = document.getElementById("navToggleBtn");
+      if (!header || !navActions || !navToggleBtn) return;
+      const closeMobileNav = () => {
+        header.classList.remove("nav-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      };
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = !header.classList.contains("nav-open");
+        header.classList.toggle("nav-open", isOpen);
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) closeMobileNav();
+      });
+    })();
   </script>
 </body>
 </html>

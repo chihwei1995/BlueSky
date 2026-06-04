@@ -91,6 +91,18 @@
       color: var(--muted);
       font-size: 0.84rem;
     }
+    .nav-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .nav-mobile-tools {
+      display: none;
+      margin-left: auto;
+    }
     .nav-actions {
       display: flex;
       gap: 10px;
@@ -113,6 +125,16 @@
       background: linear-gradient(135deg, var(--blue), var(--teal));
       color: #fff;
       box-shadow: 0 12px 24px rgba(11, 92, 171, 0.18);
+    }
+    .nav-toggle {
+      display: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 15px;
+      background: #fff;
+      color: var(--blue);
+      font-weight: 700;
+      cursor: pointer;
     }
     main {
       padding: 28px 0 72px;
@@ -229,19 +251,38 @@
         position: static;
       }
     }
+    @media (max-width: 640px) {
+      .brand-copy span { display: none; }
+      .nav-mobile-tools { display: block; }
+      .nav-toggle { display: inline-flex; }
+      .nav-actions {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 10px;
+      }
+      header.nav-open .nav-actions { display: flex; }
+      .nav-actions .pill { width: 100%; }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="shell nav">
-      <div class="brand">
-        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
-        <div class="brand-copy">
-          <strong>Blue Sky Returns</strong>
-          <span>Privacy &amp; Terms</span>
+      <div class="nav-primary">
+        <div class="brand">
+          <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+          <div class="brand-copy">
+            <strong>Blue Sky Returns</strong>
+            <span>Privacy &amp; Terms</span>
+          </div>
+        </div>
+        <div class="nav-mobile-tools">
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
         </div>
       </div>
-      <div class="nav-actions">
+      <div id="navActions" class="nav-actions">
         <a class="pill" href="../index.html">主地球首頁 / Main Globe</a>
         <a class="pill" href="./index.html">項目介紹 / About</a>
         <a class="pill" href="./member-center.html">氣候行動者中心 / Member Center</a>
@@ -313,5 +354,26 @@
   </main>
 
   <footer>Blue Sky Returns • Privacy &amp; Terms • 2026</footer>
+  <script>
+    (() => {
+      const header = document.querySelector("header");
+      const navActions = document.getElementById("navActions");
+      const navToggleBtn = document.getElementById("navToggleBtn");
+      if (!header || !navActions || !navToggleBtn) return;
+      const closeMobileNav = () => {
+        header.classList.remove("nav-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      };
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = !header.classList.contains("nav-open");
+        header.classList.toggle("nav-open", isOpen);
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) closeMobileNav();
+      });
+    })();
+  </script>
 </body>
 </html>

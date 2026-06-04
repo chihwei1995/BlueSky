@@ -60,6 +60,21 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
+    .topbar-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .topbar-mobile-tools {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     .title-block {
       display: flex;
@@ -128,6 +143,18 @@
       background: linear-gradient(135deg, var(--primary), #38bdf8);
       color: #fff;
       box-shadow: 0 8px 18px rgba(2, 132, 199, 0.18);
+    }
+    .nav-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--primary-dark);
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .topbar-actions {
@@ -640,6 +667,24 @@
     }
 
     @media (max-width: 700px) {
+      .topbar-mobile-tools {
+        display: flex;
+      }
+      .nav-toggle {
+        display: inline-flex;
+      }
+      .topbar-actions {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .topbar.nav-open .topbar-actions {
+        display: flex;
+      }
+      .topbar-actions .lang-toggle {
+        display: none;
+      }
       .result-meta-grid,
       .insight-grid {
         grid-template-columns: 1fr;
@@ -654,11 +699,20 @@
 <body>
   <main class="container">
     <div class="topbar">
-      <div class="title-block">
-        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
-        <h1 id="pageTitle">Blue Sky Returns 步入行動<br>Blue Sky Returns Take One Step</h1>
+      <div class="topbar-primary">
+        <div class="title-block">
+          <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+          <h1 id="pageTitle">Blue Sky Returns 步入行動<br>Blue Sky Returns Take One Step</h1>
+        </div>
+        <div class="topbar-mobile-tools">
+          <div class="lang-toggle" role="group" aria-label="Language switcher">
+            <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
+        </div>
       </div>
-      <div class="topbar-actions">
+      <div id="navActions" class="topbar-actions">
         <a class="nav-chip" href="../index.html">主地球首頁 / Main Globe</a>
         <a class="nav-chip" href="./index.html">項目介紹 / About</a>
         <a class="nav-chip" href="./member-center.html">氣候行動者中心 / Member Center</a>
@@ -1559,6 +1613,27 @@
       button.addEventListener("click", () => applyLanguage(button.dataset.lang));
     });
     applyLanguage(currentLang);
+  </script>
+  <script>
+    (() => {
+      const topbar = document.querySelector(".topbar");
+      const navActions = document.getElementById("navActions");
+      const navToggleBtn = document.getElementById("navToggleBtn");
+      if (!topbar || !navActions || !navToggleBtn) return;
+      const closeMobileNav = () => {
+        topbar.classList.remove("nav-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      };
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = !topbar.classList.contains("nav-open");
+        topbar.classList.toggle("nav-open", isOpen);
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 700) closeMobileNav();
+      });
+    })();
   </script>
 </body>
 </html>

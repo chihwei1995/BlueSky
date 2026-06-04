@@ -101,6 +101,21 @@
       color: var(--muted);
       font-size: 0.84rem;
     }
+    .nav-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .nav-mobile-tools {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     .nav-actions {
       display: flex;
@@ -141,6 +156,16 @@
       border: 1px solid var(--line);
       border-radius: 999px;
       background: #fff;
+    }
+    .nav-toggle {
+      display: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: #fff;
+      color: var(--accent);
+      font-weight: 700;
+      cursor: pointer;
     }
 
     main {
@@ -290,19 +315,46 @@
         grid-template-columns: 1fr;
       }
     }
+    @media (max-width: 640px) {
+      .brand-copy span { display: none; }
+      .nav-mobile-tools { display: flex; }
+      .nav-toggle { display: inline-flex; }
+      .nav-actions {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 10px;
+      }
+      header.nav-open .nav-actions { display: flex; }
+      .nav-actions .pill {
+        width: 100%;
+        justify-content: center;
+      }
+      .nav-actions .lang-toggle { display: none; }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="shell nav">
-      <div class="brand">
-        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
-        <div class="brand-copy">
-          <strong data-i18n="brand.title">Blue Sky Returns</strong>
-          <span data-i18n="brand.subtitle">Collaboration Share Page</span>
+      <div class="nav-primary">
+        <div class="brand">
+          <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+          <div class="brand-copy">
+            <strong data-i18n="brand.title">Blue Sky Returns</strong>
+            <span data-i18n="brand.subtitle">Collaboration Share Page</span>
+          </div>
+        </div>
+        <div class="nav-mobile-tools">
+          <div class="lang-toggle" role="group" aria-label="Language switcher">
+            <button class="lang-btn active" type="button" data-lang="en">EN</button>
+            <button class="lang-btn" type="button" data-lang="zh">中文</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
         </div>
       </div>
-      <div class="nav-actions">
+      <div id="navActions" class="nav-actions">
         <a class="pill" href="./index.html" data-i18n="nav.about">About</a>
         <a class="pill active" href="./collaboration-share.html" data-i18n="nav.share">Share Page</a>
         <a class="pill" href="./countries-regions-hope-crisis.html" data-i18n="nav.full">Full Page</a>
@@ -485,6 +537,27 @@
     });
 
     applyLanguage(currentLang);
+  </script>
+  <script>
+    (() => {
+      const header = document.querySelector("header");
+      const navActions = document.getElementById("navActions");
+      const navToggleBtn = document.getElementById("navToggleBtn");
+      if (!header || !navActions || !navToggleBtn) return;
+      const closeMobileNav = () => {
+        header.classList.remove("nav-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      };
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = !header.classList.contains("nav-open");
+        header.classList.toggle("nav-open", isOpen);
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) closeMobileNav();
+      });
+    })();
   </script>
 </body>
 </html>

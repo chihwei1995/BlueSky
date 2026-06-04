@@ -71,6 +71,21 @@
       flex-wrap: wrap;
       min-width: 0;
     }
+    .header-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .header-mobile-tools {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     .logo {
       display: flex;
@@ -143,6 +158,16 @@
       background: var(--accent);
       color: #fff;
       box-shadow: 0 6px 16px rgba(14, 165, 233, 0.2);
+    }
+    .nav-toggle {
+      display: none;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: #fff;
+      color: var(--accent-dark);
+      font-weight: 600;
+      cursor: pointer;
     }
 
     main {
@@ -307,27 +332,35 @@
 
     .timeline-item h3 {
       margin: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .timeline-copy {
       display: grid;
       gap: 10px;
+      min-width: 0;
     }
 
     .timeline-meta {
       color: var(--ink-soft);
       font-weight: 600;
       margin: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .timeline-points {
       margin: 0;
       padding-left: 18px;
       color: var(--ink-soft);
+      min-width: 0;
     }
 
     .timeline-points li {
       margin-bottom: 8px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .timeline-ig-panel {
@@ -613,29 +646,41 @@
       font-size: 0.9rem;
     }
 
-    @media (max-width: 720px) {
-      .header-inner { flex-direction: column; align-items: flex-start; }
-      .header-actions {
-        width: 100%;
-        display: grid;
+    @media (max-width: 920px) {
+      .timeline-body,
+      .timeline-item.has-slides .timeline-body {
         grid-template-columns: 1fr;
       }
+    }
+
+    @media (max-width: 720px) {
+      .header-primary {
+        width: 100%;
+      }
+      .header-mobile-tools {
+        display: flex;
+      }
+      .nav-toggle {
+        display: inline-flex;
+      }
+      .header-actions {
+        width: 100%;
+        display: none;
+        grid-template-columns: 1fr;
+      }
+      header.nav-open .header-actions { display: grid; }
       .nav-link {
         width: 100%;
         justify-content: center;
         text-align: center;
       }
-      .lang-toggle {
-        width: 100%;
-        justify-content: center;
-      }
+      .header-actions .lang-toggle { display: none; }
       .lang-btn {
         flex: 1 1 0;
       }
       .hero { padding: 24px; }
       main { padding: 32px 20px 56px; }
       .timeline-item-header { flex-direction: column; }
-      .timeline-body { grid-template-columns: 1fr; }
       .timeline-ig-grid { grid-template-columns: 1fr; }
       .timeline-ig-panel { padding: 12px; }
       .timeline-ig-card { padding: 6px; }
@@ -728,11 +773,20 @@
 <body>
   <header>
     <div class="header-inner">
-      <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" data-i18n-aria-label="aria.pjcSite">
-        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
-        <span data-i18n="header.title">One Step Blue Sky Returns</span>
-      </a>
-      <div class="header-actions">
+      <div class="header-primary">
+        <a class="logo" href="https://hkpjc.org/" target="_blank" rel="noopener noreferrer" data-i18n-aria-label="aria.pjcSite">
+          <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+          <span data-i18n="header.title">One Step Blue Sky Returns</span>
+        </a>
+        <div class="header-mobile-tools">
+          <div class="lang-toggle" role="group" data-i18n-aria-label="aria.languageToggle">
+            <button class="lang-btn active" data-lang="en" type="button">EN</button>
+            <button class="lang-btn" data-lang="zh" type="button">中文</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
+        </div>
+      </div>
+      <div id="navActions" class="header-actions">
         <a class="nav-link" href="../index.html" data-i18n="nav.main">Main Globe</a>
         <a class="nav-link active" href="./index.html" data-i18n="nav.about">About</a>
         <a class="nav-link" href="./countries-regions-hope-crisis.html" data-i18n="nav.call">Collaboration & Vision</a>
@@ -1499,6 +1553,27 @@
         renderTimelineList();
       });
     });
+  </script>
+  <script>
+    (() => {
+      const header = document.querySelector("header");
+      const navActions = document.getElementById("navActions");
+      const navToggleBtn = document.getElementById("navToggleBtn");
+      if (!header || !navActions || !navToggleBtn) return;
+      const closeMobileNav = () => {
+        header.classList.remove("nav-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      };
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = !header.classList.contains("nav-open");
+        header.classList.toggle("nav-open", isOpen);
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 720) closeMobileNav();
+      });
+    })();
   </script>
 </body>
 </html>

@@ -53,6 +53,21 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+    .topbar-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .topbar-mobile-tools {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     .brand {
       display: grid;
@@ -123,6 +138,18 @@
       color: #fff;
       border-color: transparent;
       box-shadow: 0 12px 28px rgba(27, 122, 85, 0.18);
+    }
+    .nav-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--forest);
+      font-weight: 800;
+      cursor: pointer;
     }
 
     .panel {
@@ -357,14 +384,27 @@
       .topbar {
         gap: 10px;
       }
+      .topbar-mobile-tools {
+        display: flex;
+      }
+      .nav-toggle {
+        display: inline-flex;
+      }
 
       .brand span {
         font-size: 0.82rem;
       }
-
-      .lang-toggle {
+      .topbar-actions {
+        display: none;
         width: 100%;
-        justify-content: center;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .topbar.nav-open .topbar-actions {
+        display: flex;
+      }
+      .topbar-actions .lang-toggle {
+        display: none;
       }
 
       .lang-btn {
@@ -442,11 +482,20 @@
 <body>
   <main class="shell">
     <div class="topbar">
-      <div class="brand">
-        <strong>Blue Sky Returns</strong>
-        <span data-i18n="brand.subtitle">2026 氣候行動介紹</span>
+      <div class="topbar-primary">
+        <div class="brand">
+          <strong>Blue Sky Returns</strong>
+          <span data-i18n="brand.subtitle">2026 氣候行動介紹</span>
+        </div>
+        <div class="topbar-mobile-tools">
+          <div class="lang-toggle" aria-label="Language switcher">
+            <button class="lang-btn" type="button" data-lang="zh">中</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
+        </div>
       </div>
-      <div class="topbar-actions">
+      <div id="navActions" class="topbar-actions">
         <div class="lang-toggle" aria-label="Language switcher">
           <button class="lang-btn" type="button" data-lang="zh">中</button>
           <button class="lang-btn" type="button" data-lang="en">EN</button>
@@ -793,6 +842,27 @@
     }, { passive: true });
 
     applyLanguage(currentLang);
+  </script>
+  <script>
+    (() => {
+      const topbar = document.querySelector(".topbar");
+      const navActions = document.getElementById("navActions");
+      const navToggleBtn = document.getElementById("navToggleBtn");
+      if (!topbar || !navActions || !navToggleBtn) return;
+      const closeMobileNav = () => {
+        topbar.classList.remove("nav-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      };
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = !topbar.classList.contains("nav-open");
+        topbar.classList.toggle("nav-open", isOpen);
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) closeMobileNav();
+      });
+    })();
   </script>
 </body>
 </html>

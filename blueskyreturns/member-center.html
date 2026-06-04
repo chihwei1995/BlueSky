@@ -110,6 +110,21 @@
       color: var(--muted);
       font-size: 0.84rem;
     }
+    .nav-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .nav-mobile-tools {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     .nav-actions {
       display: flex;
@@ -142,6 +157,13 @@
       background: linear-gradient(135deg, var(--blue), var(--teal));
       color: #fff;
       box-shadow: 0 8px 18px rgba(11, 92, 171, 0.18);
+    }
+    .nav-toggle {
+      display: none;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--blue);
+      box-shadow: none;
     }
 
     .pill,
@@ -743,6 +765,22 @@
       .shell {
         padding: 0 16px;
       }
+      .brand-copy span { display: none; }
+      .nav-mobile-tools { display: flex; }
+      .nav-toggle { display: inline-flex; }
+      .nav-actions {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 10px;
+      }
+      header.nav-open .nav-actions { display: flex; }
+      .nav-actions .pill,
+      .nav-actions button {
+        width: 100%;
+      }
+      .nav-actions .lang-toggle { display: none; }
 
       .hero,
       .panel {
@@ -760,14 +798,23 @@
 <body>
   <header>
     <div class="shell nav">
-      <div class="brand">
-        <img src="../Enter.PNG" alt="JCI Peninsula logo" />
-        <div class="brand-copy">
-          <strong id="brandTitle">Blue Sky Returns</strong>
-          <span id="brandSubtitle">氣候行動者中心 / Member Center</span>
+      <div class="nav-primary">
+        <div class="brand">
+          <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+          <div class="brand-copy">
+            <strong id="brandTitle">Blue Sky Returns</strong>
+            <span id="brandSubtitle">氣候行動者中心 / Member Center</span>
+          </div>
+        </div>
+        <div class="nav-mobile-tools">
+          <div class="lang-toggle" role="group" aria-label="Language switcher">
+            <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
         </div>
       </div>
-      <div class="nav-actions">
+      <div id="navActions" class="nav-actions">
         <a id="navMain" class="pill" href="../index.html">Main Globe</a>
         <a id="navAbout" class="pill" href="./index.html">About</a>
         <a id="navMember" class="pill active" href="./member-center.html">Member Center</a>
@@ -2869,6 +2916,27 @@
     applyLanguage(currentLang);
     updateInviteModeUi();
     resetSummary();
+  </script>
+  <script>
+    (() => {
+      const header = document.querySelector("header");
+      const navActions = document.getElementById("navActions");
+      const navToggleBtn = document.getElementById("navToggleBtn");
+      if (!header || !navActions || !navToggleBtn) return;
+      const closeMobileNav = () => {
+        header.classList.remove("nav-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+      };
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = !header.classList.contains("nav-open");
+        header.classList.toggle("nav-open", isOpen);
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+      navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 640) closeMobileNav();
+      });
+    })();
   </script>
 </body>
 </html>
