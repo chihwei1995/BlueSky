@@ -68,6 +68,10 @@
       border-bottom: 1px solid rgba(216, 231, 221, 0.96);
     }
 
+    body[data-screen="intro"] header {
+      display: none !important;
+    }
+
     .shell {
       max-width: 1200px;
       margin: 0 auto;
@@ -271,10 +275,6 @@
       margin-bottom: 18px;
     }
 
-    .mobile-lang-toggle {
-      display: none;
-    }
-
     .mobile-nav-card {
       padding: 14px;
     }
@@ -433,24 +433,35 @@
     }
 
     .intro-video-actions {
-      display: contents;
-    }
-
-    .intro-start-btn {
       position: absolute;
-      left: 49.5%;
+      left: 50%;
       top: 61.5%;
       transform: translate(-50%, -50%);
       pointer-events: auto;
-      width: clamp(180px, 26vw, 300px);
-      height: clamp(96px, 13vw, 150px);
-      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 2;
+    }
+
+    .intro-start-btn {
+      position: relative;
+      width: clamp(148px, 18vw, 220px);
+      height: clamp(64px, 8.5vw, 92px);
+      padding: 0 18px;
       background: transparent;
       border: none;
       box-shadow: none;
-      color: transparent;
-      font-size: 0;
-      z-index: 2;
+      color: rgba(255, 255, 255, 0.97);
+      font-size: clamp(1.18rem, 1.8vw, 1.7rem);
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      text-transform: none;
+      text-shadow:
+        0 4px 18px rgba(0, 0, 0, 0.34),
+        0 0 24px rgba(208, 255, 233, 0.24);
+      transition: transform 0.22s ease, text-shadow 0.22s ease, opacity 0.22s ease;
     }
 
     .intro-start-btn::before {
@@ -483,6 +494,14 @@
     .intro-start-btn:focus-visible::after {
       opacity: 1;
       transform: scale(1);
+    }
+
+    .intro-start-btn:hover,
+    .intro-start-btn:focus-visible {
+      transform: scale(1.03);
+      text-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(218, 255, 240, 0.42);
     }
 
     .intro-start-btn:focus-visible {
@@ -1695,21 +1714,6 @@
         padding: 0 16px;
       }
 
-      .mobile-lang-toggle {
-        position: fixed;
-        top: 12px;
-        right: 14px;
-        z-index: 80;
-        display: inline-flex;
-        gap: 6px;
-        padding: 5px;
-        border: 1px solid rgba(216, 231, 221, 0.96);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(14px);
-        box-shadow: 0 12px 24px rgba(21, 49, 38, 0.12);
-      }
-
       .intro-video-hero {
         min-height: 68vh;
         border-radius: 24px;
@@ -1724,13 +1728,17 @@
       }
 
       .intro-video-actions {
-        display: contents;
+        top: auto;
+        bottom: 24px;
+        width: calc(100% - 36px);
+        transform: translateX(-50%);
+        gap: 10px;
       }
 
       .intro-start-btn {
-        top: 60%;
-        width: min(56vw, 240px);
-        height: min(21vw, 118px);
+        width: 100%;
+        height: 58px;
+        font-size: 1.1rem;
       }
 
       .result-activity-float {
@@ -1850,11 +1858,6 @@
     </div>
   </header>
 
-  <div class="lang-toggle mobile-lang-toggle" role="group" aria-label="Mobile language switcher">
-    <button class="lang-btn active" type="button" data-lang="zh">中文</button>
-    <button class="lang-btn" type="button" data-lang="en">EN</button>
-  </div>
-
   <main>
     <div class="shell">
       <div class="layout">
@@ -1867,7 +1870,8 @@
               <div class="intro-video-overlay">
                 <div class="intro-video-content">
                   <div class="intro-video-actions">
-                    <button id="startQuizBtn" class="intro-start-btn" type="button">START</button>
+                    <button id="startQuizEnBtn" class="intro-start-btn" type="button">Start</button>
+                    <button id="startQuizZhBtn" class="intro-start-btn" type="button">開始</button>
                   </div>
                 </div>
               </div>
@@ -1876,7 +1880,6 @@
           </section>
 
           <section id="quizScreen" class="flow-screen panel quiz-panel" hidden>
-            </div>
             <form id="quizForm">
               <div class="question-stage">
                 <div id="questionStageCard" class="question-stage-card"></div>
@@ -2747,7 +2750,8 @@
     const quizScreen = document.getElementById("quizScreen");
     const registerScreen = document.getElementById("registerScreen");
     const resultScreen = document.getElementById("resultScreen");
-    const startQuizBtn = document.getElementById("startQuizBtn");
+    const startQuizEnBtn = document.getElementById("startQuizEnBtn");
+    const startQuizZhBtn = document.getElementById("startQuizZhBtn");
     const quizForm = document.getElementById("quizForm");
     const questionIndexLabel = document.getElementById("questionIndexLabel");
     const questionStageCard = document.getElementById("questionStageCard");
@@ -2857,6 +2861,7 @@
 
     const setScreen = (screen) => {
       currentScreen = screen;
+      document.body.dataset.screen = screen;
       introScreen.hidden = screen !== "intro";
       quizScreen.hidden = screen !== "quiz";
       registerScreen.hidden = screen !== "register";
@@ -2967,9 +2972,11 @@
       if (!question) return;
       questionStageCard.innerHTML = "";
       questionStageCard.appendChild(createQuestionCard(question));
-      questionIndexLabel.textContent = currentLang === "zh"
-        ? `第 ${currentQuestionIndex + 1} / ${QUESTIONS.length} 題`
-        : `Question ${currentQuestionIndex + 1} / ${QUESTIONS.length}`;
+      if (questionIndexLabel) {
+        questionIndexLabel.textContent = currentLang === "zh"
+          ? `第 ${currentQuestionIndex + 1} / ${QUESTIONS.length} 題`
+          : `Question ${currentQuestionIndex + 1} / ${QUESTIONS.length}`;
+      }
       updateProgress();
     };
 
@@ -3355,7 +3362,14 @@
       renderCurrentQuestion();
     };
 
-    startQuizBtn.addEventListener("click", () => {
+    startQuizEnBtn.addEventListener("click", () => {
+      applyLanguage("en");
+      setScreen("quiz");
+      renderCurrentQuestion();
+    });
+
+    startQuizZhBtn.addEventListener("click", () => {
+      applyLanguage("zh");
       setScreen("quiz");
       renderCurrentQuestion();
     });
