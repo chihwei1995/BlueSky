@@ -603,8 +603,107 @@
       font-size: 0.85rem;
     }
 
+    .flow-shell {
+      position: relative;
+      min-height: min(78vh, 980px);
+      display: grid;
+    }
+
+    .flow-screen {
+      min-height: 100%;
+      display: grid;
+      align-content: start;
+      gap: 18px;
+      animation: screenFade 0.28s ease;
+    }
+
+    .flow-screen[hidden] {
+      display: none !important;
+    }
+
+    .intro-screen {
+      gap: 22px;
+    }
+
+    .intro-guide {
+      display: grid;
+      gap: 14px;
+      padding: 20px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(243, 248, 245, 0.94));
+    }
+
+    .intro-guide-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .intro-guide-item {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(248, 252, 249, 0.96);
+      border: 1px solid rgba(21, 49, 38, 0.08);
+    }
+
+    .intro-guide-item strong {
+      font-size: 1rem;
+    }
+
     .quiz-panel {
       gap: 22px;
+    }
+
+    .register-panel {
+      gap: 20px;
+    }
+
+    .register-card {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(241,248,244,0.94));
+    }
+
+    .register-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .register-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .register-note {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .terms-check {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .terms-check input {
+      margin-top: 3px;
+      flex: none;
+    }
+
+    .terms-check a {
+      color: var(--forest-deep);
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
 
     .progress-bar {
@@ -633,13 +732,103 @@
       align-items: center;
     }
 
-    .question-list {
+    .question-stage {
       display: grid;
-      gap: 16px;
+      gap: 18px;
+    }
+
+    .question-stage-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .question-stage-head h2 {
+      margin: 0;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+    }
+
+    .question-stage-card {
+      min-height: 360px;
+      display: grid;
+      align-content: start;
     }
 
     .question-card {
+      position: relative;
       gap: 14px;
+      overflow: hidden;
+      border: 3px solid #17392e;
+      border-radius: 28px;
+      padding: 24px 22px 22px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 208, 104, 0.2) 0 10px, transparent 11px),
+        radial-gradient(circle at 86% 14%, rgba(42, 166, 181, 0.16) 0 8px, transparent 9px),
+        radial-gradient(circle at 82% 82%, rgba(27, 122, 85, 0.12) 0 12px, transparent 13px),
+        linear-gradient(180deg, #fffdf6 0%, #f2fbf4 100%);
+      box-shadow: 10px 10px 0 rgba(23, 57, 46, 0.12);
+    }
+
+    .question-card::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 2px dashed rgba(23, 57, 46, 0.14);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .question-card::after {
+      content: "";
+      position: absolute;
+      left: 58px;
+      bottom: -16px;
+      width: 28px;
+      height: 28px;
+      background: #fff8ea;
+      border-right: 3px solid #17392e;
+      border-bottom: 3px solid #17392e;
+      transform: rotate(35deg);
+      border-bottom-right-radius: 8px;
+    }
+
+    .question-card[data-dimension="energy"] {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 208, 104, 0.2) 0 10px, transparent 11px),
+        radial-gradient(circle at 86% 14%, rgba(42, 166, 181, 0.18) 0 8px, transparent 9px),
+        linear-gradient(180deg, #fffdf6 0%, #eefbf9 100%);
+    }
+
+    .question-card[data-dimension="info"] {
+      background:
+        radial-gradient(circle at 18% 82%, rgba(199, 216, 62, 0.16) 0 11px, transparent 12px),
+        radial-gradient(circle at 86% 12%, rgba(42, 166, 181, 0.14) 0 8px, transparent 9px),
+        linear-gradient(180deg, #fffef6 0%, #f7fbeb 100%);
+    }
+
+    .question-card[data-dimension="decision"] {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 197, 92, 0.18) 0 10px, transparent 11px),
+        radial-gradient(circle at 84% 78%, rgba(231, 140, 96, 0.14) 0 12px, transparent 13px),
+        linear-gradient(180deg, #fff9f2 0%, #fdf4e8 100%);
+    }
+
+    .question-card[data-dimension="lifestyle"] {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(98, 191, 115, 0.16) 0 10px, transparent 11px),
+        radial-gradient(circle at 84% 18%, rgba(42, 166, 181, 0.12) 0 8px, transparent 9px),
+        linear-gradient(180deg, #f9fff9 0%, #edf9f1 100%);
+    }
+
+    .question-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.72fr);
+      gap: 18px;
+      align-items: start;
+      position: relative;
+      z-index: 1;
     }
 
     .question-top {
@@ -648,16 +837,33 @@
       align-items: flex-start;
     }
 
+    .question-sticker {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      z-index: 1;
+      padding: 7px 12px;
+      border: 2px solid #17392e;
+      border-radius: 999px;
+      background: #ffec8f;
+      color: #17392e;
+      font-weight: 900;
+      font-size: 0.84rem;
+      transform: rotate(8deg);
+      box-shadow: 4px 5px 0 rgba(23, 57, 46, 0.12);
+    }
+
     .question-number {
       flex: 0 0 auto;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
+      width: 54px;
+      height: 54px;
+      clip-path: polygon(50% 0%, 62% 18%, 82% 8%, 78% 30%, 100% 50%, 78% 68%, 84% 92%, 61% 82%, 50% 100%, 38% 82%, 16% 92%, 22% 68%, 0% 50%, 22% 30%, 18% 8%, 39% 18%);
       display: grid;
       place-items: center;
       background: linear-gradient(135deg, var(--gold), #f1cf6f);
       color: #5b4100;
       font-weight: 900;
+      border: 2px solid #7a5700;
       box-shadow: 0 10px 20px rgba(215, 167, 45, 0.18);
     }
 
@@ -665,28 +871,77 @@
       display: grid;
       gap: 4px;
       min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .question-copy h3 {
+      font-size: clamp(1.28rem, 2vw, 1.65rem);
+      line-height: 1.35;
+    }
+
+    .question-illustration {
+      position: relative;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 2px solid rgba(23, 57, 46, 0.14);
+      box-shadow: 0 12px 24px rgba(23, 57, 46, 0.08);
+      transform: rotate(1.6deg);
+    }
+
+    .question-illustration::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed rgba(23, 57, 46, 0.14);
+      border-radius: 18px;
+      pointer-events: none;
+    }
+
+    .question-illustration img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 341 / 384;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 2px solid #17392e;
+      background: #eef5ef;
     }
 
     .question-options {
       display: grid;
-      gap: 10px;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
     }
 
     .choice {
+      position: relative;
       display: grid;
       gap: 8px;
-      padding: 14px 15px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(248, 252, 249, 0.9);
+      padding: 16px 16px 16px 18px;
+      border: 2px solid rgba(23, 57, 46, 0.16);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.94);
       cursor: pointer;
       transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
 
     .choice:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px) rotate(-0.4deg);
       border-color: rgba(27, 122, 85, 0.35);
-      box-shadow: 0 10px 24px rgba(27, 122, 85, 0.08);
+      box-shadow: 0 12px 24px rgba(27, 122, 85, 0.08);
+    }
+
+    .choice::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px dashed rgba(23, 57, 46, 0.1);
+      border-radius: 14px;
+      pointer-events: none;
     }
 
     .choice input {
@@ -698,7 +953,8 @@
     .choice.active {
       border-color: rgba(27, 122, 85, 0.55);
       background: rgba(230, 248, 238, 0.95);
-      box-shadow: 0 12px 24px rgba(27, 122, 85, 0.1);
+      box-shadow: 0 14px 28px rgba(27, 122, 85, 0.12);
+      transform: translateY(-1px) rotate(0.4deg);
     }
 
     .choice-head {
@@ -710,8 +966,14 @@
     }
 
     .choice-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #17392e;
+      color: #fff9e8;
       font-weight: 800;
-      color: var(--forest-deep);
+      letter-spacing: 0.03em;
     }
 
     .choice-trait {
@@ -730,12 +992,31 @@
       align-items: center;
     }
 
+    .quiz-actions.between {
+      justify-content: space-between;
+    }
+
+    .quiz-actions.between .status {
+      margin-left: auto;
+    }
+
     .status {
       font-weight: 700;
     }
 
     .status.warn { color: var(--warn); }
     .status.ok { color: var(--ok); }
+
+    @keyframes screenFade {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     .auth-cta-card {
       display: grid;
@@ -768,6 +1049,16 @@
       display: grid;
       gap: 6px;
       min-width: 0;
+    }
+
+    .auth-field input {
+      width: 100%;
+      border: 1px solid rgba(21, 49, 38, 0.14);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.96);
+      color: var(--ink);
+      font: inherit;
     }
 
     .auth-field span {
@@ -1179,14 +1470,34 @@
 
       .progress-head,
       .question-top,
-      .type-row-head {
+      .type-row-head,
+      .question-stage-head {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .question-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .register-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .question-illustration {
+        max-width: 280px;
+        width: 100%;
+        justify-self: center;
+        transform: rotate(0.8deg);
       }
 
       .result-name-en,
       .side-link small {
         font-size: 0.9rem;
+      }
+
+      .intro-guide-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1215,108 +1526,139 @@
   <main>
     <div class="shell">
       <div class="layout">
-        <div class="stack">
-          <section class="hero panel">
-            <div class="hero-copy">
-              <div class="eyebrow" data-i18n="hero.eyebrow">Interactive Sustainability Personality</div>
-              <h1 data-i18n="hero.title">環保 MBTI / Eco-MBTI</h1>
-              <p data-i18n="hero.body">用 12 題快速找到你的 Climate Type。</p>
-              <div class="hero-quick-actions">
-                <span class="quick-chip" data-i18n="hero.chip1">12 題快測</span>
-                <span class="quick-chip" data-i18n="hero.chip2">先測後註冊</span>
-                <span class="quick-chip" data-i18n="hero.chip3">立即出結果</span>
+        <div class="stack flow-shell">
+          <section id="introScreen" class="flow-screen intro-screen">
+            <section class="hero panel">
+              <div class="hero-copy">
+                <div class="eyebrow" data-i18n="hero.eyebrow">Interactive Sustainability Personality</div>
+                <h1 data-i18n="hero.title">環保 MBTI / Eco-MBTI</h1>
+                <p data-i18n="hero.body">用 12 題快速找到你的 Climate Type。</p>
+                <div class="hero-quick-actions">
+                  <span class="quick-chip" data-i18n="hero.chip1">12 題快測</span>
+                  <span class="quick-chip" data-i18n="hero.chip2">先測後註冊</span>
+                  <span class="quick-chip" data-i18n="hero.chip3">立即出結果</span>
+                </div>
+                <div class="hero-actions">
+                  <button id="startQuizBtn" class="button primary" type="button" data-i18n="hero.primary">開始 12 題測驗</button>
+                </div>
               </div>
-              <div class="hero-actions">
-                <a class="button primary" href="#quiz" data-i18n="hero.primary">開始 12 題測驗</a>
-                <a class="button" href="#guide" data-i18n="hero.secondary">看簡短說明</a>
+              <div class="hero-art">
+                <div class="hero-orbit" aria-hidden="true">
+                  <div class="orbit-core"></div>
+                  <div class="trait-node energy" data-i18n-html="hero.nodeEnergy">能量<br>E / I</div>
+                  <div class="trait-node info" data-i18n-html="hero.nodeInfo">資訊<br>S / N</div>
+                  <div class="trait-node decision" data-i18n-html="hero.nodeDecision">決策<br>T / F</div>
+                  <div class="trait-node lifestyle" data-i18n-html="hero.nodeLifestyle">執行<br>J / P</div>
+                </div>
+                <div class="hero-note">
+                  <strong data-i18n="hero.noteTitle">12 questions, 4 letters, 1 climate action style.</strong>
+                  <span data-i18n="hero.noteBody">選最像你的答案，完成後立即看到結果。</span>
+                </div>
               </div>
-            </div>
-            <div class="hero-art">
-              <div class="hero-orbit" aria-hidden="true">
-                <div class="orbit-core"></div>
-                <div class="trait-node energy" data-i18n-html="hero.nodeEnergy">能量<br>E / I</div>
-                <div class="trait-node info" data-i18n-html="hero.nodeInfo">資訊<br>S / N</div>
-                <div class="trait-node decision" data-i18n-html="hero.nodeDecision">決策<br>T / F</div>
-                <div class="trait-node lifestyle" data-i18n-html="hero.nodeLifestyle">執行<br>J / P</div>
+            </section>
+
+            <section class="panel intro-guide">
+              <div class="section-head">
+                <h2 data-i18n="guide.title">測驗怎麼看 / Quick Guide</h2>
+                <p data-i18n="guide.body">四組字母、12 題直覺選擇，最後會得到你的 Eco-MBTI 類型。</p>
               </div>
-              <div class="hero-note">
-                <strong data-i18n="hero.noteTitle">12 questions, 4 letters, 1 climate action style.</strong>
-                <span data-i18n="hero.noteBody">選最像你的答案，完成後立即看到結果。</span>
+              <div class="intro-guide-grid">
+                <article class="intro-guide-item">
+                  <span class="framework-badge energy" data-i18n="framework.energy.badge">能量來源 / Energy</span>
+                  <strong data-i18n="framework.energy.title">E 社群倡議 vs. I 個人實踐</strong>
+                  <p data-i18n="letters.energy.e">E 社群倡議</p>
+                  <p data-i18n="letters.energy.i">I 個人實踐</p>
+                </article>
+                <article class="intro-guide-item">
+                  <span class="framework-badge info" data-i18n="framework.info.badge">資訊處理 / Information</span>
+                  <strong data-i18n="framework.info.title">S 務實行動 vs. N 系統創新</strong>
+                  <p data-i18n="letters.info.s">S 務實行動</p>
+                  <p data-i18n="letters.info.n">N 系統創新</p>
+                </article>
+                <article class="intro-guide-item">
+                  <span class="framework-badge decision" data-i18n="framework.decision.badge">決策依據 / Decision</span>
+                  <strong data-i18n="framework.decision.title">T 數據驅動 vs. F 情感共鳴</strong>
+                  <p data-i18n="letters.decision.t">T 數據驅動</p>
+                  <p data-i18n="letters.decision.f">F 情感共鳴</p>
+                </article>
+                <article class="intro-guide-item">
+                  <span class="framework-badge lifestyle" data-i18n="framework.lifestyle.badge">執行方式 / Lifestyle</span>
+                  <strong data-i18n="framework.lifestyle.title">J 嚴謹規劃 vs. P 彈性適應</strong>
+                  <p data-i18n="letters.lifestyle.j">J 嚴謹規劃</p>
+                  <p data-i18n="letters.lifestyle.p">P 彈性適應</p>
+                </article>
               </div>
-            </div>
+            </section>
           </section>
 
-          <section id="quiz" class="panel quiz-panel">
+          <section id="quizScreen" class="flow-screen panel quiz-panel" hidden>
             <div class="section-head">
               <h2 data-i18n="quiz.title">12 題環保 MBTI 測驗 / 12-Question Eco-MBTI Quiz</h2>
               <p data-i18n="quiz.body">依直覺作答即可。</p>
             </div>
             <div class="progress-head">
               <div class="small-badge" id="progressLabel" data-i18n="quiz.progress">已完成 0 / 12 題</div>
-              <div class="small-badge" data-i18n="quiz.tip">所有題目都選完後，就會解鎖專屬結果卡。</div>
+              <div class="small-badge" id="questionIndexLabel">第 1 / 12 題</div>
             </div>
             <div class="progress-bar" aria-hidden="true">
               <div id="progressFill" class="progress-fill"></div>
             </div>
             <form id="quizForm">
-              <div id="questionList" class="question-list"></div>
-              <div class="quiz-actions">
-                <button id="submitQuizBtn" class="primary" type="submit" data-i18n="quiz.submit">查看我的 Eco-MBTI</button>
-                <button id="resetQuizBtn" type="button" data-i18n="quiz.reset">重新作答</button>
+              <div class="question-stage">
+                <div class="question-stage-head">
+                  <h2 id="questionStageTitle" data-i18n="quiz.stageTitle">目前題目</h2>
+                  <div class="small-badge" id="questionDimensionLabel">-</div>
+                </div>
+                <div id="questionStageCard" class="question-stage-card"></div>
+              </div>
+              <div class="quiz-actions between">
+                <div class="quiz-actions">
+                  <button id="prevQuestionBtn" type="button" data-i18n="quiz.prev">上一題</button>
+                  <button id="nextQuestionBtn" class="primary" type="button" data-i18n="quiz.next">下一題</button>
+                  <button id="resetQuizBtn" type="button" data-i18n="quiz.reset">重新作答</button>
+                </div>
                 <span id="quizStatus" class="status" aria-live="polite"></span>
               </div>
             </form>
           </section>
 
-          <details id="guide" class="panel fold-panel">
-            <summary data-i18n="guide.summary">先看簡短說明</summary>
-            <div class="fold-content">
-              <section id="framework" class="section-head">
-                <h2 data-i18n="framework.title">四大核心維度 / The Four Core Dimensions</h2>
-                <p data-i18n="framework.body">四個維度，快速看懂你的行動傾向。</p>
-              </section>
-              <div class="framework-grid">
-                <article class="framework-card">
-                  <span class="framework-badge energy" data-i18n="framework.energy.badge">能量來源 / Energy</span>
-                  <h3 data-i18n="framework.energy.title">E 社群倡議 vs. I 個人實踐</h3>
-                  <p data-i18n="framework.energy.body">你更習慣在群體中號召、連結與推廣，還是從自己的生活細節開始落實低碳選擇，並用穩定實踐來影響他人？</p>
-                  <div class="dimension-letters">
-                    <span class="letter-chip" data-i18n="letters.energy.e">E 社群倡議</span>
-                    <span class="letter-chip" data-i18n="letters.energy.i">I 個人實踐</span>
-                  </div>
-                </article>
-                <article class="framework-card">
-                  <span class="framework-badge info" data-i18n="framework.info.badge">資訊處理 / Information</span>
-                  <h3 data-i18n="framework.info.title">S 務實行動 vs. N 系統創新</h3>
-                  <p data-i18n="framework.info.body">你更重視看得見、立刻可做的環保任務，還是更傾向思考底層結構、未來系統與跨領域創新解方？</p>
-                  <div class="dimension-letters">
-                    <span class="letter-chip" data-i18n="letters.info.s">S 務實行動</span>
-                    <span class="letter-chip" data-i18n="letters.info.n">N 系統創新</span>
-                  </div>
-                </article>
-                <article class="framework-card">
-                  <span class="framework-badge decision" data-i18n="framework.decision.badge">決策依據 / Decision</span>
-                  <h3 data-i18n="framework.decision.title">T 數據驅動 vs. F 情感共鳴</h3>
-                  <p data-i18n="framework.decision.body">你做環保決策時，是更依賴科學數據、效率與結構，還是更容易被生態關懷、人的故事與代際責任所推動？</p>
-                  <div class="dimension-letters">
-                    <span class="letter-chip" data-i18n="letters.decision.t">T 數據驅動</span>
-                    <span class="letter-chip" data-i18n="letters.decision.f">F 情感共鳴</span>
-                  </div>
-                </article>
-                <article class="framework-card">
-                  <span class="framework-badge lifestyle" data-i18n="framework.lifestyle.badge">執行方式 / Lifestyle</span>
-                  <h3 data-i18n="framework.lifestyle.title">J 嚴謹規劃 vs. P 彈性適應</h3>
-                  <p data-i18n="framework.lifestyle.body">你的永續行動是偏向目標導向、紀律執行，還是更喜歡在現場隨機應變，以彈性與創意維持環保習慣？</p>
-                  <div class="dimension-letters">
-                    <span class="letter-chip" data-i18n="letters.lifestyle.j">J 嚴謹規劃</span>
-                    <span class="letter-chip" data-i18n="letters.lifestyle.p">P 彈性適應</span>
-                  </div>
-                </article>
-              </div>
+          <section id="registerScreen" class="flow-screen panel register-panel" hidden>
+            <div class="section-head">
+              <h2 data-i18n="gate.title">填寫 Email 與暱稱，解鎖結果</h2>
+              <p data-i18n="gate.body">完成登記後，就會顯示你的 Eco-MBTI 結果。</p>
             </div>
-          </details>
+            <div class="register-card">
+              <p class="register-note" data-i18n="gate.note">我們會保存你的測驗結果與基本資料，方便之後回來直接查看。</p>
+              <form id="gateForm" class="register-form">
+                <div class="register-grid">
+                  <label class="auth-field">
+                    <span data-i18n="gate.email">Email</span>
+                    <input id="gateEmailInput" type="email" autocomplete="email" required />
+                  </label>
+                  <label class="auth-field">
+                    <span data-i18n="gate.nickname">暱稱</span>
+                    <input id="gateNicknameInput" type="text" autocomplete="nickname" maxlength="40" required />
+                  </label>
+                  <label class="auth-field">
+                    <span data-i18n="gate.password">密碼</span>
+                    <input id="gatePasswordInput" type="password" autocomplete="new-password" minlength="6" required />
+                  </label>
+                </div>
+                <label class="terms-check">
+                  <input id="gateTermsInput" type="checkbox" required />
+                  <span data-i18n-html="gate.terms">我已閱讀並同意<a href=\"./privacy-terms.html\" target=\"_blank\" rel=\"noopener\">條款與隱私政策</a></span>
+                </label>
+                <div class="quiz-actions">
+                  <button id="gateSubmitBtn" class="primary" type="submit" data-i18n="gate.submit">註冊並查看結果</button>
+                  <button id="gateBackBtn" type="button" data-i18n="quiz.prev">上一題</button>
+                  <span id="gateStatus" class="status" aria-live="polite"></span>
+                </div>
+              </form>
+            </div>
+          </section>
 
-          <section id="resultPanel" class="panel" hidden>
+          <section id="resultScreen" class="flow-screen" hidden>
+            <section id="resultPanel" class="panel">
             <div class="section-head">
               <h2 data-i18n="result.title">你的結果 / Your Result</h2>
               <p data-i18n="result.body">這是你最自然的氣候行動風格。</p>
@@ -1371,41 +1713,22 @@
                 <strong data-i18n="result.ruleTitle">集氣規則 / Participation Boost</strong>
                 <p data-i18n="result.ruleBody">完成 Eco-MBTI 後，登入會員並完成今天的一個行動，才會開始累積集氣與 Daily Green Actions 紀錄；若有人透過你的 MBTI 分享註冊成為氣候行動者，你也會增加一次分享加成。</p>
               </div>
-              <div id="resultStateCard" class="result-state-card" hidden>
-                <strong id="resultStateTitle">-</strong>
-                <p id="resultStateBody">-</p>
-              </div>
-              <div id="authCtaCard" class="auth-cta-card" hidden>
-                <div class="auth-cta-head">
-                  <strong data-i18n="result.authTitle">先用 Email 開始</strong>
-                  <p data-i18n="result.authBody">未註冊前，結果不會開始累積集氣，也不能正式記錄今天的行動。</p>
-                </div>
-                <form id="authInlineForm" class="auth-inline-form">
-                  <label class="auth-field">
-                    <span data-i18n="result.authEmail">Email</span>
-                    <input id="authEmailInput" type="email" autocomplete="email" required />
-                  </label>
-                  <label class="auth-field">
-                    <span data-i18n="result.authPassword">密碼</span>
-                    <input id="authPasswordInput" type="password" autocomplete="new-password" minlength="6" required />
-                  </label>
-                  <button id="authInlineSubmit" class="primary" type="submit" data-i18n="result.authSubmit">註冊後做今天的行動</button>
-                </form>
-                <p class="auth-cta-note" data-i18n="result.authNote">只要 Email 和密碼即可開始，系統會同步保存你的 Eco-MBTI。</p>
-              </div>
               <div class="quiz-actions result-main-action">
-                <a id="dailyActionLink" class="button primary" href="./green-action-7day.html" data-i18n="result.step" hidden>做今天的一個行動</a>
+                <button id="sharePrimaryBtn" class="primary" type="button" data-i18n="result.sharePrimary">分享結果</button>
+                <a id="dailyActionLink" class="button" href="./green-action-7day.html" data-i18n="result.daily">參與每日</a>
                 <span id="shareStatus" class="status" aria-live="polite"></span>
               </div>
               <details class="share-more">
                 <summary data-i18n="result.more">更多結果選項</summary>
                 <div class="quiz-actions share-more-actions">
+                  <button id="retakeQuizBtn" type="button" data-i18n="quiz.reset">重新作答</button>
                   <button id="copyResultBtn" type="button" data-i18n="result.copy">複製結果文案</button>
                   <button id="shareResultBtn" type="button" data-i18n="result.shareImage">分享附圖結果</button>
                   <button id="downloadCardBtn" type="button" data-i18n="result.download">下載 PNG 角色卡</button>
                 </div>
               </details>
             </div>
+            </section>
           </section>
         </div>
       </div>
@@ -1417,7 +1740,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
-    import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
@@ -1439,19 +1762,15 @@
     const db = getFirestore(app, "default");
 
     const LANG_STORAGE_KEY = "bsr_lang";
+    const RESULT_STORAGE_KEY = "bsr_eco_mbti_result";
     const sanitizeReferralUid = (value) => {
       const trimmed = String(value || "").trim();
       return /^[A-Za-z0-9_-]{10,128}$/.test(trimmed) ? trimmed : "";
     };
     const referralUid = sanitizeReferralUid(new URLSearchParams(window.location.search).get("ref"));
-    const buildMbtiInviteUrl = (shareUid = auth.currentUser?.uid) => {
+    const buildMbtiInviteUrl = () => {
       const url = new URL("./eco-mbti.html", window.location.href);
-      const safeUid = sanitizeReferralUid(shareUid);
-      if (safeUid) {
-        url.searchParams.set("ref", safeUid);
-      } else {
-        url.searchParams.delete("ref");
-      }
+      url.searchParams.delete("ref");
       return url.toString();
     };
     const QUESTION_BANK = [
@@ -1881,7 +2200,27 @@
           noteBody: "選最像你的答案，完成後立即看到結果。"
         },
         guide: {
-          summary: "先看簡短說明"
+          summary: "先看簡短說明",
+          title: "測驗怎麼看 / Quick Guide",
+          body: "四組字母、12 題直覺選擇，最後會得到你的 Eco-MBTI 類型。"
+        },
+        gate: {
+          title: "填寫 Email 與暱稱，解鎖結果",
+          body: "完成登記後，就會顯示你的 Eco-MBTI 結果。",
+          note: "我們會保存你的測驗結果與基本資料，方便之後回來直接查看。",
+          email: "Email",
+          nickname: "暱稱",
+          password: "密碼",
+          terms: "我已閱讀並同意<a href=\"./privacy-terms.html\" target=\"_blank\" rel=\"noopener\">條款與隱私政策</a>",
+          submit: "註冊並查看結果",
+          invalid: "請輸入有效 Email、暱稱與至少 6 碼密碼。",
+          termsRequired: "請先勾選同意條款與隱私政策。",
+          submitting: "正在保存資料並解鎖結果...",
+          success: "已完成登記，正在顯示你的結果。",
+          failed: "資料保存失敗，請稍後再試。",
+          signingIn: "這個 Email 已存在，正在幫你登入...",
+          wrongPassword: "這個 Email 已註冊，請輸入正確密碼。",
+          weakPassword: "密碼至少需要 6 碼。"
         },
         framework: {
           title: "四大核心維度 / The Four Core Dimensions",
@@ -1905,9 +2244,13 @@
           progress: "已完成 0 / 12 題",
           tip: "所有題目都選完後，就會解鎖專屬結果卡。",
           submit: "查看我的 Eco-MBTI",
+          stageTitle: "目前題目",
+          prev: "上一題",
+          next: "下一題",
           reset: "重新作答",
           missing: "還有題目尚未作答，請先完成全部 12 題。",
           ready: "已完成，往下查看你的結果。",
+          moving: "已記錄答案，前往下一題...",
           optionA: "選項 A",
           optionB: "選項 B"
         },
@@ -1922,33 +2265,18 @@
           actionHeadline: "行動方向",
           shareTitle: "分享你的結果 / Share Your Result",
           shareBody: "下載或分享你的結果卡。",
-          ruleTitle: "集氣規則 / Participation Boost",
-          ruleBody: "完成 Eco-MBTI 後，登入會員並完成今天的一個行動，才會開始累積集氣與 Daily Green Actions 紀錄；若有人透過你的 MBTI 分享註冊成為氣候行動者，你也會增加一次分享加成。",
-          stateLoggedOutTitle: "你還沒登入",
-          stateLoggedOutBody: "先用 Email 開始，系統才會保存你的 Eco-MBTI，並開始累積集氣與今天的行動紀錄。",
-          stateLoggedInTitle: "你已登入",
-          stateLoggedInBody: "你的 Eco-MBTI 結果會保存到會員資料。現在可以直接去做今天的一個行動。",
-          authTitle: "先用 Email 開始",
-          authBody: "未註冊前，結果不會開始累積集氣，也不能正式記錄今天的行動。",
-          authEmail: "Email",
-          authPassword: "密碼",
-          authSubmit: "註冊後做今天的行動",
-          authNote: "只要 Email 和密碼即可開始，系統會同步保存你的 Eco-MBTI。",
+          ruleTitle: "結果保存 / Result Saved",
+          ruleBody: "完成登記後，系統會保存你的 Email、暱稱與 Eco-MBTI 結果，之後回來可以直接查看與分享。",
+          sharePrimary: "分享結果",
+          daily: "參與每日",
           more: "更多結果選項",
           copy: "複製結果文案",
           shareImage: "分享附圖結果",
           download: "下載 PNG 角色卡",
-          step: "做今天的一個行動",
           copied: "結果文案已複製。",
           shared: "已開啟附圖分享。",
           shareUnsupported: "這個瀏覽器目前不支援附圖分享，已為你下載 PNG 角色卡。",
-          saved: "已同步儲存到你的會員資料。",
-          authReady: "已登入，現在可以開始今天的行動。",
-          authCreated: "已完成註冊，正在帶你去做今天的行動。",
-          authSigningIn: "這個 Email 已存在，正在幫你登入。",
-          authFailed: "註冊失敗，請稍後再試。",
-          authWrongPassword: "這個 Email 已註冊，請改用正確密碼登入。",
-          authInvalid: "請輸入有效的 Email 與至少 6 碼密碼。",
+          saved: "已保存你的 Eco-MBTI 結果。",
           downloaded: "PNG 角色卡已下載。",
           copiedFallback: "請手動複製下方結果。",
           typeLabel: "你的 Eco-MBTI",
@@ -1994,7 +2322,27 @@
           noteBody: "Choose what feels most like you and get your result right away."
         },
         guide: {
-          summary: "See the quick guide"
+          summary: "See the quick guide",
+          title: "How It Works / Quick Guide",
+          body: "Four letter pairs, 12 instinctive choices, and one Eco-MBTI result at the end."
+        },
+        gate: {
+          title: "Enter your email and nickname to unlock your result",
+          body: "Once you register, your Eco-MBTI result will appear right away.",
+          note: "We save your result and basic info so you can come back and view it later.",
+          email: "Email",
+          nickname: "Nickname",
+          password: "Password",
+          terms: "I have read and agree to the <a href=\"./privacy-terms.html\" target=\"_blank\" rel=\"noopener\">terms and privacy policy</a>",
+          submit: "Register and view result",
+          invalid: "Please enter a valid email, nickname, and a password with at least 6 characters.",
+          termsRequired: "Please agree to the terms and privacy policy first.",
+          submitting: "Saving your info and unlocking your result...",
+          success: "Registration complete. Showing your result now.",
+          failed: "Saving failed. Please try again later.",
+          signingIn: "This email already exists. Signing you in now...",
+          wrongPassword: "This email is already registered. Please enter the correct password.",
+          weakPassword: "Password must be at least 6 characters."
         },
         framework: {
           title: "The Four Core Dimensions",
@@ -2018,9 +2366,13 @@
           progress: "Completed 0 / 12 questions",
           tip: "Your result card unlocks once all questions are answered.",
           submit: "Show My Eco-MBTI",
+          stageTitle: "Current Question",
+          prev: "Previous",
+          next: "Next",
           reset: "Reset Answers",
           missing: "Some questions are still unanswered. Please complete all 12 first.",
           ready: "All answered. Scroll down to see your result.",
+          moving: "Answer saved. Moving to the next question...",
           optionA: "Option A",
           optionB: "Option B"
         },
@@ -2035,33 +2387,18 @@
           actionHeadline: "Action Direction",
           shareTitle: "Share Your Result",
           shareBody: "Download or share your result card.",
-          ruleTitle: "Participation Boost",
-          ruleBody: "After Eco-MBTI, you need a member sign-in and one completed daily action before your boost and Daily Green Actions record begin. If someone becomes a Climate Action Partner through your MBTI share link, you also gain one share bonus.",
-          stateLoggedOutTitle: "You are not signed in yet",
-          stateLoggedOutBody: "Start with email first so your Eco-MBTI can be saved and your boost plus today's action record can begin.",
-          stateLoggedInTitle: "You are signed in",
-          stateLoggedInBody: "Your Eco-MBTI result will be saved to your member profile. You can go do one action today now.",
-          authTitle: "Start with Email",
-          authBody: "Before registration, your result does not start collecting boost and you cannot officially record today's action yet.",
-          authEmail: "Email",
-          authPassword: "Password",
-          authSubmit: "Register and do one action today",
-          authNote: "Only email and password are needed. Your Eco-MBTI result will be saved automatically.",
+          ruleTitle: "Saved Result",
+          ruleBody: "After registration, we save your email, nickname, and Eco-MBTI result so you can come back to view and share it directly.",
+          sharePrimary: "Share Result",
+          daily: "Daily Action",
           more: "More result options",
           copy: "Copy Result Text",
           shareImage: "Share with Image",
           download: "Download PNG Card",
-          step: "Do one action today",
           copied: "Result text copied.",
           shared: "Image share opened.",
           shareUnsupported: "This browser does not support image sharing. The PNG card has been downloaded instead.",
-          saved: "Saved to your member profile.",
-          authReady: "You are signed in. You can start today's action now.",
-          authCreated: "Registration complete. Taking you to today's action now.",
-          authSigningIn: "This email already exists. Signing you in now.",
-          authFailed: "Registration failed. Please try again later.",
-          authWrongPassword: "This email already exists. Please sign in with the correct password.",
-          authInvalid: "Please enter a valid email and a password with at least 6 characters.",
+          saved: "Your Eco-MBTI result has been saved.",
           downloaded: "PNG role card downloaded.",
           copiedFallback: "Please copy the result text manually.",
           typeLabel: "Your Eco-MBTI",
@@ -2084,13 +2421,30 @@
       lifestyle: { pair: ["J", "P"] }
     };
 
-    const questionList = document.getElementById("questionList");
+    const introScreen = document.getElementById("introScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const registerScreen = document.getElementById("registerScreen");
+    const resultScreen = document.getElementById("resultScreen");
+    const startQuizBtn = document.getElementById("startQuizBtn");
     const quizForm = document.getElementById("quizForm");
     const progressFill = document.getElementById("progressFill");
     const progressLabel = document.getElementById("progressLabel");
+    const questionIndexLabel = document.getElementById("questionIndexLabel");
+    const questionStageTitle = document.getElementById("questionStageTitle");
+    const questionDimensionLabel = document.getElementById("questionDimensionLabel");
+    const questionStageCard = document.getElementById("questionStageCard");
     const quizStatus = document.getElementById("quizStatus");
-    const submitQuizBtn = document.getElementById("submitQuizBtn");
+    const prevQuestionBtn = document.getElementById("prevQuestionBtn");
+    const nextQuestionBtn = document.getElementById("nextQuestionBtn");
     const resetQuizBtn = document.getElementById("resetQuizBtn");
+    const gateForm = document.getElementById("gateForm");
+    const gateEmailInput = document.getElementById("gateEmailInput");
+    const gateNicknameInput = document.getElementById("gateNicknameInput");
+    const gatePasswordInput = document.getElementById("gatePasswordInput");
+    const gateTermsInput = document.getElementById("gateTermsInput");
+    const gateSubmitBtn = document.getElementById("gateSubmitBtn");
+    const gateBackBtn = document.getElementById("gateBackBtn");
+    const gateStatus = document.getElementById("gateStatus");
     const resultPanel = document.getElementById("resultPanel");
     const resultPortrait = document.getElementById("resultPortrait");
     const resultBadge = document.getElementById("resultBadge");
@@ -2104,25 +2458,21 @@
     const resultTraitBody = document.getElementById("resultTraitBody");
     const resultActionBody = document.getElementById("resultActionBody");
     const copyResultBtn = document.getElementById("copyResultBtn");
+    const sharePrimaryBtn = document.getElementById("sharePrimaryBtn");
     const shareResultBtn = document.getElementById("shareResultBtn");
     const downloadCardBtn = document.getElementById("downloadCardBtn");
+    const retakeQuizBtn = document.getElementById("retakeQuizBtn");
     const dailyActionLink = document.getElementById("dailyActionLink");
-    const resultStateCard = document.getElementById("resultStateCard");
-    const resultStateTitle = document.getElementById("resultStateTitle");
-    const resultStateBody = document.getElementById("resultStateBody");
-    const authCtaCard = document.getElementById("authCtaCard");
-    const authInlineForm = document.getElementById("authInlineForm");
-    const authEmailInput = document.getElementById("authEmailInput");
-    const authPasswordInput = document.getElementById("authPasswordInput");
-    const authInlineSubmit = document.getElementById("authInlineSubmit");
     const shareStatus = document.getElementById("shareStatus");
 
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
     let lastResultText = "";
     let activeType = "INTJ";
-    let currentUser = null;
-    let authReady = false;
     let lastRenderedCounts = null;
+    let currentQuestionIndex = 0;
+    let currentScreen = "intro";
+    const answers = new Map();
+    let pendingResult = null;
 
     const TYPE_THEMES = {
       INTJ: { soft: "rgba(109, 198, 220, 0.38)", deep: "rgba(47, 106, 170, 0.26)", accent: "rgba(92, 224, 206, 0.34)", codeBg: "rgba(91, 169, 224, 0.16)", codeFg: "#0c4f72", cardTop: "rgba(240, 248, 255, 0.98)", cardBottom: "rgba(229, 242, 250, 0.96)", active: "rgba(69, 146, 215, 0.5)", activeTop: "rgba(228, 242, 255, 0.96)", shadow: "rgba(69, 146, 215, 0.18)", badge: "Systems" },
@@ -2160,10 +2510,37 @@
 
     const t = (path) => path.split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
 
+    const setScreen = (screen) => {
+      currentScreen = screen;
+      introScreen.hidden = screen !== "intro";
+      quizScreen.hidden = screen !== "quiz";
+      registerScreen.hidden = screen !== "register";
+      resultScreen.hidden = screen !== "result";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const getAnsweredCount = () => QUESTIONS.filter((question) => {
+      return answers.has(question.id);
+    }).length;
+
+    const getSelectedValue = (questionId) => answers.get(questionId) || "";
+
+    const getQuestionIllustrationPath = (question) => {
+      const number = String(question.displayIndex).padStart(2, "0");
+      return `../assets/eco-mbti-question-characters/q${number}.png`;
+    };
+
     const createQuestionCard = (question) => {
       const article = document.createElement("article");
       article.className = "question-card";
       article.dataset.dimension = question.dimension;
+
+      const sticker = document.createElement("div");
+      sticker.className = "question-sticker";
+      sticker.textContent = currentLang === "zh" ? "啪!" : "POW!";
+
+      const hero = document.createElement("div");
+      hero.className = "question-hero";
 
       const top = document.createElement("div");
       top.className = "question-top";
@@ -2180,6 +2557,20 @@
 
       copy.append(title);
       top.append(number, copy);
+      hero.appendChild(top);
+
+      const illustration = document.createElement("div");
+      illustration.className = "question-illustration";
+
+      const image = document.createElement("img");
+      image.src = getQuestionIllustrationPath(question);
+      image.alt = currentLang === "zh"
+        ? `第 ${question.displayIndex} 題角色插圖`
+        : `Question ${question.displayIndex} character illustration`;
+      image.loading = "lazy";
+
+      illustration.appendChild(image);
+      hero.appendChild(illustration);
 
       const options = document.createElement("div");
       options.className = "question-options";
@@ -2205,38 +2596,60 @@
         const body = document.createElement("div");
         body.textContent = question[currentLang][option.key.toLowerCase()];
 
+        if (getSelectedValue(question.id) === option.letter) {
+          label.classList.add("active");
+          input.checked = true;
+        }
+
         input.addEventListener("change", () => {
+          answers.set(question.id, option.letter);
           options.querySelectorAll(".choice").forEach((node) => node.classList.remove("active"));
           label.classList.add("active");
           updateProgress();
+          quizStatus.className = "status ok";
+          quizStatus.textContent = t("quiz.moving");
+          window.setTimeout(() => {
+            if (currentQuestionIndex < QUESTIONS.length - 1) {
+              currentQuestionIndex += 1;
+              renderCurrentQuestion();
+            } else {
+              quizStatus.className = "status ok";
+              quizStatus.textContent = t("quiz.ready");
+              renderResult(calculateResult());
+            }
+          }, 220);
         });
 
         label.append(input, head, body);
         options.appendChild(label);
       });
 
-      article.append(top, options);
+      article.append(sticker, hero, options);
       return article;
     };
 
-    const renderQuestions = () => {
-      questionList.innerHTML = "";
-      QUESTIONS.forEach((question) => {
-        questionList.appendChild(createQuestionCard(question));
-      });
+    const renderCurrentQuestion = () => {
+      const question = QUESTIONS[currentQuestionIndex];
+      if (!question) return;
+      questionStageCard.innerHTML = "";
+      questionStageCard.appendChild(createQuestionCard(question));
+      questionStageTitle.textContent = t("quiz.stageTitle");
+      questionDimensionLabel.textContent = t(`dimensions.${question.dimension}`);
+      questionIndexLabel.textContent = currentLang === "zh"
+        ? `第 ${currentQuestionIndex + 1} / ${QUESTIONS.length} 題`
+        : `Question ${currentQuestionIndex + 1} / ${QUESTIONS.length}`;
+      prevQuestionBtn.disabled = currentQuestionIndex === 0;
+      nextQuestionBtn.textContent = currentQuestionIndex === QUESTIONS.length - 1 ? t("quiz.submit") : t("quiz.next");
       updateProgress();
     };
 
     const updateProgress = () => {
-      const answered = QUESTIONS.filter((question) => quizForm.querySelector(`input[name="question-${question.id}"]:checked`)).length;
+      const answered = getAnsweredCount();
       const percent = Math.round((answered / QUESTIONS.length) * 100);
       progressFill.style.width = `${percent}%`;
       progressLabel.textContent = currentLang === "zh" ? `已完成 ${answered} / ${QUESTIONS.length} 題` : `Completed ${answered} / ${QUESTIONS.length} questions`;
-      quizStatus.className = "status";
-      if (answered === QUESTIONS.length) {
-        quizStatus.classList.add("ok");
-        quizStatus.textContent = t("quiz.ready");
-      } else {
+      if (answered !== QUESTIONS.length && !quizStatus.classList.contains("warn")) {
+        quizStatus.className = "status";
         quizStatus.textContent = "";
       }
       return answered;
@@ -2245,8 +2658,8 @@
     const calculateResult = () => {
       const counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
       QUESTIONS.forEach((question) => {
-        const selected = quizForm.querySelector(`input[name="question-${question.id}"]:checked`);
-        if (selected) counts[selected.value] += 1;
+        const selected = answers.get(question.id);
+        if (selected) counts[selected] += 1;
       });
 
       const type = [
@@ -2262,11 +2675,114 @@
     const getProfile = (type) => TYPE_META[type][currentLang];
 
     const buildShareText = (type, profile) => {
-      const inviteUrl = buildMbtiInviteUrl(currentUser?.uid);
+      const inviteUrl = buildMbtiInviteUrl();
       if (currentLang === "zh") {
         return `我的 Eco-MBTI 是 ${type}｜${profile.title}\n核心特質：${profile.core}\n強項：${profile.strengths}\n挑戰：${profile.challenge}\n適合的綠色行動建議：${profile.actions}\n來測看看你的永續行動風格：${inviteUrl}`;
       }
       return `My Eco-MBTI is ${type} | ${profile.title}\nCore trait: ${profile.core}\nStrengths: ${profile.strengths}\nChallenge: ${profile.challenge}\nSuggested green actions: ${profile.actions}\nTry your own sustainability style here: ${inviteUrl}`;
+    };
+
+    const saveLocalResult = (type, counts, registration = {}) => {
+      try {
+        localStorage.setItem(RESULT_STORAGE_KEY, JSON.stringify({
+          type,
+          counts,
+          email: registration.email || "",
+          nickname: registration.nickname || "",
+          updatedAt: new Date().toISOString()
+        }));
+      } catch (error) {
+        console.error("Failed to save Eco-MBTI result locally:", error);
+      }
+    };
+
+    const loadLocalResult = () => {
+      try {
+        const raw = localStorage.getItem(RESULT_STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed?.type || !TYPE_META[parsed.type]) return null;
+        const counts = parsed.counts && typeof parsed.counts === "object"
+          ? parsed.counts
+          : { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+        return {
+          type: parsed.type,
+          counts,
+          email: typeof parsed.email === "string" ? parsed.email : "",
+          nickname: typeof parsed.nickname === "string" ? parsed.nickname : ""
+        };
+      } catch (error) {
+        console.error("Failed to load Eco-MBTI result locally:", error);
+        return null;
+      }
+    };
+
+    const clearLocalResult = () => {
+      try {
+        localStorage.removeItem(RESULT_STORAGE_KEY);
+      } catch (error) {
+        console.error("Failed to clear Eco-MBTI result locally:", error);
+      }
+    };
+
+    const saveRegistrationAndResult = async ({ email, nickname, result, termsAcceptedAt }) => {
+      const normalizedEmail = String(email || "").trim().toLowerCase();
+      const normalizedNickname = String(nickname || "").trim();
+      const docId = encodeURIComponent(normalizedEmail);
+      const profile = TYPE_META[result.type];
+      const now = new Date().toISOString();
+      const uid = auth.currentUser?.uid || "";
+
+      const existing = await getDoc(doc(db, "ecoMbtiRegistrations", docId));
+
+      await setDoc(doc(db, "ecoMbtiRegistrations", docId), {
+        uid,
+        email: normalizedEmail,
+        nickname: normalizedNickname,
+        createdFrom: "eco-mbti",
+        createdAt: existing.exists() ? existing.data()?.createdAt || now : now,
+        updatedAt: now,
+        termsAcceptedAt,
+        referral: referralUid ? {
+          referredBy: referralUid,
+          source: "eco-mbti-share",
+          updatedAt: now
+        } : null,
+        ecoMbti: {
+          type: result.type,
+          titleZh: profile.zh.title,
+          titleEn: profile.en.title,
+          coreZh: profile.zh.core,
+          coreEn: profile.en.core,
+          actionsZh: profile.zh.actions,
+          actionsEn: profile.en.actions,
+          counts: result.counts,
+          updatedAt: now
+        }
+      }, { merge: true });
+
+      if (uid) {
+        await setDoc(doc(db, "members", uid), {
+          email: normalizedEmail,
+          name: normalizedNickname,
+          createdFrom: "eco-mbti",
+          updatedAt: now,
+          termsAcceptedAt,
+          ecoMbti: {
+            type: result.type,
+            titleZh: profile.zh.title,
+            titleEn: profile.en.title,
+            coreZh: profile.zh.core,
+            coreEn: profile.en.core,
+            actionsZh: profile.zh.actions,
+            actionsEn: profile.en.actions,
+            counts: result.counts,
+            updatedAt: now
+          }
+        }, { merge: true });
+      }
+
+      return { email: normalizedEmail, nickname: normalizedNickname };
     };
 
     const getPortraitAlt = (type, profile) => {
@@ -2276,31 +2792,8 @@
 
     const getFullPortraitPath = (type) => `../assets/eco-mbti-full/${type}.png`;
 
-    const setVisibleState = (node, visible, displayValue = "") => {
-      if (!node) return;
-      node.hidden = !visible;
-      node.setAttribute("aria-hidden", visible ? "false" : "true");
-      node.style.display = visible ? displayValue : "none";
-    };
-
-    const syncResultActions = () => {
-      const hasResult = !resultPanel.hidden && Boolean(lastResultText);
-      if (!authReady) {
-        setVisibleState(resultStateCard, false);
-        setVisibleState(authCtaCard, false);
-        setVisibleState(dailyActionLink, false);
-        return;
-      }
-      setVisibleState(resultStateCard, hasResult, "grid");
-      if (hasResult) {
-        resultStateTitle.textContent = currentUser ? t("result.stateLoggedInTitle") : t("result.stateLoggedOutTitle");
-        resultStateBody.textContent = currentUser ? t("result.stateLoggedInBody") : t("result.stateLoggedOutBody");
-      }
-      setVisibleState(authCtaCard, hasResult && !currentUser, "grid");
-      setVisibleState(dailyActionLink, hasResult && !!currentUser, "inline-flex");
-    };
-
-    const renderResult = ({ counts, type }) => {
+    const renderResult = ({ counts, type }, options = {}) => {
+      const { persistLocal = true, registration = null } = options;
       const profile = getProfile(type);
       activeType = type;
       lastRenderedCounts = counts;
@@ -2320,61 +2813,8 @@
       resultTraitBody.textContent = profile.core;
       resultActionBody.textContent = profile.actions;
       lastResultText = buildShareText(type, profile);
-      resultPanel.hidden = false;
-      syncResultActions();
-      resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-      saveResultToMember(type, profile, counts);
-    };
-
-    const saveResultToMember = async (type, profile, counts) => {
-      if (!currentUser) return;
-      try {
-        await setDoc(doc(db, "members", currentUser.uid), {
-          email: currentUser.email || "",
-          name: currentUser.email?.split("@")[0] || "",
-          partnerType: "individual",
-          permissionLevel: 1,
-          createdFrom: "eco-mbti",
-          ecoMbti: {
-            type,
-            titleZh: TYPE_META[type].zh.title,
-            titleEn: TYPE_META[type].en.title,
-            coreZh: TYPE_META[type].zh.core,
-            coreEn: TYPE_META[type].en.core,
-            actionsZh: TYPE_META[type].zh.actions,
-            actionsEn: TYPE_META[type].en.actions,
-            counts,
-            updatedAt: new Date().toISOString()
-          },
-          updatedAt: new Date().toISOString()
-        }, { merge: true });
-        shareStatus.className = "status ok";
-        shareStatus.textContent = t("result.saved");
-      } catch (error) {
-        console.error("Failed to save Eco-MBTI to member profile:", error);
-      }
-    };
-
-    const loadSavedResultFromMember = async (user) => {
-      if (!user) return;
-      try {
-        const snapshot = await getDoc(doc(db, "members", user.uid));
-        const saved = snapshot.exists() ? snapshot.data()?.ecoMbti : null;
-        if (!saved?.type || !TYPE_META[saved.type]) return;
-
-        const counts = saved.counts && typeof saved.counts === "object"
-          ? saved.counts
-          : { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
-
-        activeType = saved.type;
-        renderResult({ counts, type: saved.type });
-        shareStatus.className = "status ok";
-        shareStatus.textContent = currentLang === "zh"
-          ? "已帶入你之前的 Eco-MBTI 結果。"
-          : "Your previous Eco-MBTI result has been loaded.";
-      } catch (error) {
-        console.error("Failed to load saved Eco-MBTI result:", error);
-      }
+      setScreen("result");
+      if (persistLocal) saveLocalResult(type, counts, registration || loadLocalResult() || {});
     };
 
     const roundRect = (ctx, x, y, w, h, r) => {
@@ -2563,35 +3003,71 @@
       document.querySelectorAll(".lang-btn").forEach((button) => {
         button.classList.toggle("active", button.dataset.lang === currentLang);
       });
-      renderQuestions();
-      if (!resultPanel.hidden && lastResultText) {
-        renderResult({ counts: lastRenderedCounts || calculateResult().counts, type: activeType });
+      renderCurrentQuestion();
+      if (!resultScreen.hidden && lastResultText) {
+        renderResult({ counts: lastRenderedCounts || calculateResult().counts, type: activeType }, { persistLocal: false });
       }
-      syncResultActions();
     };
 
-    quizForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const answered = updateProgress();
-      if (answered !== QUESTIONS.length) {
+    const resetQuizFlow = () => {
+      quizForm.reset();
+      answers.clear();
+      clearLocalResult();
+      currentQuestionIndex = 0;
+      lastResultText = "";
+      lastRenderedCounts = null;
+      activeType = "INTJ";
+      pendingResult = null;
+      shareStatus.textContent = "";
+      quizStatus.className = "status";
+      quizStatus.textContent = "";
+      gateStatus.className = "status";
+      gateStatus.textContent = "";
+      gateForm.reset();
+      gateTermsInput.checked = false;
+      setScreen("intro");
+      renderCurrentQuestion();
+    };
+
+    startQuizBtn.addEventListener("click", () => {
+      setScreen("quiz");
+      renderCurrentQuestion();
+    });
+
+    prevQuestionBtn.addEventListener("click", () => {
+      if (currentQuestionIndex === 0) return;
+      currentQuestionIndex -= 1;
+      quizStatus.className = "status";
+      quizStatus.textContent = "";
+      renderCurrentQuestion();
+    });
+
+    nextQuestionBtn.addEventListener("click", () => {
+      const question = QUESTIONS[currentQuestionIndex];
+      if (!answers.has(question.id)) {
         quizStatus.className = "status warn";
         quizStatus.textContent = t("quiz.missing");
         return;
       }
-      quizStatus.textContent = "";
-      renderResult(calculateResult());
+      if (currentQuestionIndex < QUESTIONS.length - 1) {
+        currentQuestionIndex += 1;
+        quizStatus.className = "status";
+        quizStatus.textContent = "";
+        renderCurrentQuestion();
+        return;
+      }
+      quizStatus.className = "status ok";
+      quizStatus.textContent = t("quiz.ready");
+      pendingResult = calculateResult();
+      gateStatus.className = "status";
+      gateStatus.textContent = "";
+      setScreen("register");
     });
 
-    resetQuizBtn.addEventListener("click", () => {
-      quizForm.reset();
-      questionList.querySelectorAll(".choice").forEach((node) => node.classList.remove("active"));
-      resultPanel.hidden = true;
-      lastResultText = "";
-      lastRenderedCounts = null;
-      shareStatus.textContent = "";
-      syncResultActions();
-      updateProgress();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    resetQuizBtn.addEventListener("click", resetQuizFlow);
+    retakeQuizBtn.addEventListener("click", resetQuizFlow);
+    gateBackBtn.addEventListener("click", () => {
+      setScreen("quiz");
     });
 
     copyResultBtn.addEventListener("click", async () => {
@@ -2637,68 +3113,78 @@
       }
     });
 
-    authInlineForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
+    sharePrimaryBtn.addEventListener("click", async () => {
       shareStatus.className = "status";
-      const email = String(authEmailInput.value || "").trim();
-      const password = String(authPasswordInput.value || "");
-      if (!email || !password || password.length < 6) {
+      try {
+        await shareRoleCard();
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+        console.error("Primary share failed:", error);
         shareStatus.classList.add("warn");
-        shareStatus.textContent = t("result.authInvalid");
+        shareStatus.textContent = currentLang === "zh"
+          ? "分享失敗，請改用下載 PNG 角色卡。"
+          : "Sharing failed. Please download the PNG card instead.";
+      }
+    });
+
+    gateForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      gateStatus.className = "status";
+      const email = String(gateEmailInput.value || "").trim();
+      const nickname = String(gateNicknameInput.value || "").trim();
+      const password = String(gatePasswordInput.value || "");
+      if (!pendingResult || !email || !nickname || !email.includes("@") || password.length < 6) {
+        gateStatus.classList.add("warn");
+        gateStatus.textContent = password.length > 0 && password.length < 6 ? t("gate.weakPassword") : t("gate.invalid");
+        return;
+      }
+      if (!gateTermsInput.checked) {
+        gateStatus.classList.add("warn");
+        gateStatus.textContent = t("gate.termsRequired");
         return;
       }
 
-      authInlineSubmit.disabled = true;
+      gateSubmitBtn.disabled = true;
       try {
+        gateStatus.classList.add("ok");
+        gateStatus.textContent = t("gate.submitting");
         await setPersistence(auth, browserLocalPersistence);
         try {
           await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {
           if (error?.code === "auth/email-already-in-use") {
-            shareStatus.className = "status ok";
-            shareStatus.textContent = t("result.authSigningIn");
+            gateStatus.textContent = t("gate.signingIn");
             await signInWithEmailAndPassword(auth, email, password);
           } else {
             throw error;
           }
         }
-
-        if (auth.currentUser && lastRenderedCounts && TYPE_META[activeType]) {
-          currentUser = auth.currentUser;
-          await saveResultToMember(activeType, getProfile(activeType), lastRenderedCounts);
-          if (referralUid && referralUid !== currentUser.uid) {
-            const referrerSnap = await getDoc(doc(db, "members", referralUid));
-            if (referrerSnap.exists()) {
-              await setDoc(doc(db, "memberReferrals", currentUser.uid), {
-                referredUid: currentUser.uid,
-                referredBy: referralUid,
-                acceptedAt: new Date().toISOString(),
-                source: "eco-mbti-share"
-              }, { merge: true });
-              await setDoc(doc(db, "members", currentUser.uid), {
-                referral: {
-                  referredBy: referralUid,
-                  acceptedAt: new Date().toISOString(),
-                  source: "eco-mbti-share"
-                }
-              }, { merge: true });
-            }
-          }
+        if (auth.currentUser && auth.currentUser.displayName !== nickname) {
+          await updateProfile(auth.currentUser, { displayName: nickname });
         }
+        const termsAcceptedAt = new Date().toISOString();
+        const registration = await saveRegistrationAndResult({
+          email,
+          nickname,
+          result: pendingResult,
+          termsAcceptedAt
+        });
+        gateStatus.textContent = t("gate.success");
         shareStatus.className = "status ok";
-        shareStatus.textContent = t("result.authCreated");
-        syncResultActions();
-        setTimeout(() => {
-          window.location.href = dailyActionLink.href;
-        }, 240);
+        shareStatus.textContent = currentLang === "zh"
+          ? `已為 ${registration.nickname} 解鎖並保存結果。`
+          : `Result unlocked and saved for ${registration.nickname}.`;
+        renderResult(pendingResult, { persistLocal: true, registration });
       } catch (error) {
-        console.error("Inline auth failed:", error);
-        shareStatus.className = "status warn";
-        shareStatus.textContent = error?.code === "auth/wrong-password"
-          ? t("result.authWrongPassword")
-          : t("result.authFailed");
+        console.error("Eco-MBTI registration failed:", error);
+        gateStatus.className = "status warn";
+        gateStatus.textContent = error?.code === "auth/wrong-password"
+          ? t("gate.wrongPassword")
+          : error?.code === "auth/weak-password"
+            ? t("gate.weakPassword")
+            : t("gate.failed");
       } finally {
-        authInlineSubmit.disabled = false;
+        gateSubmitBtn.disabled = false;
       }
     });
 
@@ -2706,14 +3192,12 @@
       button.addEventListener("click", () => applyLanguage(button.dataset.lang));
     });
 
-    onAuthStateChanged(auth, (user) => {
-      authReady = true;
-      currentUser = user || null;
-      if (currentUser) {
-        loadSavedResultFromMember(currentUser);
-      }
-      syncResultActions();
-    });
+    const localSavedResult = loadLocalResult();
+    if (localSavedResult) {
+      gateEmailInput.value = localSavedResult.email || "";
+      gateNicknameInput.value = localSavedResult.nickname || "";
+      renderResult(localSavedResult, { persistLocal: false, registration: localSavedResult });
+    }
 
     applyLanguage(currentLang);
   </script>
