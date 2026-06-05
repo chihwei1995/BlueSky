@@ -961,6 +961,7 @@
       getDownloadURL,
       deleteObject
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
+    import { compressImageUpload } from "../assets/image-upload-utils.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -984,6 +985,7 @@
     let currentMember = null;
     let currentUser = null;
     let editingSubmission = null;
+    let selectedUploadFile = null;
     let submissions = [];
     let acceptedTermsRecord = null;
     const uploadFormStartedAt = Date.now();
@@ -1274,6 +1276,7 @@
 
     const resetForm = () => {
       editingSubmission = null;
+      selectedUploadFile = null;
       formEl.reset();
       formEl.elements.mode.value = "hope";
       document.getElementById("entryDate").value = new Date().toISOString().slice(0, 10);
@@ -1411,18 +1414,19 @@
 
     const uploadMediaFile = async (userId, file) => {
       if (!file || !file.name || file.size === 0) return null;
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const uploadFile = await compressImageUpload(file);
+      const safeName = uploadFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
       const fileRef = ref(storage, `member-globe-submissions/${userId}/${Date.now()}-${safeName}`);
       const snapshot = await withTimeout(
-        uploadBytes(fileRef, file, { contentType: file.type || "application/octet-stream" }),
+        uploadBytes(fileRef, uploadFile, { contentType: uploadFile.type || "application/octet-stream" }),
         20000,
         "Upload timed out."
       );
       const downloadURL = await withTimeout(getDownloadURL(snapshot.ref), 10000, "Failed to load uploaded file URL.");
       return {
-        name: file.name,
-        size: file.size,
-        type: file.type || "",
+        name: uploadFile.name,
+        size: uploadFile.size,
+        type: uploadFile.type || "",
         path: snapshot.metadata.fullPath,
         downloadURL
       };
@@ -1448,6 +1452,7 @@
       formEl.elements.credit.value = submission.credit || "";
       formEl.elements.summary.value = submission.summary || "";
       fileInput.value = "";
+      selectedUploadFile = null;
       fileMetaEl.textContent = submission.media?.name || t("form.fileEmpty");
       renderPreview({
         url: submission.media?.downloadURL,
@@ -1597,7 +1602,7 @@
         return;
       }
 
-      const file = fileInput.files?.[0] || null;
+      const file = selectedUploadFile;
       if (!editingSubmission && !file) {
         setStatus("error", t("state.noFileOnCreate"));
         return;
@@ -1667,7 +1672,23 @@
     });
 
     cancelEditBtn.addEventListener("click", () => resetForm());
-    fileInput.addEventListener("change", () => loadFilePreview(fileInput.files?.[0] || null));
+    fileInput.addEventListener("change", async () => {
+      const nextFile = fileInput.files?.[0] || null;
+      if (!nextFile) {
+        selectedUploadFile = null;
+        loadFilePreview(null);
+        return;
+      }
+      if (!String(nextFile.type || "").startsWith("image/")) {
+        selectedUploadFile = nextFile;
+        loadFilePreview(nextFile);
+        return;
+      }
+      setStatus("warn", currentLang === "zh" ? "正在優化圖片..." : "Optimizing image...");
+      selectedUploadFile = await compressImageUpload(nextFile);
+      loadFilePreview(selectedUploadFile);
+      setStatus("", "");
+    });
     modeLabels.forEach((label) => {
       label.addEventListener("click", () => {
         formEl.elements.mode.value = label.dataset.mode;

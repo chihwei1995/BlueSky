@@ -1069,6 +1069,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
+    import { compressImageUpload } from "../assets/image-upload-utils.js";
     import { browserLocalPersistence, getAuth, onAuthStateChanged, setPersistence, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
@@ -1928,11 +1929,11 @@
 
     photoInput.addEventListener("change", async (event) => {
       const file = event.target.files?.[0] || null;
-      selectedPhotoFile = file;
+      selectedPhotoFile = file ? await compressImageUpload(file, { maxWidth: 1536, maxHeight: 1536, maxBytes: 850 * 1024 }) : null;
       if (hasAvailableToken(currentReward)) {
         generatedImageUrl = "";
       }
-      if (!file) {
+      if (!selectedPhotoFile) {
         uploadedPreviewUrl = "";
         photoPreview.hidden = true;
         updateCertificateStage();
@@ -1941,9 +1942,9 @@
         setStatus(currentReward ? t("statusNeedPhoto") : t("statusNeedReward"), currentReward ? "warn" : "warn");
         return;
       }
-      uploadedPreviewUrl = await readFileAsDataUrl(file);
+      uploadedPreviewUrl = await readFileAsDataUrl(selectedPhotoFile);
       photoPreviewImg.src = uploadedPreviewUrl;
-      photoPreviewName.textContent = file.name;
+      photoPreviewName.textContent = `${selectedPhotoFile.name} • ${(selectedPhotoFile.size / 1024 / 1024).toFixed(2)} MB`;
       photoPreview.hidden = false;
       updateCertificateStage();
       setStatus(hasAvailableToken(currentReward) ? t("statusNeedPhoto") : t("statusTokenUsed"), "warn");

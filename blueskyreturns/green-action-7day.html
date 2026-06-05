@@ -40,7 +40,7 @@
       margin: 0;
       font-family: "Segoe UI", "Noto Sans TC", sans-serif;
       color: var(--ink);
-      line-height: 1.7;
+      line-height: 1.58;
       background:
         radial-gradient(circle at top left, rgba(140, 198, 63, 0.22), transparent 22%),
         radial-gradient(circle at top right, rgba(31, 143, 88, 0.16), transparent 24%),
@@ -210,7 +210,7 @@
       opacity: 0;
       pointer-events: none;
     }
-    main { padding: 28px 0 70px; }
+    main { padding: 24px 0 56px; }
     .layout {
       display: block;
     }
@@ -314,11 +314,11 @@
       color: #ffffff;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
     }
-    .panel { padding: 26px; }
+    .panel { padding: 24px; }
     .section-head {
       display: grid;
-      gap: 6px;
-      margin-bottom: 18px;
+      gap: 4px;
+      margin-bottom: 14px;
     }
     .section-head h2 {
       margin: 0;
@@ -370,7 +370,7 @@
     }
     .dimension-card {
       display: grid;
-      gap: 12px;
+      gap: 10px;
       min-height: 100%;
     }
     .dimension-icon-wrap {
@@ -380,8 +380,8 @@
       margin-bottom: 4px;
     }
     .dimension-icon {
-      width: 128px;
-      height: 128px;
+      width: 96px;
+      height: 96px;
       object-fit: contain;
       filter: drop-shadow(0 12px 20px rgba(31, 143, 88, 0.1));
     }
@@ -445,24 +445,7 @@
       border-radius: 26px 26px 0 0;
       background: linear-gradient(90deg, var(--green), var(--lime));
     }
-    .task-panel .section-head {
-      margin-bottom: 16px;
-    }
-    .task-kicker {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(20, 92, 58, 0.09);
-      border: 1px solid rgba(20, 92, 58, 0.12);
-      color: var(--green-deep);
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
+    .task-panel .section-head { margin-bottom: 12px; }
     .task-spotlight {
       display: flex;
       flex-wrap: wrap;
@@ -497,23 +480,16 @@
 
     .task-rule {
       display: grid;
-      gap: 8px;
-      padding: 16px 18px;
+      gap: 4px;
+      padding: 14px 16px;
       border-radius: 20px;
       background: linear-gradient(135deg, rgba(31, 143, 88, 0.1), rgba(140, 198, 63, 0.12));
       border: 1px solid rgba(31, 143, 88, 0.18);
       color: var(--green-deep);
     }
 
-    .task-rule strong {
-      font-size: 0.96rem;
-    }
-
-    .task-rule p {
-      margin: 0;
-      line-height: 1.65;
-      color: var(--muted);
-    }
+    .task-rule strong { font-size: 0.96rem; }
+    .task-rule p { margin: 0; line-height: 1.5; color: var(--muted); }
 
     .task-form {
       display: grid;
@@ -742,7 +718,7 @@
     }
 
     .submission-empty {
-      padding: 16px;
+      padding: 14px 16px;
       border-radius: 16px;
       background: rgba(20, 92, 58, 0.05);
       border: 1px solid rgba(20, 92, 58, 0.12);
@@ -815,18 +791,134 @@
         box-shadow: 0 12px 24px rgba(31, 143, 88, 0.18);
         transform: translateY(-1px);
       }
+      main { padding: 16px 0 34px; }
+      .stack { gap: 14px; }
       .panel,
       .hero {
-        padding: 22px 18px;
+        padding: 18px 14px;
         border-radius: 24px;
       }
       .task-panel::before {
         border-radius: 24px 24px 0 0;
       }
+      .section-head {
+        gap: 2px;
+        margin-bottom: 10px;
+      }
+      .section-head h2 { font-size: 1.28rem; }
+      .section-head p,
+      .hero-copy p,
+      .poster-note span,
+      .dimension-card p,
+      .task-rule p,
+      .task-auth-card p,
+      .terms-copy {
+        font-size: 0.9rem;
+      }
+      .eyebrow,
+      .task-spotlight {
+        display: none;
+      }
+      .hero-copy,
+      .hero-art {
+        gap: 12px;
+      }
+      .hero h1 {
+        font-size: 1.9rem;
+        line-height: 1.08;
+      }
+      .button,
+      .pill {
+        min-height: 46px;
+      }
+      .poster-note {
+        padding: 12px 14px;
+        border-radius: 18px;
+      }
+      .poster-note strong {
+        font-size: 0.95rem;
+      }
       .dimension-grid { grid-template-columns: 1fr; }
+      .dimension-card {
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 12px;
+        align-items: center;
+        padding: 14px;
+      }
+      .dimension-card p {
+        display: none;
+      }
+      .dimension-icon-wrap {
+        grid-row: 1 / span 2;
+        margin-bottom: 0;
+      }
+      .dimension-icon {
+        width: 56px;
+        height: 56px;
+      }
+      .dimension-tag {
+        padding: 6px 10px;
+        font-size: 0.76rem;
+      }
+      .dimension-card h3 {
+        margin: 0;
+        font-size: 0.98rem;
+        line-height: 1.35;
+      }
+      .task-rule {
+        padding: 12px 14px;
+        border-radius: 18px;
+      }
+      .task-card,
+      .concept-card,
+      .why-card,
+      .flow-card,
+      .cta-card {
+        padding: 16px 14px;
+        border-radius: 18px;
+      }
+      .task-form {
+        gap: 10px;
+      }
+      .task-form label {
+        margin-bottom: 4px;
+        font-size: 0.92rem;
+      }
+      .task-form input[type="text"],
+      .task-form input[type="date"],
+      .task-form textarea,
+      .task-form input[type="file"],
+      .task-auth-field input {
+        padding: 11px 12px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+      }
+      .task-form textarea {
+        min-height: 96px;
+      }
+      .checkbox-grid { grid-template-columns: 1fr; }
+      .checkbox-item {
+        padding: 9px 10px;
+        font-size: 0.9rem;
+      }
+      .consent-box,
+      .task-auth-card {
+        padding: 12px 14px;
+        border-radius: 16px;
+      }
+      .submission-item {
+        padding: 14px;
+        gap: 8px;
+      }
+      .submission-item h3 {
+        font-size: 1rem;
+      }
+      .submission-item p {
+        margin: 0;
+        font-size: 0.9rem;
+      }
       .checkbox-grid { grid-template-columns: 1fr; }
       .task-auth-form { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 2.25rem; }
     }
   </style>
 </head>
@@ -868,9 +960,7 @@
         <div class="stack">
           <section class="hero panel">
             <div class="hero-copy">
-              <div class="eyebrow" data-i18n="hero.eyebrow">Flexible Climate Participation</div>
               <h1 data-i18n="hero.title">今天的一個綠色行動</h1>
-              <p data-i18n="hero.body">不用一次完成很多事。先記下今天做的一個行動，就算開始。</p>
               <div class="hero-actions">
               <a class="button primary" href="#task" data-i18n="hero.submit">立即提交任務</a>
               </div>
@@ -881,14 +971,12 @@
               </div>
               <div class="poster-note">
                 <strong data-i18n="hero.noteTitle">先做一件，就很好。</strong>
-                <span data-i18n="hero.noteBody">走路、自備、節能、減廢，都可以算。</span>
               </div>
             </div>
           </section>
           <section id="dimensions" class="panel">
             <div class="section-head">
               <h2 data-i18n="dimensions.title">The Green Dimensions / 五大維度</h2>
-              <p data-i18n="dimensions.body">不知道怎麼分類也沒關係，先完成今天的一個行動。</p>
             </div>
             <div class="dimension-grid">
               <article class="dimension-card">
@@ -935,22 +1023,15 @@
           </section>
           <section id="task" class="panel task-panel">
             <div class="section-head">
-              <div class="task-kicker">Fast Entry / 快速入口</div>
               <h2>Task Submission / 任務提交</h2>
-              <p>登入後，記下今天做的一個綠色行動就可以。</p>
-            </div>
-            <div class="task-spotlight">
-              <div class="task-spotlight-chip">📸 有照片更好</div>
-              <div class="task-spotlight-chip">🗓 每天交一筆就好</div>
-              <div class="task-spotlight-chip">🌿 不用想太多，先開始</div>
             </div>
             <div class="task-rule">
-              <strong data-i18n="taskRule.title">正式行動者規則 / Official Action Taker Rule</strong>
+              <strong data-i18n="taskRule.title">每日 1 筆</strong>
               <p data-i18n="taskRule.body">第一次完成今天的一個行動可獲得 +5。之後每日完成 1 個行動可再 +1；若連續 7 日完成，額外再 +5。</p>
             </div>
             <div class="task-grid">
               <article class="task-card task-form-card">
-                <h3>提交今天的綠色任務</h3>
+                <h3>今天的行動</h3>
                 <form id="proposalTaskForm" class="task-form">
                   <div class="bot-guard" aria-hidden="true">
                     <label for="taskWebsiteField">Website</label>
@@ -994,7 +1075,6 @@
                 <div id="taskAuthCard" class="task-auth-card" hidden>
                   <div>
                     <strong data-i18n="taskAuth.title">先用 Email 開始</strong>
-                    <p data-i18n="taskAuth.body">送出前只要補上 Email 和密碼，註冊成功後會直接提交今天的行動。</p>
                   </div>
                   <form id="taskAuthForm" class="task-auth-form">
                     <label class="task-auth-field">
@@ -1010,7 +1090,7 @@
                 </div>
               </article>
               <article class="task-card">
-                <h3>我的任務紀錄 / My Recent Submissions</h3>
+                <h3>我的紀錄 / My Entries</h3>
                 <div id="proposalSubmissionEmpty" class="submission-empty">正在確認登入狀態... / Checking sign-in status...</div>
                 <div id="proposalSubmissionList" class="submission-list" hidden></div>
               </article>
@@ -1051,18 +1131,18 @@
           title: "Daily Green Actions", linkTask: "任務提交", linkDimensions: "五大維度"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", submit: "立即提交任務", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "先做一件，就很好。", noteBody: "走路、自備、節能、減廢，都可以算。"
+          eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", submit: "立即提交任務", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "走路、自備、節能、減廢，都可以算。", noteBody: "走路、自備、節能、減廢，都可以算。"
         },
         dimensions: {
           title: "The Green Dimensions / 五大維度", body: "不知道怎麼分類也沒關係，先完成今天的一個行動。", dietTag: "素 Green Diet", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食。", mobilityTag: "行 Low-carbon Mobility", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵。", wasteTag: "減 Waste Reduction", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、垃圾分類、拒絕一次性用品。", energyTag: "能 Energy Saving", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、少開冷氣、使用自然光。", natureTag: "森 City / Nature Connection", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>社區公園、室內植栽、親近自然。"
         },
         taskRule: {
-          title: "正式行動者規則 / Official Action Taker Rule",
-          body: "第一次完成今天的一個行動可獲得 +5。之後每日完成 1 個行動可再 +1；若首次完成連續 7 日，可獲得 1 枚限量氣候行動徽章。"
+          title: "每日 1 筆",
+          body: "完成今天的行動即可累積記錄；首次連續 7 日完成，可獲得 1 枚限量氣候行動徽章。"
         },
         taskAuth: {
           title: "先用 Email 開始",
-          body: "送出前只要補上 Email 和密碼，註冊成功後會直接提交今天的行動。",
+          body: "補上 Email 和密碼後，就能直接送出。",
           email: "Email",
           password: "密碼",
           submit: "註冊後直接提交"
@@ -1080,18 +1160,18 @@
           title: "Daily Green Actions", linkTask: "Task Submission", linkDimensions: "Five Dimensions"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "One Green Action Today", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", submit: "Submit a Task Now", posterAlt: "Daily Green Actions key visual", posterImage: "../assets/GAen.png", noteTitle: "One action is enough to begin.", noteBody: "Walking, reusing, saving energy, or eating greener all count."
+          eyebrow: "Flexible Climate Participation", title: "One Green Action Today", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", submit: "Submit a Task Now", posterAlt: "Daily Green Actions key visual", posterImage: "../assets/GAen.png", noteTitle: "Walking, reusing, saving energy, or eating greener all count.", noteBody: "Walking, reusing, saving energy, or eating greener all count."
         },
         dimensions: {
           title: "The Green Dimensions", body: "If you are not sure which dimension fits, just start with the action itself.", dietTag: "Green Diet", dietTitle: "Plant-forward food choices", dietBody: "<strong>Examples:</strong> meat-free meals, home-cooked vegetables, less food waste.", mobilityTag: "Low-carbon Mobility", mobilityTitle: "Move with less carbon", mobilityBody: "<strong>Examples:</strong> walking, cycling, bus, metro.", wasteTag: "Waste Reduction", wasteTitle: "Reduce and reuse", wasteBody: "<strong>Examples:</strong> reusables, repairs, recycling, refusing single-use items.", energyTag: "Energy Saving", energyTitle: "Save energy", energyBody: "<strong>Examples:</strong> lights off, less air-conditioning, natural light.", natureTag: "City / Nature Connection", natureTitle: "Reconnect with nature", natureBody: "<strong>Examples:</strong> parks, indoor plants, nature walks."
         },
         taskRule: {
-          title: "Official Action Taker Rule",
-          body: "Your first completed action gives +5. Each following day adds +1. Your first completed 7-day streak earns 1 limited Climate Badge."
+          title: "One Entry Per Day",
+          body: "Log today's action to build your record. Your first completed 7-day streak earns 1 limited Climate Badge."
         },
         taskAuth: {
           title: "Start with Email",
-          body: "Add your email and password before sending. Once registration succeeds, today's action will be submitted automatically.",
+          body: "Add your email and password, then submit right away.",
           email: "Email",
           password: "Password",
           submit: "Register and Submit"
@@ -1139,6 +1219,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
+    import { compressImageUpload } from "../assets/image-upload-utils.js";
     import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc, query, setDoc, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
     import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
@@ -1523,14 +1604,15 @@
 
     const uploadTaskImage = async (uid, file) => {
       if (!file || !file.name) return null;
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const uploadFile = await compressImageUpload(file);
+      const safeName = uploadFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
       const fileRef = ref(storage, `green-proposal-submissions/${uid}/${Date.now()}-${safeName}`);
-      const snapshot = await uploadBytes(fileRef, file, { contentType: file.type || "application/octet-stream" });
+      const snapshot = await uploadBytes(fileRef, uploadFile, { contentType: uploadFile.type || "application/octet-stream" });
       const downloadURL = await getDownloadURL(snapshot.ref);
       return {
-        name: file.name,
-        type: file.type || "",
-        size: file.size,
+        name: uploadFile.name,
+        type: uploadFile.type || "",
+        size: uploadFile.size,
         path: snapshot.metadata.fullPath,
         downloadURL
       };
