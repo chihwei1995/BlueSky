@@ -223,9 +223,10 @@
     .stack { display: grid; gap: 22px; }
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.95fr);
-      gap: 24px;
-      padding: 30px;
+      grid-template-columns: minmax(260px, 0.74fr) minmax(320px, 1fr);
+      align-items: center;
+      gap: 20px;
+      padding: 24px 28px;
       overflow: hidden;
       background:
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 30%),
@@ -234,8 +235,9 @@
     }
     .hero-copy {
       display: grid;
-      gap: 16px;
-      align-content: start;
+      gap: 14px;
+      align-content: center;
+      max-width: 360px;
     }
     .eyebrow {
       display: inline-flex;
@@ -252,24 +254,16 @@
     }
     .hero h1 {
       margin: 0;
-      font-size: clamp(2.1rem, 4.3vw, 3.8rem);
-      line-height: 1.06;
+      max-width: 7ch;
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      line-height: 1.02;
       color: #ffffff;
       text-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
     }
-    .hero p,
-    .hero .hero-copy p,
-    .hero .poster-note span {
-      margin: 0;
-      color: rgba(255, 255, 255, 0.98);
-      font-size: 1rem;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
-    }
     .hero-actions {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-top: 6px;
     }
     .button {
       display: inline-flex;
@@ -291,28 +285,21 @@
     }
     .hero-art {
       display: grid;
-      gap: 14px;
-      align-content: start;
+      justify-self: end;
+      width: min(100%, 470px);
     }
     .poster-frame {
+      aspect-ratio: 1 / 1;
       border-radius: 24px;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.18);
       box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
       background: rgba(255, 255, 255, 0.12);
     }
-    .poster-note {
-      display: grid;
-      gap: 8px;
-      padding: 16px 18px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.28);
-    }
-    .poster-note strong {
-      font-size: 1rem;
-      color: #ffffff;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+    .poster-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .panel { padding: 24px; }
     .section-head {
@@ -561,6 +548,26 @@
     .task-form textarea {
       min-height: 120px;
       resize: vertical;
+    }
+    .task-date-display {
+      display: grid;
+      gap: 4px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(31, 143, 88, 0.14);
+      background: linear-gradient(135deg, rgba(223, 245, 209, 0.42), rgba(255, 255, 255, 0.96));
+    }
+    .task-date-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .task-date-value {
+      color: var(--green-deep);
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1.3;
     }
 
     .checkbox-grid {
@@ -842,7 +849,10 @@
       .dimension-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 820px) {
-      .hero { grid-template-columns: 1fr; }
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
       .concept-grid,
       .why-grid,
       .flow-grid,
@@ -931,20 +941,31 @@
       .hero-art {
         gap: 12px;
       }
+      .hero-copy {
+        max-width: none;
+        justify-items: center;
+        text-align: center;
+      }
       .hero h1 {
         font-size: 1.9rem;
         line-height: 1.08;
+        max-width: none;
       }
       .button,
       .pill {
         min-height: 46px;
       }
-      .poster-note {
-        padding: 12px 14px;
-        border-radius: 18px;
+      .hero-actions {
+        width: 100%;
+        justify-content: center;
       }
-      .poster-note strong {
-        font-size: 0.95rem;
+      .hero-actions .button {
+        width: 100%;
+        max-width: 320px;
+      }
+      .hero-art {
+        justify-self: stretch;
+        width: 100%;
       }
       .dimension-grid { grid-template-columns: 1fr; }
       .dimension-card {
@@ -1017,6 +1038,15 @@
       }
       .task-form textarea {
         min-height: 96px;
+      }
+      .task-date-display {
+        padding: 11px 12px;
+      }
+      .task-date-label {
+        font-size: 0.78rem;
+      }
+      .task-date-value {
+        font-size: 0.94rem;
       }
       .checkbox-grid { grid-template-columns: 1fr; }
       .checkbox-item {
@@ -1118,9 +1148,6 @@
               <div class="poster-frame">
                 <img id="heroPosterImage" src="../assets/GA.png" alt="Daily Green Actions visual" data-i18n-alt="hero.posterAlt" />
               </div>
-              <div class="poster-note">
-                <strong data-i18n="hero.noteTitle">先做一件，就很好。</strong>
-              </div>
             </div>
           </section>
           <section id="task" class="panel task-panel">
@@ -1136,6 +1163,10 @@
                     <input id="taskWebsiteField" name="website" type="text" tabindex="-1" autocomplete="off" />
                   </div>
                   <input id="taskDate" name="taskDate" type="hidden" />
+                  <div class="task-date-display">
+                    <div class="task-date-label" data-i18n="task.dateAuto">系統自動帶入今天</div>
+                    <div id="taskDateDisplay" class="task-date-value"></div>
+                  </div>
                   <div>
                     <label data-i18n="task.dimensionLabel">對應維度（選填）</label>
                     <div class="checkbox-grid">
@@ -1269,6 +1300,7 @@
           heading: "任務提交",
           formTitle: "今天的行動",
           dateLabel: "日期",
+          dateAuto: "系統自動帶入今天",
           dimensionLabel: "對應維度（選填）",
           dimensionDiet: "綠色飲食",
           dimensionMobility: "低碳移動",
@@ -1338,6 +1370,7 @@
           heading: "Task Submission",
           formTitle: "Today's Action",
           dateLabel: "Date",
+          dateAuto: "Automatically set to today",
           dimensionLabel: "Dimensions (Optional)",
           dimensionDiet: "Green Diet",
           dimensionMobility: "Low-carbon Mobility",
@@ -1466,6 +1499,7 @@
     const submissionEmpty = document.getElementById("proposalSubmissionEmpty");
     const taskTermsConsent = document.getElementById("taskTermsConsent");
     const taskDateInput = document.getElementById("taskDate");
+    const taskDateDisplay = document.getElementById("taskDateDisplay");
     const taskCaptionInput = document.getElementById("taskCaption");
     const dimensionInlineHelp = document.getElementById("dimensionInlineHelp");
     const dimensionInlineHelpTitle = document.getElementById("dimensionInlineHelpTitle");
@@ -1595,6 +1629,19 @@
     }, { passive: true });
 
     const taskText = (zh, en) => document.documentElement.lang === "en" ? en : zh;
+    const formatTaskDateLabel = (value) => {
+      if (!value) return "";
+      const [year, month, day] = String(value).split("-");
+      if (!year || !month || !day) return value;
+      return document.documentElement.lang === "en"
+        ? `${year}-${month}-${day}`
+        : `${year} 年 ${month} 月 ${day} 日`;
+    };
+    const syncTaskDateDisplay = () => {
+      if (taskDateDisplay) {
+        taskDateDisplay.textContent = formatTaskDateLabel(taskDateInput.value);
+      }
+    };
     const dimensionHelpMap = {
       "素 Green Diet": { title: "task.dimensionHelpDietTitle", body: "task.dimensionHelpDietBody" },
       "行 Low-carbon Mobility": { title: "task.dimensionHelpMobilityTitle", body: "task.dimensionHelpMobilityBody" },
@@ -1641,6 +1688,10 @@
     };
 
     syncTaskEntryUi(null);
+    if (!taskDateInput.value) {
+      taskDateInput.value = new Date().toISOString().slice(0, 10);
+    }
+    syncTaskDateDisplay();
 
     const getCopy = (path) => {
       return String(path || "")
@@ -1670,6 +1721,7 @@
       input.addEventListener("change", updateDimensionInlineHelp);
     });
     document.addEventListener("bsr:langchange", updateDimensionInlineHelp);
+    document.addEventListener("bsr:langchange", syncTaskDateDisplay);
 
     const ensureMemberProfile = async (user) => {
       if (!user) return;
@@ -1762,7 +1814,7 @@
       editingSubmissionData = submission;
       taskDateInput.value = submission.taskDate || "";
       taskCaptionInput.value = submission.caption || "";
-      taskDateInput.disabled = true;
+      syncTaskDateDisplay();
       Array.from(taskForm.querySelectorAll('input[name="dimensions"]')).forEach((checkbox) => {
         checkbox.checked = (submission.dimensions || []).includes(checkbox.value);
       });
@@ -1777,8 +1829,8 @@
       editingSubmissionData = null;
       taskForm.reset();
       updateDimensionInlineHelp();
-      taskDateInput.disabled = false;
       taskDateInput.value = new Date().toISOString().slice(0, 10);
+      syncTaskDateDisplay();
       taskSubmitBtn.textContent = "提交任務 / Submit";
     };
 
