@@ -454,38 +454,100 @@
     .task-card.task-form-card {
       border: 1px solid rgba(31, 143, 88, 0.2);
       box-shadow: 0 18px 34px rgba(20, 92, 58, 0.08);
+      min-width: 0;
     }
     .task-form-hero {
       display: grid;
-      gap: 14px;
-      margin-bottom: 16px;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding: 16px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 10% 12%, rgba(255, 255, 255, 0.18), transparent 22%),
+        radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.16), transparent 26%),
+        linear-gradient(135deg, rgba(11, 60, 40, 0.98), rgba(21, 114, 70, 0.95) 52%, rgba(140, 198, 63, 0.9));
+      box-shadow: 0 20px 40px rgba(20, 92, 58, 0.14);
+      min-width: 0;
     }
     .task-form-hero-copy {
       display: grid;
-      gap: 6px;
+      gap: 10px;
+      min-width: 0;
+    }
+    .task-form-hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: rgba(255, 255, 255, 0.96);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      backdrop-filter: blur(8px);
+    }
+    .task-form-hero-kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #d9ff9b;
+      box-shadow: 0 0 0 6px rgba(217, 255, 155, 0.16);
     }
     .task-form-hero-copy h3 {
       margin: 0;
-      font-size: clamp(1.55rem, 3vw, 2.2rem);
-      line-height: 1.05;
-      color: var(--green-deep);
+      max-width: 8ch;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      line-height: 0.98;
+      color: #ffffff;
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
     }
     .task-form-hero-copy p {
       margin: 0;
-      color: var(--muted);
+      max-width: 26ch;
+      color: rgba(245, 255, 245, 0.9);
+      font-size: 0.96rem;
+      line-height: 1.5;
     }
     .task-form-hero-media {
       overflow: hidden;
       aspect-ratio: 16 / 10;
       border-radius: 22px;
-      border: 1px solid rgba(31, 143, 88, 0.18);
-      box-shadow: 0 18px 34px rgba(20, 92, 58, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 24px 40px rgba(0, 0, 0, 0.16);
       background: linear-gradient(135deg, rgba(20, 92, 58, 0.18), rgba(140, 198, 63, 0.14));
+      position: relative;
+      min-width: 0;
     }
     .task-form-hero-media img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    .task-form-hero-chip {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(8, 31, 47, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+    }
+    .task-form-hero-chip::before {
+      content: "🌿";
+      font-size: 0.95rem;
+      line-height: 1;
     }
 
     .task-auth {
@@ -556,6 +618,7 @@
     .task-form {
       display: grid;
       gap: 12px;
+      min-width: 0;
     }
 
     .task-form label {
@@ -606,6 +669,7 @@
       display: grid;
       gap: 8px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      min-width: 0;
     }
 
     .checkbox-item {
@@ -617,6 +681,7 @@
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.86);
       color: var(--muted);
+      min-width: 0;
     }
 
     .checkbox-item input {
@@ -641,6 +706,8 @@
       display: inline-flex;
       align-items: center;
       line-height: 1.35;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
     .dimension-inline-help {
       display: grid;
@@ -671,6 +738,7 @@
       gap: 12px;
       flex-wrap: wrap;
       align-items: center;
+      min-width: 0;
     }
 
     .task-auth-card {
@@ -698,6 +766,7 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
       gap: 10px;
       align-items: end;
+      min-width: 0;
     }
 
     .task-auth-field {
@@ -817,6 +886,7 @@
       scroll-padding-left: 4px;
       padding: 4px 2px 8px;
       scrollbar-width: none;
+      min-width: 0;
     }
     .submission-list::-webkit-scrollbar { display: none; }
 
@@ -831,23 +901,28 @@
       min-width: min(332px, 82vw);
       flex: 0 0 min(332px, 82vw);
       scroll-snap-align: start;
+      overflow: hidden;
     }
     .submission-item:first-child { margin-left: 2px; }
     .submission-item:last-child { margin-right: 2px; }
     .submission-item h3 {
       font-size: 1.02rem;
       line-height: 1.35;
+      margin: 0;
+      overflow-wrap: anywhere;
     }
 
     .submission-actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .submission-item img {
       width: 100%;
-      max-width: 220px;
+      max-width: min(220px, 100%);
+      display: block;
       border-radius: 14px;
       border: 1px solid var(--line);
     }
@@ -893,7 +968,7 @@
     }
     @media (max-width: 640px) {
       header { padding-top: env(safe-area-inset-top); }
-      .shell { padding: 0 16px; }
+      .shell { padding: 0 12px; }
       .nav { gap: 8px; padding: 10px 0; }
       .stack {
         display: flex;
@@ -1055,6 +1130,7 @@
       .cta-card {
         padding: 16px 14px;
         border-radius: 18px;
+        min-width: 0;
       }
       .task-form {
         gap: 10px;
@@ -1094,18 +1170,37 @@
         height: 24px;
       }
       .task-form-hero {
-        gap: 10px;
+        gap: 12px;
         margin-bottom: 14px;
+        padding: 14px;
+        border-radius: 20px;
+        min-width: 0;
+      }
+      .task-form-hero-kicker {
+        padding: 6px 10px;
+        font-size: 0.74rem;
       }
       .task-form-hero-copy h3 {
-        font-size: 1.5rem;
+        max-width: none;
+        font-size: 1.62rem;
+        overflow-wrap: anywhere;
       }
       .task-form-hero-copy p {
         font-size: 0.9rem;
+        max-width: none;
+        overflow-wrap: anywhere;
       }
       .task-form-hero-media {
         aspect-ratio: 16 / 11;
         border-radius: 18px;
+      }
+      .task-form-hero-chip {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 0.76rem;
       }
       .dimension-inline-help {
         margin-top: 8px;
@@ -1125,8 +1220,8 @@
       .submission-item {
         padding: 14px;
         gap: 8px;
-        min-width: 84vw;
-        flex-basis: 84vw;
+        min-width: 100%;
+        flex-basis: 100%;
         border-radius: 20px;
       }
       .submission-item h3 {
@@ -1140,7 +1235,7 @@
         gap: 8px;
       }
       .submission-actions .pill {
-        flex: 1 1 calc(50% - 4px);
+        flex: 1 1 100%;
         justify-content: center;
         min-height: 42px;
         padding: 10px 12px;
@@ -1195,10 +1290,13 @@
               <article class="task-card task-form-card">
                 <div class="task-form-hero">
                   <div class="task-form-hero-copy">
+                    <div class="task-form-hero-kicker" data-i18n="hero.kicker">DAILY GREEN ACTIONS</div>
                     <h3 data-i18n="hero.title">今天的一個綠色行動</h3>
+                    <p data-i18n="hero.caption">每天一件小事，也能慢慢累積成真正的改變。</p>
                   </div>
                   <div class="task-form-hero-media">
                     <img id="heroPosterImage" src="../assets/GA.png" alt="Daily Green Actions visual" data-i18n-alt="hero.posterAlt" />
+                    <div class="task-form-hero-chip" data-i18n="hero.chip">今天就開始累積 1 筆</div>
                   </div>
                 </div>
                 <form id="proposalTaskForm" class="task-form">
@@ -1319,7 +1417,7 @@
           title: "Daily Green Actions", linkTask: "任務提交", linkDimensions: "五大維度"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", submit: "立即提交任務", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "", noteBody: ""
+          eyebrow: "Flexible Climate Participation", kicker: "DAILY GREEN ACTIONS", title: "今天的一個綠色行動", caption: "每天一件小事，也能慢慢累積成真正的改變。", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", submit: "立即提交任務", chip: "今天就開始累積 1 筆", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "", noteBody: ""
         },
         dimensions: {
           title: "五大分類", body: "不知道怎麼分類也沒關係，先完成今天的一個行動。", dietTag: "綠色飲食", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食。", mobilityTag: "低碳移動", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵。", wasteTag: "減廢重用", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、垃圾分類、拒絕一次性用品。", energyTag: "節能減碳", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、少開冷氣、使用自然光。", natureTag: "親近自然", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>社區公園、室內植栽、親近自然。"
@@ -1344,6 +1442,10 @@
           submit: "提交任務",
           entriesTitle: "我的紀錄",
           entriesLoading: "正在確認登入狀態...",
+          share: "分享",
+          shareSuccess: "分享圖已準備好。",
+          shareError: "分享圖片建立失敗，請稍後再試。",
+          shareFallback: "裝置不支援直接分享，已改為下載圖片。",
           dimensionHelpDietTitle: "綠色飲食",
           dimensionHelpDietBody: "像是蔬食、自煮、減少剩食，都算是一種更友善環境的飲食選擇。",
           dimensionHelpMobilityTitle: "低碳移動",
@@ -1385,7 +1487,7 @@
           title: "Daily Green Actions", linkTask: "Task Submission", linkDimensions: "Five Dimensions"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "One Green Action Today", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", submit: "Submit a Task Now", posterAlt: "Daily Green Actions key visual", posterImage: "../assets/GAen.png", noteTitle: "", noteBody: ""
+          eyebrow: "Flexible Climate Participation", kicker: "DAILY GREEN ACTIONS", title: "One Green Action Today", caption: "One small action each day can grow into real change over time.", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", submit: "Submit a Task Now", chip: "Start your first entry today", posterAlt: "Daily Green Actions key visual", posterImage: "../assets/GAen.png", noteTitle: "", noteBody: ""
         },
         dimensions: {
           title: "The Green Dimensions", body: "If you are not sure which dimension fits, just start with the action itself.", dietTag: "Green Diet", dietTitle: "Plant-forward food choices", dietBody: "<strong>Examples:</strong> meat-free meals, home-cooked vegetables, less food waste.", mobilityTag: "Low-carbon Mobility", mobilityTitle: "Move with less carbon", mobilityBody: "<strong>Examples:</strong> walking, cycling, bus, metro.", wasteTag: "Waste Reduction", wasteTitle: "Reduce and reuse", wasteBody: "<strong>Examples:</strong> reusables, repairs, recycling, refusing single-use items.", energyTag: "Energy Saving", energyTitle: "Save energy", energyBody: "<strong>Examples:</strong> lights off, less air-conditioning, natural light.", natureTag: "City / Nature Connection", natureTitle: "Reconnect with nature", natureBody: "<strong>Examples:</strong> parks, indoor plants, nature walks."
@@ -1410,6 +1512,10 @@
           submit: "Submit",
           entriesTitle: "My Entries",
           entriesLoading: "Checking sign-in status...",
+          share: "Share",
+          shareSuccess: "Your share image is ready.",
+          shareError: "Could not create the share image. Please try again later.",
+          shareFallback: "Direct sharing is not available on this device, so the image was downloaded instead.",
           dimensionHelpDietTitle: "Green Diet",
           dimensionHelpDietBody: "Plant-forward meals, home cooking, and reducing food waste all count as greener food choices.",
           dimensionHelpMobilityTitle: "Low-carbon Mobility",
@@ -1679,6 +1785,38 @@
       "能 Energy Saving": { title: "task.dimensionHelpEnergyTitle", body: "task.dimensionHelpEnergyBody" },
       "森 City / Nature Connection": { title: "task.dimensionHelpNatureTitle", body: "task.dimensionHelpNatureBody" }
     };
+    const dimensionShareMap = {
+      "素 Green Diet": {
+        asset: "../assets/green-action-share-characters/green-diet.webp",
+        titleZh: "綠色飲食",
+        titleEn: "Green Diet",
+        gradient: ["#0f5f3a", "#76c66b"]
+      },
+      "行 Low-carbon Mobility": {
+        asset: "../assets/green-action-share-characters/low-carbon-mobility.webp",
+        titleZh: "低碳移動",
+        titleEn: "Low-carbon Mobility",
+        gradient: ["#0f4a6d", "#3fc9a9"]
+      },
+      "減 Waste Reduction": {
+        asset: "../assets/green-action-share-characters/waste-reduction.webp",
+        titleZh: "減廢重用",
+        titleEn: "Waste Reduction",
+        gradient: ["#346a1c", "#9bd35a"]
+      },
+      "能 Energy Saving": {
+        asset: "../assets/green-action-share-characters/energy-saving.webp",
+        titleZh: "節能減碳",
+        titleEn: "Energy Saving",
+        gradient: ["#7a4f12", "#ffd866"]
+      },
+      "森 City / Nature Connection": {
+        asset: "../assets/green-action-share-characters/city-nature-connection.webp",
+        titleZh: "親近自然",
+        titleEn: "City / Nature Connection",
+        gradient: ["#186b52", "#7ad8a0"]
+      }
+    };
     const wrapTaskStepError = (step, error) => {
       if (error && typeof error === "object") {
         error.step = step;
@@ -1727,6 +1865,156 @@
       return String(path || "")
         .split(".")
         .reduce((acc, key) => (acc && typeof acc === "object" ? acc[key] : ""), I18N[document.documentElement.lang === "en" ? "en" : "zh"]) || "";
+    };
+    const getPrimaryDimension = (submission) => {
+      if (Array.isArray(submission?.dimensions)) return submission.dimensions[0] || "";
+      return String(submission?.dimensions || "").trim();
+    };
+    const loadCanvasImage = (src) => new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+    const drawCover = (ctx, img, x, y, width, height) => {
+      const scale = Math.max(width / img.width, height / img.height);
+      const drawWidth = img.width * scale;
+      const drawHeight = img.height * scale;
+      const dx = x + (width - drawWidth) / 2;
+      const dy = y + (height - drawHeight) / 2;
+      ctx.drawImage(img, dx, dy, drawWidth, drawHeight);
+    };
+    const drawContain = (ctx, img, x, y, width, height) => {
+      const scale = Math.min(width / img.width, height / img.height);
+      const drawWidth = img.width * scale;
+      const drawHeight = img.height * scale;
+      const dx = x + (width - drawWidth) / 2;
+      const dy = y + (height - drawHeight) / 2;
+      ctx.drawImage(img, dx, dy, drawWidth, drawHeight);
+    };
+    const canvasToBlob = (canvas) => new Promise((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+          return;
+        }
+        reject(new Error("share-canvas-blob-failed"));
+      }, "image/png");
+    });
+    const buildSubmissionShareBlob = async (submission) => {
+      const dimension = getPrimaryDimension(submission);
+      const shareConfig = dimensionShareMap[dimension] || dimensionShareMap["素 Green Diet"];
+      const title = document.documentElement.lang === "en" ? shareConfig.titleEn : shareConfig.titleZh;
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1350;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("share-canvas-context-missing");
+
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, shareConfig.gradient[0]);
+      gradient.addColorStop(1, shareConfig.gradient[1]);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "rgba(255,255,255,0.12)";
+      ctx.beginPath();
+      ctx.arc(910, 210, 220, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(160, 1180, 180, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.beginPath();
+      ctx.roundRect(54, 54, 972, 1242, 38);
+      ctx.fill();
+
+      ctx.fillStyle = shareConfig.gradient[0];
+      ctx.font = "800 32px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText("Blue Sky Returns", 88, 112);
+
+      ctx.fillStyle = "#14382c";
+      ctx.font = "900 72px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(title, 88, 214, 560);
+
+      ctx.fillStyle = "#527164";
+      ctx.font = "600 28px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      const taskDateLabel = submission.taskDate ? formatTaskDateLabel(submission.taskDate) : "";
+      if (taskDateLabel) {
+        ctx.fillText(taskDateLabel, 88, 264);
+      }
+
+      if (submission.image?.downloadURL) {
+        const photo = await loadCanvasImage(submission.image.downloadURL);
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(88, 310, 560, 760, 34);
+        ctx.clip();
+        drawCover(ctx, photo, 88, 310, 560, 760);
+        ctx.restore();
+      }
+
+      const character = await loadCanvasImage(shareConfig.asset);
+      drawContain(ctx, character, 620, 220, 360, 860);
+
+      ctx.fillStyle = "#173228";
+      ctx.font = "800 42px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      const caption = String(submission.caption || "").trim() || title;
+      const words = caption.split("");
+      let line = "";
+      let y = 1140;
+      const maxWidth = 904;
+      const lineHeight = 54;
+      let lines = 0;
+      for (const word of words) {
+        const test = line + word;
+        if (ctx.measureText(test).width > maxWidth && line) {
+          ctx.fillText(line, 88, y);
+          line = word;
+          y += lineHeight;
+          lines += 1;
+          if (lines >= 2) break;
+        } else {
+          line = test;
+        }
+      }
+      if (line && lines < 3) {
+        ctx.fillText(line, 88, y);
+      }
+
+      ctx.fillStyle = "#5c7b6e";
+      ctx.font = "700 24px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(document.documentElement.lang === "en" ? "Daily Green Actions" : "每日綠色行動", 88, 1248);
+
+      return canvasToBlob(canvas);
+    };
+    const shareSubmission = async (submission) => {
+      try {
+        const blob = await buildSubmissionShareBlob(submission);
+        const dimension = getPrimaryDimension(submission);
+        const shareConfig = dimensionShareMap[dimension] || dimensionShareMap["素 Green Diet"];
+        const title = document.documentElement.lang === "en" ? shareConfig.titleEn : shareConfig.titleZh;
+        const file = new File([blob], `green-action-${Date.now()}.png`, { type: "image/png" });
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({
+            title,
+            text: submission.caption || title,
+            files: [file]
+          });
+          setTaskStatus("ok", getCopy("task.shareSuccess"));
+          return;
+        }
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `green-action-${Date.now()}.png`;
+        link.click();
+        setTaskStatus("ok", getCopy("task.shareFallback"));
+      } catch (error) {
+        console.error(error);
+        setTaskStatus("error", getCopy("task.shareError"));
+      }
     };
 
     const updateDimensionInlineHelp = () => {
@@ -1910,6 +2198,12 @@
       editBtn.textContent = "編輯 / Edit";
       editBtn.addEventListener("click", () => populateFormForEdit(submission));
 
+      const shareBtn = document.createElement("button");
+      shareBtn.type = "button";
+      shareBtn.className = "pill primary";
+      shareBtn.textContent = getCopy("task.share");
+      shareBtn.addEventListener("click", () => shareSubmission(submission));
+
       const deleteBtn = document.createElement("button");
       deleteBtn.type = "button";
       deleteBtn.className = "pill";
@@ -1948,7 +2242,7 @@
         }
       });
 
-      actions.append(editBtn, deleteBtn);
+      actions.append(editBtn, shareBtn, deleteBtn);
       article.appendChild(actions);
 
       return article;
