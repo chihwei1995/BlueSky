@@ -490,6 +490,49 @@
 
     .task-rule strong { font-size: 0.96rem; }
     .task-rule p { margin: 0; line-height: 1.5; color: var(--muted); }
+    .task-aux {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .task-disclosure {
+      border: 1px solid rgba(31, 143, 88, 0.16);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.84);
+      overflow: hidden;
+    }
+    .task-disclosure summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      cursor: pointer;
+      color: var(--green-deep);
+      font-weight: 800;
+    }
+    .task-disclosure summary::-webkit-details-marker {
+      display: none;
+    }
+    .task-disclosure summary::after {
+      content: "+";
+      flex: 0 0 auto;
+      font-size: 1.2rem;
+      line-height: 1;
+      color: var(--green);
+      transition: transform 0.18s ease;
+    }
+    .task-disclosure[open] summary::after {
+      transform: rotate(45deg);
+    }
+    .task-disclosure-body {
+      padding: 0 18px 18px;
+      border-top: 1px solid rgba(210, 228, 216, 0.9);
+    }
+    .task-disclosure-body > .task-rule {
+      margin-top: 14px;
+    }
 
     .task-form {
       display: grid;
@@ -528,7 +571,7 @@
 
     .checkbox-item {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 8px;
       padding: 10px 12px;
       border: 1px solid var(--line);
@@ -538,7 +581,50 @@
     }
 
     .checkbox-item input {
-      margin-top: 4px;
+      margin: 0;
+      flex: 0 0 auto;
+    }
+    .checkbox-item:has(input:checked) {
+      border-color: rgba(31, 143, 88, 0.42);
+      background: linear-gradient(135deg, rgba(223, 245, 209, 0.72), rgba(255, 255, 255, 0.96));
+      box-shadow: 0 12px 24px rgba(31, 143, 88, 0.12);
+    }
+
+    .checkbox-item-icon {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 6px 12px rgba(31, 143, 88, 0.12));
+    }
+
+    .checkbox-item-text {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1.35;
+    }
+    .dimension-inline-help {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(31, 143, 88, 0.16);
+      background: linear-gradient(135deg, rgba(223, 245, 209, 0.5), rgba(255, 255, 255, 0.95));
+    }
+    .dimension-inline-help[hidden] {
+      display: none;
+    }
+    .dimension-inline-help strong {
+      color: var(--green-deep);
+      font-size: 0.96rem;
+      line-height: 1.35;
+    }
+    .dimension-inline-help p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
     }
 
     .task-actions {
@@ -685,17 +771,33 @@
     .task-status.warn { color: #b45309; }
 
     .submission-list {
-      display: grid;
+      display: flex;
       gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: 4px;
+      padding: 4px 2px 8px;
+      scrollbar-width: none;
     }
+    .submission-list::-webkit-scrollbar { display: none; }
 
     .submission-item {
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.88);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 252, 248, 0.92));
+      box-shadow: 0 16px 28px rgba(20, 92, 58, 0.08);
       padding: 16px;
       display: grid;
       gap: 10px;
+      min-width: min(332px, 82vw);
+      flex: 0 0 min(332px, 82vw);
+      scroll-snap-align: start;
+    }
+    .submission-item:first-child { margin-left: 2px; }
+    .submission-item:last-child { margin-right: 2px; }
+    .submission-item h3 {
+      font-size: 1.02rem;
+      line-height: 1.35;
     }
 
     .submission-actions {
@@ -715,6 +817,12 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+    }
+    .submission-tags .highlight {
+      padding: 7px 11px;
+      font-size: 0.8rem;
+      box-shadow: none;
+      background: linear-gradient(135deg, rgba(223, 245, 209, 0.94), rgba(241, 255, 229, 0.96));
     }
 
     .submission-empty {
@@ -869,6 +977,20 @@
         padding: 12px 14px;
         border-radius: 18px;
       }
+      .task-aux {
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .task-disclosure {
+        border-radius: 18px;
+      }
+      .task-disclosure summary {
+        padding: 14px;
+        font-size: 0.95rem;
+      }
+      .task-disclosure-body {
+        padding: 0 14px 14px;
+      }
       .task-card,
       .concept-card,
       .why-card,
@@ -901,6 +1023,20 @@
         padding: 9px 10px;
         font-size: 0.9rem;
       }
+      .checkbox-item-icon {
+        width: 24px;
+        height: 24px;
+      }
+      .dimension-inline-help {
+        margin-top: 8px;
+        padding: 12px;
+      }
+      .dimension-inline-help strong {
+        font-size: 0.92rem;
+      }
+      .dimension-inline-help p {
+        font-size: 0.88rem;
+      }
       .consent-box,
       .task-auth-card {
         padding: 12px 14px;
@@ -909,13 +1045,26 @@
       .submission-item {
         padding: 14px;
         gap: 8px;
+        min-width: 84vw;
+        flex-basis: 84vw;
+        border-radius: 20px;
       }
       .submission-item h3 {
-        font-size: 1rem;
+        font-size: 0.98rem;
       }
       .submission-item p {
         margin: 0;
         font-size: 0.9rem;
+      }
+      .submission-actions {
+        gap: 8px;
+      }
+      .submission-actions .pill {
+        flex: 1 1 calc(50% - 4px);
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 12px;
+        font-size: 0.88rem;
       }
       .checkbox-grid { grid-template-columns: 1fr; }
       .task-auth-form { grid-template-columns: 1fr; }
@@ -938,7 +1087,7 @@
             <button class="lang-btn active" type="button" data-lang="zh">中文</button>
             <button class="lang-btn" type="button" data-lang="en">EN</button>
           </div>
-          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false">Menu / 選單</button>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false" data-i18n="nav.menu">選單</button>
         </div>
       </div>
       <div id="navActions" class="nav-actions">
@@ -974,101 +1123,71 @@
               </div>
             </div>
           </section>
-          <section id="dimensions" class="panel">
-            <div class="section-head">
-              <h2 data-i18n="dimensions.title">The Green Dimensions / 五大維度</h2>
-            </div>
-            <div class="dimension-grid">
-              <article class="dimension-card">
-                <div class="dimension-icon-wrap">
-                  <img class="dimension-icon" src="../assets/green-dimensions/diet.svg" alt="Green Diet icon" />
-                </div>
-                <span class="dimension-tag" data-i18n="dimensions.dietTag">Green Diet</span>
-                <h3 data-i18n="dimensions.dietTitle">Plant-forward food choices</h3>
-                <p data-i18n-html="dimensions.dietBody"><strong>Examples:</strong> meat-free meals, home-cooked vegetables, reducing food waste.</p>
-              </article>
-              <article class="dimension-card">
-                <div class="dimension-icon-wrap">
-                  <img class="dimension-icon" src="../assets/green-dimensions/mobility.svg" alt="Low-carbon Mobility icon" />
-                </div>
-                <span class="dimension-tag" data-i18n="dimensions.mobilityTag">Low-carbon Mobility</span>
-                <h3 data-i18n="dimensions.mobilityTitle">Move with less carbon</h3>
-                <p data-i18n-html="dimensions.mobilityBody"><strong>Examples:</strong> walking, cycling, buses, metro, or choosing not to drive.</p>
-              </article>
-              <article class="dimension-card">
-                <div class="dimension-icon-wrap">
-                  <img class="dimension-icon" src="../assets/green-dimensions/waste.svg" alt="Waste Reduction icon" />
-                </div>
-                <span class="dimension-tag" data-i18n="dimensions.wasteTag">Waste Reduction</span>
-                <h3 data-i18n="dimensions.wasteTitle">Reduce and reuse</h3>
-                <p data-i18n-html="dimensions.wasteBody"><strong>Examples:</strong> reusable containers, repairs, recycling, refusing single-use plastic.</p>
-              </article>
-              <article class="dimension-card">
-                <div class="dimension-icon-wrap">
-                  <img class="dimension-icon" src="../assets/green-dimensions/energy.svg" alt="Energy Saving icon" />
-                </div>
-                <span class="dimension-tag" data-i18n="dimensions.energyTag">Energy Saving</span>
-                <h3 data-i18n="dimensions.energyTitle">Save energy and trim digital waste</h3>
-                <p data-i18n-html="dimensions.energyBody"><strong>Examples:</strong> natural light, unplugging devices, deleting expired emails.</p>
-              </article>
-              <article class="dimension-card">
-                <div class="dimension-icon-wrap">
-                  <img class="dimension-icon" src="../assets/green-dimensions/nature.svg" alt="City and Nature Connection icon" />
-                </div>
-                <span class="dimension-tag" data-i18n="dimensions.natureTag">City / Nature Connection</span>
-                <h3 data-i18n="dimensions.natureTitle">Reconnect urban life with nature</h3>
-                <p data-i18n-html="dimensions.natureBody"><strong>Examples:</strong> green infrastructure, community parks, indoor plants, Green Hunt stops.</p>
-              </article>
-            </div>
-          </section>
           <section id="task" class="panel task-panel">
             <div class="section-head">
-              <h2>Task Submission / 任務提交</h2>
-            </div>
-            <div class="task-rule">
-              <strong data-i18n="taskRule.title">每日 1 筆</strong>
-              <p data-i18n="taskRule.body">第一次完成今天的一個行動可獲得 +5。之後每日完成 1 個行動可再 +1；若連續 7 日完成，額外再 +5。</p>
+              <h2 data-i18n="task.heading">任務提交</h2>
             </div>
             <div class="task-grid">
               <article class="task-card task-form-card">
-                <h3>今天的行動</h3>
+                <h3 data-i18n="task.formTitle">今天的行動</h3>
                 <form id="proposalTaskForm" class="task-form">
                   <div class="bot-guard" aria-hidden="true">
                     <label for="taskWebsiteField">Website</label>
                     <input id="taskWebsiteField" name="website" type="text" tabindex="-1" autocomplete="off" />
                   </div>
+                  <input id="taskDate" name="taskDate" type="hidden" />
                   <div>
-                    <label for="taskDate">日期 / Date</label>
-                    <input id="taskDate" name="taskDate" type="date" />
-                  </div>
-                  <div>
-                    <label>對應維度（選填） / Dimensions (Optional)</label>
+                    <label data-i18n="task.dimensionLabel">對應維度（選填）</label>
                     <div class="checkbox-grid">
-                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="素 Green Diet" />素 Green Diet</label>
-                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="行 Low-carbon Mobility" />行 Low-carbon Mobility</label>
-                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="減 Waste Reduction" />減 Waste Reduction</label>
-                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="能 Energy Saving" />能 Energy Saving</label>
-                      <label class="checkbox-item"><input type="checkbox" name="dimensions" value="森 City / Nature Connection" />森 City / Nature Connection</label>
+                      <label class="checkbox-item">
+                        <input type="checkbox" name="dimensions" value="素 Green Diet" />
+                        <img class="checkbox-item-icon" src="../assets/green-dimensions/diet.svg" alt="" aria-hidden="true" />
+                        <span class="checkbox-item-text" data-i18n="task.dimensionDiet">素食選擇</span>
+                      </label>
+                      <label class="checkbox-item">
+                        <input type="checkbox" name="dimensions" value="行 Low-carbon Mobility" />
+                        <img class="checkbox-item-icon" src="../assets/green-dimensions/mobility.svg" alt="" aria-hidden="true" />
+                        <span class="checkbox-item-text" data-i18n="task.dimensionMobility">低碳移動</span>
+                      </label>
+                      <label class="checkbox-item">
+                        <input type="checkbox" name="dimensions" value="減 Waste Reduction" />
+                        <img class="checkbox-item-icon" src="../assets/green-dimensions/waste.svg" alt="" aria-hidden="true" />
+                        <span class="checkbox-item-text" data-i18n="task.dimensionWaste">減廢重用</span>
+                      </label>
+                      <label class="checkbox-item">
+                        <input type="checkbox" name="dimensions" value="能 Energy Saving" />
+                        <img class="checkbox-item-icon" src="../assets/green-dimensions/energy.svg" alt="" aria-hidden="true" />
+                        <span class="checkbox-item-text" data-i18n="task.dimensionEnergy">節能省電</span>
+                      </label>
+                      <label class="checkbox-item">
+                        <input type="checkbox" name="dimensions" value="森 City / Nature Connection" />
+                        <img class="checkbox-item-icon" src="../assets/green-dimensions/nature.svg" alt="" aria-hidden="true" />
+                        <span class="checkbox-item-text" data-i18n="task.dimensionNature">親近自然</span>
+                      </label>
+                    </div>
+                    <div id="dimensionInlineHelp" class="dimension-inline-help" hidden>
+                      <strong id="dimensionInlineHelpTitle"></strong>
+                      <p id="dimensionInlineHelpBody"></p>
                     </div>
                   </div>
                   <div>
-                    <label for="taskCaption">今天做了什麼 / What did you do today?</label>
-                    <textarea id="taskCaption" name="taskCaption" placeholder="例：今天步行 15 分鐘，少開一次冷氣。"></textarea>
+                    <label for="taskCaption" data-i18n="task.captionLabel">今天做了什麼</label>
+                    <textarea id="taskCaption" name="taskCaption" data-i18n-placeholder="task.captionPlaceholder" placeholder="例：今天步行 15 分鐘，少開一次冷氣。"></textarea>
                   </div>
                   <div>
-                    <label for="taskImage">照片（選填） / Photo (Optional)</label>
+                    <label for="taskImage" data-i18n="task.imageLabel">照片（選填）</label>
                     <input id="taskImage" name="taskImage" type="file" accept="image/*" />
                   </div>
                   <div class="consent-box">
-                    <button type="button" id="termsOpenBtn" class="terms-trigger">查看隱私與規範條款 / Privacy &amp; Terms</button>
+                    <button type="button" id="termsOpenBtn" class="terms-trigger" data-i18n="task.termsLink">查看隱私與規範條款</button>
                     <label for="taskTermsConsent">
                       <input id="taskTermsConsent" name="taskTermsConsent" type="checkbox" />
-                      我已閱讀並同意隱私與規範條款。 / I have read and agree to the Privacy &amp; Terms.
+                      <span data-i18n="task.termsConsent">我已閱讀並同意隱私與規範條款。</span>
                     </label>
-                    <p id="taskTermsState" class="terms-copy">請只提交你有權提供的內容。首次同意後，同帳號可沿用。 / Please only submit content you have the right to provide. Once accepted, the same account can reuse this consent.</p>
+                    <p id="taskTermsState" class="terms-copy" data-i18n="task.termsState">請只提交你有權提供的內容。首次同意後，同帳號可沿用。</p>
                   </div>
                   <div class="task-actions">
-                    <button id="taskSubmitBtn" class="pill primary" type="submit" hidden aria-hidden="true" style="display:none;">提交任務 / Submit</button>
+                    <button id="taskSubmitBtn" class="pill primary" type="submit" hidden aria-hidden="true" style="display:none;" data-i18n="task.submit">提交任務</button>
                     <span id="taskStatus" class="task-status" aria-live="polite"></span>
                   </div>
                 </form>
@@ -1090,10 +1209,16 @@
                 </div>
               </article>
               <article class="task-card">
-                <h3>我的紀錄 / My Entries</h3>
-                <div id="proposalSubmissionEmpty" class="submission-empty">正在確認登入狀態... / Checking sign-in status...</div>
+                <h3 data-i18n="task.entriesTitle">我的紀錄</h3>
+                <div id="proposalSubmissionEmpty" class="submission-empty" data-i18n="task.entriesLoading">正在確認登入狀態...</div>
                 <div id="proposalSubmissionList" class="submission-list" hidden></div>
               </article>
+            </div>
+            <div class="task-aux">
+              <details class="task-disclosure">
+                <summary data-i18n="taskRule.title">每日 1 筆</summary>
+                <div class="task-disclosure-body"></div>
+              </details>
             </div>
           </section>
         </div>
@@ -1103,17 +1228,17 @@
   <footer class="footer" data-i18n="footer">Blue Sky Returns • Daily Green Actions • 2026</footer>
   <section id="termsModal" class="terms-modal" aria-hidden="true">
     <div class="terms-card">
-      <h3>隱私與規範條款 / Privacy &amp; Terms</h3>
-      <p>本網站用於記錄、展示與推廣 Blue Sky Returns 的氣候行動參與成果。 / This website documents, presents, and promotes climate action participation within Blue Sky Returns.</p>
+      <h3 data-i18n="terms.title">隱私與規範條款</h3>
+      <p data-i18n="terms.body">本網站用於記錄、展示與推廣 Blue Sky Returns 的氣候行動參與成果。</p>
       <ul>
-        <li>你提交的任務標題、日期、維度、文字、圖片與相關紀錄，可能用於網站頁面、互動內容與活動成果展示。 / Your task titles, dates, dimensions, text, images, and related records may be used on website pages, interactive features, and project showcases.</li>
-        <li>相關內容可能被整理為電子書、社群宣導、展覽、工作坊、學校教材與其他氣候行動用途。 / These materials may be curated into an e-book, social promotion, exhibitions, workshops, school materials, and other climate action uses.</li>
-        <li>請勿上傳侵權內容、未經同意的人像敏感資料，或你無權分享的素材。 / Please do not upload infringing materials, unauthorized sensitive personal imagery, or content you do not have permission to share.</li>
-        <li>若內容用於公開展示，我們可能因設計、翻譯或教育整理需要進行必要編修。 / If the content is used publicly, we may make reasonable edits for design, translation, or educational presentation.</li>
+        <li data-i18n="terms.item1">你提交的任務標題、日期、維度、文字、圖片與相關紀錄，可能用於網站頁面、互動內容與活動成果展示。</li>
+        <li data-i18n="terms.item2">相關內容可能被整理為電子書、社群宣導、展覽、工作坊、學校教材與其他氣候行動用途。</li>
+        <li data-i18n="terms.item3">請勿上傳侵權內容、未經同意的人像敏感資料，或你無權分享的素材。</li>
+        <li data-i18n="terms.item4">若內容用於公開展示，我們可能因設計、翻譯或教育整理需要進行必要編修。</li>
       </ul>
       <div class="task-actions">
-        <a href="./privacy-terms.html" class="pill">獨立條款頁 / Full Page</a>
-        <button id="termsCloseBtn" class="pill" type="button">關閉 / Close</button>
+        <a href="./privacy-terms.html" class="pill" data-i18n="terms.fullPage">獨立條款頁</a>
+        <button id="termsCloseBtn" class="pill" type="button" data-i18n="terms.close">關閉</button>
       </div>
     </div>
   </section>
@@ -1122,8 +1247,8 @@
     const I18N = {
       zh: {
         page: { title: "Daily Green Actions | Blue Sky Returns" },
-        header: { title: "Blue Sky Returns", subtitle: "Daily Green Actions" },
-        nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "Daily Green Actions", member: "氣候行動者中心", form: "步入行動" },
+        header: { title: "Blue Sky Returns", subtitle: "每日綠色行動" },
+        nav: { main: "主地球首頁", about: "項目介紹", call: "合作與願景", proposal: "每日綠色行動", member: "氣候行動者中心", form: "步入行動", menu: "選單" },
         mobileNav: {
           title: "快速導覽", task: "任務提交", dimensions: "五大維度"
         },
@@ -1134,11 +1259,41 @@
           eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", submit: "立即提交任務", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "走路、自備、節能、減廢，都可以算。", noteBody: "走路、自備、節能、減廢，都可以算。"
         },
         dimensions: {
-          title: "The Green Dimensions / 五大維度", body: "不知道怎麼分類也沒關係，先完成今天的一個行動。", dietTag: "素 Green Diet", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食。", mobilityTag: "行 Low-carbon Mobility", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵。", wasteTag: "減 Waste Reduction", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、垃圾分類、拒絕一次性用品。", energyTag: "能 Energy Saving", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、少開冷氣、使用自然光。", natureTag: "森 City / Nature Connection", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>社區公園、室內植栽、親近自然。"
+          title: "五大分類", body: "不知道怎麼分類也沒關係，先完成今天的一個行動。", dietTag: "綠色飲食", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食。", mobilityTag: "低碳移動", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵。", wasteTag: "減廢重用", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、垃圾分類、拒絕一次性用品。", energyTag: "節能減碳", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、少開冷氣、使用自然光。", natureTag: "親近自然", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>社區公園、室內植栽、親近自然。"
         },
         taskRule: {
           title: "每日 1 筆",
-          body: "完成今天的行動即可累積記錄；首次連續 7 日完成，可獲得 1 枚限量氣候行動徽章。"
+          body: ""
+        },
+        task: {
+          heading: "任務提交",
+          formTitle: "今天的行動",
+          dateLabel: "日期",
+          dimensionLabel: "對應維度（選填）",
+          dimensionDiet: "綠色飲食",
+          dimensionMobility: "低碳移動",
+          dimensionWaste: "減廢重用",
+          dimensionEnergy: "節能減碳",
+          dimensionNature: "親近自然",
+          captionLabel: "今天做了什麼",
+          captionPlaceholder: "例：今天步行 15 分鐘，少開一次冷氣。",
+          imageLabel: "照片（選填）",
+          termsLink: "查看隱私與規範條款",
+          termsConsent: "我已閱讀並同意隱私與規範條款。",
+          termsState: "請只提交你有權提供的內容。首次同意後，同帳號可沿用。",
+          submit: "提交任務",
+          entriesTitle: "我的紀錄",
+          entriesLoading: "正在確認登入狀態...",
+          dimensionHelpDietTitle: "綠色飲食",
+          dimensionHelpDietBody: "像是蔬食、自煮、減少剩食，都算是一種更友善環境的飲食選擇。",
+          dimensionHelpMobilityTitle: "低碳移動",
+          dimensionHelpMobilityBody: "像是步行、單車、公車或地鐵，都是減少交通排放的做法。",
+          dimensionHelpWasteTitle: "減廢重用",
+          dimensionHelpWasteBody: "像是自備容器、重複使用、分類回收，都是日常很實際的減廢行動。",
+          dimensionHelpEnergyTitle: "節能減碳",
+          dimensionHelpEnergyBody: "像是少開冷氣、關燈拔插頭、使用自然光，都屬於節能行動。",
+          dimensionHelpNatureTitle: "親近自然",
+          dimensionHelpNatureBody: "像是走進公園、照顧植物、感受自然，也是一種和環境重新連結的行動。"
         },
         taskAuth: {
           title: "先用 Email 開始",
@@ -1147,12 +1302,22 @@
           password: "密碼",
           submit: "註冊後直接提交"
         },
+        terms: {
+          title: "隱私與規範條款",
+          body: "本網站用於記錄、展示與推廣 Blue Sky Returns 的氣候行動參與成果。",
+          item1: "你提交的任務標題、日期、維度、文字、圖片與相關紀錄，可能用於網站頁面、互動內容與活動成果展示。",
+          item2: "相關內容可能被整理為電子書、社群宣導、展覽、工作坊、學校教材與其他氣候行動用途。",
+          item3: "請勿上傳侵權內容、未經同意的人像敏感資料，或你無權分享的素材。",
+          item4: "若內容用於公開展示，我們可能因設計、翻譯或教育整理需要進行必要編修。",
+          fullPage: "獨立條款頁",
+          close: "關閉"
+        },
         footer: "Blue Sky Returns • Daily Green Actions • 2026"
       },
       en: {
         page: { title: "Daily Green Actions | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "Daily Green Actions" },
-        nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "Daily Green Actions", member: "Member Center", form: "Take One Step" },
+        nav: { main: "Main Globe", about: "About", call: "Collaboration & Vision", proposal: "Daily Green Actions", member: "Member Center", form: "Take One Step", menu: "Menu" },
         mobileNav: {
           title: "Quick Navigation", task: "Task Submission", dimensions: "Five Dimensions"
         },
@@ -1167,7 +1332,37 @@
         },
         taskRule: {
           title: "One Entry Per Day",
-          body: "Log today's action to build your record. Your first completed 7-day streak earns 1 limited Climate Badge."
+          body: ""
+        },
+        task: {
+          heading: "Task Submission",
+          formTitle: "Today's Action",
+          dateLabel: "Date",
+          dimensionLabel: "Dimensions (Optional)",
+          dimensionDiet: "Green Diet",
+          dimensionMobility: "Low-carbon Mobility",
+          dimensionWaste: "Waste Reduction",
+          dimensionEnergy: "Energy Saving",
+          dimensionNature: "City / Nature Connection",
+          captionLabel: "What did you do today?",
+          captionPlaceholder: "Example: Walked for 15 minutes and used less air-conditioning today.",
+          imageLabel: "Photo (Optional)",
+          termsLink: "View Privacy & Terms",
+          termsConsent: "I have read and agree to the Privacy & Terms.",
+          termsState: "Please only submit content you have the right to provide. Once accepted, the same account can reuse this consent.",
+          submit: "Submit",
+          entriesTitle: "My Entries",
+          entriesLoading: "Checking sign-in status...",
+          dimensionHelpDietTitle: "Green Diet",
+          dimensionHelpDietBody: "Plant-forward meals, home cooking, and reducing food waste all count as greener food choices.",
+          dimensionHelpMobilityTitle: "Low-carbon Mobility",
+          dimensionHelpMobilityBody: "Walking, cycling, buses, and metro rides are all good examples of lower-carbon travel.",
+          dimensionHelpWasteTitle: "Waste Reduction",
+          dimensionHelpWasteBody: "Reusable containers, repairing items, and recycling are simple actions that reduce daily waste.",
+          dimensionHelpEnergyTitle: "Energy Saving",
+          dimensionHelpEnergyBody: "Using less air-conditioning, turning things off, and choosing natural light all count as energy-saving actions.",
+          dimensionHelpNatureTitle: "City / Nature Connection",
+          dimensionHelpNatureBody: "Spending time with plants, parks, and nearby nature is also a meaningful environmental action."
         },
         taskAuth: {
           title: "Start with Email",
@@ -1175,6 +1370,16 @@
           email: "Email",
           password: "Password",
           submit: "Register and Submit"
+        },
+        terms: {
+          title: "Privacy & Terms",
+          body: "This website documents, presents, and promotes climate action participation within Blue Sky Returns.",
+          item1: "Your task titles, dates, dimensions, text, images, and related records may be used on website pages, interactive features, and project showcases.",
+          item2: "These materials may be curated into an e-book, social promotion, exhibitions, workshops, school materials, and other climate action uses.",
+          item3: "Please do not upload infringing materials, unauthorized sensitive personal imagery, or content you do not have permission to share.",
+          item4: "If the content is used publicly, we may make reasonable edits for design, translation, or educational presentation.",
+          fullPage: "Full Page",
+          close: "Close"
         },
         footer: "Blue Sky Returns • Daily Green Actions • 2026"
       }
@@ -1199,6 +1404,9 @@
           document.querySelectorAll(`[data-i18n-alt="${next}"]`).forEach((node) => {
             node.setAttribute("alt", nested);
           });
+          document.querySelectorAll(`[data-i18n-placeholder="${next}"]`).forEach((node) => {
+            node.setAttribute("placeholder", nested);
+          });
         });
       };
       update("", dict);
@@ -1210,6 +1418,7 @@
         button.classList.toggle("active", button.dataset.lang === lang);
       });
       localStorage.setItem(LANG_STORAGE_KEY, lang);
+      document.dispatchEvent(new CustomEvent("bsr:langchange", { detail: { lang } }));
     }
     applyLanguage(localStorage.getItem(LANG_STORAGE_KEY) || "zh");
     document.querySelectorAll(".lang-btn").forEach((button) => {
@@ -1258,6 +1467,9 @@
     const taskTermsConsent = document.getElementById("taskTermsConsent");
     const taskDateInput = document.getElementById("taskDate");
     const taskCaptionInput = document.getElementById("taskCaption");
+    const dimensionInlineHelp = document.getElementById("dimensionInlineHelp");
+    const dimensionInlineHelpTitle = document.getElementById("dimensionInlineHelpTitle");
+    const dimensionInlineHelpBody = document.getElementById("dimensionInlineHelpBody");
     const termsModal = document.getElementById("termsModal");
     const termsOpenBtn = document.getElementById("termsOpenBtn");
     const termsCloseBtn = document.getElementById("termsCloseBtn");
@@ -1270,6 +1482,8 @@
     let currentMemberProfile = null;
     let submissionLoadToken = 0;
     let authSyncToken = 0;
+    let submissionMarqueeFrame = 0;
+    let submissionMarqueePaused = false;
     const taskFormStartedAt = Date.now();
     const MIN_TASK_FILL_MS = 2000;
     const DAILY_SLOT_COLLECTION = "greenProposalDailySlots";
@@ -1337,7 +1551,57 @@
       setVisibleState(taskAuthCard, true, "grid");
     };
 
+    const stopSubmissionMarquee = () => {
+      if (submissionMarqueeFrame) {
+        cancelAnimationFrame(submissionMarqueeFrame);
+        submissionMarqueeFrame = 0;
+      }
+    };
+
+    const startSubmissionMarquee = () => {
+      stopSubmissionMarquee();
+      if (!submissionList || submissionList.hidden || submissionList.children.length < 2) return;
+
+      const tick = () => {
+        if (!submissionMarqueePaused) {
+          const maxScroll = submissionList.scrollWidth - submissionList.clientWidth;
+          if (maxScroll > 0) {
+            submissionList.scrollLeft += 0.45;
+            if (submissionList.scrollLeft >= maxScroll - 1) {
+              submissionList.scrollLeft = 0;
+            }
+          }
+        }
+        submissionMarqueeFrame = requestAnimationFrame(tick);
+      };
+
+      submissionMarqueeFrame = requestAnimationFrame(tick);
+    };
+
+    submissionList.addEventListener("pointerdown", () => {
+      submissionMarqueePaused = true;
+    });
+    submissionList.addEventListener("pointerenter", () => {
+      submissionMarqueePaused = true;
+    });
+    submissionList.addEventListener("pointerleave", () => {
+      submissionMarqueePaused = false;
+    });
+    submissionList.addEventListener("touchstart", () => {
+      submissionMarqueePaused = true;
+    }, { passive: true });
+    submissionList.addEventListener("touchend", () => {
+      submissionMarqueePaused = false;
+    }, { passive: true });
+
     const taskText = (zh, en) => document.documentElement.lang === "en" ? en : zh;
+    const dimensionHelpMap = {
+      "素 Green Diet": { title: "task.dimensionHelpDietTitle", body: "task.dimensionHelpDietBody" },
+      "行 Low-carbon Mobility": { title: "task.dimensionHelpMobilityTitle", body: "task.dimensionHelpMobilityBody" },
+      "減 Waste Reduction": { title: "task.dimensionHelpWasteTitle", body: "task.dimensionHelpWasteBody" },
+      "能 Energy Saving": { title: "task.dimensionHelpEnergyTitle", body: "task.dimensionHelpEnergyBody" },
+      "森 City / Nature Connection": { title: "task.dimensionHelpNatureTitle", body: "task.dimensionHelpNatureBody" }
+    };
     const wrapTaskStepError = (step, error) => {
       if (error && typeof error === "object") {
         error.step = step;
@@ -1377,6 +1641,35 @@
     };
 
     syncTaskEntryUi(null);
+
+    const getCopy = (path) => {
+      return String(path || "")
+        .split(".")
+        .reduce((acc, key) => (acc && typeof acc === "object" ? acc[key] : ""), I18N[document.documentElement.lang === "en" ? "en" : "zh"]) || "";
+    };
+
+    const updateDimensionInlineHelp = () => {
+      const selected = Array.from(taskForm.querySelectorAll('input[name="dimensions"]:checked'));
+      const latest = selected[selected.length - 1];
+      if (!latest) {
+        dimensionInlineHelp.hidden = true;
+        dimensionInlineHelpTitle.textContent = "";
+        dimensionInlineHelpBody.textContent = "";
+        return;
+      }
+      const config = dimensionHelpMap[latest.value];
+      if (!config) {
+        dimensionInlineHelp.hidden = true;
+        return;
+      }
+      dimensionInlineHelpTitle.textContent = getCopy(config.title);
+      dimensionInlineHelpBody.textContent = getCopy(config.body);
+      dimensionInlineHelp.hidden = false;
+    };
+    taskForm.querySelectorAll('input[name="dimensions"]').forEach((input) => {
+      input.addEventListener("change", updateDimensionInlineHelp);
+    });
+    document.addEventListener("bsr:langchange", updateDimensionInlineHelp);
 
     const ensureMemberProfile = async (user) => {
       if (!user) return;
@@ -1473,6 +1766,7 @@
       Array.from(taskForm.querySelectorAll('input[name="dimensions"]')).forEach((checkbox) => {
         checkbox.checked = (submission.dimensions || []).includes(checkbox.value);
       });
+      updateDimensionInlineHelp();
       setTaskStatus("warn", "目前正在編輯既有任務，重新送出會更新原內容。");
       taskSubmitBtn.textContent = "更新任務 / Update";
       window.scrollTo({ top: taskForm.offsetTop - 120, behavior: "smooth" });
@@ -1482,6 +1776,7 @@
       editingSubmissionId = null;
       editingSubmissionData = null;
       taskForm.reset();
+      updateDimensionInlineHelp();
       taskDateInput.disabled = false;
       taskDateInput.value = new Date().toISOString().slice(0, 10);
       taskSubmitBtn.textContent = "提交任務 / Submit";
@@ -1587,18 +1882,21 @@
 
         if (!submissions.length) {
           submissionEmpty.textContent = "你目前還沒有提交任何 Daily Green Actions 紀錄。";
+          stopSubmissionMarquee();
           return;
         }
 
         submissions.forEach((submission) => submissionList.appendChild(renderSubmission(submission)));
         submissionEmpty.hidden = true;
         submissionList.hidden = false;
+        startSubmissionMarquee();
       } catch (error) {
         if (loadToken !== submissionLoadToken) return;
         console.error("Failed to load Daily Green Actions:", error);
         submissionList.hidden = true;
         submissionEmpty.hidden = false;
         submissionEmpty.textContent = "Daily Green Actions 紀錄讀取失敗，請稍後再試。";
+        stopSubmissionMarquee();
       }
     };
 
