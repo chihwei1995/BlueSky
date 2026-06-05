@@ -863,6 +863,10 @@
       header { padding-top: env(safe-area-inset-top); }
       .shell { padding: 0 16px; }
       .nav { gap: 8px; padding: 10px 0; }
+      .stack {
+        display: flex;
+        flex-direction: column;
+      }
       .nav-primary { gap: 10px; align-items: center; min-height: 42px; }
       .brand { flex: 0 0 auto; }
       .nav-mobile-tools { display: flex; gap: 6px; margin-left: 0; }
@@ -911,6 +915,8 @@
       }
       main { padding: 16px 0 34px; }
       .stack { gap: 14px; }
+      .task-panel { order: 1; }
+      .hero { order: 2; }
       .panel,
       .hero {
         padding: 18px 14px;
@@ -960,8 +966,7 @@
         justify-content: center;
       }
       .hero-actions .button {
-        width: 100%;
-        max-width: 320px;
+        display: none;
       }
       .hero-art {
         justify-self: stretch;
@@ -1140,9 +1145,6 @@
           <section class="hero panel">
             <div class="hero-copy">
               <h1 data-i18n="hero.title">今天的一個綠色行動</h1>
-              <div class="hero-actions">
-              <a class="button primary" href="#task" data-i18n="hero.submit">立即提交任務</a>
-              </div>
             </div>
             <div class="hero-art">
               <div class="poster-frame">
@@ -1163,10 +1165,6 @@
                     <input id="taskWebsiteField" name="website" type="text" tabindex="-1" autocomplete="off" />
                   </div>
                   <input id="taskDate" name="taskDate" type="hidden" />
-                  <div class="task-date-display">
-                    <div class="task-date-label" data-i18n="task.dateAuto">系統自動帶入今天</div>
-                    <div id="taskDateDisplay" class="task-date-value"></div>
-                  </div>
                   <div>
                     <label data-i18n="task.dimensionLabel">對應維度（選填）</label>
                     <div class="checkbox-grid">
@@ -1206,15 +1204,11 @@
                     <textarea id="taskCaption" name="taskCaption" data-i18n-placeholder="task.captionPlaceholder" placeholder="例：今天步行 15 分鐘，少開一次冷氣。"></textarea>
                   </div>
                   <div>
-                    <label for="taskImage" data-i18n="task.imageLabel">照片（選填）</label>
+                    <label for="taskImage" data-i18n="task.imageLabel">照片</label>
                     <input id="taskImage" name="taskImage" type="file" accept="image/*" />
                   </div>
-                  <div class="consent-box">
-                    <button type="button" id="termsOpenBtn" class="terms-trigger" data-i18n="task.termsLink">查看隱私與規範條款</button>
-                    <label for="taskTermsConsent">
-                      <input id="taskTermsConsent" name="taskTermsConsent" type="checkbox" />
-                      <span data-i18n="task.termsConsent">我已閱讀並同意隱私與規範條款。</span>
-                    </label>
+                  <div class="bot-guard" aria-hidden="true">
+                    <input id="taskTermsConsent" name="taskTermsConsent" type="checkbox" checked />
                     <p id="taskTermsState" class="terms-copy" data-i18n="task.termsState">請只提交你有權提供的內容。首次同意後，同帳號可沿用。</p>
                   </div>
                   <div class="task-actions">
@@ -1246,10 +1240,6 @@
               </article>
             </div>
             <div class="task-aux">
-              <details class="task-disclosure">
-                <summary data-i18n="taskRule.title">每日 1 筆</summary>
-                <div class="task-disclosure-body"></div>
-              </details>
             </div>
           </section>
         </div>
@@ -1287,14 +1277,10 @@
           title: "Daily Green Actions", linkTask: "任務提交", linkDimensions: "五大維度"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", submit: "立即提交任務", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "走路、自備、節能、減廢，都可以算。", noteBody: "走路、自備、節能、減廢，都可以算。"
+          eyebrow: "Flexible Climate Participation", title: "今天的一個綠色行動", body: "不用一次完成很多事。先記下今天做的一個行動，就算開始。", submit: "立即提交任務", posterAlt: "Daily Green Actions 主視覺", posterImage: "../assets/GA.png", noteTitle: "", noteBody: ""
         },
         dimensions: {
           title: "五大分類", body: "不知道怎麼分類也沒關係，先完成今天的一個行動。", dietTag: "綠色飲食", dietTitle: "無肉餐單與飲食選擇", dietBody: "<strong>例子：</strong>自炊蔬食、植物性餐點、減少剩食。", mobilityTag: "低碳移動", mobilityTitle: "低碳移動與少開車", mobilityBody: "<strong>例子：</strong>步行、單車、公車地鐵。", wasteTag: "減廢重用", wasteTitle: "減廢與重複使用", wasteBody: "<strong>例子：</strong>自備容器、垃圾分類、拒絕一次性用品。", energyTag: "節能減碳", energyTitle: "節能與數位減碳", energyBody: "<strong>例子：</strong>關燈拔插頭、少開冷氣、使用自然光。", natureTag: "親近自然", natureTitle: "城市與自然重新連結", natureBody: "<strong>例子：</strong>社區公園、室內植栽、親近自然。"
-        },
-        taskRule: {
-          title: "每日 1 筆",
-          body: ""
         },
         task: {
           heading: "任務提交",
@@ -1309,7 +1295,7 @@
           dimensionNature: "親近自然",
           captionLabel: "今天做了什麼",
           captionPlaceholder: "例：今天步行 15 分鐘，少開一次冷氣。",
-          imageLabel: "照片（選填）",
+          imageLabel: "照片",
           termsLink: "查看隱私與規範條款",
           termsConsent: "我已閱讀並同意隱私與規範條款。",
           termsState: "請只提交你有權提供的內容。首次同意後，同帳號可沿用。",
@@ -1357,14 +1343,10 @@
           title: "Daily Green Actions", linkTask: "Task Submission", linkDimensions: "Five Dimensions"
         },
         hero: {
-          eyebrow: "Flexible Climate Participation", title: "One Green Action Today", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", submit: "Submit a Task Now", posterAlt: "Daily Green Actions key visual", posterImage: "../assets/GAen.png", noteTitle: "Walking, reusing, saving energy, or eating greener all count.", noteBody: "Walking, reusing, saving energy, or eating greener all count."
+          eyebrow: "Flexible Climate Participation", title: "One Green Action Today", body: "You do not need to finish everything at once. Log one green action from today and that already counts as a start.", submit: "Submit a Task Now", posterAlt: "Daily Green Actions key visual", posterImage: "../assets/GAen.png", noteTitle: "", noteBody: ""
         },
         dimensions: {
           title: "The Green Dimensions", body: "If you are not sure which dimension fits, just start with the action itself.", dietTag: "Green Diet", dietTitle: "Plant-forward food choices", dietBody: "<strong>Examples:</strong> meat-free meals, home-cooked vegetables, less food waste.", mobilityTag: "Low-carbon Mobility", mobilityTitle: "Move with less carbon", mobilityBody: "<strong>Examples:</strong> walking, cycling, bus, metro.", wasteTag: "Waste Reduction", wasteTitle: "Reduce and reuse", wasteBody: "<strong>Examples:</strong> reusables, repairs, recycling, refusing single-use items.", energyTag: "Energy Saving", energyTitle: "Save energy", energyBody: "<strong>Examples:</strong> lights off, less air-conditioning, natural light.", natureTag: "City / Nature Connection", natureTitle: "Reconnect with nature", natureBody: "<strong>Examples:</strong> parks, indoor plants, nature walks."
-        },
-        taskRule: {
-          title: "One Entry Per Day",
-          body: ""
         },
         task: {
           heading: "Task Submission",
@@ -1379,7 +1361,7 @@
           dimensionNature: "City / Nature Connection",
           captionLabel: "What did you do today?",
           captionPlaceholder: "Example: Walked for 15 minutes and used less air-conditioning today.",
-          imageLabel: "Photo (Optional)",
+          imageLabel: "Photo",
           termsLink: "View Privacy & Terms",
           termsConsent: "I have read and agree to the Privacy & Terms.",
           termsState: "Please only submit content you have the right to provide. Once accepted, the same account can reuse this consent.",
@@ -1538,15 +1520,21 @@
       if (hasAcceptedTerms(record)) {
         taskTermsConsent.checked = true;
         taskTermsConsent.disabled = true;
-        taskTermsState.textContent = "此帳號已完成條款同意，這次不需重複勾選。 / This account has already accepted the terms, so you do not need to check again.";
+        if (taskTermsState) {
+          taskTermsState.textContent = "此帳號已完成條款同意，這次不需重複勾選。 / This account has already accepted the terms, so you do not need to check again.";
+        }
         return;
       }
       taskTermsConsent.disabled = false;
-      taskTermsConsent.checked = false;
-      taskTermsState.textContent = "請只上傳你有權提供的照片與內容。首次同意後，同帳號可全站共用。 / Please only upload materials you have the right to provide. Once accepted, the same account can reuse this consent across the site.";
+      taskTermsConsent.checked = true;
+      if (taskTermsState) {
+        taskTermsState.textContent = "請只上傳你有權提供的照片與內容。首次同意後，同帳號可全站共用。 / Please only upload materials you have the right to provide. Once accepted, the same account can reuse this consent across the site.";
+      }
     };
 
-    termsOpenBtn.addEventListener("click", openTermsModal);
+    if (termsOpenBtn) {
+      termsOpenBtn.addEventListener("click", openTermsModal);
+    }
     termsCloseBtn.addEventListener("click", closeTermsModal);
     termsModal.addEventListener("click", (event) => {
       if (event.target === termsModal) closeTermsModal();
@@ -1765,6 +1753,14 @@
 
       if (!caption) {
         setTaskStatus("error", taskText("請簡單寫下今天做了什麼。", "Please briefly describe what you did today."));
+        return null;
+      }
+
+      const taskImage = formData.get("taskImage");
+      const hasNewImage = taskImage instanceof File && taskImage.size > 0;
+      const hasExistingImage = Boolean(editingSubmissionData?.image?.downloadURL || editingSubmissionData?.image?.path);
+      if (!hasNewImage && !hasExistingImage) {
+        setTaskStatus("error", taskText("請上傳一張照片。", "Please upload a photo."));
         return null;
       }
 
