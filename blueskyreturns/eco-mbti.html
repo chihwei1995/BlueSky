@@ -2653,7 +2653,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
-    import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
 
     const firebaseConfig = {
@@ -3400,6 +3400,7 @@
     const answers = new Map();
     let pendingResult = null;
     let hasDismissedActivityFloat = false;
+    let authReady = false;
 
     const TYPE_THEMES = {
       INTJ: { soft: "rgba(109, 198, 220, 0.38)", deep: "rgba(47, 106, 170, 0.26)", accent: "rgba(92, 224, 206, 0.34)", codeBg: "rgba(91, 169, 224, 0.16)", codeFg: "#0c4f72", cardTop: "rgba(240, 248, 255, 0.98)", cardBottom: "rgba(229, 242, 250, 0.96)", active: "rgba(69, 146, 215, 0.5)", activeTop: "rgba(228, 242, 255, 0.96)", shadow: "rgba(69, 146, 215, 0.18)", badge: "Systems" },
@@ -3491,6 +3492,58 @@
       return answers.has(question.id);
     }).length;
 
+    const waitForAuthReady = async () => {
+      if (authReady) return;
+      if (typeof auth.authStateReady === "function") {
+        try {
+          await auth.authStateReady();
+        } catch (error) {
+          console.warn("authStateReady failed:", error);
+        }
+      }
+    };
+
+    const buildAuthenticatedRegistration = (user) => {
+      if (!user) return null;
+      return {
+        email: String(user.email || "").trim().toLowerCase(),
+        nickname: String(user.displayName || "").trim() || String(user.email || "").split("@")[0] || "Member"
+      };
+    };
+
+    const handleQuizCompleted = async () => {
+      pendingResult = calculateResult();
+      gateStatus.className = "status";
+      gateStatus.textContent = "";
+
+      await waitForAuthReady();
+      const user = auth.currentUser;
+      if (!user) {
+        setScreen("register");
+        return;
+      }
+
+      const registration = buildAuthenticatedRegistration(user);
+      try {
+        await saveRegistrationAndResult({
+          email: registration?.email || "",
+          nickname: registration?.nickname || "",
+          result: pendingResult,
+          termsAcceptedAt: new Date().toISOString()
+        });
+        shareStatus.className = "status ok";
+        shareStatus.textContent = t("result.saved");
+      } catch (error) {
+        console.error("Eco-MBTI save for signed-in member failed:", error);
+        shareStatus.className = "status warn";
+        shareStatus.textContent = currentLang === "zh"
+          ? "已直接顯示結果，但雲端保存失敗。"
+          : "Your result is ready, but cloud saving failed.";
+      }
+
+      renderResult(pendingResult, { persistLocal: true, registration });
+    };
+
     const getSelectedValue = (questionId) => answers.get(questionId) || "";
 
     const getQuestionIllustrationPath = (question) => {
@@ -3566,10 +3619,7 @@
               currentQuestionIndex += 1;
               renderCurrentQuestion();
             } else {
-              pendingResult = calculateResult();
-              gateStatus.className = "status";
-              gateStatus.textContent = "";
-              setScreen("register");
+              handleQuizCompleted();
             }
           }, 220);
         });
@@ -4172,6 +4222,13 @@
       if (window.innerWidth > 640) closeMobileNav();
     });
     setNavToggleLabel(false);
+
+    onAuthStateChanged(auth, (user) => {
+      authReady = true;
+      const registration = buildAuthenticatedRegistration(user);
+      if (registration?.email) gateEmailInput.value = registration.email;
+      if (registration?.nickname) gateNicknameInput.value = registration.nickname;
+    });
 
     const localSavedResult = loadLocalResult();
     if (localSavedResult) {
