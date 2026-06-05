@@ -68,10 +68,6 @@
       border-bottom: 1px solid rgba(216, 231, 221, 0.96);
     }
 
-    body[data-screen="intro"] header {
-      display: none !important;
-    }
-
     .shell {
       max-width: 1200px;
       margin: 0 auto;
@@ -392,19 +388,26 @@
 
     .intro-video-hero {
       position: relative;
+      width: min(100%, 430px);
+      margin: 0 auto;
       padding: 0;
       overflow: hidden;
-      min-height: min(78vh, 1080px);
+      min-height: clamp(720px, 82vh, 920px);
+      aspect-ratio: 9 / 18.8;
       background: #0f251d;
-      border-radius: 32px;
-      box-shadow: 0 28px 56px rgba(9, 34, 26, 0.22);
+      border-radius: 36px;
+      border: 1px solid rgba(18, 56, 45, 0.14);
+      box-shadow:
+        0 32px 72px rgba(9, 34, 26, 0.22),
+        0 0 0 10px rgba(255, 255, 255, 0.52),
+        0 0 0 11px rgba(18, 56, 45, 0.08);
     }
 
     .intro-video-hero video {
       display: block;
       width: 100%;
       height: 100%;
-      min-height: min(78vh, 1080px);
+      min-height: clamp(720px, 82vh, 920px);
       object-fit: cover;
       background: #0f251d;
     }
@@ -418,6 +421,21 @@
       padding: clamp(20px, 4vw, 36px);
       background:
         linear-gradient(180deg, rgba(8, 27, 21, 0.22) 0%, rgba(8, 27, 21, 0.02) 28%, rgba(8, 27, 21, 0.34) 100%);
+      pointer-events: none;
+    }
+
+    .intro-video-hero::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 34%;
+      height: 20px;
+      border-radius: 0 0 18px 18px;
+      background: rgba(9, 25, 20, 0.76);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+      z-index: 3;
       pointer-events: none;
     }
 
@@ -461,77 +479,131 @@
       pointer-events: auto;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(8, 28, 21, 0.28), rgba(8, 28, 21, 0.14));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow:
+        0 16px 36px rgba(7, 31, 24, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(14px);
       z-index: 2;
     }
 
     .intro-start-btn {
       position: relative;
-      width: clamp(148px, 18vw, 220px);
-      height: clamp(64px, 8.5vw, 92px);
-      padding: 0 18px;
-      background:
-        linear-gradient(135deg, rgba(19, 90, 64, 0.84), rgba(42, 166, 181, 0.8));
-      border: 1px solid rgba(255, 255, 255, 0.34);
+      width: clamp(138px, 16vw, 192px);
+      min-height: clamp(68px, 8vw, 84px);
+      padding: 14px 18px 12px;
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 6px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(237, 249, 242, 0.92));
+      border: 1px solid rgba(255, 255, 255, 0.5);
       box-shadow:
-        0 16px 30px rgba(11, 53, 40, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.24);
-      color: rgba(255, 255, 255, 0.97);
-      font-size: clamp(1.18rem, 1.8vw, 1.7rem);
+        0 16px 30px rgba(11, 53, 40, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      color: #123f30;
+      font-size: clamp(1.04rem, 1.45vw, 1.35rem);
       font-weight: 900;
-      letter-spacing: 0.1em;
-      line-height: 1;
+      letter-spacing: 0.08em;
+      line-height: 1.05;
       text-transform: none;
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
+      border-radius: 26px;
+      backdrop-filter: blur(12px);
       text-shadow:
-        0 4px 18px rgba(0, 0, 0, 0.34),
-        0 0 24px rgba(208, 255, 233, 0.24);
-      transition: transform 0.22s ease, text-shadow 0.22s ease, opacity 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: transform 0.22s ease, text-shadow 0.22s ease, opacity 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+      overflow: hidden;
     }
 
     .intro-start-btn::before {
       content: "";
       position: absolute;
-      inset: -10px;
-      border-radius: 44px;
+      inset: 6px;
+      border-radius: 20px;
       background:
-        radial-gradient(circle at center, rgba(205, 255, 234, 0.26), rgba(160, 232, 214, 0.12) 34%, transparent 72%);
-      opacity: 0;
-      transform: scale(0.92);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.08));
+      opacity: 1;
+      transform: none;
       transition: opacity 0.22s ease, transform 0.22s ease;
-      z-index: -1;
+      z-index: 0;
     }
 
     .intro-start-btn::after {
-      content: "";
+      content: "Tap to begin";
       position: absolute;
-      inset: 6px;
-      border-radius: 38px;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.18), transparent 58%);
-      opacity: 0;
-      transition: opacity 0.22s ease;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      font-size: 0.58rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(18, 63, 48, 0.5);
+      white-space: nowrap;
+      transition: color 0.22s ease, opacity 0.22s ease;
+      z-index: 1;
     }
 
-    .intro-start-btn:hover::before,
-    .intro-start-btn:hover::after,
-    .intro-start-btn:focus-visible::before,
-    .intro-start-btn:focus-visible::after {
-      opacity: 1;
-      transform: scale(1);
+    .intro-start-btn > span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .intro-start-btn .intro-start-main {
+      font-size: inherit;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .intro-start-btn .intro-start-sub {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(18, 63, 48, 0.68);
+    }
+
+    .intro-start-btn.zh {
+      background: linear-gradient(145deg, rgba(18, 81, 58, 0.96), rgba(42, 166, 181, 0.92));
+      border-color: rgba(255, 255, 255, 0.28);
+      color: #fff;
+      box-shadow:
+        0 18px 34px rgba(11, 53, 40, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      text-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.24);
+    }
+
+    .intro-start-btn.zh::before {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.04));
+    }
+
+    .intro-start-btn.zh::after,
+    .intro-start-btn.zh .intro-start-sub {
+      color: rgba(255, 255, 255, 0.76);
     }
 
     .intro-start-btn:hover,
     .intro-start-btn:focus-visible {
       transform: scale(1.03);
-      border-color: rgba(255, 255, 255, 0.52);
+      border-color: rgba(255, 255, 255, 0.58);
       box-shadow:
-        0 20px 38px rgba(11, 53, 40, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.32);
-      text-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(218, 255, 240, 0.42);
+        0 22px 40px rgba(11, 53, 40, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.44);
+    }
+
+    .intro-start-btn:hover::after,
+    .intro-start-btn:focus-visible::after {
+      color: rgba(18, 63, 48, 0.72);
+    }
+
+    .intro-start-btn.zh:hover::after,
+    .intro-start-btn.zh:focus-visible::after {
+      color: rgba(255, 255, 255, 0.92);
     }
 
     .intro-start-btn:focus-visible {
@@ -796,6 +868,118 @@
 
     .intro-screen {
       gap: 22px;
+      justify-items: center;
+    }
+
+    .intro-support-banner {
+      width: min(100%, 430px);
+      display: grid;
+      gap: 10px;
+      padding: 18px 18px 20px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.34), transparent 32%),
+        linear-gradient(135deg, rgba(18, 81, 58, 0.96), rgba(27, 122, 85, 0.94) 52%, rgba(42, 166, 181, 0.88));
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 24px 48px rgba(12, 53, 40, 0.18);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .intro-support-banner::before,
+    .intro-support-banner::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
+
+    .intro-support-banner::before {
+      width: 168px;
+      height: 168px;
+      right: -48px;
+      top: -62px;
+    }
+
+    .intro-support-banner::after {
+      width: 118px;
+      height: 118px;
+      left: -28px;
+      bottom: -54px;
+    }
+
+    .intro-support-badge,
+    .intro-support-banner strong,
+    .intro-support-banner p,
+    .intro-support-stats,
+    .intro-support-note {
+      position: relative;
+      z-index: 1;
+    }
+
+    .intro-support-badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .intro-support-banner-image {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 16px 28px rgba(11, 53, 40, 0.16);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .intro-support-banner strong {
+      font-size: clamp(1.2rem, 2vw, 1.55rem);
+      line-height: 1.25;
+    }
+
+    .intro-support-banner p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .intro-support-stats {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .intro-support-number {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+
+    .intro-support-note {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 0.84rem;
+      font-weight: 800;
     }
 
     .intro-guide {
@@ -1682,9 +1866,10 @@
         min-width: 0;
       }
       .brand img {
-        width: 34px;
-        height: 34px;
-        border-radius: 10px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        padding: 5px;
       }
 
       .brand-copy span {
@@ -1724,12 +1909,23 @@
       }
 
       .intro-video-hero {
+        width: 100%;
         min-height: 68vh;
         border-radius: 24px;
+        aspect-ratio: auto;
+        box-shadow:
+          0 24px 48px rgba(9, 34, 26, 0.18),
+          0 0 0 1px rgba(18, 56, 45, 0.08);
       }
 
       .intro-video-hero video {
         min-height: 68vh;
+      }
+
+      .intro-video-hero::before {
+        top: 10px;
+        width: 32%;
+        height: 16px;
       }
 
       .intro-video-overlay {
@@ -1742,12 +1938,38 @@
         width: calc(100% - 36px);
         transform: translateX(-50%);
         gap: 10px;
+        padding: 8px;
       }
 
       .intro-start-btn {
+        flex: 1 1 0;
+        width: auto;
+        min-height: 62px;
+        font-size: 1rem;
+        padding: 12px 14px 11px;
+      }
+
+      .intro-start-btn::after {
+        font-size: 0.52rem;
+        bottom: 8px;
+      }
+
+      .intro-start-btn .intro-start-sub {
+        font-size: 0.66rem;
+      }
+
+      .intro-support-banner {
         width: 100%;
-        height: 58px;
-        font-size: 1.1rem;
+        padding: 16px 16px 18px;
+        border-radius: 24px;
+      }
+
+      .intro-support-banner strong {
+        font-size: 1.08rem;
+      }
+
+      .intro-support-number {
+        font-size: 2rem;
       }
 
       .result-activity-float {
@@ -1906,11 +2128,28 @@
               <div class="intro-video-overlay">
                 <div class="intro-video-content">
                   <div class="intro-video-actions">
-                    <button id="startQuizEnBtn" class="intro-start-btn" type="button">Start</button>
-                    <button id="startQuizZhBtn" class="intro-start-btn" type="button">開始</button>
+                    <button id="startQuizEnBtn" class="intro-start-btn en" type="button">
+                      <span class="intro-start-main">START</span>
+                      <span class="intro-start-sub">English</span>
+                    </button>
+                    <button id="startQuizZhBtn" class="intro-start-btn zh" type="button">
+                      <span class="intro-start-main">開始</span>
+                      <span class="intro-start-sub">中文</span>
+                    </button>
                   </div>
                 </div>
               </div>
+            </section>
+            <section class="intro-support-banner" aria-label="321 Tree Rally">
+              <span class="intro-support-badge">CLIMATE ACTION 321</span>
+              <img class="intro-support-banner-image" src="../assets/generated/eco-mbti-321-banner.png" alt="Eco-MBTI climate action 321 banner illustration" loading="lazy" />
+              <strong>一同集氣 321 種下未來小樹苗</strong>
+              <p>把這份測驗的參與感，延伸成真實世界的綠色行動與植樹支持。</p>
+              <div class="intro-support-stats">
+                <span class="intro-support-number">321</span>
+                <span>把每一次加入，累積成更大的未來綠意</span>
+              </div>
+              <span class="intro-support-note">完成測驗後，也能接續參與氣候行動任務</span>
             </section>
 
           </section>

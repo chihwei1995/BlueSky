@@ -99,6 +99,8 @@
 
     header {
       display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      position: relative;
+      z-index: 9;
       padding: 12px 16px;
       background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));
       border-radius: 16px;
@@ -114,6 +116,8 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 10;
     }
     .header-primary {
       display: flex;
@@ -208,7 +212,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.22s ease;
-      z-index: 1;
+      z-index: 7;
     }
     .nav-backdrop.is-visible {
       opacity: 1;
@@ -734,6 +738,8 @@
         width: 100%;
         justify-content: flex-start;
         display: none;
+        flex-direction: column;
+        align-items: stretch;
         gap: 8px;
         margin-top: 10px;
         padding: 14px;
@@ -747,11 +753,15 @@
 
       .header-actions > * {
         max-width: 100%;
+        width: 100%;
       }
       .header-actions .lang-toggle { display: none; }
       .header-actions .about-link,
       .header-actions .ghost-btn,
       .header-actions .nav-link-btn {
+        display: inline-flex;
+        width: 100%;
+        justify-content: center;
         min-height: 46px;
         border-radius: 16px;
         padding: 12px 14px;
