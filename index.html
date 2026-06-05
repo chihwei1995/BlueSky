@@ -181,13 +181,38 @@
     }
     .nav-toggle {
       display: none;
-      border: 1px solid rgba(255, 255, 255, 0.22);
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
       border-radius: 999px;
-      padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-      font-weight: 600;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(255, 255, 255, 0.92);
+      color: #16324f;
+      font-size: 0.92rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
       cursor: pointer;
+    }
+    @keyframes mobileNavFade {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.24);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+      z-index: 1;
+    }
+    .nav-backdrop.is-visible {
+      opacity: 1;
+      pointer-events: auto;
     }
     
     /* hover 小效果（可選） */
@@ -699,20 +724,61 @@
       }
 
       .header-primary { width: 100%; }
-      .header-mobile-tools { display: flex; }
+      .header-primary { gap: 10px; min-height: 42px; }
+      .header-mobile-tools { display: flex; gap: 8px; }
+      .header-mobile-tools .lang-toggle { gap: 4px; padding: 3px; }
+      .header-mobile-tools .lang-btn { min-width: 42px; min-height: 42px; padding: 7px 0; font-size: 0.82rem; }
       .nav-toggle { display: inline-flex; }
       header { width: 100%; gap: 10px; }
       .header-actions {
         width: 100%;
         justify-content: flex-start;
         display: none;
+        gap: 8px;
+        margin-top: 10px;
+        padding: 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(226, 232, 240, 0.22);
+        background: linear-gradient(180deg, rgba(19, 24, 39, 0.88), rgba(15, 23, 42, 0.82));
+        box-shadow: 0 20px 44px rgba(15, 23, 42, 0.28);
+        backdrop-filter: blur(14px);
       }
-      header.nav-open .header-actions { display: flex; }
+      header.nav-open .header-actions { display: flex; animation: mobileNavFade 0.22s ease both; }
 
       .header-actions > * {
         max-width: 100%;
       }
       .header-actions .lang-toggle { display: none; }
+      .header-actions .about-link,
+      .header-actions .ghost-btn,
+      .header-actions .nav-link-btn {
+        min-height: 46px;
+        border-radius: 16px;
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.2;
+        transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+      }
+      .header-actions .about-link:hover,
+      .header-actions .ghost-btn:hover,
+      .header-actions .nav-link-btn:hover {
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.28);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
+        transform: translateY(-1px);
+      }
+      .logo-area {
+        gap: 8px;
+      }
+      .pjc-logo {
+        width: 34px;
+        height: 34px;
+      }
+      .logo-text {
+        display: none;
+      }
 
       /* ✅ 手機：時間表固定上方，但「高度受限」且內容可滾動 → 不再撞到底部資訊 */
       .timeline-container {
@@ -885,6 +951,7 @@
         </div>
       </div>
     </header>
+    <div id="navBackdrop" class="nav-backdrop" aria-hidden="true"></div>
 
     <div class="intro-card" id="introPanel">
       <h1 class="hero-text" id="heroTitle" data-i18n="hero.title">A 3D globe to understand climate crisis and local hope.</h1>
@@ -2498,20 +2565,30 @@
       const header = document.querySelector("header");
       const navActions = document.getElementById("navActions");
       const navToggleBtn = document.getElementById("navToggleBtn");
+      const navBackdrop = document.getElementById("navBackdrop");
       if (!header || !navActions || !navToggleBtn) return;
+      const setNavToggleLabel = (isOpen) => {
+        navToggleBtn.textContent = isOpen ? "Close / 關閉" : "Menu / 選單";
+      };
       const closeMobileNav = () => {
         header.classList.remove("nav-open");
         navToggleBtn.setAttribute("aria-expanded", "false");
+        navBackdrop?.classList.remove("is-visible");
+        setNavToggleLabel(false);
       };
       navToggleBtn.addEventListener("click", () => {
         const isOpen = !header.classList.contains("nav-open");
         header.classList.toggle("nav-open", isOpen);
         navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        navBackdrop?.classList.toggle("is-visible", isOpen);
+        setNavToggleLabel(isOpen);
       });
       navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      navBackdrop?.addEventListener("click", closeMobileNav);
       window.addEventListener("resize", () => {
         if (window.innerWidth > 768) closeMobileNav();
       });
+      setNavToggleLabel(false);
     })();
   </script>
 </body>

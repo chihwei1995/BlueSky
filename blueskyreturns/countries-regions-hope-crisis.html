@@ -163,13 +163,38 @@
     }
     .nav-toggle {
       display: none;
-      border: 1px solid var(--line);
-      background: var(--surface-strong);
-      color: var(--blue-deep);
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
       border-radius: 999px;
-      padding: 10px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(255, 255, 255, 0.92);
+      color: #16324f;
+      font-size: 0.92rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
       font-weight: 700;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
       cursor: pointer;
+    }
+    @keyframes mobileNavFade {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.24);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+      z-index: 29;
+    }
+    .nav-backdrop.is-visible {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .nav-member {
@@ -800,27 +825,57 @@
     }
 
     @media (max-width: 560px) {
+      header { padding-top: env(safe-area-inset-top); }
       .shell {
-        padding: 0 14px;
+        padding: 0 16px;
       }
+      .nav { gap: 8px; padding: 10px 0; }
+      .nav-primary { gap: 10px; align-items: center; min-height: 42px; }
+      .nav-mobile-tools .lang-toggle { gap: 4px; padding: 3px; }
+      .nav-mobile-tools .lang-btn { min-width: 42px; min-height: 42px; padding: 7px 0; font-size: 0.82rem; }
+      .brand img { width: 34px; height: 34px; border-radius: 10px; }
+      .brand strong { display: none; }
       .brand-copy span { display: none; }
-      .nav-mobile-tools { display: flex; }
+      .nav-mobile-tools { display: flex; gap: 8px; }
       .nav-toggle { display: inline-flex; }
       .nav-actions {
         display: none;
         width: 100%;
         flex-direction: column;
         align-items: stretch;
-        padding-top: 10px;
+        gap: 8px;
+        margin-top: 10px;
+        padding: 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(226, 232, 240, 0.84);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+        box-shadow: 0 20px 44px rgba(15, 23, 42, 0.14);
+        backdrop-filter: blur(12px);
       }
-      header.nav-open .nav-actions { display: flex; }
+      header.nav-open .nav-actions { display: flex; animation: mobileNavFade 0.22s ease both; }
       .nav-actions .pill,
       .nav-actions button,
       .nav-member {
         width: 100%;
         justify-content: center;
+        min-height: 46px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.2;
+        transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
       }
       .nav-actions .lang-toggle { display: none; }
+      .nav-actions .pill:hover,
+      .nav-actions .pill.active,
+      .nav-actions button:hover {
+        background: linear-gradient(135deg, #0b5cab, #14b8a6);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(11, 92, 171, 0.18);
+        transform: translateY(-1px);
+      }
 
       .hero-actions,
       .actions-row,
@@ -876,6 +931,7 @@
       </div>
     </div>
   </header>
+  <div id="navBackdrop" class="nav-backdrop" aria-hidden="true"></div>
 
   <main class="shell">
     <div class="mobile-side-nav">
@@ -1222,20 +1278,30 @@
       const header = document.querySelector("header");
       const navActions = document.getElementById("navActions");
       const navToggleBtn = document.getElementById("navToggleBtn");
+      const navBackdrop = document.getElementById("navBackdrop");
       if (!header || !navActions || !navToggleBtn) return;
+      const setNavToggleLabel = (isOpen) => {
+        navToggleBtn.textContent = isOpen ? "Close / 關閉" : "Menu / 選單";
+      };
       const closeMobileNav = () => {
         header.classList.remove("nav-open");
         navToggleBtn.setAttribute("aria-expanded", "false");
+        navBackdrop?.classList.remove("is-visible");
+        setNavToggleLabel(false);
       };
       navToggleBtn.addEventListener("click", () => {
         const isOpen = !header.classList.contains("nav-open");
         header.classList.toggle("nav-open", isOpen);
         navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        navBackdrop?.classList.toggle("is-visible", isOpen);
+        setNavToggleLabel(isOpen);
       });
       navActions.querySelectorAll("a, button").forEach((item) => item.addEventListener("click", closeMobileNav));
+      navBackdrop?.addEventListener("click", closeMobileNav);
       window.addEventListener("resize", () => {
         if (window.innerWidth > 560) closeMobileNav();
       });
+      setNavToggleLabel(false);
     })();
   </script>
 </body>
