@@ -1818,21 +1818,34 @@
       justify-content: flex-start;
     }
 
+    .result-activity-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 39;
+      background: rgba(10, 32, 24, 0.42);
+      backdrop-filter: blur(8px);
+    }
+
+    .result-activity-backdrop[hidden] {
+      display: none !important;
+    }
+
     .result-activity-float {
       position: fixed;
-      right: 22px;
-      bottom: 22px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       z-index: 40;
-      width: min(360px, calc(100vw - 28px));
+      width: min(420px, calc(100vw - 28px));
       display: grid;
       gap: 12px;
-      padding: 16px;
+      padding: 18px;
       border-radius: 24px;
       background:
         linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(244, 252, 247, 0.94)),
         linear-gradient(135deg, rgba(71, 189, 121, 0.22), rgba(77, 143, 255, 0.12));
       border: 1px solid rgba(19, 85, 58, 0.12);
-      box-shadow: 0 24px 48px rgba(15, 52, 41, 0.22);
+      box-shadow: 0 30px 80px rgba(15, 52, 41, 0.28);
       backdrop-filter: blur(18px);
     }
 
@@ -2158,10 +2171,12 @@
       }
 
       .result-activity-float {
-        left: 14px;
-        right: 14px;
-        bottom: 14px;
-        width: auto;
+        left: 50%;
+        right: auto;
+        top: 50%;
+        bottom: auto;
+        width: min(400px, calc(100vw - 28px));
+        padding: 16px;
       }
 
       .hero-copy > .eyebrow,
@@ -2459,7 +2474,7 @@
         <div class="stack flow-shell">
           <section id="introScreen" class="flow-screen intro-screen">
             <section class="intro-video-hero panel">
-              <video autoplay muted loop playsinline preload="metadata" poster="../assets/eco-mbti-intro-poster.png">
+              <video autoplay muted loop playsinline preload="metadata" poster="../assets/eco-mbti-intro-poster.webp">
                 <source src="../assets/eco-mbti-intro.mp4" type="video/mp4" />
               </video>
               <div class="intro-video-overlay">
@@ -2479,7 +2494,7 @@
             </section>
             <section class="intro-support-banner" aria-label="321 Tree Rally">
               <span class="intro-support-badge">CLIMATE ACTION 321</span>
-              <img class="intro-support-banner-image" src="../assets/generated/eco-mbti-321-banner.png" alt="Eco-MBTI climate action 321 banner illustration" loading="lazy" />
+              <img class="intro-support-banner-image" src="../assets/generated/eco-mbti-321-banner.webp" alt="Eco-MBTI climate action 321 banner illustration" loading="lazy" />
               <strong>
                 一同集氣 321 種下未來小樹苗
                 <span class="intro-support-title-en">Gather 321 voices and plant seedlings for the future</span>
@@ -2552,7 +2567,7 @@
                 <div class="result-hero">
                   <div class="portrait-frame">
                     <span id="resultBadge" class="frame-leaf">Eco Type</span>
-                    <img id="resultPortrait" class="result-portrait" src="../assets/eco-mbti-full/INTJ.png" alt="Eco-MBTI character portrait" />
+                    <img id="resultPortrait" class="result-portrait" src="../assets/eco-mbti-full/INTJ.webp" alt="Eco-MBTI character portrait" />
                   </div>
                   <div class="result-copy">
                     <span class="result-type" id="resultTypeLabel">Eco-MBTI</span>
@@ -2614,6 +2629,7 @@
             </div>
             </section>
 
+            <div id="resultActivityBackdrop" class="result-activity-backdrop" hidden></div>
             <aside id="resultActivityFloat" class="result-activity-float" hidden>
               <button id="closeActivityFloatBtn" class="result-activity-close" type="button" aria-label="Close">×</button>
               <div class="result-activity-head">
@@ -2621,7 +2637,7 @@
                 <h3 data-i18n="activity.floatTitle">測完後，順手加入 2026 氣候行動</h3>
                 <p data-i18n="activity.floatBody">恭喜成為集氣的一員，順手加入 2026 氣候行動！</p>
               </div>
-              <img class="result-activity-poster" src="../assets/eco-mbti-climate-action-poster.png" alt="2026 Climate Action campaign poster" loading="lazy" />
+              <img class="result-activity-poster" src="../assets/eco-mbti-climate-action-poster.webp" alt="2026 Climate Action campaign poster" loading="lazy" />
               <div class="result-activity-actions">
                 <a id="openActivityPageLink" class="button primary" href="./climate-action-intro.html" target="_blank" rel="noopener" data-i18n="activity.detail">詳細點擊</a>
               </div>
@@ -3371,6 +3387,7 @@
     const dailyActionLink = document.getElementById("dailyActionLink");
     const shareStatus = document.getElementById("shareStatus");
     const resultActivityFloat = document.getElementById("resultActivityFloat");
+    const resultActivityBackdrop = document.getElementById("resultActivityBackdrop");
     const closeActivityFloatBtn = document.getElementById("closeActivityFloatBtn");
     const openActivityPageLink = document.getElementById("openActivityPageLink");
 
@@ -3422,11 +3439,13 @@
 
     const showActivityFloat = () => {
       if (!resultActivityFloat || hasDismissedActivityFloat || currentScreen !== "result") return;
+      resultActivityBackdrop && (resultActivityBackdrop.hidden = false);
       resultActivityFloat.hidden = false;
     };
 
     const hideActivityFloat = () => {
       if (!resultActivityFloat) return;
+      resultActivityBackdrop && (resultActivityBackdrop.hidden = true);
       resultActivityFloat.hidden = true;
     };
 
@@ -3476,7 +3495,7 @@
 
     const getQuestionIllustrationPath = (question) => {
       const number = String(question.displayIndex).padStart(2, "0");
-      return `../assets/eco-mbti-question-characters/q${number}.png`;
+      return `../assets/eco-mbti-question-characters/q${number}.webp`;
     };
 
     const createQuestionCard = (question) => {
@@ -3719,7 +3738,7 @@
       return `${type} ${profile.title} character card`;
     };
 
-    const getFullPortraitPath = (type) => `../assets/eco-mbti-full/${type}.png`;
+    const getFullPortraitPath = (type) => `../assets/eco-mbti-full/${type}.webp`;
 
     const renderResult = ({ counts, type }, options = {}) => {
       const { persistLocal = true, registration = null } = options;
@@ -3765,10 +3784,25 @@
     };
 
     const drawRoundedImage = (ctx, img, x, y, w, h, r) => {
+      const targetRatio = w / h;
+      const sourceRatio = img.width / img.height;
+      let sx = 0;
+      let sy = 0;
+      let sw = img.width;
+      let sh = img.height;
+
+      if (sourceRatio > targetRatio) {
+        sw = img.height * targetRatio;
+        sx = (img.width - sw) / 2;
+      } else {
+        sh = img.width / targetRatio;
+        sy = (img.height - sh) / 2;
+      }
+
       ctx.save();
       roundRect(ctx, x, y, w, h, r);
       ctx.clip();
-      ctx.drawImage(img, x, y, w, h);
+      ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
       ctx.restore();
     };
 
@@ -3822,26 +3856,26 @@
       fillRoundRect(ctx, cardX + 14, cardY + 14, cardW - 28, cardH - 28, 36, "rgba(255,255,255,0.82)");
       fillRoundRect(ctx, cardX + 36, cardY + 36, cardW - 72, cardH - 72, 30, "#ffffff");
 
-      const imageX = cardX + 72;
+      const imageW = 700;
+      const imageH = 1050;
+      const imageX = cardX + (cardW - imageW) / 2;
       const imageY = cardY + 78;
-      const imageW = cardW - 144;
-      const imageH = 1020;
       drawRoundedImage(ctx, img, imageX, imageY, imageW, imageH, 28);
 
-      fillRoundRect(ctx, imageX + 26, imageY + imageH - 88, 176, 46, 23, "rgba(255,255,255,0.2)");
+      fillRoundRect(ctx, imageX + 24, imageY + imageH - 84, 176, 46, 23, "rgba(255,255,255,0.2)");
       ctx.fillStyle = "#ffffff";
       ctx.font = "900 26px 'Segoe UI', sans-serif";
-      ctx.fillText(`🍃 ${theme.badge}`, imageX + 42, imageY + imageH - 56);
+      ctx.fillText(`🍃 ${theme.badge}`, imageX + 40, imageY + imageH - 52);
 
       ctx.fillStyle = "#12382d";
       ctx.font = "900 58px 'Segoe UI', sans-serif";
-      ctx.fillText(type, imageX, imageY + imageH + 90);
+      ctx.fillText(type, imageX, imageY + imageH + 84);
 
       ctx.font = "900 48px 'Noto Sans TC', 'PingFang TC', sans-serif";
-      const zhBottom = wrapText(ctx, zh.title, imageX, imageY + imageH + 158, imageW, 56);
+      const zhBottom = wrapText(ctx, zh.title, imageX, imageY + imageH + 148, imageW, 56);
       ctx.fillStyle = "#53726a";
       ctx.font = "700 27px 'Segoe UI', sans-serif";
-      const enBottom = wrapText(ctx, en.title, imageX, zhBottom + 42, imageW, 36);
+      const enBottom = wrapText(ctx, en.title, imageX, zhBottom + 38, imageW, 36);
 
       const sections = [
         ["核心特質", zh.core],
@@ -3849,7 +3883,7 @@
         ["挑戰", zh.challenge],
         ["綠色行動建議", zh.actions]
       ];
-      let y = enBottom + 86;
+      let y = enBottom + 76;
       sections.forEach(([label, value]) => {
         fillRoundRect(ctx, imageX, y - 28, imageW, 112, 22, "rgba(239,247,243,0.98)");
         ctx.fillStyle = "#0f5c48";
@@ -4037,6 +4071,10 @@
     });
 
     closeActivityFloatBtn?.addEventListener("click", () => {
+      hasDismissedActivityFloat = true;
+      hideActivityFloat();
+    });
+    resultActivityBackdrop?.addEventListener("click", () => {
       hasDismissedActivityFloat = true;
       hideActivityFloat();
     });
