@@ -75,9 +75,12 @@
     }
 
     .nav {
-      display: grid;
-      gap: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
       padding: 14px 0;
+      flex-wrap: nowrap;
     }
 
     .nav-primary {
@@ -85,6 +88,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+      flex: 1 1 auto;
       min-width: 0;
     }
 
@@ -134,7 +138,8 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      flex: 0 0 auto;
       min-width: 0;
       justify-content: flex-end;
     }
@@ -495,11 +500,11 @@
       position: relative;
       width: clamp(138px, 16vw, 192px);
       min-height: clamp(68px, 8vw, 84px);
-      padding: 14px 18px 12px;
+      padding: 14px 16px;
       display: grid;
       justify-items: center;
       align-content: center;
-      gap: 6px;
+      gap: 4px;
       background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(237, 249, 242, 0.92));
       border: 1px solid rgba(255, 255, 255, 0.5);
       box-shadow:
@@ -517,6 +522,7 @@
         0 1px 0 rgba(255, 255, 255, 0.4);
       transition: transform 0.22s ease, text-shadow 0.22s ease, opacity 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
       overflow: hidden;
+      text-align: center;
     }
 
     .intro-start-btn::before {
@@ -533,18 +539,12 @@
     }
 
     .intro-start-btn::after {
-      content: "Tap to begin";
+      content: "";
       position: absolute;
-      left: 50%;
-      bottom: 10px;
-      transform: translateX(-50%);
-      font-size: 0.58rem;
-      font-weight: 800;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(18, 63, 48, 0.5);
-      white-space: nowrap;
-      transition: color 0.22s ease, opacity 0.22s ease;
+      inset: auto 14px 10px 14px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(18, 63, 48, 0.18), transparent);
+      transition: opacity 0.22s ease;
       z-index: 1;
     }
 
@@ -554,17 +554,25 @@
     }
 
     .intro-start-btn .intro-start-main {
+      display: block;
+      width: 100%;
       font-size: inherit;
       font-weight: 900;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      white-space: nowrap;
     }
 
     .intro-start-btn .intro-start-sub {
-      font-size: 0.74rem;
+      display: block;
+      width: 100%;
+      font-size: 0.68rem;
       font-weight: 800;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: rgba(18, 63, 48, 0.68);
+      line-height: 1.05;
+      white-space: nowrap;
     }
 
     .intro-start-btn.zh {
@@ -598,12 +606,7 @@
 
     .intro-start-btn:hover::after,
     .intro-start-btn:focus-visible::after {
-      color: rgba(18, 63, 48, 0.72);
-    }
-
-    .intro-start-btn.zh:hover::after,
-    .intro-start-btn.zh:focus-visible::after {
-      color: rgba(255, 255, 255, 0.92);
+      opacity: 0.88;
     }
 
     .intro-start-btn:focus-visible {
@@ -949,9 +952,27 @@
       line-height: 1.25;
     }
 
+    .intro-support-title-en {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.84);
+      text-transform: uppercase;
+    }
+
     .intro-support-banner p {
       margin: 0;
       color: rgba(255, 255, 255, 0.88);
+    }
+
+    .intro-support-copy-en {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.84rem;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     .intro-support-stats {
@@ -980,6 +1001,65 @@
       border: 1px solid rgba(255, 255, 255, 0.16);
       font-size: 0.84rem;
       font-weight: 800;
+    }
+
+    .intro-support-note-en {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: -4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    @media (min-width: 1024px) {
+      body[data-screen="intro"] {
+        overflow: hidden;
+      }
+
+      body[data-screen="intro"] main {
+        height: calc(100vh - 104px);
+        padding: 18px 0;
+        overflow: hidden;
+      }
+
+      body[data-screen="intro"] .shell,
+      body[data-screen="intro"] .layout,
+      body[data-screen="intro"] .flow-shell {
+        height: 100%;
+      }
+
+      body[data-screen="intro"] .layout {
+        gap: 0;
+      }
+
+      body[data-screen="intro"] .flow-shell {
+        min-height: 100%;
+        align-items: center;
+      }
+
+      body[data-screen="intro"] .intro-screen {
+        min-height: 100%;
+        width: 100%;
+        grid-template-columns: minmax(360px, 430px) minmax(420px, 560px);
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        justify-items: stretch;
+        gap: 28px;
+      }
+
+      body[data-screen="intro"] .intro-video-hero {
+        width: min(100%, 430px);
+        margin: 0;
+        justify-self: end;
+      }
+
+      body[data-screen="intro"] .intro-support-banner {
+        width: min(100%, 560px);
+        align-self: center;
+        justify-self: start;
+      }
     }
 
     .intro-guide {
@@ -1836,6 +1916,10 @@
     }
 
     @media (max-width: 640px) {
+      body[data-screen="intro"] {
+        overflow: hidden;
+      }
+
       header { padding-top: env(safe-area-inset-top); }
       .hero,
       #guide {
@@ -1844,10 +1928,24 @@
 
       main {
         padding-top: 12px;
+        padding-bottom: 0;
       }
 
       .shell {
         padding: 0 16px;
+      }
+
+      .layout {
+        gap: 0;
+      }
+
+      .flow-shell {
+        min-height: calc(100dvh - env(safe-area-inset-top) - 96px);
+      }
+
+      .intro-screen {
+        min-height: calc(100dvh - env(safe-area-inset-top) - 96px);
+        gap: 0;
       }
 
       .nav {
@@ -1862,7 +1960,7 @@
       }
 
       .brand {
-        flex: 1 1 auto;
+        flex: 0 0 auto;
         min-width: 0;
       }
       .brand img {
@@ -1882,7 +1980,8 @@
       .nav-mobile-tools {
         flex: 0 0 auto;
         width: auto;
-        gap: 8px;
+        gap: 6px;
+        margin-left: 0;
       }
       .nav-mobile-tools .lang-toggle {
         gap: 4px;
@@ -1910,7 +2009,7 @@
 
       .intro-video-hero {
         width: 100%;
-        min-height: 68vh;
+        min-height: calc(100dvh - env(safe-area-inset-top) - 132px);
         border-radius: 24px;
         aspect-ratio: auto;
         box-shadow:
@@ -1919,7 +2018,7 @@
       }
 
       .intro-video-hero video {
-        min-height: 68vh;
+        min-height: calc(100dvh - env(safe-area-inset-top) - 132px);
       }
 
       .intro-video-hero::before {
@@ -1946,22 +2045,20 @@
         width: auto;
         min-height: 62px;
         font-size: 1rem;
-        padding: 12px 14px 11px;
+        padding: 12px 12px;
       }
 
       .intro-start-btn::after {
-        font-size: 0.52rem;
-        bottom: 8px;
+        inset: auto 12px 8px 12px;
       }
 
       .intro-start-btn .intro-start-sub {
-        font-size: 0.66rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.04em;
       }
 
       .intro-support-banner {
-        width: 100%;
-        padding: 16px 16px 18px;
-        border-radius: 24px;
+        display: none;
       }
 
       .intro-support-banner strong {
@@ -2143,13 +2240,20 @@
             <section class="intro-support-banner" aria-label="321 Tree Rally">
               <span class="intro-support-badge">CLIMATE ACTION 321</span>
               <img class="intro-support-banner-image" src="../assets/generated/eco-mbti-321-banner.png" alt="Eco-MBTI climate action 321 banner illustration" loading="lazy" />
-              <strong>一同集氣 321 種下未來小樹苗</strong>
-              <p>把這份測驗的參與感，延伸成真實世界的綠色行動與植樹支持。</p>
+              <strong>
+                一同集氣 321 種下未來小樹苗
+                <span class="intro-support-title-en">Gather 321 voices and plant seedlings for the future</span>
+              </strong>
+              <p>
+                把這份測驗的參與感，延伸成真實世界的綠色行動與植樹支持。
+                <span class="intro-support-copy-en">Turn the energy of this quiz into real-world green action and tree-planting support.</span>
+              </p>
               <div class="intro-support-stats">
                 <span class="intro-support-number">321</span>
                 <span>把每一次加入，累積成更大的未來綠意</span>
               </div>
               <span class="intro-support-note">完成測驗後，也能接續參與氣候行動任務</span>
+              <span class="intro-support-note-en">Complete the quiz, then continue into the climate action missions.</span>
             </section>
 
           </section>
