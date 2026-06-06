@@ -1800,6 +1800,11 @@
     const taskFormStartedAt = Date.now();
     const MIN_TASK_FILL_MS = 2000;
     const DAILY_SLOT_COLLECTION = "greenProposalDailySlots";
+    const sanitizeReferralUid = (value) => {
+      const trimmed = String(value || "").trim();
+      return /^[A-Za-z0-9_-]{10,128}$/.test(trimmed) ? trimmed : "";
+    };
+    const referralUid = sanitizeReferralUid(new URLSearchParams(window.location.search).get("ref"));
 
     const formatCopy = (path, values = {}) => {
       let template = getCopy(path);
@@ -1842,6 +1847,41 @@
       if (hasWeeklyStreak) total += 5;
       total += Math.max(0, Number(impactCount || 0));
       return total;
+    };
+    const buildDailyActionInviteUrl = () => {
+      const url = new URL("./green-action-7day.html", window.location.href);
+      url.searchParams.delete("ref");
+      const sharerUid = sanitizeReferralUid(auth.currentUser?.uid || "");
+      if (sharerUid) {
+        url.searchParams.set("ref", sharerUid);
+      }
+      return url.toString();
+    };
+    const buildDailyActionShareText = (submission, title) => {
+      const inviteUrl = buildDailyActionInviteUrl();
+      const caption = String(submission.caption || "").trim() || title;
+      if (document.documentElement.lang === "en") {
+        return `${title}\n${caption}\nJoin the Daily Green Actions here: ${inviteUrl}`;
+      }
+      return `${title}\n${caption}\n一起加入每日綠色行動：${inviteUrl}`;
+    };
+    const persistMemberReferral = async (uid, source = "daily-green-actions-share") => {
+      if (!referralUid || !uid || referralUid === uid) return;
+      const referrerSnap = await getDoc(doc(db, "members", referralUid));
+      if (!referrerSnap.exists()) return;
+      await setDoc(doc(db, "members", uid), {
+        referral: {
+          referredBy: referralUid,
+          source,
+          updatedAt: new Date().toISOString()
+        }
+      }, { merge: true });
+      await setDoc(doc(db, "memberReferrals", uid), {
+        referredUid: uid,
+        referredBy: referralUid,
+        acceptedAt: new Date().toISOString(),
+        source
+      }, { merge: true });
     };
     const renderTaskScoreGuest = () => {
       currentTaskScoreState = { mode: "guest" };
@@ -2353,12 +2393,14 @@
         const title = document.documentElement.lang === "en" ? shareConfig.titleEn : shareConfig.titleZh;
         const filename = `green-action-${Date.now()}.png`;
         const file = typeof File === "function" ? new File([blob], filename, { type: "image/png" }) : null;
-        const shareText = submission.caption || title;
+        const shareText = buildDailyActionShareText(submission, title);
+        const inviteUrl = buildDailyActionInviteUrl();
 
         if (navigator.share && navigator.canShare && file && navigator.canShare({ files: [file] })) {
           await navigator.share({
             title,
             text: shareText,
+            url: inviteUrl,
             files: [file]
           });
           setTaskStatus("ok", getCopy("task.shareSuccess"));
@@ -2730,6 +2772,11 @@
 
       try {
         await ensureMemberProfile(user);
+        try {
+          await persistMemberReferral(user.uid, "daily-green-actions-share");
+        } catch (referralError) {
+          console.warn("Daily Green Actions referral save skipped:", referralError);
+        }
         if (!hasAcceptedTerms(acceptedTermsRecord) && taskTermsConsent.checked) {
           try {
             await setDoc(doc(db, "members", user.uid), {

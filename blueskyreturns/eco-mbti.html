@@ -2684,6 +2684,10 @@
     const buildMbtiInviteUrl = () => {
       const url = new URL("./eco-mbti.html", window.location.href);
       url.searchParams.delete("ref");
+      const sharerUid = sanitizeReferralUid(auth.currentUser?.uid || "");
+      if (sharerUid) {
+        url.searchParams.set("ref", sharerUid);
+      }
       return url.toString();
     };
     const QUESTION_BANK = [
