@@ -12,9 +12,9 @@
     :root {
       --paper: #f7f0e6;
       --paper-ink: #3f2a24;
-      --board: #cd4032;
-      --board-deep: #a5271d;
-      --board-line: #59110d;
+      --board: #f3eee6;
+      --board-deep: #e7dfd4;
+      --board-line: #6c625d;
       --card: rgba(255, 251, 246, 0.9);
       --line: rgba(87, 58, 48, 0.12);
       --shadow: 0 24px 56px rgba(79, 45, 32, 0.14);
@@ -273,81 +273,55 @@
       font-size: 1rem;
     }
 
-    .logo-showcase-label {
-      display: inline-flex;
-      width: fit-content;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(30, 127, 91, 0.08);
-      color: #1b5c46;
-      border: 1px solid rgba(30, 127, 91, 0.12);
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-    }
-
-    .logo-showcase {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 6px;
-    }
-
-    .logo-showcase-card {
-      display: grid;
-      align-items: center;
-      justify-items: center;
-      min-height: 132px;
-      padding: 16px 18px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.84);
-      border: 1px solid rgba(87, 58, 48, 0.08);
-      box-shadow: 0 14px 30px rgba(79, 45, 32, 0.08);
-      overflow: hidden;
-    }
-
-    .logo-showcase-card img {
-      width: 100%;
-      height: 78px;
-      object-fit: contain;
-      object-position: center;
-      display: block;
-    }
-
-    .logo-showcase-card.featured img {
-      height: 96px;
-      transform: scale(1.06);
-      transform-origin: center;
-    }
-
     .board-stage {
       display: grid;
-      gap: 22px;
+      gap: 0;
       justify-items: center;
     }
 
     .board-frame {
       width: min(100%, 720px);
-      padding: 24px;
+      padding: 24px 24px 26px;
       border-radius: 40px;
-      background: linear-gradient(180deg, #d84839, #b92d22);
-      border: 3px solid rgba(90, 18, 14, 0.35);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.95), transparent 16%),
+        linear-gradient(180deg, #faf7f2, #ece4d9);
+      border: 3px solid rgba(108, 98, 93, 0.18);
       box-shadow:
-        inset 0 2px 0 rgba(255, 255, 255, 0.18),
-        inset 0 -8px 18px rgba(61, 10, 7, 0.18),
-        0 26px 50px rgba(93, 32, 24, 0.24);
+        inset 0 2px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -10px 24px rgba(96, 79, 67, 0.08),
+        0 28px 56px rgba(93, 32, 24, 0.14);
       position: relative;
       aspect-ratio: 0.82;
       overflow: hidden;
+    }
+
+    .board-frame.is-celebrating {
+      animation: boardCelebrate 1.8s ease-in-out infinite;
+    }
+
+    @keyframes boardCelebrate {
+      0%, 100% {
+        box-shadow:
+          inset 0 2px 0 rgba(255, 255, 255, 0.7),
+          inset 0 -10px 24px rgba(96, 79, 67, 0.08),
+          0 28px 56px rgba(93, 32, 24, 0.14);
+      }
+      50% {
+        box-shadow:
+          inset 0 2px 0 rgba(255, 255, 255, 0.76),
+          inset 0 -10px 24px rgba(96, 79, 67, 0.08),
+          0 0 0 6px rgba(255, 206, 92, 0.16),
+          0 0 42px rgba(255, 191, 72, 0.38),
+          0 28px 56px rgba(93, 32, 24, 0.18);
+      }
     }
 
     .board-title {
       position: absolute;
       top: 22px;
       right: 28px;
-      color: rgba(54, 8, 7, 0.8);
+      color: rgba(44, 34, 29, 0.88);
       font-size: 1.18rem;
       font-weight: 900;
       letter-spacing: 0.12em;
@@ -395,13 +369,134 @@
       gap: 8px;
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(81, 10, 8, 0.16);
-      color: #fff8f3;
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(94, 83, 76, 0.08);
+      color: #463831;
+      border: 1px solid rgba(108, 98, 93, 0.14);
       font-size: 0.88rem;
       font-weight: 800;
       z-index: 2;
       backdrop-filter: blur(6px);
+    }
+
+    .board-marquee {
+      position: absolute;
+      inset: 14px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .board-marquee span {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fffef1 0%, #ffd86b 38%, #d69320 100%);
+      box-shadow: 0 0 12px rgba(255, 206, 92, 0.7);
+      animation: marqueeBlink 1.5s ease-in-out infinite;
+    }
+
+    .board-marquee span:nth-child(2n) {
+      animation-delay: 0.25s;
+    }
+
+    .board-marquee span:nth-child(3n) {
+      animation-delay: 0.45s;
+    }
+
+    @keyframes marqueeBlink {
+      0%, 100% { opacity: 0.45; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+
+    .board-marquee span:nth-child(1) { top: 8px; left: 56px; }
+    .board-marquee span:nth-child(2) { top: 8px; left: 128px; }
+    .board-marquee span:nth-child(3) { top: 8px; left: 200px; }
+    .board-marquee span:nth-child(4) { top: 8px; right: 128px; }
+    .board-marquee span:nth-child(5) { top: 8px; right: 56px; }
+    .board-marquee span:nth-child(6) { right: 8px; top: 124px; }
+    .board-marquee span:nth-child(7) { right: 8px; top: 244px; }
+    .board-marquee span:nth-child(8) { right: 8px; top: 364px; }
+    .board-marquee span:nth-child(9) { right: 8px; bottom: 152px; }
+    .board-marquee span:nth-child(10) { right: 8px; bottom: 48px; }
+    .board-marquee span:nth-child(11) { bottom: 8px; right: 132px; }
+    .board-marquee span:nth-child(12) { bottom: 8px; right: 60px; }
+    .board-marquee span:nth-child(13) { bottom: 8px; left: 60px; }
+    .board-marquee span:nth-child(14) { bottom: 8px; left: 132px; }
+    .board-marquee span:nth-child(15) { left: 8px; bottom: 152px; }
+    .board-marquee span:nth-child(16) { left: 8px; top: 364px; }
+    .board-marquee span:nth-child(17) { left: 8px; top: 244px; }
+    .board-marquee span:nth-child(18) { left: 8px; top: 124px; }
+
+    .board-launch {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+      width: min(88%, 320px);
+      text-align: center;
+      transition: opacity 0.24s ease, transform 0.24s ease;
+    }
+
+    .board-launch[hidden] {
+      display: none;
+    }
+
+    .board-launch-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 248, 243, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff8f3;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      backdrop-filter: blur(8px);
+    }
+
+    .board-launch button {
+      min-width: 236px;
+      min-height: 84px;
+      padding: 18px 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(122, 25, 20, 0.18);
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255, 228, 214, 0.92), transparent 38%),
+        linear-gradient(180deg, #e55949 0%, #c93527 56%, #941d14 100%);
+      color: #fffdf9;
+      font-size: 1.16rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-shadow: 0 2px 8px rgba(87, 17, 12, 0.34);
+      box-shadow:
+        0 16px 0 #7b170f,
+        0 24px 32px rgba(79, 18, 13, 0.24),
+        inset 0 2px 0 rgba(255, 255, 255, 0.36),
+        inset 0 -6px 10px rgba(98, 17, 11, 0.26);
+    }
+
+    .board-launch button:hover {
+      transform: translateY(2px);
+      box-shadow:
+        0 12px 0 #7b170f,
+        0 20px 28px rgba(79, 18, 13, 0.28),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -6px 10px rgba(98, 17, 11, 0.26);
+    }
+
+    .board-launch p {
+      margin: 0;
+      max-width: 28ch;
+      color: rgba(70, 56, 49, 0.9);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
     }
 
     .board-legend {
@@ -421,9 +516,9 @@
       justify-items: center;
       padding: 10px 8px;
       border-radius: 18px;
-      background: rgba(81, 10, 8, 0.16);
-      color: #fff8f3;
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.58);
+      color: #4a3d36;
+      border: 1px solid rgba(108, 98, 93, 0.14);
       backdrop-filter: blur(6px);
       text-align: center;
     }
@@ -439,137 +534,97 @@
       line-height: 1.25;
     }
 
-    .info-panel,
-    .result-panel {
-      width: min(100%, 920px);
-      border-radius: 28px;
-      background: var(--card);
-      border: 1px solid rgba(87, 58, 48, 0.08);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .info-panel {
-      display: grid;
-      gap: 16px;
-      padding: 22px;
-    }
-
-    .status-row {
+    .board-status {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 96px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
+      z-index: 4;
     }
 
-    .status-badge,
-    .mini-badge {
+    .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: var(--accent-soft);
-      color: #14553e;
-      border: 1px solid rgba(30, 127, 91, 0.12);
+      background: rgba(255, 255, 255, 0.74);
+      color: #4b3a33;
+      border: 1px solid rgba(108, 98, 93, 0.12);
       font-weight: 800;
       font-size: 0.84rem;
     }
 
-    .mini-badge {
-      background: rgba(217, 164, 65, 0.12);
-      color: #875713;
-      border-color: rgba(217, 164, 65, 0.16);
-    }
-
     .progress-track {
-      width: 100%;
-      height: 10px;
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 72px;
+      height: 9px;
       border-radius: 999px;
-      background: rgba(87, 58, 48, 0.08);
+      background: rgba(108, 98, 93, 0.08);
       overflow: hidden;
+      z-index: 4;
     }
 
     .progress-bar {
       height: 100%;
       width: 0;
       border-radius: inherit;
-      background: linear-gradient(90deg, #cb4638, #d9a441);
+      background: linear-gradient(90deg, #ffdc78, #f2a326);
       transition: width 0.3s ease;
     }
 
-    .launch-card {
+    .board-result {
+      position: absolute;
+      inset: 86px 24px 146px;
       display: grid;
-      gap: 16px;
-    }
-
-    .launch-card h2,
-    .result-panel h2 {
-      margin: 0;
-      font-size: clamp(1.55rem, 2.8vw, 2.4rem);
-      line-height: 1.08;
-      color: #4c261d;
-    }
-
-    .launch-card p,
-    .result-panel p {
-      margin: 0;
-      color: rgba(63, 42, 36, 0.76);
-      line-height: 1.6;
-    }
-
-    .launch-actions,
-    .result-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .helper-note {
-      padding: 14px 16px;
-      border-radius: 18px;
-      background: rgba(217, 164, 65, 0.1);
-      border: 1px solid rgba(217, 164, 65, 0.14);
-      color: #754d16;
-      font-size: 0.92rem;
-      line-height: 1.55;
-    }
-
-    .path-strip {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .path-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(201, 58, 46, 0.08);
-      border: 1px solid rgba(201, 58, 46, 0.12);
-      color: #832821;
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .result-panel {
-      display: grid;
-      gap: 16px;
-      padding: 22px;
+      align-content: start;
+      gap: 14px;
+      z-index: 5;
+      pointer-events: none;
     }
 
     .result-summary {
       display: grid;
-      gap: 16px;
-      padding: 22px;
+      gap: 14px;
+      padding: 20px;
       border-radius: 24px;
       background:
-        radial-gradient(circle at top right, rgba(30, 127, 91, 0.12), transparent 18%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 240, 229, 0.92));
-      border: 1px solid rgba(87, 58, 48, 0.08);
+        radial-gradient(circle at 50% 0%, rgba(255, 241, 188, 0.82), transparent 26%),
+        radial-gradient(circle at top right, rgba(255, 182, 60, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(255, 251, 247, 0.99), rgba(246, 236, 224, 0.98));
+      border: 1px solid rgba(245, 182, 62, 0.28);
+      box-shadow:
+        0 0 0 1px rgba(255, 217, 112, 0.3),
+        0 0 32px rgba(255, 196, 74, 0.38),
+        0 24px 42px rgba(79, 22, 16, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      pointer-events: auto;
+      animation: winnerBurst 1.2s ease;
+    }
+
+    @keyframes winnerBurst {
+      0% {
+        opacity: 0;
+        transform: scale(0.82) translateY(22px);
+        filter: brightness(1.16);
+      }
+      55% {
+        opacity: 1;
+        transform: scale(1.04) translateY(-4px);
+        filter: brightness(1.08);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: brightness(1);
+      }
     }
 
     .result-kicker {
@@ -584,75 +639,32 @@
       letter-spacing: 0.05em;
     }
 
-    .result-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 16px;
-    }
-
-    .book-card,
-    .route-card {
-      display: grid;
-      gap: 12px;
-      padding: 18px;
-      border-radius: 22px;
-      border: 1px solid rgba(87, 58, 48, 0.08);
-      background: rgba(255, 255, 255, 0.88);
-      min-width: 0;
-    }
-
-    .book-spread {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .book-page {
-      position: relative;
-      min-height: 180px;
-      padding: 16px;
-      border-radius: 18px;
-      background:
-        linear-gradient(180deg, rgba(252, 247, 240, 0.98), rgba(245, 235, 223, 0.92));
-      border: 1px solid rgba(87, 58, 48, 0.08);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-      overflow: hidden;
-    }
-
-    .book-page::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 18px;
-      width: 1px;
-      background: linear-gradient(180deg, transparent, rgba(113, 84, 74, 0.24), transparent);
-    }
-
-    .book-page strong {
-      display: block;
-      margin-bottom: 8px;
-      color: #824427;
-      font-size: 0.82rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .book-page h3 {
-      margin: 0 0 6px;
-      font-size: 1.04rem;
-      color: #3d271f;
-      line-height: 1.25;
-    }
-
-    .book-page p {
+    .result-summary h2 {
       margin: 0;
-      font-size: 0.9rem;
+      font-size: clamp(1.45rem, 2.3vw, 2.1rem);
+      line-height: 1.08;
+      color: #4c261d;
+    }
+
+    .result-summary p {
+      margin: 0;
+      color: rgba(63, 42, 36, 0.78);
+      line-height: 1.58;
+    }
+
+    .helper-note {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(217, 164, 65, 0.12);
+      border: 1px solid rgba(217, 164, 65, 0.16);
+      color: #754d16;
+      font-size: 0.92rem;
       line-height: 1.55;
-      color: rgba(63, 42, 36, 0.74);
     }
 
     .route-list {
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
 
     .route-item {
@@ -660,7 +672,7 @@
       grid-template-columns: 40px minmax(0, 1fr);
       gap: 12px;
       align-items: start;
-      padding: 12px 0;
+      padding: 10px 0;
       border-top: 1px dashed rgba(87, 58, 48, 0.12);
     }
 
@@ -694,6 +706,59 @@
       line-height: 1.55;
     }
 
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .result-fireworks {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 4;
+    }
+
+    .result-fireworks span {
+      position: absolute;
+      width: 160px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(255, 237, 167, 0.78) 0 6%, transparent 7% 100%),
+        conic-gradient(from 0deg, rgba(255, 196, 74, 0.88), transparent 20%, rgba(255, 135, 74, 0.72), transparent 40%, rgba(255, 230, 146, 0.92), transparent 60%, rgba(255, 174, 61, 0.8), transparent 80%, rgba(255, 196, 74, 0.88));
+      filter: blur(0.2px);
+      opacity: 0;
+      transform: scale(0.2);
+      animation: fireworkPop 1.4s ease-out forwards;
+    }
+
+    .result-fireworks span:nth-child(1) {
+      top: 24px;
+      left: 14px;
+    }
+
+    .result-fireworks span:nth-child(2) {
+      top: 32px;
+      right: 8px;
+      animation-delay: 0.16s;
+    }
+
+    .result-fireworks span:nth-child(3) {
+      top: 108px;
+      left: 50%;
+      margin-left: -80px;
+      animation-delay: 0.28s;
+    }
+
+    @keyframes fireworkPop {
+      0% { opacity: 0; transform: scale(0.2); }
+      20% { opacity: 0.95; transform: scale(0.58); }
+      100% { opacity: 0; transform: scale(1); }
+    }
+
     .footer {
       text-align: center;
       padding: 0 20px 36px;
@@ -702,10 +767,8 @@
     }
 
     @media (max-width: 760px) {
-      .logo-showcase,
-      .book-spread,
-      .result-grid {
-        grid-template-columns: 1fr;
+      .board-result {
+        inset: 84px 18px 142px;
       }
     }
 
@@ -778,22 +841,7 @@
         display: none;
       }
       main { padding-top: 16px; }
-      .hero,
-      .info-panel,
-      .result-panel {
-        padding: 18px;
-      }
-      .logo-showcase-card {
-        min-height: 112px;
-        padding: 14px 16px;
-        border-radius: 18px;
-      }
-      .logo-showcase-card img {
-        height: 64px;
-      }
-      .logo-showcase-card.featured img {
-        height: 84px;
-      }
+      .hero { padding: 18px; }
       .board-frame {
         width: 100%;
         padding: 18px;
@@ -805,15 +853,44 @@
         justify-content: center;
         text-align: center;
       }
-      .launch-actions,
-      .result-actions {
-        align-items: stretch;
+      .board-launch {
+        top: 51%;
+        width: min(90%, 280px);
       }
-      .launch-actions .button,
-      .launch-actions button,
-      .result-actions .button,
+      .board-launch button {
+        min-width: 100%;
+        min-height: 78px;
+      }
+      .board-launch button,
       .result-actions button {
         width: 100%;
+      }
+      .board-status {
+        left: 18px;
+        right: 18px;
+        bottom: 92px;
+      }
+      .progress-track {
+        left: 18px;
+        right: 18px;
+        bottom: 72px;
+      }
+      .board-result {
+        inset: 86px 14px 142px;
+      }
+      .result-summary {
+        padding: 16px;
+        gap: 12px;
+      }
+      .result-summary h2 {
+        font-size: 1.28rem;
+      }
+      .result-fireworks span {
+        width: 124px;
+      }
+      .helper-note,
+      .route-item p {
+        font-size: 0.86rem;
       }
     }
   </style>
@@ -857,26 +934,32 @@
         <span class="eyebrow" data-i18n="hero.kicker">INTERACTIVE E-BOOK EXPERIENCE</span>
         <h1 data-i18n="hero.title">點最上面的球，讓大決策板自己掉出結果。</h1>
         <p data-i18n="hero.body">這是純動畫電子版本，不需要回答一堆選項。只要點一下最上方金球，它就會亂數滾落，最後直接揭曉 X、重做、或剔 的攤位結果。</p>
-        <span class="logo-showcase-label" data-i18n="hero.logoLabel">合作單位與活動識別</span>
-        <div class="logo-showcase" aria-label="Partner logos">
-          <div class="logo-showcase-card">
-            <img src="../assets/decision-board-logos/jci-peninsula.png" alt="JCI Peninsula logo" />
-          </div>
-          <div class="logo-showcase-card featured">
-            <img src="../assets/decision-board-logos/h-logo.webp" alt="JCI 2026 Asia-Pacific Conference Niigata Japan logo" />
-          </div>
-          <div class="logo-showcase-card">
-            <img src="../assets/decision-board-logos/jci-lantau.png" alt="JCI Lantau logo" />
-          </div>
-        </div>
       </section>
 
       <section class="board-stage">
         <section class="board-frame">
+          <div class="board-marquee" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
           <div id="boardTitle" class="board-title" data-i18n="board.title">DECISION</div>
           <div class="board-callout" data-i18n="board.callout">點最上面金球開始</div>
           <svg id="boardSvg" class="board-svg" viewBox="0 0 420 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+          <div id="boardLaunch" class="board-launch">
+            <span class="board-launch-chip" data-i18n="launch.kicker">電子決策板</span>
+            <button id="boardLaunchBtn" type="button" data-i18n="launch.start">開始亂數</button>
+            <p data-i18n="launch.body">最上方金球就是開始按鈕。點下去後，球會沿著板面一路滾落，最後停在其中一個攤位結果。</p>
+          </div>
+          <div id="boardResult" class="board-result" hidden></div>
           <button id="boardToken" class="board-token ready" type="button" aria-label="Start random draw"></button>
+          <div class="board-status">
+            <span id="stepBadge" class="status-badge">Animation 0 / 6</span>
+            <span id="pathBadge" class="status-badge">按下開始，亂數掉出結果</span>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
           <div class="board-legend">
             <div class="legend-chip">
               <strong>X</strong>
@@ -892,19 +975,6 @@
             </div>
           </div>
         </section>
-
-        <section class="info-panel">
-          <div class="status-row">
-            <span id="stepBadge" class="status-badge">Animation 0 / 6</span>
-            <span id="pathBadge" class="mini-badge">按下開始，亂數掉出結果</span>
-          </div>
-          <div class="progress-track" aria-hidden="true">
-            <div id="progressBar" class="progress-bar"></div>
-          </div>
-          <div id="launchPanel" class="launch-card"></div>
-        </section>
-
-        <section id="resultPanel" class="result-panel" hidden></section>
       </section>
     </div>
   </main>
@@ -923,8 +993,7 @@
         hero: {
           kicker: "INTERACTIVE E-BOOK EXPERIENCE",
           title: "點最上面的球，讓大決策板自己掉出結果。",
-          body: "這是純動畫電子版本，不需要回答一堆選項。只要點一下最上方金球，它就會亂數滾落，最後直接揭曉 X、重做、或剔 的攤位結果。",
-          logoLabel: "合作單位與活動識別"
+          body: "這是純動畫電子版本，不需要回答一堆選項。只要點一下最上方金球，它就會亂數滾落，最後直接揭曉 X、重做、或剔 的攤位結果。"
         },
         board: {
           title: "決策板",
@@ -966,8 +1035,7 @@
         hero: {
           kicker: "INTERACTIVE E-BOOK EXPERIENCE",
           title: "Tap the top ball and let the big decision board reveal the result.",
-          body: "This is a pure animated electronic version with no long questionnaire. Tap the gold ball at the top and it drops through a random path before revealing X, Redo, or Check.",
-          logoLabel: "Partner logos and event identity"
+          body: "This is a pure animated electronic version with no long questionnaire. Tap the gold ball at the top and it drops through a random path before revealing X, Redo, or Check."
         },
         board: {
           title: "DECISION",
@@ -1109,10 +1177,12 @@
     const navToggleBtn = document.getElementById("navToggleBtn");
     const navBackdrop = document.getElementById("navBackdrop");
     const boardTitle = document.getElementById("boardTitle");
+    const boardFrame = document.querySelector(".board-frame");
     const boardSvg = document.getElementById("boardSvg");
     const boardToken = document.getElementById("boardToken");
-    const launchPanel = document.getElementById("launchPanel");
-    const resultPanel = document.getElementById("resultPanel");
+    const boardLaunch = document.getElementById("boardLaunch");
+    const boardLaunchBtn = document.getElementById("boardLaunchBtn");
+    const boardResult = document.getElementById("boardResult");
     const stepBadge = document.getElementById("stepBadge");
     const pathBadge = document.getElementById("pathBadge");
     const progressBar = document.getElementById("progressBar");
@@ -1154,13 +1224,13 @@
       const railLeft = 70;
       const railRight = 350;
       const segments = boardRows.slice(0, 6).map((y, index) => {
-        const offset = index % 2 === 0 ? 0 : 14;
+        const offset = index % 2 === 0 ? 0 : 10;
         const mid = (railLeft + railRight) / 2;
         return `
           <g>
-            <line x1="${mid}" y1="${y - 32}" x2="${mid}" y2="${y - 14}" stroke="rgba(85,16,13,0.82)" stroke-width="4" stroke-linecap="round" />
-            <path d="M ${railLeft + offset} ${y} L ${mid} ${y - 18} L ${railRight - offset} ${y}" fill="none" stroke="rgba(85,16,13,0.82)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M ${railLeft + offset} ${y + 24} L ${mid} ${y + 6} L ${railRight - offset} ${y + 24}" fill="none" stroke="rgba(85,16,13,0.82)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <line x1="${mid}" y1="${y - 30}" x2="${mid}" y2="${y - 15}" stroke="#8d837d" stroke-width="4" stroke-linecap="round" />
+            <path d="M ${railLeft + offset} ${y} L ${mid} ${y - 18} L ${railRight - offset} ${y}" fill="none" stroke="#8d837d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M ${railLeft + offset} ${y + 24} L ${mid} ${y + 6} L ${railRight - offset} ${y + 24}" fill="none" stroke="#8d837d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
           </g>
         `;
       }).join("");
@@ -1168,16 +1238,19 @@
       boardSvg.innerHTML = `
         <defs>
           <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="rgba(68,10,8,0.18)" />
+            <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="rgba(68,10,8,0.12)" />
           </filter>
         </defs>
-        <circle cx="210" cy="44" r="7" fill="rgba(90,18,14,0.82)" />
-        <line x1="210" y1="50" x2="210" y2="68" stroke="rgba(90,18,14,0.82)" stroke-width="4" stroke-linecap="round" />
+        <circle cx="210" cy="44" r="7" fill="#8d837d" />
+        <line x1="210" y1="50" x2="210" y2="68" stroke="#8d837d" stroke-width="4" stroke-linecap="round" />
         ${segments}
         <g filter="url(#shadow)">
-          <circle cx="${laneX.left}" cy="552" r="7" fill="rgba(90,18,14,0.82)" />
-          <circle cx="${laneX.middle}" cy="552" r="7" fill="rgba(90,18,14,0.82)" />
-          <circle cx="${laneX.right}" cy="552" r="7" fill="rgba(90,18,14,0.82)" />
+          <ellipse cx="${laneX.left}" cy="552" rx="16" ry="9" fill="rgba(145,133,126,0.22)" />
+          <ellipse cx="${laneX.middle}" cy="552" rx="16" ry="9" fill="rgba(145,133,126,0.22)" />
+          <ellipse cx="${laneX.right}" cy="552" rx="16" ry="9" fill="rgba(145,133,126,0.22)" />
+          <circle cx="${laneX.left}" cy="552" r="7" fill="#8d837d" />
+          <circle cx="${laneX.middle}" cy="552" r="7" fill="#8d837d" />
+          <circle cx="${laneX.right}" cy="552" r="7" fill="#8d837d" />
         </g>
       `;
     };
@@ -1259,68 +1332,37 @@
       progressBar.style.width = `${(completed / TOTAL_ANIMATION_STEPS) * 100}%`;
     };
 
-    const renderLaunchPanel = () => {
-      launchPanel.innerHTML = `
-        <span class="mini-badge">${t("launch.kicker")}</span>
-        <h2>${t("launch.title")}</h2>
-        <p>${t("launch.body")}</p>
-        <div class="launch-actions">
-          <button id="launchBtn" class="primary" type="button">${isAnimating ? t("status.spinning") : t("launch.start")}</button>
-          <button id="resetBtn" type="button">${t("launch.reset")}</button>
-        </div>
-        <div class="path-strip">
-          ${pathHistory.map((lane, index) => `<span class="path-pill">${index + 1}. ${laneLabels[lane]}</span>`).join("")}
-        </div>
-      `;
-
-      const launchBtn = document.getElementById("launchBtn");
-      const resetBtn = document.getElementById("resetBtn");
-      launchBtn.disabled = isAnimating;
-      launchBtn.addEventListener("click", runRandomDraw);
-      resetBtn.addEventListener("click", resetExperience);
+    const renderLaunchState = () => {
+      boardLaunch.hidden = Boolean(currentResultKey || isAnimating);
+      boardLaunchBtn.disabled = isAnimating;
+      boardLaunchBtn.textContent = isAnimating ? t("status.spinning") : t("launch.start");
     };
 
     const renderResult = () => {
       const route = ROUTES[currentResultKey || "spark"][currentLang];
       const summaryTitle = format(t("result.title"), { route: route.name });
-      resultPanel.hidden = false;
-      resultPanel.innerHTML = `
+      boardResult.hidden = false;
+      boardResult.innerHTML = `
+        <div class="result-fireworks" aria-hidden="true"><span></span><span></span><span></span></div>
         <div class="result-summary">
           <span class="result-kicker">${t("result.kicker")}</span>
           <h2>${summaryTitle}</h2>
           <p>${t("result.summary")}</p>
           <div class="helper-note">${route.summary}</div>
+          <div class="route-list">
+            ${route.steps.map((step, index) => `
+              <div class="route-item">
+                <div class="route-step">${index + 1}</div>
+                <div>
+                  <strong>${step.title}</strong>
+                  <p>${step.body}</p>
+                </div>
+              </div>
+            `).join("")}
+          </div>
           <div class="result-actions">
             <button id="restartBtn" class="primary" type="button">${t("result.action")}</button>
             <button id="copyBtn" type="button">${t("result.share")}</button>
-          </div>
-        </div>
-        <div class="result-grid">
-          <div class="book-card">
-            <h3>${t("result.nextTitle")}</h3>
-            <div class="book-spread">
-              ${route.pages.map((page) => `
-                <article class="book-page">
-                  <strong>${page.label}</strong>
-                  <h3>${page.title}</h3>
-                  <p>${page.body}</p>
-                </article>
-              `).join("")}
-            </div>
-          </div>
-          <div class="route-card">
-            <h3>${t("result.routeTitle")}</h3>
-            <div class="route-list">
-              ${route.steps.map((step, index) => `
-                <div class="route-item">
-                  <div class="route-step">${index + 1}</div>
-                  <div>
-                    <strong>${step.title}</strong>
-                    <p>${step.body}</p>
-                  </div>
-                </div>
-              `).join("")}
-            </div>
           </div>
         </div>
       `;
@@ -1331,12 +1373,13 @@
 
     const renderCurrentState = () => {
       updateStatus();
-      renderLaunchPanel();
+      renderLaunchState();
+      boardFrame.classList.toggle("is-celebrating", Boolean(currentResultKey));
       if (currentResultKey) {
         renderResult();
       } else {
-        resultPanel.hidden = true;
-        resultPanel.innerHTML = "";
+        boardResult.hidden = true;
+        boardResult.innerHTML = "";
       }
       boardToken.classList.toggle("ready", !isAnimating && !pathHistory.length);
     };
@@ -1346,8 +1389,8 @@
       isAnimating = true;
       currentResultKey = "";
       pathHistory = [];
-      resultPanel.hidden = true;
-      resultPanel.innerHTML = "";
+      boardResult.hidden = true;
+      boardResult.innerHTML = "";
       renderCurrentState();
 
       const finalResult = RESULT_KEYS[Math.floor(Math.random() * RESULT_KEYS.length)];
@@ -1410,6 +1453,7 @@
     });
 
     boardToken.addEventListener("click", runRandomDraw);
+    boardLaunchBtn.addEventListener("click", runRandomDraw);
 
     renderBoard();
     loadState();
