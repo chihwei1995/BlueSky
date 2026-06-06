@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decision Board | Blue Sky Returns</title>
+  <link rel="icon" type="image/png" href="/Enter.PNG" />
+  <link rel="shortcut icon" type="image/png" href="/Enter.PNG" />
+  <link rel="apple-touch-icon" href="/Enter.PNG" />
+  <meta name="description" content="Explore an interactive decision board experience and discover your next Blue Sky Returns action path." />
+  <style>
+    :root {
+      --paper: #f7f0e6;
+      --paper-ink: #3f2a24;
+      --board: #c93a2e;
+      --board-deep: #97271d;
+      --board-line: #621713;
+      --accent: #1e7f5b;
+      --accent-soft: #def2e7;
+      --gold: #d9a441;
+      --card: rgba(255, 250, 245, 0.88);
+      --line: rgba(87, 58, 48, 0.14);
+      --shadow: 0 24px 56px rgba(79, 45, 32, 0.14);
+      --menu-shadow: 0 20px 44px rgba(15, 23, 42, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      color: var(--paper-ink);
+      background:
+        radial-gradient(circle at top left, rgba(217, 164, 65, 0.16), transparent 20%),
+        radial-gradient(circle at top right, rgba(201, 58, 46, 0.12), transparent 16%),
+        linear-gradient(180deg, #fbf6ef 0%, #f6efe5 52%, #f4ecdf 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(14px);
+      background: rgba(251, 246, 239, 0.9);
+      border-bottom: 1px solid rgba(87, 58, 48, 0.08);
+    }
+
+    .shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+      flex-wrap: nowrap;
+    }
+
+    .nav-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #fff;
+      padding: 5px;
+      border: 1px solid rgba(87, 58, 48, 0.1);
+      box-shadow: 0 10px 18px rgba(64, 42, 34, 0.1);
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brand-copy strong {
+      color: #234b3f;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-copy span {
+      color: rgba(63, 42, 36, 0.72);
+      font-size: 0.84rem;
+    }
+
+    .nav-mobile-tools {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+      min-width: 0;
+      justify-content: flex-end;
+    }
+
+    .pill,
+    .button,
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 0;
+      border-radius: 999px;
+      border: 1px solid rgba(87, 58, 48, 0.12);
+      background: rgba(255, 255, 255, 0.86);
+      color: #244d41;
+      padding: 10px 14px;
+      font-size: 0.94rem;
+      line-height: 1.35;
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .pill:hover,
+    .button:hover,
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(30, 127, 91, 0.3);
+      box-shadow: 0 10px 22px rgba(30, 127, 91, 0.12);
+    }
+
+    .pill.active,
+    .button.primary,
+    button.primary {
+      background: linear-gradient(135deg, #1e7f5b, #51aa89);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(30, 127, 91, 0.18);
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid rgba(87, 58, 48, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: rgba(63, 42, 36, 0.68);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, #1e7f5b, #51aa89);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(30, 127, 91, 0.16);
+    }
+
+    .nav-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(255, 255, 255, 0.92);
+      color: #16324f;
+      font-size: 0.92rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      white-space: nowrap;
+    }
+
+    @keyframes mobileNavFade {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nav-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.24);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+      z-index: 29;
+    }
+
+    .nav-backdrop.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    main {
+      padding: 28px 0 56px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 14px;
+      padding: 24px 28px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.34), transparent 18%),
+        linear-gradient(135deg, rgba(245, 228, 201, 0.98), rgba(252, 247, 241, 0.92));
+      border: 1px solid rgba(87, 58, 48, 0.08);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(201, 58, 46, 0.08);
+      color: #8a241c;
+      border: 1px solid rgba(201, 58, 46, 0.12);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.02;
+      color: #4c261d;
+      max-width: 12ch;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 62ch;
+      color: rgba(63, 42, 36, 0.8);
+      font-size: 1rem;
+    }
+
+    .logo-showcase {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .logo-showcase-card {
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      min-height: 132px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(87, 58, 48, 0.08);
+      box-shadow: 0 14px 30px rgba(79, 45, 32, 0.08);
+      overflow: hidden;
+    }
+
+    .logo-showcase-card img {
+      width: 100%;
+      height: 72px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      filter: saturate(1.02) contrast(1.02);
+    }
+
+    .experience-grid {
+      display: grid;
+      grid-template-columns: minmax(360px, 460px) minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid rgba(87, 58, 48, 0.08);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .board-panel {
+      padding: 18px;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 20%),
+        linear-gradient(180deg, rgba(161, 28, 20, 0.08), rgba(0, 0, 0, 0) 20%),
+        #f7ede2;
+      position: sticky;
+      top: 94px;
+    }
+
+    .board-frame {
+      padding: 18px;
+      border-radius: 32px;
+      background: linear-gradient(180deg, #d84839, #b92d22);
+      border: 3px solid rgba(90, 18, 14, 0.35);
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.18),
+        inset 0 -8px 18px rgba(61, 10, 7, 0.18),
+        0 26px 50px rgba(93, 32, 24, 0.24);
+      position: relative;
+      aspect-ratio: 0.78;
+      overflow: hidden;
+    }
+
+    .board-title {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      color: rgba(54, 8, 7, 0.8);
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      z-index: 2;
+    }
+
+    .board-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .board-token {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, #fff7d6 0%, #f1ca6f 40%, #ba7d13 100%);
+      box-shadow:
+        0 6px 14px rgba(62, 17, 12, 0.26),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(101, 50, 4, 0.4);
+      transform: translate(-50%, -50%);
+      transition: left 0.42s cubic-bezier(0.22, 1, 0.36, 1), top 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 3;
+    }
+
+    .board-legend {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      right: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .legend-chip {
+      display: grid;
+      gap: 4px;
+      justify-items: center;
+      padding: 10px 8px;
+      border-radius: 18px;
+      background: rgba(81, 10, 8, 0.16);
+      color: #fff8f3;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(6px);
+      text-align: center;
+    }
+
+    .legend-chip strong {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .legend-chip span {
+      font-size: 0.76rem;
+      opacity: 0.88;
+      line-height: 1.25;
+    }
+
+    .control-panel {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status-badge,
+    .mini-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #14553e;
+      border: 1px solid rgba(30, 127, 91, 0.12);
+      font-weight: 800;
+      font-size: 0.84rem;
+    }
+
+    .mini-badge {
+      background: rgba(217, 164, 65, 0.12);
+      color: #875713;
+      border-color: rgba(217, 164, 65, 0.16);
+    }
+
+    .question-card {
+      display: grid;
+      gap: 18px;
+      padding: 22px;
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(252, 247, 241, 0.9));
+      border: 1px solid rgba(87, 58, 48, 0.08);
+      min-width: 0;
+    }
+
+    .question-copy {
+      display: grid;
+      gap: 8px;
+    }
+
+    .question-copy h2,
+    .result-panel h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+      line-height: 1.08;
+      color: #4c261d;
+    }
+
+    .question-copy p,
+    .result-panel p {
+      margin: 0;
+      color: rgba(63, 42, 36, 0.76);
+    }
+
+    .choice-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .choice-btn {
+      display: grid;
+      gap: 6px;
+      align-content: start;
+      justify-items: start;
+      min-height: 150px;
+      padding: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(87, 58, 48, 0.1);
+      background: rgba(255, 255, 255, 0.88);
+      color: #27473d;
+      text-align: left;
+      box-shadow: 0 12px 28px rgba(79, 45, 32, 0.06);
+    }
+
+    .choice-btn:hover {
+      border-color: rgba(30, 127, 91, 0.28);
+      box-shadow: 0 16px 30px rgba(30, 127, 91, 0.12);
+    }
+
+    .choice-btn strong {
+      font-size: 1.06rem;
+      color: #173f34;
+    }
+
+    .choice-btn span {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      color: rgba(39, 71, 61, 0.78);
+    }
+
+    .path-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .path-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(201, 58, 46, 0.08);
+      border: 1px solid rgba(201, 58, 46, 0.12);
+      color: #832821;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .result-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .result-summary {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(30, 127, 91, 0.12), transparent 18%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 240, 229, 0.92));
+      border: 1px solid rgba(87, 58, 48, 0.08);
+    }
+
+    .result-kicker {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(30, 127, 91, 0.1);
+      color: #1c6d50;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+    }
+
+    .book-card,
+    .route-card {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(87, 58, 48, 0.08);
+      background: rgba(255, 255, 255, 0.88);
+      min-width: 0;
+    }
+
+    .book-spread {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .book-page {
+      position: relative;
+      min-height: 180px;
+      padding: 16px;
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(252, 247, 240, 0.98), rgba(245, 235, 223, 0.92));
+      border: 1px solid rgba(87, 58, 48, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+    }
+
+    .book-page::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 18px;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(113, 84, 74, 0.24), transparent);
+    }
+
+    .book-page strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #824427;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .book-page h3 {
+      margin: 0 0 6px;
+      font-size: 1.04rem;
+      color: #3d271f;
+      line-height: 1.25;
+    }
+
+    .book-page p {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: rgba(63, 42, 36, 0.74);
+    }
+
+    .route-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .route-item {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 12px 0;
+      border-top: 1px dashed rgba(87, 58, 48, 0.12);
+    }
+
+    .route-item:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .route-step {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: rgba(201, 58, 46, 0.08);
+      color: #8e2a1f;
+      font-weight: 900;
+    }
+
+    .route-item strong {
+      display: block;
+      font-size: 0.96rem;
+      color: #28473d;
+      margin-bottom: 4px;
+    }
+
+    .route-item p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: rgba(63, 42, 36, 0.74);
+      line-height: 1.55;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(87, 58, 48, 0.08);
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #cb4638, #d9a441);
+      transition: width 0.3s ease;
+    }
+
+    .helper-note {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(217, 164, 65, 0.1);
+      border: 1px solid rgba(217, 164, 65, 0.14);
+      color: #754d16;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 0 20px 36px;
+      color: rgba(63, 42, 36, 0.64);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 1080px) {
+      .experience-grid,
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .board-panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .choice-grid,
+      .book-spread,
+      .logo-showcase {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header { padding-top: env(safe-area-inset-top); }
+      .shell { padding: 0 16px; }
+      .nav {
+        gap: 8px;
+        padding: 10px 0;
+      }
+      .nav-primary {
+        align-items: center;
+        gap: 10px;
+        min-height: 42px;
+      }
+      .brand img {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+      }
+      .brand-copy strong,
+      .brand-copy span {
+        display: none;
+      }
+      .nav-mobile-tools {
+        gap: 6px;
+      }
+      .nav-mobile-tools .lang-toggle {
+        gap: 4px;
+        padding: 3px;
+      }
+      .nav-mobile-tools .lang-btn {
+        min-width: 42px;
+        min-height: 42px;
+        padding: 7px 0;
+        font-size: 0.82rem;
+      }
+      .nav-toggle { display: inline-flex; }
+      .nav-actions {
+        width: 100%;
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-top: 10px;
+        padding: 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(226, 232, 240, 0.84);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+        box-shadow: var(--menu-shadow);
+        backdrop-filter: blur(12px);
+      }
+      header.nav-open .nav-actions {
+        display: grid;
+        animation: mobileNavFade 0.22s ease both;
+      }
+      .nav-actions > * {
+        width: 100%;
+      }
+      .nav-actions > .pill,
+      .nav-actions > .button,
+      .nav-actions > button {
+        min-height: 46px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      .nav-actions .lang-toggle {
+        display: none;
+      }
+      main { padding-top: 16px; }
+      .hero,
+      .control-panel {
+        padding: 18px;
+      }
+      .logo-showcase-card {
+        min-height: 112px;
+        padding: 14px 16px;
+        border-radius: 18px;
+      }
+      .logo-showcase-card img {
+        height: 60px;
+      }
+      .board-panel {
+        padding: 14px;
+      }
+      .board-frame {
+        border-radius: 28px;
+      }
+      .choice-btn {
+        min-height: 128px;
+      }
+      .status-row,
+      .result-actions {
+        align-items: stretch;
+      }
+      .result-actions .button,
+      .result-actions button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <div class="nav-primary">
+        <div class="brand">
+          <img src="../Enter.PNG" alt="JCI Peninsula logo" />
+          <div class="brand-copy">
+            <strong data-i18n="header.title">Blue Sky Returns</strong>
+            <span data-i18n="header.subtitle">Decision board experience</span>
+          </div>
+        </div>
+        <div class="nav-mobile-tools">
+          <div class="lang-toggle" role="group" aria-label="Language switcher">
+            <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <button id="navToggleBtn" class="nav-toggle" type="button" aria-expanded="false" data-i18n="nav.menu">選單</button>
+        </div>
+      </div>
+      <div id="navActions" class="nav-actions">
+        <a class="pill" href="./index.html" data-i18n="nav.about">項目介紹</a>
+        <a class="pill" href="./eco-mbti.html" data-i18n="nav.mbti">Eco-MBTI</a>
+        <a class="pill" href="./green-action-7day.html" data-i18n="nav.daily">每日行動</a>
+        <a class="pill active" href="./decision-board.html" data-i18n="nav.decision">決策板</a>
+        <div class="lang-toggle" role="group" aria-label="Language switcher">
+          <button class="lang-btn active" type="button" data-lang="zh">中文</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div id="navBackdrop" class="nav-backdrop" aria-hidden="true"></div>
+
+  <main>
+    <div class="shell">
+      <section class="hero">
+        <span class="eyebrow" data-i18n="hero.kicker">INTERACTIVE E-BOOK EXPERIENCE</span>
+        <h1 data-i18n="hero.title">像翻電子本一樣，一路掉進你的下一步行動。</h1>
+        <p data-i18n="hero.body">這個頁面把傳統決策板變成互動式閱讀體驗。每一題都像翻開一頁，最後會得到最適合你的 Blue Sky Returns 行動路線與閱讀章節。</p>
+        <div class="logo-showcase" aria-label="Partner logos">
+          <div class="logo-showcase-card">
+            <img src="../assets/decision-board-logos/h-logo.webp" alt="JCI 2026 Asia-Pacific Conference Niigata Japan logo" />
+          </div>
+          <div class="logo-showcase-card">
+            <img src="../assets/decision-board-logos/jci-lantau.png" alt="JCI Lantau logo" />
+          </div>
+          <div class="logo-showcase-card">
+            <img src="../assets/decision-board-logos/jci-peninsula.png" alt="JCI Peninsula logo" />
+          </div>
+        </div>
+      </section>
+
+      <section class="experience-grid">
+        <aside class="panel board-panel">
+          <div class="board-frame">
+            <div class="board-title">DECISION</div>
+            <svg id="boardSvg" class="board-svg" viewBox="0 0 420 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+            <div id="boardToken" class="board-token" aria-hidden="true"></div>
+            <div class="board-legend">
+              <div class="legend-chip">
+                <strong>X</strong>
+                <span data-i18n="legend.left">先觀察</span>
+              </div>
+              <div class="legend-chip">
+                <strong>↺</strong>
+                <span data-i18n="legend.middle">再整理</span>
+              </div>
+              <div class="legend-chip">
+                <strong>✓</strong>
+                <span data-i18n="legend.right">直接行動</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="panel control-panel">
+          <div class="status-row">
+            <span id="stepBadge" class="status-badge">STEP 1 / 6</span>
+            <span id="pathBadge" class="mini-badge" data-i18n="status.pathEmpty">路徑尚未形成</span>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+
+          <article id="questionCard" class="question-card"></article>
+
+          <section id="resultPanel" class="result-panel" hidden></section>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer" data-i18n="footer">Blue Sky Returns • Decision Board Experience • 2026</footer>
+
+  <script>
+    const LANG_STORAGE_KEY = "bsr_decision_board_lang";
+    const STATE_STORAGE_KEY = "bsr_decision_board_state";
+
+    const I18N = {
+      zh: {
+        page: { title: "Decision Board | Blue Sky Returns" },
+        header: { title: "Blue Sky Returns", subtitle: "電子本決策板體驗" },
+        nav: { about: "項目介紹", mbti: "Eco-MBTI", daily: "每日行動", decision: "決策板", menu: "選單" },
+        hero: {
+          kicker: "INTERACTIVE E-BOOK EXPERIENCE",
+          title: "像翻電子本一樣，一路掉進你的下一步行動。",
+          body: "這個頁面把傳統決策板變成互動式閱讀體驗。每一題都像翻開一頁，最後會得到最適合你的 Blue Sky Returns 行動路線與閱讀章節。"
+        },
+        legend: { left: "X（沒有）", middle: "重做（再來一次）", right: "剔（回答題目）" },
+        status: {
+          step: "第 {current} / {total} 步",
+          pathEmpty: "路徑尚未形成",
+          pathPrefix: "目前路徑：",
+          progress: "你已經完成 {count} 個選擇。"
+        },
+        controls: {
+          choose: "請選一個方向",
+          reset: "重新開始",
+          continue: "回到第一步"
+        },
+        result: {
+          kicker: "你的決策讀法",
+          title: "這一輪，決策板把你帶到「{route}」。",
+          summary: "這個結果可以直接變成現場互動玩法。不同落點，對應不同的帶動氣氛與送禮方式。",
+          nextTitle: "推薦閱讀頁",
+          routeTitle: "接下來三步",
+          action: "重新走一次",
+          share: "複製結果摘要",
+          copied: "結果摘要已複製。",
+          fallback: "請手動複製這段摘要：",
+          routeLabel: "決策結果"
+        },
+        footer: "Blue Sky Returns • Decision Board Experience • 2026"
+      },
+      en: {
+        page: { title: "Decision Board | Blue Sky Returns" },
+        header: { title: "Blue Sky Returns", subtitle: "Decision board e-book experience" },
+        nav: { about: "About", mbti: "Eco-MBTI", daily: "Daily Actions", decision: "Decision Board", menu: "Menu" },
+        hero: {
+          kicker: "INTERACTIVE E-BOOK EXPERIENCE",
+          title: "Move through your next step like flipping an interactive book.",
+          body: "This page turns a classic decision board into a reading journey. Each choice feels like turning a page, and the ending gives you the next Blue Sky Returns route and chapters to start with."
+        },
+        legend: { left: "X / No", middle: "Redo", right: "Check / Answer" },
+        status: {
+          step: "Step {current} / {total}",
+          pathEmpty: "Your path has not formed yet",
+          pathPrefix: "Current path:",
+          progress: "You have completed {count} choices."
+        },
+        controls: {
+          choose: "Choose one direction",
+          reset: "Start over",
+          continue: "Back to step one"
+        },
+        result: {
+          kicker: "Your decision reading",
+          title: "This round, the board lands on “{route}.”",
+          summary: "You can turn this directly into a live booth mechanic. Each landing spot creates a different kind of crowd energy and reward moment.",
+          nextTitle: "Recommended pages",
+          routeTitle: "Your next three moves",
+          action: "Run it again",
+          share: "Copy summary",
+          copied: "Result summary copied.",
+          fallback: "Please copy this summary manually:",
+          routeLabel: "Decision result"
+        },
+        footer: "Blue Sky Returns • Decision Board Experience • 2026"
+      }
+    };
+
+    const ROUTES = {
+      spark: {
+        zh: {
+          name: "剔（回答題目）",
+          summary: "參加者需抽取一條「青商知識題」，答對即獲得大獎，讓現場有挑戰感也更有記憶點。",
+          pages: [
+            { label: "PAGE 01", title: "抽題卡", body: "參加者抽出一條青商知識題，瞬間把注意力集中到台前。" },
+            { label: "PAGE 02", title: "現場作答", body: "主持人可即時互動、追問、帶節奏，讓其他人也一起猜答案。" },
+            { label: "PAGE 03", title: "答對拿大獎", body: "正確回答後直接送出大獎，形成最有張力的一個高潮點。" }
+          ],
+          steps: [
+            { title: "主持人宣布進入答題模式", body: "氣氛要像抽獎升級版，讓旁邊的人也知道這是重頭戲。" },
+            { title: "題目內容可偏向青商與項目知識", body: "既能教育，也能讓互動不只是單純送禮。" },
+            { title: "答對立即送出大獎", body: "讓參加者覺得有挑戰就有回報，攤位吸引力會更強。" }
+          ]
+        },
+        en: {
+          name: "Check / Answer Challenge",
+          summary: "The participant draws a JCI knowledge question. If the answer is correct, they win the grand prize.",
+          pages: [
+            { label: "PAGE 01", title: "Draw a question card", body: "The participant pulls a JCI knowledge question and the crowd immediately focuses in." },
+            { label: "PAGE 02", title: "Answer live on site", body: "The host can build suspense, invite guesses, and turn the booth into a small stage moment." },
+            { label: "PAGE 03", title: "Win the grand prize", body: "A correct answer leads directly to the big reward and creates the strongest climax." }
+          ],
+          steps: [
+            { title: "Announce the challenge moment", body: "Make it feel like the premium moment of the booth so nearby visitors pay attention." },
+            { title: "Use JCI or project knowledge questions", body: "That way the game also teaches something instead of being only a giveaway." },
+            { title: "Reward the correct answer immediately", body: "Challenge plus instant payoff makes the booth feel memorable and exciting." }
+          ]
+        }
+      },
+      weave: {
+        zh: {
+          name: "重做（再來一次）",
+          summary: "全場大喊「重做！重做！」，參加者獲得多一次機會，最適合帶出喧鬧感與重複聚眾效果。",
+          pages: [
+            { label: "PAGE 01", title: "全場一起喊重做", body: "不是失敗，而是把結果轉成再次互動的理由。" },
+            { label: "PAGE 02", title: "追加一次轉盤或決策機會", body: "讓參加者再玩一次，也讓現場多一次期待感。" },
+            { label: "PAGE 03", title: "把熱鬧感拉高", body: "重做本身就能製造笑聲、圍觀與二次停留。" }
+          ],
+          steps: [
+            { title: "主持人口號要明確", body: "像是『重做一次！大家一起喊！』，帶動圍觀者同步參與。" },
+            { title: "再給一次機會", body: "多一次轉盤或決策板落點，等於多一次情緒拉高的機會。" },
+            { title: "用喧鬧感幫攤位聚人", body: "這種結果最適合增加叫座力，讓路過的人也停下來看。" }
+          ]
+        },
+        en: {
+          name: "Redo / One More Try",
+          summary: "The whole crowd shouts “redo!” and the participant earns one more chance, which boosts energy and booth noise.",
+          pages: [
+            { label: "PAGE 01", title: "Let the crowd shout for a redo", body: "The result becomes a reason to keep the game alive instead of ending it." },
+            { label: "PAGE 02", title: "Give one extra board or wheel chance", body: "The participant gets another shot and the booth gets another suspense beat." },
+            { label: "PAGE 03", title: "Turn noise into attraction", body: "Redo is the best route for laughter, cheering, and repeat crowd attention." }
+          ],
+          steps: [
+            { title: "Use a clear host chant", body: "A prompt like “one more try!” helps pull surrounding visitors into the moment." },
+            { title: "Grant an extra spin or board attempt", body: "Another chance means another wave of suspense and attention." },
+            { title: "Use the noise to increase foot traffic", body: "This route is great for making the booth feel lively and hard to ignore." }
+          ]
+        }
+      },
+      root: {
+        zh: {
+          name: "X（沒有）",
+          summary: "意指「我愛中國香港」，可直接送出精美禮品，節奏快、理解也最直覺。",
+          pages: [
+            { label: "PAGE 01", title: "落到 X", body: "主持人立即解讀為『我愛中國香港』，現場不需要再猶豫。" },
+            { label: "PAGE 02", title: "直接送出精美禮品", body: "這是最快速也最順的獎勵落點，適合拉快整體節奏。" },
+            { label: "PAGE 03", title: "保持流暢人流", body: "因為不用答題或重做，很適合在高峰時快速消化排隊人潮。" }
+          ],
+          steps: [
+            { title: "結果解讀要乾脆有記憶點", body: "『X 代表我愛中國香港！』一句就能立刻讓大家聽懂。" },
+            { title: "直接給禮品", body: "把這個結果做成最俐落的送禮通道，提升現場順暢度。" },
+            { title: "適合高流量時段", body: "當人多時，這條結果能幫你快速完成互動與發禮。" }
+          ]
+        },
+        en: {
+          name: "X / I Love Hong Kong",
+          summary: "This result means “I love Hong Kong, China” and the participant directly receives a gift.",
+          pages: [
+            { label: "PAGE 01", title: "Land on X", body: "The host immediately reads it as “I love Hong Kong, China,” with no extra delay." },
+            { label: "PAGE 02", title: "Give the participant a nice gift", body: "This is the fastest and most direct reward route." },
+            { label: "PAGE 03", title: "Keep the line moving", body: "Because there is no quiz or redo, this route is ideal when traffic is heavy." }
+          ],
+          steps: [
+            { title: "Make the interpretation immediate", body: "A simple line like “X means I love Hong Kong, China” makes the meaning memorable." },
+            { title: "Deliver the gift directly", body: "Use this route as the smoothest prize path in the full interaction flow." },
+            { title: "Best for high-traffic moments", body: "It helps you reward people quickly and keep the booth moving." }
+          ]
+        }
+      }
+    };
+
+    const QUESTIONS = [
+      {
+        id: 1,
+        zh: {
+          title: "如果你今天只有 20 分鐘，你最想怎麼開始？",
+          body: "想像這是電子本的第一頁，你會把手指放在哪裡。",
+          options: [
+            { title: "先看別人怎麼做", body: "觀察案例、蒐集感覺，再決定方向。", lane: "left", score: { root: 1 } },
+            { title: "先列出一頁筆記", body: "先整理成幾個重點，再挑一個入口。", lane: "middle", score: { weave: 1 } },
+            { title: "直接做一件小事", body: "不等完整規劃，先讓自己動起來。", lane: "right", score: { spark: 1 } }
+          ]
+        },
+        en: {
+          title: "If you only had 20 minutes today, how would you begin?",
+          body: "Imagine this is the first page of the book. Where would your finger land?",
+          options: [
+            { title: "Look at examples first", body: "Observe what others are doing before choosing a direction.", lane: "left", score: { root: 1 } },
+            { title: "Sketch one page of notes", body: "Organize a few points before choosing an entry point.", lane: "middle", score: { weave: 1 } },
+            { title: "Do one small thing now", body: "Start moving before the plan feels complete.", lane: "right", score: { spark: 1 } }
+          ]
+        }
+      },
+      {
+        id: 2,
+        zh: {
+          title: "當你想到氣候行動，你最自然會先連到哪一種畫面？",
+          body: "這一頁會決定你比較偏向直覺行動、整理脈絡，還是長期累積。",
+          options: [
+            { title: "可以長期維持的習慣", body: "像是固定重複的日常節奏。", lane: "left", score: { root: 2 } },
+            { title: "一張能串起事情的地圖", body: "把人、工具、場景連成一頁。", lane: "middle", score: { weave: 2 } },
+            { title: "一個今天就能上手的挑戰", body: "希望立刻有一個明確起點。", lane: "right", score: { spark: 2 } }
+          ]
+        },
+        en: {
+          title: "When you think about climate action, what image appears first?",
+          body: "This page separates quick action, contextual mapping, and long-term rhythm.",
+          options: [
+            { title: "A habit that can last", body: "Something repeatable and steady in daily life.", lane: "left", score: { root: 2 } },
+            { title: "A map that connects moving parts", body: "People, tools, and places linked on one page.", lane: "middle", score: { weave: 2 } },
+            { title: "A challenge I can start today", body: "A clear starting point with immediate momentum.", lane: "right", score: { spark: 2 } }
+          ]
+        }
+      },
+      {
+        id: 3,
+        zh: {
+          title: "如果要把你的想法分享給朋友，你會先分享什麼？",
+          body: "這一頁在看你習慣先分享結果、結構，還是節奏。",
+          options: [
+            { title: "我打算每週都做的事", body: "先讓大家知道你想持續做什麼。", lane: "left", score: { root: 2 } },
+            { title: "我整理出來的框架", body: "先讓對方看懂整體邏輯。", lane: "middle", score: { weave: 2 } },
+            { title: "我剛剛完成的小成果", body: "先用一個已完成的動作說話。", lane: "right", score: { spark: 2 } }
+          ]
+        },
+        en: {
+          title: "If you shared the idea with a friend, what would you show first?",
+          body: "This page checks whether you naturally share rhythm, structure, or action.",
+          options: [
+            { title: "The thing I plan to repeat weekly", body: "Show the habit you want to sustain.", lane: "left", score: { root: 2 } },
+            { title: "The framework I mapped out", body: "Help the other person see the full logic first.", lane: "middle", score: { weave: 2 } },
+            { title: "The small thing I already finished", body: "Lead with a completed action.", lane: "right", score: { spark: 2 } }
+          ]
+        }
+      },
+      {
+        id: 4,
+        zh: {
+          title: "面對一個有點大的目標時，你會怎麼讓自己不被卡住？",
+          body: "這一頁會更明顯地把你帶向最適合的路線。",
+          options: [
+            { title: "縮成固定可重複的版本", body: "先讓它小到可以長久持續。", lane: "left", score: { root: 3 } },
+            { title: "拆成幾個可協作的段落", body: "先看到哪些部分可以被分工推進。", lane: "middle", score: { weave: 3 } },
+            { title: "抓最簡單的一步先做", body: "先讓自己跨過起跑線。", lane: "right", score: { spark: 3 } }
+          ]
+        },
+        en: {
+          title: "When the goal feels large, how do you avoid getting stuck?",
+          body: "This page makes your best route much clearer.",
+          options: [
+            { title: "Shrink it into a repeatable habit", body: "Make it small enough to last.", lane: "left", score: { root: 3 } },
+            { title: "Break it into collaborative sections", body: "See what different people or tools can move.", lane: "middle", score: { weave: 3 } },
+            { title: "Take the easiest first step", body: "Get across the starting line immediately.", lane: "right", score: { spark: 3 } }
+          ]
+        }
+      },
+      {
+        id: 5,
+        zh: {
+          title: "你最希望這個頁面最後帶給你什麼？",
+          body: "這不是測驗標準答案，而是在對焦你現在最需要的推進方式。",
+          options: [
+            { title: "一個能維持下去的節奏", body: "讓行動能留下來。", lane: "left", score: { root: 3 } },
+            { title: "一張可以往下展開的藍圖", body: "讓方向更清楚也更好協調。", lane: "middle", score: { weave: 3 } },
+            { title: "一個立刻可做的下一步", body: "讓自己不要只停在想像。", lane: "right", score: { spark: 3 } }
+          ]
+        },
+        en: {
+          title: "What do you most want this page to give you at the end?",
+          body: "There is no single correct answer here. This simply reveals what kind of push you need now.",
+          options: [
+            { title: "A rhythm I can sustain", body: "Something that stays with me.", lane: "left", score: { root: 3 } },
+            { title: "A blueprint I can open further", body: "A clearer structure with room to grow.", lane: "middle", score: { weave: 3 } },
+            { title: "A next move I can do right now", body: "Something that gets me out of pure thinking.", lane: "right", score: { spark: 3 } }
+          ]
+        }
+      },
+      {
+        id: 6,
+        zh: {
+          title: "最後一頁，你想用哪種姿態收尾？",
+          body: "做出這個選擇後，決策球就會落到你的閱讀結尾。",
+          options: [
+            { title: "穩穩放進日常", body: "把行動留在生活裡。", lane: "left", score: { root: 4 } },
+            { title: "整理成可共享的提案", body: "讓下一個人也能跟上。", lane: "middle", score: { weave: 4 } },
+            { title: "立刻展開第一個嘗試", body: "讓今天就算真正開始。", lane: "right", score: { spark: 4 } }
+          ]
+        },
+        en: {
+          title: "On the final page, how do you want to close the journey?",
+          body: "Once you choose here, the token drops into your ending route.",
+          options: [
+            { title: "Set it into daily life", body: "Let the action stay in ordinary rhythm.", lane: "left", score: { root: 4 } },
+            { title: "Shape it into a shared proposal", body: "Make it easier for others to follow.", lane: "middle", score: { weave: 4 } },
+            { title: "Launch the first attempt immediately", body: "Make today count as a real beginning.", lane: "right", score: { spark: 4 } }
+          ]
+        }
+      }
+    ];
+
+    const laneLabels = { left: "X", middle: "↺", right: "✓" };
+    const laneX = { left: 86, middle: 210, right: 334 };
+    const boardRows = [66, 138, 210, 282, 354, 426, 500];
+
+    const siteHeader = document.querySelector("header");
+    const navActions = document.getElementById("navActions");
+    const navToggleBtn = document.getElementById("navToggleBtn");
+    const navBackdrop = document.getElementById("navBackdrop");
+    const boardSvg = document.getElementById("boardSvg");
+    const boardToken = document.getElementById("boardToken");
+    const questionCard = document.getElementById("questionCard");
+    const resultPanel = document.getElementById("resultPanel");
+    const stepBadge = document.getElementById("stepBadge");
+    const pathBadge = document.getElementById("pathBadge");
+    const progressBar = document.getElementById("progressBar");
+
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
+    let currentStep = 0;
+    let answers = [];
+
+    const t = (path) => String(path || "").split(".").reduce((acc, key) => acc?.[key], I18N[currentLang]) || "";
+    const format = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? "");
+
+    const setNavToggleLabel = (isOpen) => {
+      navToggleBtn.textContent = isOpen ? "Close / 關閉" : t("nav.menu");
+    };
+
+    const closeMobileNav = () => {
+      siteHeader.classList.remove("nav-open");
+      navToggleBtn.setAttribute("aria-expanded", "false");
+      navBackdrop.classList.remove("is-visible");
+      setNavToggleLabel(false);
+    };
+
+    navToggleBtn.addEventListener("click", () => {
+      const nextOpen = !siteHeader.classList.contains("nav-open");
+      siteHeader.classList.toggle("nav-open", nextOpen);
+      navToggleBtn.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+      navBackdrop.classList.toggle("is-visible", nextOpen);
+      setNavToggleLabel(nextOpen);
+    });
+
+    navBackdrop.addEventListener("click", closeMobileNav);
+    navActions.querySelectorAll("a, button").forEach((node) => node.addEventListener("click", closeMobileNav));
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 640) closeMobileNav();
+    });
+
+    const renderBoard = () => {
+      const railLeft = 70;
+      const railRight = 350;
+      const segments = boardRows.slice(0, 6).map((y, index) => {
+        const offset = index % 2 === 0 ? 0 : 14;
+        const mid = (railLeft + railRight) / 2;
+        return `
+          <g>
+            <line x1="${mid}" y1="${y - 32}" x2="${mid}" y2="${y - 14}" stroke="rgba(85,16,13,0.82)" stroke-width="4" stroke-linecap="round" />
+            <path d="M ${railLeft + offset} ${y} L ${mid} ${y - 18} L ${railRight - offset} ${y}" fill="none" stroke="rgba(85,16,13,0.82)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M ${railLeft + offset} ${y + 24} L ${mid} ${y + 6} L ${railRight - offset} ${y + 24}" fill="none" stroke="rgba(85,16,13,0.82)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        `;
+      }).join("");
+
+      boardSvg.innerHTML = `
+        <defs>
+          <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="rgba(68,10,8,0.18)" />
+          </filter>
+        </defs>
+        <circle cx="210" cy="44" r="7" fill="rgba(90,18,14,0.82)" />
+        <line x1="210" y1="50" x2="210" y2="68" stroke="rgba(90,18,14,0.82)" stroke-width="4" stroke-linecap="round" />
+        ${segments}
+        <g filter="url(#shadow)">
+          <circle cx="${laneX.left}" cy="552" r="7" fill="rgba(90,18,14,0.82)" />
+          <circle cx="${laneX.middle}" cy="552" r="7" fill="rgba(90,18,14,0.82)" />
+          <circle cx="${laneX.right}" cy="552" r="7" fill="rgba(90,18,14,0.82)" />
+        </g>
+      `;
+    };
+
+    const saveState = () => {
+      localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify({ currentStep, answers }));
+    };
+
+    const loadState = () => {
+      try {
+        const raw = localStorage.getItem(STATE_STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.answers)) answers = parsed.answers.slice(0, QUESTIONS.length);
+        currentStep = Math.min(Number(parsed.currentStep || 0), QUESTIONS.length);
+      } catch (error) {
+        console.error("Failed to load decision board state:", error);
+      }
+    };
+
+    const getTokenPosition = () => {
+      if (!answers.length) return { left: 210, top: boardRows[0] };
+      const last = answers[Math.min(answers.length - 1, boardRows.length - 1)];
+      return {
+        left: laneX[last.lane] || 210,
+        top: boardRows[Math.min(answers.length, boardRows.length - 1)]
+      };
+    };
+
+    const updateToken = () => {
+      const pos = getTokenPosition();
+      boardToken.style.left = `${(pos.left / 420) * 100}%`;
+      boardToken.style.top = `${(pos.top / 620) * 100}%`;
+    };
+
+    const getRouteKey = () => {
+      const totals = answers.reduce((acc, answer) => {
+        Object.entries(answer.score || {}).forEach(([key, value]) => {
+          acc[key] = (acc[key] || 0) + value;
+        });
+        return acc;
+      }, { spark: 0, weave: 0, root: 0 });
+      return Object.entries(totals).sort((a, b) => b[1] - a[1])[0]?.[0] || "spark";
+    };
+
+    const getPathLabel = () => {
+      if (!answers.length) return t("status.pathEmpty");
+      return `${t("status.pathPrefix")} ${answers.map((answer) => laneLabels[answer.lane]).join(" · ")}`;
+    };
+
+    const animateAndAdvance = async (option) => {
+      answers.push({ lane: option.lane, score: option.score });
+      currentStep += 1;
+      saveState();
+      updateToken();
+      updateStatus();
+      await new Promise((resolve) => window.setTimeout(resolve, 420));
+      renderCurrentState();
+    };
+
+    const resetExperience = () => {
+      currentStep = 0;
+      answers = [];
+      saveState();
+      resultPanel.hidden = true;
+      questionCard.hidden = false;
+      updateToken();
+      renderCurrentState();
+    };
+
+    const buildCopyText = () => {
+      const route = ROUTES[getRouteKey()][currentLang];
+      const path = answers.map((answer) => laneLabels[answer.lane]).join(" · ");
+      if (currentLang === "zh") {
+        return `我的 Decision Board 結果是：${route.name}\n路徑：${path}\n摘要：${route.summary}`;
+      }
+      return `My Decision Board result: ${route.name}\nPath: ${path}\nSummary: ${route.summary}`;
+    };
+
+    const copySummary = async () => {
+      const text = buildCopyText();
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          alert(t("result.copied"));
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      alert(`${t("result.fallback")}\n\n${text}`);
+    };
+
+    const updateStatus = () => {
+      const total = QUESTIONS.length;
+      const completed = Math.min(currentStep, total);
+      stepBadge.textContent = format(t("status.step"), { current: Math.min(completed + 1, total), total });
+      pathBadge.textContent = getPathLabel();
+      progressBar.style.width = `${(completed / total) * 100}%`;
+    };
+
+    const renderQuestion = () => {
+      const question = QUESTIONS[currentStep];
+      const copy = question[currentLang];
+      questionCard.hidden = false;
+      resultPanel.hidden = true;
+      questionCard.innerHTML = `
+        <div class="question-copy">
+          <span class="mini-badge">${t("controls.choose")}</span>
+          <h2>${copy.title}</h2>
+          <p>${copy.body}</p>
+        </div>
+        <div class="choice-grid">
+          ${copy.options.map((option, index) => `
+            <button class="choice-btn" type="button" data-option-index="${index}">
+              <strong>${option.title}</strong>
+              <span>${option.body}</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="path-strip">
+          ${answers.map((answer, index) => `<span class="path-pill">${index + 1}. ${laneLabels[answer.lane]}</span>`).join("")}
+        </div>
+      `;
+      questionCard.querySelectorAll(".choice-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          const option = copy.options[Number(button.dataset.optionIndex)];
+          animateAndAdvance(option);
+        });
+      });
+    };
+
+    const renderResult = () => {
+      const route = ROUTES[getRouteKey()][currentLang];
+      const summaryTitle = format(t("result.title"), { route: route.name });
+      questionCard.hidden = true;
+      resultPanel.hidden = false;
+      stepBadge.textContent = t("result.routeLabel");
+      pathBadge.textContent = getPathLabel();
+      progressBar.style.width = "100%";
+
+      resultPanel.innerHTML = `
+        <div class="result-summary">
+          <span class="result-kicker">${t("result.kicker")}</span>
+          <h2>${summaryTitle}</h2>
+          <p>${t("result.summary")}</p>
+          <div class="helper-note">${route.summary}</div>
+          <div class="result-actions">
+            <button id="restartBtn" class="primary" type="button">${t("result.action")}</button>
+            <button id="copyBtn" type="button">${t("result.share")}</button>
+          </div>
+        </div>
+        <div class="result-grid">
+          <div class="book-card">
+            <h3>${t("result.nextTitle")}</h3>
+            <div class="book-spread">
+              ${route.pages.map((page) => `
+                <article class="book-page">
+                  <strong>${page.label}</strong>
+                  <h3>${page.title}</h3>
+                  <p>${page.body}</p>
+                </article>
+              `).join("")}
+            </div>
+          </div>
+          <div class="route-card">
+            <h3>${t("result.routeTitle")}</h3>
+            <div class="route-list">
+              ${route.steps.map((step, index) => `
+                <div class="route-item">
+                  <div class="route-step">${index + 1}</div>
+                  <div>
+                    <strong>${step.title}</strong>
+                    <p>${step.body}</p>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("restartBtn").addEventListener("click", resetExperience);
+      document.getElementById("copyBtn").addEventListener("click", copySummary);
+    };
+
+    const renderCurrentState = () => {
+      updateStatus();
+      if (currentStep >= QUESTIONS.length) {
+        renderResult();
+      } else {
+        renderQuestion();
+      }
+    };
+
+    const applyLanguage = (lang) => {
+      currentLang = lang === "en" ? "en" : "zh";
+      localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+      document.documentElement.lang = currentLang === "zh" ? "zh-Hant" : "en";
+      document.title = t("page.title");
+
+      const walk = (prefix, value) => {
+        Object.entries(value).forEach(([key, nested]) => {
+          const path = prefix ? `${prefix}.${key}` : key;
+          if (nested && typeof nested === "object" && !Array.isArray(nested)) {
+            walk(path, nested);
+            return;
+          }
+          document.querySelectorAll(`[data-i18n="${path}"]`).forEach((node) => {
+            node.textContent = nested;
+          });
+        });
+      };
+
+      walk("", I18N[currentLang]);
+      document.querySelectorAll(".lang-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === currentLang);
+      });
+      setNavToggleLabel(siteHeader.classList.contains("nav-open"));
+      renderCurrentState();
+    };
+
+    document.querySelectorAll(".lang-btn").forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+
+    renderBoard();
+    loadState();
+    updateToken();
+    applyLanguage(currentLang);
+  </script>
+</body>
+</html>
