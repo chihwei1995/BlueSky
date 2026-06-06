@@ -230,33 +230,6 @@
       padding: 28px 0 56px;
     }
 
-    .hero {
-      display: grid;
-      gap: 0;
-      padding: 24px 28px;
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.34), transparent 18%),
-        linear-gradient(135deg, rgba(245, 228, 201, 0.98), rgba(252, 247, 241, 0.92));
-      border: 1px solid rgba(87, 58, 48, 0.08);
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      width: fit-content;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(201, 58, 46, 0.08);
-      color: #8a241c;
-      border: 1px solid rgba(201, 58, 46, 0.12);
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-    }
     .board-stage {
       display: grid;
       gap: 0;
@@ -548,18 +521,6 @@
       }
     }
 
-    .result-kicker {
-      display: inline-flex;
-      width: fit-content;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(30, 127, 91, 0.1);
-      color: #1c6d50;
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-    }
-
     .result-summary h2 {
       margin: 0;
       font-size: clamp(1.45rem, 2.3vw, 2.1rem);
@@ -651,17 +612,6 @@
       }
       main {
         padding: 18px 0 36px;
-      }
-      .hero {
-        padding: 10px 0 12px;
-        margin-bottom: 12px;
-        background: transparent;
-        border: none;
-        box-shadow: none;
-      }
-      .eyebrow {
-        font-size: 0.74rem;
-        padding: 6px 10px;
       }
       .board-frame {
         width: min(100%, 520px);
@@ -790,10 +740,6 @@
         display: none;
       }
       main { padding-top: 10px; }
-      .hero {
-        padding: 4px 0 10px;
-        margin-bottom: 10px;
-      }
       .board-frame {
         width: 100%;
         padding: 12px;
@@ -839,10 +785,6 @@
       .result-summary {
         padding: 14px;
         gap: 10px;
-      }
-      .result-kicker {
-        font-size: 0.72rem;
-        padding: 6px 10px;
       }
       .result-summary h2 {
         font-size: 1.08rem;
@@ -892,10 +834,6 @@
 
   <main>
     <div class="shell">
-      <section class="hero">
-        <span class="eyebrow" data-i18n="hero.kicker">INTERACTIVE E-BOOK EXPERIENCE</span>
-      </section>
-
       <section class="board-stage">
         <section class="board-frame">
           <div id="boardTitle" class="board-title" data-i18n="board.title">DECISION</div>
@@ -941,9 +879,6 @@
         page: { title: "Decision Board | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "電子決策板動畫體驗" },
         nav: { about: "項目介紹", mbti: "Eco-MBTI", daily: "每日行動", decision: "決策板", menu: "選單" },
-        hero: {
-          kicker: "INTERACTIVE E-BOOK EXPERIENCE"
-        },
         board: {
           title: "決策板",
           callout: "直接點一下開始"
@@ -963,9 +898,7 @@
           reset: "重置"
         },
         result: {
-          kicker: "結果",
           title: "這次是「{route}」",
-          summary: "直接看結果就好。",
           action: "下一輪",
           copied: "結果摘要已複製。",
           fallback: "請手動複製這段摘要：",
@@ -977,9 +910,6 @@
         page: { title: "Decision Board | Blue Sky Returns" },
         header: { title: "Blue Sky Returns", subtitle: "Electronic decision board animation" },
         nav: { about: "About", mbti: "Eco-MBTI", daily: "Daily Actions", decision: "Decision Board", menu: "Menu" },
-        hero: {
-          kicker: "INTERACTIVE E-BOOK EXPERIENCE"
-        },
         board: {
           title: "DECISION",
           callout: "Tap to start"
@@ -999,9 +929,7 @@
           reset: "Reset"
         },
         result: {
-          kicker: "Result",
           title: "This round: “{route}”",
-          summary: "Just check the result.",
           action: "Next Round",
           copied: "Result summary copied.",
           fallback: "Please copy this summary manually:",
@@ -1313,9 +1241,7 @@
       boardResult.innerHTML = `
         <div class="result-fireworks" aria-hidden="true"><span></span><span></span><span></span></div>
         <div class="result-summary">
-          <span class="result-kicker">${t("result.kicker")}</span>
           <h2>${summaryTitle}</h2>
-          <p>${t("result.summary")}</p>
           <p class="result-line">${route.summary}</p>
           <div class="result-actions">
             <button id="restartBtn" class="primary" type="button">${t("result.action")}</button>
