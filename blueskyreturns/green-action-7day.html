@@ -576,6 +576,79 @@
       gap: 14px;
       margin-top: 16px;
     }
+    .score-panel {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(18, 92, 61, 0.94), rgba(72, 166, 118, 0.9));
+      color: #f5fff7;
+      box-shadow: 0 18px 40px rgba(18, 80, 53, 0.18);
+    }
+    .score-panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .score-panel-head h3 {
+      margin: 0;
+      font-size: 1.02rem;
+      letter-spacing: 0.03em;
+    }
+    .score-panel-head p {
+      margin: 4px 0 0;
+      color: rgba(245, 255, 247, 0.8);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+    .score-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+    }
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .score-stat {
+      display: grid;
+      gap: 4px;
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      min-width: 0;
+    }
+    .score-stat-label {
+      color: rgba(245, 255, 247, 0.76);
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+    .score-stat-value {
+      font-size: 1.7rem;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    .score-note {
+      margin: 0;
+      color: rgba(245, 255, 247, 0.9);
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
     .task-disclosure {
       border: 1px solid rgba(31, 143, 88, 0.16);
       border-radius: 20px;
@@ -1113,6 +1186,19 @@
         gap: 10px;
         margin-top: 12px;
       }
+      .score-panel {
+        padding: 16px;
+        border-radius: 22px;
+      }
+      .score-grid {
+        grid-template-columns: 1fr;
+      }
+      .score-stat {
+        padding: 12px 14px;
+      }
+      .score-stat-value {
+        font-size: 1.42rem;
+      }
       .task-disclosure {
         border-radius: 18px;
       }
@@ -1380,6 +1466,30 @@
               </article>
             </div>
             <div class="task-aux">
+              <article class="score-panel">
+                <div class="score-panel-head">
+                  <div>
+                    <h3 data-i18n="score.title">我的氣候積分</h3>
+                    <p id="taskScoreSummary" data-i18n="score.loading">正在同步你的積分資料...</p>
+                  </div>
+                  <span id="taskScoreBadge" class="score-pill" data-i18n="score.badge">同步中</span>
+                </div>
+                <div class="score-grid">
+                  <div class="score-stat">
+                    <span class="score-stat-label" data-i18n="score.pointsLabel">目前積分</span>
+                    <strong id="taskScorePoints" class="score-stat-value">-</strong>
+                  </div>
+                  <div class="score-stat">
+                    <span class="score-stat-label" data-i18n="score.daysLabel">完成天數</span>
+                    <strong id="taskScoreDays" class="score-stat-value">-</strong>
+                  </div>
+                  <div class="score-stat">
+                    <span class="score-stat-label" data-i18n="score.impactLabel">集氣人數</span>
+                    <strong id="taskScoreImpact" class="score-stat-value">-</strong>
+                  </div>
+                </div>
+                <p id="taskScoreNote" class="score-note" data-i18n="score.guest">登入後就會顯示你的每日任務積分、完成天數與集氣成果。</p>
+              </article>
             </div>
           </section>
         </div>
@@ -1457,6 +1567,22 @@
           dimensionHelpNatureTitle: "親近自然",
           dimensionHelpNatureBody: "像是走進公園、照顧植物、感受自然，也是一種和環境重新連結的行動。"
         },
+        score: {
+          title: "我的氣候積分",
+          badge: "同步中",
+          loading: "正在同步你的積分資料...",
+          guest: "登入後就會顯示你的每日任務積分、完成天數與集氣成果。",
+          pointsLabel: "目前積分",
+          daysLabel: "完成天數",
+          impactLabel: "集氣人數",
+          ready: "已同步",
+          streak: "連續 7 日達成",
+          noStreak: "持續累積中",
+          summary: "你目前累積 {points} 分，完成 {days} 天，已集氣 {impact} 人。",
+          summaryWithStreak: "你目前累積 {points} 分，完成 {days} 天，已集氣 {impact} 人，並達成 7 日連續行動。",
+          note: "Eco-MBTI、每日行動、7 日連續與集氣人數都會一起計入。",
+          unavailable: "暫時無法同步積分資料，請稍後再試。"
+        },
         taskAuth: {
           title: "先用 Email 開始",
           body: "補上 Email 和密碼後，就能直接送出。",
@@ -1526,6 +1652,22 @@
           dimensionHelpEnergyBody: "Using less air-conditioning, turning things off, and choosing natural light all count as energy-saving actions.",
           dimensionHelpNatureTitle: "City / Nature Connection",
           dimensionHelpNatureBody: "Spending time with plants, parks, and nearby nature is also a meaningful environmental action."
+        },
+        score: {
+          title: "My Climate Points",
+          badge: "Syncing",
+          loading: "Syncing your climate points...",
+          guest: "Sign in to see your daily action points, completion days, and momentum count.",
+          pointsLabel: "Points",
+          daysLabel: "Completed Days",
+          impactLabel: "Momentum",
+          ready: "Synced",
+          streak: "7-day streak reached",
+          noStreak: "Keep going",
+          summary: "You have {points} points, {days} completed days, and {impact} momentum count.",
+          summaryWithStreak: "You have {points} points, {days} completed days, {impact} momentum count, and a 7-day streak.",
+          note: "Eco-MBTI, daily actions, the 7-day streak, and momentum all count together.",
+          unavailable: "Climate points are temporarily unavailable. Please try again later."
         },
         taskAuth: {
           title: "Start with Email",
@@ -1634,6 +1776,12 @@
     const dimensionInlineHelp = document.getElementById("dimensionInlineHelp");
     const dimensionInlineHelpTitle = document.getElementById("dimensionInlineHelpTitle");
     const dimensionInlineHelpBody = document.getElementById("dimensionInlineHelpBody");
+    const taskScoreSummary = document.getElementById("taskScoreSummary");
+    const taskScoreBadge = document.getElementById("taskScoreBadge");
+    const taskScorePoints = document.getElementById("taskScorePoints");
+    const taskScoreDays = document.getElementById("taskScoreDays");
+    const taskScoreImpact = document.getElementById("taskScoreImpact");
+    const taskScoreNote = document.getElementById("taskScoreNote");
     const termsModal = document.getElementById("termsModal");
     const termsOpenBtn = document.getElementById("termsOpenBtn");
     const termsCloseBtn = document.getElementById("termsCloseBtn");
@@ -1648,9 +1796,127 @@
     let authSyncToken = 0;
     let submissionMarqueeFrame = 0;
     let submissionMarqueePaused = false;
+    let currentTaskScoreState = { mode: "guest" };
     const taskFormStartedAt = Date.now();
     const MIN_TASK_FILL_MS = 2000;
     const DAILY_SLOT_COLLECTION = "greenProposalDailySlots";
+
+    const formatCopy = (path, values = {}) => {
+      let template = getCopy(path);
+      Object.entries(values).forEach(([key, value]) => {
+        template = template.replaceAll(`{${key}}`, String(value));
+      });
+      return template;
+    };
+    const normalizeCreditedDates = (dates = []) => {
+      return Array.from(new Set(
+        dates
+          .map((value) => String(value || "").trim())
+          .filter(Boolean)
+      )).sort();
+    };
+    const hasSevenDayStreak = (dates = []) => {
+      const uniqueDates = normalizeCreditedDates(dates);
+      if (uniqueDates.length < 7) return false;
+      let streak = 1;
+      for (let index = 1; index < uniqueDates.length; index += 1) {
+        const prev = new Date(`${uniqueDates[index - 1]}T00:00:00Z`);
+        const current = new Date(`${uniqueDates[index]}T00:00:00Z`);
+        const diffDays = Math.round((current - prev) / 86400000);
+        if (diffDays === 1) {
+          streak += 1;
+          if (streak >= 7) return true;
+        } else {
+          streak = 1;
+        }
+      }
+      return false;
+    };
+    const calculateClimatePoints = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+      let total = 0;
+      if (member?.ecoMbti?.type) total += 1;
+      if (completedDays > 0) {
+        total += 5;
+        total += Math.max(0, completedDays - 1);
+      }
+      if (hasWeeklyStreak) total += 5;
+      total += Math.max(0, Number(impactCount || 0));
+      return total;
+    };
+    const renderTaskScoreGuest = () => {
+      currentTaskScoreState = { mode: "guest" };
+      taskScoreBadge.textContent = getCopy("score.badge");
+      taskScoreSummary.textContent = getCopy("score.guest");
+      taskScorePoints.textContent = "-";
+      taskScoreDays.textContent = "-";
+      taskScoreImpact.textContent = "-";
+      taskScoreNote.textContent = getCopy("score.guest");
+    };
+    const renderTaskScoreLoading = () => {
+      currentTaskScoreState = { mode: "loading" };
+      taskScoreBadge.textContent = getCopy("score.badge");
+      taskScoreSummary.textContent = getCopy("score.loading");
+      taskScorePoints.textContent = "…";
+      taskScoreDays.textContent = "…";
+      taskScoreImpact.textContent = "…";
+      taskScoreNote.textContent = getCopy("score.note");
+    };
+    const renderTaskScoreError = () => {
+      currentTaskScoreState = { mode: "error" };
+      taskScoreBadge.textContent = getCopy("score.badge");
+      taskScoreSummary.textContent = getCopy("score.unavailable");
+      taskScorePoints.textContent = "-";
+      taskScoreDays.textContent = "-";
+      taskScoreImpact.textContent = "-";
+      taskScoreNote.textContent = getCopy("score.note");
+    };
+    const renderTaskScore = ({ points = 0, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+      currentTaskScoreState = { mode: "ready", points, completedDays, impactCount, hasWeeklyStreak };
+      taskScoreBadge.textContent = hasWeeklyStreak ? getCopy("score.streak") : getCopy("score.ready");
+      taskScoreSummary.textContent = formatCopy(
+        hasWeeklyStreak ? "score.summaryWithStreak" : "score.summary",
+        { points, days: completedDays, impact: impactCount }
+      );
+      taskScorePoints.textContent = String(points);
+      taskScoreDays.textContent = String(completedDays);
+      taskScoreImpact.textContent = String(impactCount);
+      taskScoreNote.textContent = hasWeeklyStreak ? getCopy("score.streak") : getCopy("score.note");
+    };
+    const refreshTaskScoreByState = () => {
+      if (currentTaskScoreState.mode === "loading") {
+        renderTaskScoreLoading();
+        return;
+      }
+      if (currentTaskScoreState.mode === "error") {
+        renderTaskScoreError();
+        return;
+      }
+      if (currentTaskScoreState.mode === "ready") {
+        renderTaskScore(currentTaskScoreState);
+        return;
+      }
+      renderTaskScoreGuest();
+    };
+    const loadTaskScore = async (uid, submissions = []) => {
+      try {
+        const referralSnap = await getDocs(
+          query(collection(db, "memberReferrals"), where("referredBy", "==", uid))
+        );
+        const completedDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
+        const impactCount = referralSnap.size;
+        const weeklyStreak = hasSevenDayStreak(submissions.map((item) => item.taskDate));
+        const points = calculateClimatePoints({
+          member: currentMemberProfile || {},
+          completedDays,
+          impactCount,
+          hasWeeklyStreak: weeklyStreak
+        });
+        renderTaskScore({ points, completedDays, impactCount, hasWeeklyStreak: weeklyStreak });
+      } catch (error) {
+        console.error("Failed to load Daily Green Actions score:", error);
+        renderTaskScoreError();
+      }
+    };
 
     const openTermsModal = () => {
       termsModal.classList.add("open");
@@ -1866,6 +2132,10 @@
         .split(".")
         .reduce((acc, key) => (acc && typeof acc === "object" ? acc[key] : ""), I18N[document.documentElement.lang === "en" ? "en" : "zh"]) || "";
     };
+    renderTaskScoreGuest();
+    document.addEventListener("bsr:langchange", () => {
+      refreshTaskScoreByState();
+    });
     const getPrimaryDimension = (submission) => {
       if (Array.isArray(submission?.dimensions)) return submission.dimensions[0] || "";
       return String(submission?.dimensions || "").trim();
@@ -2343,6 +2613,7 @@
       submissionList.innerHTML = "";
       submissionList.hidden = true;
       submissionEmpty.hidden = false;
+      renderTaskScoreLoading();
 
       try {
         const snapshot = await getDocs(
@@ -2353,6 +2624,8 @@
         const submissions = snapshot.docs
           .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
           .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+
+        await loadTaskScore(uid, submissions);
 
         if (!submissions.length) {
           submissionEmpty.textContent = "你目前還沒有提交任何 Daily Green Actions 紀錄。";
@@ -2409,6 +2682,7 @@
         updateTermsConsentUI(null);
         pendingTaskAuthSubmit = false;
         syncTaskEntryUi(null);
+        renderTaskScoreGuest();
         submissionList.hidden = true;
         submissionEmpty.hidden = false;
         submissionEmpty.textContent = "登入後，這裡會顯示你最近提交的 Daily Green Actions 紀錄。";
@@ -2433,6 +2707,7 @@
       taskForm.querySelectorAll("input, textarea, button").forEach((el) => {
         el.disabled = false;
       });
+      renderTaskScoreLoading();
       if (!taskDateInput.value) {
         taskDateInput.value = new Date().toISOString().slice(0, 10);
       }
