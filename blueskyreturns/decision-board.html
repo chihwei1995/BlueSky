@@ -12,9 +12,9 @@
     :root {
       --paper: #f7f0e6;
       --paper-ink: #3f2a24;
-      --board: #f3eee6;
-      --board-deep: #e7dfd4;
-      --board-line: #6c625d;
+      --board: #e43d35;
+      --board-deep: #c92c25;
+      --board-line: #5a5551;
       --card: rgba(255, 251, 246, 0.9);
       --line: rgba(87, 58, 48, 0.12);
       --shadow: 0 24px 56px rgba(79, 45, 32, 0.14);
@@ -232,7 +232,7 @@
 
     .hero {
       display: grid;
-      gap: 14px;
+      gap: 0;
       padding: 24px 28px;
       border-radius: 28px;
       background:
@@ -257,22 +257,6 @@
       font-weight: 800;
       letter-spacing: 0.06em;
     }
-
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      line-height: 1.02;
-      color: #4c261d;
-      max-width: 13ch;
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 62ch;
-      color: rgba(63, 42, 36, 0.8);
-      font-size: 1rem;
-    }
-
     .board-stage {
       display: grid;
       gap: 0;
@@ -282,15 +266,15 @@
     .board-frame {
       width: min(100%, 720px);
       padding: 24px 24px 26px;
-      border-radius: 40px;
+      border-radius: 18px;
       background:
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.95), transparent 16%),
-        linear-gradient(180deg, #faf7f2, #ece4d9);
-      border: 3px solid rgba(108, 98, 93, 0.18);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 14%),
+        linear-gradient(180deg, var(--board), var(--board-deep));
+      border: 1px solid rgba(116, 26, 22, 0.42);
       box-shadow:
-        inset 0 2px 0 rgba(255, 255, 255, 0.7),
-        inset 0 -10px 24px rgba(96, 79, 67, 0.08),
-        0 28px 56px rgba(93, 32, 24, 0.14);
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        inset 0 -16px 24px rgba(104, 18, 14, 0.2),
+        0 24px 48px rgba(93, 32, 24, 0.2);
       position: relative;
       aspect-ratio: 0.82;
       overflow: hidden;
@@ -303,29 +287,30 @@
     @keyframes boardCelebrate {
       0%, 100% {
         box-shadow:
-          inset 0 2px 0 rgba(255, 255, 255, 0.7),
-          inset 0 -10px 24px rgba(96, 79, 67, 0.08),
-          0 28px 56px rgba(93, 32, 24, 0.14);
+          inset 0 1px 0 rgba(255, 255, 255, 0.16),
+          inset 0 -16px 24px rgba(104, 18, 14, 0.2),
+          0 24px 48px rgba(93, 32, 24, 0.2);
       }
       50% {
         box-shadow:
-          inset 0 2px 0 rgba(255, 255, 255, 0.76),
-          inset 0 -10px 24px rgba(96, 79, 67, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2),
+          inset 0 -16px 24px rgba(104, 18, 14, 0.2),
           0 0 0 6px rgba(255, 206, 92, 0.16),
           0 0 42px rgba(255, 191, 72, 0.38),
-          0 28px 56px rgba(93, 32, 24, 0.18);
+          0 24px 48px rgba(93, 32, 24, 0.26);
       }
     }
 
     .board-title {
       position: absolute;
-      top: 22px;
-      right: 28px;
-      color: rgba(44, 34, 29, 0.88);
-      font-size: 1.18rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
+      top: 18px;
+      right: 22px;
+      color: rgba(32, 14, 13, 0.9);
+      font-size: 1.12rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
       z-index: 2;
+      font-family: Georgia, "Times New Roman", serif;
     }
 
     .board-svg {
@@ -369,9 +354,9 @@
       gap: 8px;
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(94, 83, 76, 0.08);
-      color: #463831;
-      border: 1px solid rgba(108, 98, 93, 0.14);
+      background: rgba(61, 16, 13, 0.18);
+      color: rgba(255, 246, 240, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       font-size: 0.88rem;
       font-weight: 800;
       z-index: 2;
@@ -379,53 +364,8 @@
     }
 
     .board-marquee {
-      position: absolute;
-      inset: 14px;
-      pointer-events: none;
-      z-index: 1;
+      display: none;
     }
-
-    .board-marquee span {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fffef1 0%, #ffd86b 38%, #d69320 100%);
-      box-shadow: 0 0 12px rgba(255, 206, 92, 0.7);
-      animation: marqueeBlink 1.5s ease-in-out infinite;
-    }
-
-    .board-marquee span:nth-child(2n) {
-      animation-delay: 0.25s;
-    }
-
-    .board-marquee span:nth-child(3n) {
-      animation-delay: 0.45s;
-    }
-
-    @keyframes marqueeBlink {
-      0%, 100% { opacity: 0.45; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.08); }
-    }
-
-    .board-marquee span:nth-child(1) { top: 8px; left: 56px; }
-    .board-marquee span:nth-child(2) { top: 8px; left: 128px; }
-    .board-marquee span:nth-child(3) { top: 8px; left: 200px; }
-    .board-marquee span:nth-child(4) { top: 8px; right: 128px; }
-    .board-marquee span:nth-child(5) { top: 8px; right: 56px; }
-    .board-marquee span:nth-child(6) { right: 8px; top: 124px; }
-    .board-marquee span:nth-child(7) { right: 8px; top: 244px; }
-    .board-marquee span:nth-child(8) { right: 8px; top: 364px; }
-    .board-marquee span:nth-child(9) { right: 8px; bottom: 152px; }
-    .board-marquee span:nth-child(10) { right: 8px; bottom: 48px; }
-    .board-marquee span:nth-child(11) { bottom: 8px; right: 132px; }
-    .board-marquee span:nth-child(12) { bottom: 8px; right: 60px; }
-    .board-marquee span:nth-child(13) { bottom: 8px; left: 60px; }
-    .board-marquee span:nth-child(14) { bottom: 8px; left: 132px; }
-    .board-marquee span:nth-child(15) { left: 8px; bottom: 152px; }
-    .board-marquee span:nth-child(16) { left: 8px; top: 364px; }
-    .board-marquee span:nth-child(17) { left: 8px; top: 244px; }
-    .board-marquee span:nth-child(18) { left: 8px; top: 124px; }
 
     .board-launch {
       position: absolute;
@@ -493,10 +433,10 @@
     .board-launch p {
       margin: 0;
       max-width: 28ch;
-      color: rgba(70, 56, 49, 0.9);
+      color: rgba(255, 242, 236, 0.92);
       font-size: 0.92rem;
       line-height: 1.55;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+      text-shadow: 0 1px 10px rgba(70, 14, 11, 0.22);
     }
 
     .board-legend {
@@ -516,9 +456,9 @@
       justify-items: center;
       padding: 10px 8px;
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.58);
-      color: #4a3d36;
-      border: 1px solid rgba(108, 98, 93, 0.14);
+      background: rgba(57, 16, 14, 0.18);
+      color: rgba(255, 245, 238, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(6px);
       text-align: center;
     }
@@ -541,7 +481,7 @@
       bottom: 96px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 12px;
       flex-wrap: wrap;
       z-index: 4;
@@ -553,9 +493,9 @@
       gap: 8px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.74);
-      color: #4b3a33;
-      border: 1px solid rgba(108, 98, 93, 0.12);
+      background: rgba(57, 16, 14, 0.2);
+      color: rgba(255, 245, 238, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       font-weight: 800;
       font-size: 0.84rem;
     }
@@ -567,7 +507,7 @@
       bottom: 72px;
       height: 9px;
       border-radius: 999px;
-      background: rgba(108, 98, 93, 0.08);
+      background: rgba(57, 16, 14, 0.24);
       overflow: hidden;
       z-index: 4;
     }
@@ -932,17 +872,10 @@
     <div class="shell">
       <section class="hero">
         <span class="eyebrow" data-i18n="hero.kicker">INTERACTIVE E-BOOK EXPERIENCE</span>
-        <h1 data-i18n="hero.title">點最上面的球，讓大決策板自己掉出結果。</h1>
-        <p data-i18n="hero.body">這是純動畫電子版本，不需要回答一堆選項。只要點一下最上方金球，它就會亂數滾落，最後直接揭曉 X、重做、或剔 的攤位結果。</p>
       </section>
 
       <section class="board-stage">
         <section class="board-frame">
-          <div class="board-marquee" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span><span></span>
-          </div>
           <div id="boardTitle" class="board-title" data-i18n="board.title">DECISION</div>
           <div class="board-callout" data-i18n="board.callout">點最上面金球開始</div>
           <svg id="boardSvg" class="board-svg" viewBox="0 0 420 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
@@ -954,7 +887,6 @@
           <div id="boardResult" class="board-result" hidden></div>
           <button id="boardToken" class="board-token ready" type="button" aria-label="Start random draw"></button>
           <div class="board-status">
-            <span id="stepBadge" class="status-badge">Animation 0 / 6</span>
             <span id="pathBadge" class="status-badge">按下開始，亂數掉出結果</span>
           </div>
           <div class="progress-track" aria-hidden="true">
@@ -991,9 +923,7 @@
         header: { title: "Blue Sky Returns", subtitle: "電子決策板動畫體驗" },
         nav: { about: "項目介紹", mbti: "Eco-MBTI", daily: "每日行動", decision: "決策板", menu: "選單" },
         hero: {
-          kicker: "INTERACTIVE E-BOOK EXPERIENCE",
-          title: "點最上面的球，讓大決策板自己掉出結果。",
-          body: "這是純動畫電子版本，不需要回答一堆選項。只要點一下最上方金球，它就會亂數滾落，最後直接揭曉 X、重做、或剔 的攤位結果。"
+          kicker: "INTERACTIVE E-BOOK EXPERIENCE"
         },
         board: {
           title: "決策板",
@@ -1033,9 +963,7 @@
         header: { title: "Blue Sky Returns", subtitle: "Electronic decision board animation" },
         nav: { about: "About", mbti: "Eco-MBTI", daily: "Daily Actions", decision: "Decision Board", menu: "Menu" },
         hero: {
-          kicker: "INTERACTIVE E-BOOK EXPERIENCE",
-          title: "Tap the top ball and let the big decision board reveal the result.",
-          body: "This is a pure animated electronic version with no long questionnaire. Tap the gold ball at the top and it drops through a random path before revealing X, Redo, or Check."
+          kicker: "INTERACTIVE E-BOOK EXPERIENCE"
         },
         board: {
           title: "DECISION",
@@ -1169,8 +1097,8 @@
     const RESULT_KEYS = ["root", "weave", "spark"];
     const TOTAL_ANIMATION_STEPS = 6;
     const laneLabels = { left: "X", middle: "↺", right: "✓" };
-    const laneX = { left: 86, middle: 210, right: 334 };
-    const boardRows = [66, 138, 210, 282, 354, 426, 500];
+    const laneX = { left: 84, middle: 210, right: 336 };
+    const boardRows = [76, 144, 212, 280, 348, 416, 500];
 
     const siteHeader = document.querySelector("header");
     const navActions = document.getElementById("navActions");
@@ -1183,7 +1111,6 @@
     const boardLaunch = document.getElementById("boardLaunch");
     const boardLaunchBtn = document.getElementById("boardLaunchBtn");
     const boardResult = document.getElementById("boardResult");
-    const stepBadge = document.getElementById("stepBadge");
     const pathBadge = document.getElementById("pathBadge");
     const progressBar = document.getElementById("progressBar");
 
@@ -1221,16 +1148,18 @@
     });
 
     const renderBoard = () => {
-      const railLeft = 70;
-      const railRight = 350;
+      const railLeft = 64;
+      const railRight = 356;
       const segments = boardRows.slice(0, 6).map((y, index) => {
-        const offset = index % 2 === 0 ? 0 : 10;
+        const offset = index % 2 === 0 ? 0 : 12;
         const mid = (railLeft + railRight) / 2;
         return `
           <g>
-            <line x1="${mid}" y1="${y - 30}" x2="${mid}" y2="${y - 15}" stroke="#8d837d" stroke-width="4" stroke-linecap="round" />
-            <path d="M ${railLeft + offset} ${y} L ${mid} ${y - 18} L ${railRight - offset} ${y}" fill="none" stroke="#8d837d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M ${railLeft + offset} ${y + 24} L ${mid} ${y + 6} L ${railRight - offset} ${y + 24}" fill="none" stroke="#8d837d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <line x1="${mid}" y1="${y - 28}" x2="${mid}" y2="${y - 14}" stroke="url(#trackMetal)" stroke-width="14" stroke-linecap="round" />
+            <line x1="${railLeft + offset}" y1="${y}" x2="${mid}" y2="${y - 16}" stroke="url(#trackMetal)" stroke-width="14" stroke-linecap="round" />
+            <line x1="${mid}" y1="${y - 16}" x2="${railRight - offset}" y2="${y}" stroke="url(#trackMetal)" stroke-width="14" stroke-linecap="round" />
+            <line x1="${railLeft + offset}" y1="${y + 22}" x2="${mid}" y2="${y + 6}" stroke="url(#trackMetal)" stroke-width="14" stroke-linecap="round" />
+            <line x1="${mid}" y1="${y + 6}" x2="${railRight - offset}" y2="${y + 22}" stroke="url(#trackMetal)" stroke-width="14" stroke-linecap="round" />
           </g>
         `;
       }).join("");
@@ -1240,17 +1169,24 @@
           <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="rgba(68,10,8,0.12)" />
           </filter>
+          <filter id="trackDepth" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.28)" />
+            <feDropShadow dx="0" dy="-1" stdDeviation="1" flood-color="rgba(255,255,255,0.12)" />
+          </filter>
+          <linearGradient id="trackMetal" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#99908a" />
+            <stop offset="38%" stop-color="#5f5955" />
+            <stop offset="68%" stop-color="#45403c" />
+            <stop offset="100%" stop-color="#7f7771" />
+          </linearGradient>
         </defs>
-        <circle cx="210" cy="44" r="7" fill="#8d837d" />
-        <line x1="210" y1="50" x2="210" y2="68" stroke="#8d837d" stroke-width="4" stroke-linecap="round" />
-        ${segments}
+        <circle cx="210" cy="44" r="8" fill="#3b3532" />
+        <line x1="210" y1="52" x2="210" y2="72" stroke="#3b3532" stroke-width="5" stroke-linecap="round" />
+        <g filter="url(#trackDepth)">${segments}</g>
         <g filter="url(#shadow)">
-          <ellipse cx="${laneX.left}" cy="552" rx="16" ry="9" fill="rgba(145,133,126,0.22)" />
-          <ellipse cx="${laneX.middle}" cy="552" rx="16" ry="9" fill="rgba(145,133,126,0.22)" />
-          <ellipse cx="${laneX.right}" cy="552" rx="16" ry="9" fill="rgba(145,133,126,0.22)" />
-          <circle cx="${laneX.left}" cy="552" r="7" fill="#8d837d" />
-          <circle cx="${laneX.middle}" cy="552" r="7" fill="#8d837d" />
-          <circle cx="${laneX.right}" cy="552" r="7" fill="#8d837d" />
+          <line x1="${laneX.left - 28}" y1="548" x2="${laneX.left + 28}" y2="548" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
+          <line x1="${laneX.middle - 28}" y1="548" x2="${laneX.middle + 28}" y2="548" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
+          <line x1="${laneX.right - 28}" y1="548" x2="${laneX.right + 28}" y2="548" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
         </g>
       `;
     };
@@ -1271,19 +1207,9 @@
       }
     };
 
-    const getTokenPosition = () => {
-      if (!pathHistory.length) return { left: 210, top: boardRows[0] };
-      const lastLane = pathHistory[Math.min(pathHistory.length - 1, boardRows.length - 1)];
-      return {
-        left: laneX[lastLane] || 210,
-        top: boardRows[Math.min(pathHistory.length, boardRows.length - 1)]
-      };
-    };
-
-    const updateToken = () => {
-      const pos = getTokenPosition();
-      boardToken.style.left = `${(pos.left / 420) * 100}%`;
-      boardToken.style.top = `${(pos.top / 620) * 100}%`;
+    const setTokenPosition = ({ left, top }) => {
+      boardToken.style.left = `${(left / 420) * 100}%`;
+      boardToken.style.top = `${(top / 620) * 100}%`;
     };
 
     const randomLane = () => ["left", "middle", "right"][Math.floor(Math.random() * 3)];
@@ -1295,6 +1221,23 @@
       }
       path.push(RESULT_LANE_MAP[resultKey] || "right");
       return path;
+    };
+
+    const buildAnimationPoints = (path) => {
+      const points = [{ left: 210, top: 44 }];
+      let currentX = 210;
+
+      path.forEach((lane, index) => {
+        const targetX = laneX[lane] || 210;
+        const rowY = boardRows[index];
+        points.push({ left: currentX, top: rowY - 24 });
+        points.push({ left: (currentX + targetX) / 2, top: rowY - 10 });
+        points.push({ left: targetX, top: rowY + 8 });
+        currentX = targetX;
+      });
+
+      points.push({ left: currentX, top: 548 });
+      return points;
     };
 
     const getPathLabel = () => {
@@ -1327,7 +1270,6 @@
 
     const updateStatus = () => {
       const completed = Math.min(pathHistory.length, TOTAL_ANIMATION_STEPS);
-      stepBadge.textContent = format(t("status.step"), { current: Math.max(completed, 0), total: TOTAL_ANIMATION_STEPS });
       pathBadge.textContent = currentResultKey ? t("status.landed") : getPathLabel();
       progressBar.style.width = `${(completed / TOTAL_ANIMATION_STEPS) * 100}%`;
     };
@@ -1395,14 +1337,21 @@
 
       const finalResult = RESULT_KEYS[Math.floor(Math.random() * RESULT_KEYS.length)];
       const path = buildRandomPath(finalResult);
+      const points = buildAnimationPoints(path);
 
-      for (let i = 0; i < path.length; i += 1) {
-        pathHistory.push(path[i]);
-        updateToken();
-        updateStatus();
-        saveState();
-        renderLaunchPanel();
-        await new Promise((resolve) => window.setTimeout(resolve, i === path.length - 1 ? 620 : 320));
+      for (let i = 1; i < points.length; i += 1) {
+        setTokenPosition(points[i]);
+
+        if (i % 3 === 0) {
+          const stepIndex = Math.floor(i / 3) - 1;
+          if (path[stepIndex]) {
+            pathHistory.push(path[stepIndex]);
+            updateStatus();
+            saveState();
+          }
+        }
+
+        await new Promise((resolve) => window.setTimeout(resolve, i === points.length - 1 ? 380 : 150));
       }
 
       currentResultKey = finalResult;
@@ -1416,7 +1365,7 @@
       currentResultKey = "";
       isAnimating = false;
       saveState();
-      updateToken();
+      setTokenPosition({ left: 210, top: 44 });
       renderCurrentState();
     };
 
@@ -1457,7 +1406,12 @@
 
     renderBoard();
     loadState();
-    updateToken();
+    if (pathHistory.length) {
+      const lastLane = pathHistory[Math.min(pathHistory.length - 1, boardRows.length - 1)];
+      setTokenPosition({ left: laneX[lastLane] || 210, top: boardRows[Math.min(pathHistory.length, boardRows.length - 1)] + 8 });
+    } else {
+      setTokenPosition({ left: 210, top: 44 });
+    }
     applyLanguage(currentLang);
   </script>
 </body>
