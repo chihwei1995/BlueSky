@@ -501,26 +501,6 @@
       font-size: 0.84rem;
     }
 
-    .progress-track {
-      position: absolute;
-      left: 24px;
-      right: 24px;
-      bottom: 72px;
-      height: 9px;
-      border-radius: 999px;
-      background: rgba(57, 16, 14, 0.24);
-      overflow: hidden;
-      z-index: 4;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #ffdc78, #f2a326);
-      transition: width 0.3s ease;
-    }
-
     .board-result {
       position: absolute;
       inset: 86px 24px 146px;
@@ -811,11 +791,6 @@
         right: 18px;
         bottom: 92px;
       }
-      .progress-track {
-        left: 18px;
-        right: 18px;
-        bottom: 72px;
-      }
       .board-result {
         inset: 86px 14px 142px;
       }
@@ -879,7 +854,7 @@
         <section class="board-frame">
           <div id="boardTitle" class="board-title" data-i18n="board.title">DECISION</div>
           <div class="board-callout" data-i18n="board.callout">點最上面金球開始</div>
-          <svg id="boardSvg" class="board-svg" viewBox="0 0 420 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+          <svg id="boardSvg" class="board-svg" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
           <div id="boardLaunch" class="board-launch">
             <span class="board-launch-chip" data-i18n="launch.kicker">電子決策板</span>
             <button id="boardLaunchBtn" type="button" data-i18n="launch.start">開始亂數</button>
@@ -889,9 +864,6 @@
           <button id="boardToken" class="board-token ready" type="button" aria-label="Start random draw"></button>
           <div class="board-status">
             <span id="pathBadge" class="status-badge">按下開始，亂數掉出結果</span>
-          </div>
-          <div class="progress-track" aria-hidden="true">
-            <div id="progressBar" class="progress-bar"></div>
           </div>
           <div class="board-legend">
             <div class="legend-chip">
@@ -928,27 +900,27 @@
         },
         board: {
           title: "決策板",
-          callout: "點最上面金球開始"
+          callout: "直接點一下開始"
         },
-        legend: { left: "X（沒有）", middle: "重做（再來一次）", right: "剔（回答題目）" },
+        legend: { left: "X", middle: "重做", right: "剔" },
         status: {
           step: "動畫進度 {current} / {total}",
-          ready: "按下開始，亂數掉出結果",
+          ready: "直接點一下",
           spinning: "亂數滾動中...",
-          landed: "已落到最終結果",
+          landed: "結果出爐",
           pathPrefix: "掉落路徑："
         },
         launch: {
-          kicker: "電子決策板",
-          title: "不需作答，直接亂數動畫揭曉。",
-          body: "最上方金球就是開始按鈕。點下去後，球會沿著板面一路滾落，最後停在其中一個攤位結果。",
-          start: "開始亂數",
+          kicker: "決策板",
+          title: "直接點",
+          body: "球會自己落下。",
+          start: "開始",
           reset: "重置"
         },
         result: {
-          kicker: "你的決策讀法",
-          title: "這一輪，決策板把你帶到「{route}」。",
-          summary: "這個結果可以直接變成現場互動玩法。不同落點，對應不同的帶動氣氛與送禮方式。",
+          kicker: "結果",
+          title: "這次是「{route}」",
+          summary: "直接看結果就好。",
           nextTitle: "推薦閱讀頁",
           routeTitle: "接下來三步",
           action: "再玩一次",
@@ -968,27 +940,27 @@
         },
         board: {
           title: "DECISION",
-          callout: "Tap the gold ball to start"
+          callout: "Tap to start"
         },
-        legend: { left: "X / No", middle: "Redo", right: "Check / Answer" },
+        legend: { left: "X", middle: "Redo", right: "Check" },
         status: {
           step: "Animation {current} / {total}",
-          ready: "Press start to generate a random result",
+          ready: "Tap once",
           spinning: "Randomizing...",
-          landed: "Final result locked in",
+          landed: "Result ready",
           pathPrefix: "Drop path:"
         },
         launch: {
-          kicker: "Electronic decision board",
-          title: "No questions, just a random animated reveal.",
-          body: "The gold ball at the top is the start button. Once tapped, it drops through the board and lands on one booth result.",
-          start: "Start random draw",
+          kicker: "Decision board",
+          title: "Tap to play",
+          body: "The ball will drop on its own.",
+          start: "Start",
           reset: "Reset"
         },
         result: {
-          kicker: "Your decision reading",
-          title: "This round, the board lands on “{route}.”",
-          summary: "You can turn this directly into a live booth mechanic. Each landing spot creates a different kind of crowd energy and reward moment.",
+          kicker: "Result",
+          title: "This round: “{route}”",
+          summary: "Just check the result.",
           nextTitle: "Recommended pages",
           routeTitle: "Your next three moves",
           action: "Play again",
@@ -1094,12 +1066,14 @@
       }
     };
 
+    const BOARD_SIZE = 420;
     const RESULT_LANE_MAP = { root: "left", weave: "middle", spark: "right" };
     const RESULT_KEYS = ["root", "weave", "spark"];
-    const TOTAL_ANIMATION_STEPS = 6;
+    const TOTAL_ANIMATION_STEPS = 9;
     const laneLabels = { left: "X", middle: "↺", right: "✓" };
-    const laneX = { left: 82, middle: 210, right: 338 };
-    const boardRows = [82, 150, 218, 286, 354, 422, 492];
+    const trackLaneX = { left: 126, middle: 210, right: 294 };
+    const outletLaneX = { left: 54, middle: 210, right: 366 };
+    const boardRows = [74, 106, 138, 170, 202, 234, 266, 298, 330];
 
     const siteHeader = document.querySelector("header");
     const navActions = document.getElementById("navActions");
@@ -1113,8 +1087,6 @@
     const boardLaunchBtn = document.getElementById("boardLaunchBtn");
     const boardResult = document.getElementById("boardResult");
     const pathBadge = document.getElementById("pathBadge");
-    const progressBar = document.getElementById("progressBar");
-
     let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "zh";
     let pathHistory = [];
     let currentResultKey = "";
@@ -1151,7 +1123,7 @@
     const renderBoard = () => {
       const railLeft = 64;
       const railRight = 356;
-      const segments = boardRows.slice(0, 6).map((y, index) => {
+      const segments = boardRows.map((y, index) => {
         const offset = index % 2 === 0 ? 0 : 12;
         const mid = (railLeft + railRight) / 2;
         return `
@@ -1185,9 +1157,9 @@
         <line x1="210" y1="52" x2="210" y2="72" stroke="#3b3532" stroke-width="5" stroke-linecap="round" />
         <g filter="url(#trackDepth)">${segments}</g>
         <g filter="url(#shadow)">
-          <line x1="${laneX.left - 28}" y1="548" x2="${laneX.left + 28}" y2="548" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
-          <line x1="${laneX.middle - 28}" y1="548" x2="${laneX.middle + 28}" y2="548" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
-          <line x1="${laneX.right - 28}" y1="548" x2="${laneX.right + 28}" y2="548" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
+          <line x1="${outletLaneX.left - 28}" y1="358" x2="${outletLaneX.left + 28}" y2="358" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
+          <line x1="${outletLaneX.middle - 28}" y1="358" x2="${outletLaneX.middle + 28}" y2="358" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
+          <line x1="${outletLaneX.right - 28}" y1="358" x2="${outletLaneX.right + 28}" y2="358" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
         </g>
       `;
     };
@@ -1209,8 +1181,8 @@
     };
 
     const setTokenPosition = ({ left, top }) => {
-      boardToken.style.left = `${(left / 420) * 100}%`;
-      boardToken.style.top = `${(top / 620) * 100}%`;
+      boardToken.style.left = `${(left / BOARD_SIZE) * 100}%`;
+      boardToken.style.top = `${(top / BOARD_SIZE) * 100}%`;
     };
 
     const randomLane = () => ["left", "middle", "right"][Math.floor(Math.random() * 3)];
@@ -1229,7 +1201,7 @@
       let currentX = 210;
 
       path.forEach((lane, index) => {
-        const targetX = laneX[lane] || 210;
+        const targetX = trackLaneX[lane] || 210;
         const rowY = boardRows[index];
         points.push({ left: currentX, top: rowY - 30 });
         points.push({ left: currentX, top: rowY - 18 });
@@ -1238,7 +1210,11 @@
         currentX = targetX;
       });
 
-      points.push({ left: currentX, top: 548 });
+      const finalLane = path[path.length - 1] || "middle";
+      const finalX = outletLaneX[finalLane] || 210;
+      points.push({ left: currentX, top: 344 });
+      points.push({ left: (currentX + finalX) / 2, top: 352 });
+      points.push({ left: finalX, top: 358 });
       return points;
     };
 
@@ -1271,9 +1247,7 @@
     };
 
     const updateStatus = () => {
-      const completed = Math.min(pathHistory.length, TOTAL_ANIMATION_STEPS);
       pathBadge.textContent = currentResultKey ? t("status.landed") : getPathLabel();
-      progressBar.style.width = `${(completed / TOTAL_ANIMATION_STEPS) * 100}%`;
     };
 
     const renderLaunchState = () => {
@@ -1408,7 +1382,7 @@
     loadState();
     if (pathHistory.length) {
       const lastLane = pathHistory[Math.min(pathHistory.length - 1, boardRows.length - 1)];
-      setTokenPosition({ left: laneX[lastLane] || 210, top: boardRows[Math.min(pathHistory.length, boardRows.length - 1)] + 3 });
+      setTokenPosition({ left: trackLaneX[lastLane] || 210, top: boardRows[Math.min(pathHistory.length, boardRows.length - 1)] + 3 });
     } else {
       setTokenPosition({ left: 210, top: 44 });
     }
