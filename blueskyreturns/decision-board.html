@@ -31,6 +31,7 @@
       margin: 0;
       font-family: "Segoe UI", "Noto Sans TC", sans-serif;
       color: var(--paper-ink);
+      overflow-x: hidden;
       background:
         radial-gradient(circle at top left, rgba(217, 164, 65, 0.16), transparent 18%),
         radial-gradient(circle at top right, rgba(205, 64, 50, 0.12), transparent 16%),
@@ -608,66 +609,91 @@
 
     @media (max-width: 760px) {
       .shell {
-        padding: 0 14px;
+        padding: 0 10px;
       }
       main {
-        padding: 18px 0 36px;
+        padding: 8px 0 20px;
+      }
+      .board-stage {
+        width: 100%;
       }
       .board-frame {
         width: min(100%, 520px);
-        padding: 14px 14px 16px;
+        max-width: min(100vw - 20px, 520px);
+        padding: 10px 10px 12px;
+        border-radius: 16px;
       }
       .board-callout {
-        top: 12px;
-        left: 12px;
-        right: 12px;
-        padding: 8px 12px;
-        font-size: 0.8rem;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 7px 10px;
+        font-size: 0.76rem;
       }
       .board-token {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
       }
       .board-launch {
-        width: min(82%, 250px);
-        gap: 10px;
+        top: 54.5%;
+        width: min(82%, 220px);
+        gap: 8px;
       }
       .board-launch-chip {
-        padding: 6px 10px;
-        font-size: 0.72rem;
+        display: none;
       }
       .board-launch button {
-        min-height: 68px;
+        min-height: 58px;
         min-width: 100%;
-        font-size: 1rem;
+        font-size: 0.94rem;
         letter-spacing: 0.08em;
       }
       .board-launch p {
-        font-size: 0.82rem;
-        max-width: 20ch;
+        font-size: 0.74rem;
+        max-width: 18ch;
+        line-height: 1.34;
       }
       .board-status {
-        left: 14px;
-        right: 14px;
-        bottom: 14px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
         justify-content: center;
       }
       .status-badge {
         width: 100%;
         justify-content: center;
-        padding: 8px 10px;
-        font-size: 0.78rem;
+        padding: 7px 9px;
+        font-size: 0.72rem;
       }
       .board-result {
-        inset: 64px 10px 56px;
+        inset: 44px 6px 36px;
       }
       .result-summary {
-        max-height: calc(100% - 4px);
+        padding: 12px;
+        gap: 8px;
+        max-height: 100%;
         overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 18px;
+      }
+      .result-summary h2 {
+        font-size: 1rem;
+      }
+      .result-line {
+        padding: 11px 12px;
+        font-size: 0.78rem;
+        line-height: 1.42;
+      }
+      .result-actions button {
+        width: 100%;
+        min-height: 46px;
+      }
+      .result-fireworks span {
+        width: 86px;
       }
       .footer {
-        padding: 0 16px 28px;
-        font-size: 0.8rem;
+        padding: 0 12px 22px;
+        font-size: 0.76rem;
       }
     }
 
@@ -739,62 +765,113 @@
       .nav-actions .lang-toggle {
         display: none;
       }
-      main { padding-top: 10px; }
+      main { padding-top: 8px; }
       .board-frame {
         width: 100%;
-        padding: 12px;
+        padding: 10px;
         border-radius: 16px;
+        max-width: min(100vw - 24px, 460px);
       }
       .board-callout {
-        top: 10px;
-        left: 10px;
-        right: 10px;
-        padding: 7px 10px;
-        font-size: 0.76rem;
+        top: 9px;
+        left: 9px;
+        right: 9px;
+        padding: 6px 9px;
+        font-size: 0.72rem;
         justify-content: center;
         text-align: center;
       }
       .board-launch {
-        top: 56%;
-        width: min(84%, 228px);
-        gap: 8px;
-      }
-      .board-launch-chip {
-        display: none;
+        top: 54%;
+        width: min(80%, 206px);
+        gap: 7px;
       }
       .board-launch button {
-        min-height: 62px;
-        font-size: 0.96rem;
+        min-height: 54px;
+        font-size: 0.9rem;
       }
       .board-launch button,
       .result-actions button {
         width: 100%;
       }
       .board-launch p {
-        font-size: 0.78rem;
-        line-height: 1.4;
+        font-size: 0.72rem;
+        line-height: 1.32;
+        max-width: 17ch;
       }
       .board-status {
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
+        left: 8px;
+        right: 8px;
+        bottom: 7px;
       }
       .board-result {
-        inset: 54px 8px 48px;
+        inset: 40px 4px 32px;
       }
       .result-summary {
-        padding: 14px;
-        gap: 10px;
+        padding: 12px;
+        gap: 8px;
+        border-radius: 18px;
       }
       .result-summary h2 {
-        font-size: 1.08rem;
+        font-size: 0.96rem;
+      }
+      .result-actions {
+        position: sticky;
+        bottom: 0;
+        padding-top: 8px;
+        background: linear-gradient(180deg, rgba(246, 236, 224, 0), rgba(246, 236, 224, 0.96) 24%);
       }
       .result-fireworks span {
-        width: 100px;
+        width: 78px;
+      }
+      .footer {
+        padding: 0 10px 20px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .board-frame {
+        max-width: calc(100vw - 20px);
+        padding: 8px;
+      }
+      .board-callout {
+        font-size: 0.68rem;
+        padding: 5px 8px;
+      }
+      .board-token {
+        width: 14px;
+        height: 14px;
+      }
+      .board-launch {
+        top: 53%;
+        width: min(79%, 190px);
+      }
+      .board-launch button {
+        min-height: 50px;
+        font-size: 0.84rem;
+      }
+      .board-launch p {
+        font-size: 0.68rem;
+      }
+      .board-status {
+        bottom: 5px;
+      }
+      .status-badge {
+        font-size: 0.68rem;
+        padding: 6px 7px;
+      }
+      .board-result {
+        inset: 36px 2px 28px;
+      }
+      .result-summary {
+        padding: 10px;
+      }
+      .result-summary h2 {
+        font-size: 0.9rem;
       }
       .result-line {
-        font-size: 0.8rem;
-        line-height: 1.42;
+        padding: 10px 11px;
+        font-size: 0.72rem;
       }
     }
   </style>

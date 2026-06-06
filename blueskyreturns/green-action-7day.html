@@ -1925,7 +1925,20 @@
           resolve(blob);
           return;
         }
-        reject(new Error("share-canvas-blob-failed"));
+        try {
+          const dataUrl = canvas.toDataURL("image/png");
+          const [header, body] = dataUrl.split(",");
+          const mimeMatch = header.match(/data:(.*?);base64/);
+          const mime = mimeMatch?.[1] || "image/png";
+          const binary = atob(body || "");
+          const bytes = new Uint8Array(binary.length);
+          for (let index = 0; index < binary.length; index += 1) {
+            bytes[index] = binary.charCodeAt(index);
+          }
+          resolve(new Blob([bytes], { type: mime }));
+        } catch (error) {
+          reject(new Error("share-canvas-blob-failed"));
+        }
       }, "image/png");
     });
     const buildSubmissionShareBlob = async (submission) => {
@@ -1972,18 +1985,53 @@
         ctx.fillText(taskDateLabel, 88, 264);
       }
 
+      let photoDrawn = false;
       if (submission.image?.downloadURL) {
-        const photo = await loadCanvasImage(submission.image.downloadURL);
-        ctx.save();
+        try {
+          const photo = await loadCanvasImage(submission.image.downloadURL);
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(88, 310, 560, 760, 34);
+          ctx.clip();
+          drawCover(ctx, photo, 88, 310, 560, 760);
+          ctx.restore();
+          photoDrawn = true;
+        } catch (error) {
+          console.warn("Daily Green Actions share photo skipped.", error);
+        }
+      }
+      if (!photoDrawn) {
+        const fallbackGradient = ctx.createLinearGradient(88, 310, 648, 1070);
+        fallbackGradient.addColorStop(0, `${shareConfig.gradient[0]}dd`);
+        fallbackGradient.addColorStop(1, `${shareConfig.gradient[1]}c9`);
+        ctx.fillStyle = fallbackGradient;
         ctx.beginPath();
         ctx.roundRect(88, 310, 560, 760, 34);
-        ctx.clip();
-        drawCover(ctx, photo, 88, 310, 560, 760);
-        ctx.restore();
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(255,255,255,0.18)";
+        ctx.beginPath();
+        ctx.arc(530, 420, 120, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(180, 940, 140, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(255,255,255,0.94)";
+        ctx.font = "800 34px 'Segoe UI', 'Noto Sans TC', sans-serif";
+        ctx.fillText(document.documentElement.lang === "en" ? "My Green Action" : "我的綠色行動", 132, 390);
+
+        ctx.fillStyle = "rgba(255,255,255,0.82)";
+        ctx.font = "600 26px 'Segoe UI', 'Noto Sans TC', sans-serif";
+        ctx.fillText(title, 132, 432);
       }
 
-      const character = await loadCanvasImage(shareConfig.asset);
-      drawContain(ctx, character, 620, 220, 360, 860);
+      try {
+        const character = await loadCanvasImage(shareConfig.asset);
+        drawContain(ctx, character, 620, 220, 360, 860);
+      } catch (error) {
+        console.warn("Daily Green Actions share character skipped.", error);
+      }
 
       ctx.fillStyle = "#173228";
       ctx.font = "800 42px 'Segoe UI', 'Noto Sans TC', sans-serif";
@@ -2016,6 +2064,17 @@
 
       return canvasToBlob(canvas);
     };
+    const downloadSubmissionShareBlob = (blob, filename) => {
+      const link = document.createElement("a");
+      const downloadUrl = URL.createObjectURL(blob);
+      link.href = downloadUrl;
+      link.download = filename;
+      link.rel = "noopener";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
+    };
     const shareSubmission = async (submission) => {
       try {
         const blob = await buildSubmissionShareBlob(submission);
@@ -2026,38 +2085,23 @@
         const file = typeof File === "function" ? new File([blob], filename, { type: "image/png" }) : null;
         const shareText = submission.caption || title;
 
-        if (navigator.share && file) {
-          const canShareFiles = typeof navigator.canShare !== "function" || navigator.canShare({ files: [file] });
-          if (canShareFiles) {
-            try {
-              await navigator.share({
-                title,
-                text: shareText,
-                files: [file]
-              });
-              setTaskStatus("ok", getCopy("task.shareSuccess"));
-              return;
-            } catch (error) {
-              if (error?.name === "AbortError") {
-                setTaskStatus("warn", "");
-                return;
-              }
-              console.warn("File sharing failed, falling back to download.", error);
-            }
-          }
+        if (navigator.share && navigator.canShare && file && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title,
+            text: shareText,
+            files: [file]
+          });
+          setTaskStatus("ok", getCopy("task.shareSuccess"));
+          return;
         }
 
-        const link = document.createElement("a");
-        const downloadUrl = URL.createObjectURL(blob);
-        link.href = downloadUrl;
-        link.download = filename;
-        link.rel = "noopener";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
+        downloadSubmissionShareBlob(blob, filename);
         setTaskStatus("ok", getCopy("task.shareFallback"));
       } catch (error) {
+        if (error?.name === "AbortError") {
+          setTaskStatus("warn", "");
+          return;
+        }
         console.error(error);
         setTaskStatus("error", getCopy("task.shareError"));
       }
