@@ -573,58 +573,16 @@
       line-height: 1.58;
     }
 
-    .helper-note {
+    .result-line {
+      margin: 0;
       padding: 14px 16px;
       border-radius: 18px;
-      background: rgba(217, 164, 65, 0.12);
-      border: 1px solid rgba(217, 164, 65, 0.16);
-      color: #754d16;
-      font-size: 0.92rem;
-      line-height: 1.55;
-    }
-
-    .route-list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .route-item {
-      display: grid;
-      grid-template-columns: 40px minmax(0, 1fr);
-      gap: 12px;
-      align-items: start;
-      padding: 10px 0;
-      border-top: 1px dashed rgba(87, 58, 48, 0.12);
-    }
-
-    .route-item:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
-
-    .route-step {
-      display: grid;
-      place-items: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: rgba(201, 58, 46, 0.08);
-      color: #8e2a1f;
-      font-weight: 900;
-    }
-
-    .route-item strong {
-      display: block;
+      background: rgba(255, 255, 255, 0.66);
+      border: 1px solid rgba(87, 58, 48, 0.1);
+      color: rgba(63, 42, 36, 0.84);
       font-size: 0.96rem;
-      color: #28473d;
-      margin-bottom: 4px;
-    }
-
-    .route-item p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: rgba(63, 42, 36, 0.74);
       line-height: 1.55;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.56);
     }
 
     .result-actions {
@@ -688,14 +646,84 @@
     }
 
     @media (max-width: 760px) {
+      .shell {
+        padding: 0 14px;
+      }
+      main {
+        padding: 18px 0 36px;
+      }
+      .hero {
+        padding: 10px 0 12px;
+        margin-bottom: 12px;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+      .eyebrow {
+        font-size: 0.74rem;
+        padding: 6px 10px;
+      }
+      .board-frame {
+        width: min(100%, 520px);
+        padding: 14px 14px 16px;
+      }
+      .board-callout {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+      .board-token {
+        width: 18px;
+        height: 18px;
+      }
+      .board-launch {
+        width: min(82%, 250px);
+        gap: 10px;
+      }
+      .board-launch-chip {
+        padding: 6px 10px;
+        font-size: 0.72rem;
+      }
+      .board-launch button {
+        min-height: 68px;
+        min-width: 100%;
+        font-size: 1rem;
+        letter-spacing: 0.08em;
+      }
+      .board-launch p {
+        font-size: 0.82rem;
+        max-width: 20ch;
+      }
+      .board-status {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        justify-content: center;
+      }
+      .status-badge {
+        width: 100%;
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 0.78rem;
+      }
       .board-result {
-        inset: 84px 18px 142px;
+        inset: 64px 10px 56px;
+      }
+      .result-summary {
+        max-height: calc(100% - 4px);
+        overflow: auto;
+      }
+      .footer {
+        padding: 0 16px 28px;
+        font-size: 0.8rem;
       }
     }
 
     @media (max-width: 640px) {
       header { padding-top: env(safe-area-inset-top); }
-      .shell { padding: 0 16px; }
+      .shell { padding: 0 12px; }
       .nav {
         gap: 8px;
         padding: 10px 0;
@@ -761,52 +789,70 @@
       .nav-actions .lang-toggle {
         display: none;
       }
-      main { padding-top: 16px; }
-      .hero { padding: 18px; }
+      main { padding-top: 10px; }
+      .hero {
+        padding: 4px 0 10px;
+        margin-bottom: 10px;
+      }
       .board-frame {
         width: 100%;
-        padding: 18px;
-        border-radius: 28px;
+        padding: 12px;
+        border-radius: 16px;
       }
       .board-callout {
-        left: 18px;
-        right: 18px;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 7px 10px;
+        font-size: 0.76rem;
         justify-content: center;
         text-align: center;
       }
       .board-launch {
-        top: 51%;
-        width: min(90%, 280px);
+        top: 56%;
+        width: min(84%, 228px);
+        gap: 8px;
+      }
+      .board-launch-chip {
+        display: none;
       }
       .board-launch button {
-        min-width: 100%;
-        min-height: 78px;
+        min-height: 62px;
+        font-size: 0.96rem;
       }
       .board-launch button,
       .result-actions button {
         width: 100%;
       }
+      .board-launch p {
+        font-size: 0.78rem;
+        line-height: 1.4;
+      }
       .board-status {
-        left: 18px;
-        right: 18px;
-        bottom: 92px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
       }
       .board-result {
-        inset: 86px 14px 142px;
+        inset: 54px 8px 48px;
       }
       .result-summary {
-        padding: 16px;
-        gap: 12px;
+        padding: 14px;
+        gap: 10px;
+      }
+      .result-kicker {
+        font-size: 0.72rem;
+        padding: 6px 10px;
       }
       .result-summary h2 {
-        font-size: 1.28rem;
+        font-size: 1.08rem;
       }
       .result-fireworks span {
-        width: 124px;
+        width: 100px;
       }
-      .helper-note,
-      .route-item p {
-        font-size: 0.86rem;
+      .result-line {
+        font-size: 0.8rem;
+        line-height: 1.42;
       }
     }
   </style>
@@ -907,8 +953,7 @@
           step: "動畫進度 {current} / {total}",
           ready: "直接點一下",
           spinning: "亂數滾動中...",
-          landed: "結果出爐",
-          pathPrefix: "掉落路徑："
+          landed: "結果出爐"
         },
         launch: {
           kicker: "決策板",
@@ -921,10 +966,7 @@
           kicker: "結果",
           title: "這次是「{route}」",
           summary: "直接看結果就好。",
-          nextTitle: "推薦閱讀頁",
-          routeTitle: "接下來三步",
-          action: "再玩一次",
-          share: "複製結果摘要",
+          action: "下一輪",
           copied: "結果摘要已複製。",
           fallback: "請手動複製這段摘要：",
           routeLabel: "決策結果"
@@ -947,8 +989,7 @@
           step: "Animation {current} / {total}",
           ready: "Tap once",
           spinning: "Randomizing...",
-          landed: "Result ready",
-          pathPrefix: "Drop path:"
+          landed: "Result ready"
         },
         launch: {
           kicker: "Decision board",
@@ -961,10 +1002,7 @@
           kicker: "Result",
           title: "This round: “{route}”",
           summary: "Just check the result.",
-          nextTitle: "Recommended pages",
-          routeTitle: "Your next three moves",
-          action: "Play again",
-          share: "Copy summary",
+          action: "Next Round",
           copied: "Result summary copied.",
           fallback: "Please copy this summary manually:",
           routeLabel: "Decision result"
@@ -1071,7 +1109,8 @@
     const RESULT_KEYS = ["root", "weave", "spark"];
     const TOTAL_ANIMATION_STEPS = 9;
     const laneLabels = { left: "X", middle: "↺", right: "✓" };
-    const outletLaneX = { left: 54, middle: 210, right: 366 };
+    const START_POINT = { left: 210, top: 38 };
+    const outletLaneX = { left: 52, middle: 210, right: 368 };
     const trackRows = [
       { y: 70, entryY: 50, bendY: 58, glideY: 64, settleY: 70, lanes: { left: 120, middle: 210, right: 300 } },
       { y: 101, entryY: 82, bendY: 88, glideY: 95, settleY: 101, lanes: { left: 98, middle: 210, right: 322 } },
@@ -1083,7 +1122,7 @@
       { y: 292, entryY: 273, bendY: 279, glideY: 285, settleY: 292, lanes: { left: 110, middle: 210, right: 310 } },
       { y: 324, entryY: 305, bendY: 311, glideY: 318, settleY: 324, lanes: { left: 124, middle: 210, right: 296 } }
     ];
-    const exitY = 356;
+    const exitY = 354;
 
     const siteHeader = document.querySelector("header");
     const navActions = document.getElementById("navActions");
@@ -1163,8 +1202,8 @@
             <stop offset="100%" stop-color="#7f7771" />
           </linearGradient>
         </defs>
-        <circle cx="210" cy="44" r="8" fill="#3b3532" />
-        <line x1="210" y1="52" x2="210" y2="72" stroke="#3b3532" stroke-width="5" stroke-linecap="round" />
+        <circle cx="${START_POINT.left}" cy="${START_POINT.top}" r="8" fill="#3b3532" />
+        <line x1="${START_POINT.left}" y1="${START_POINT.top + 8}" x2="${START_POINT.left}" y2="72" stroke="#3b3532" stroke-width="5" stroke-linecap="round" />
         <g filter="url(#trackDepth)">${segments}</g>
         <g filter="url(#shadow)">
           <line x1="${outletLaneX.left - 28}" y1="358" x2="${outletLaneX.left + 28}" y2="358" stroke="url(#trackMetal)" stroke-width="16" stroke-linecap="round" />
@@ -1207,8 +1246,8 @@
     };
 
     const buildAnimationPoints = (path) => {
-      const points = [{ left: 210, top: 44 }];
-      let currentX = 210;
+      const points = [{ left: START_POINT.left, top: START_POINT.top }];
+      let currentX = START_POINT.left;
 
       path.forEach((lane, index) => {
         const row = trackRows[index];
@@ -1231,8 +1270,7 @@
     };
 
     const getPathLabel = () => {
-      if (!pathHistory.length) return isAnimating ? t("status.spinning") : t("status.ready");
-      return `${t("status.pathPrefix")} ${pathHistory.map((lane) => laneLabels[lane]).join(" · ")}`;
+      return isAnimating ? t("status.spinning") : t("status.ready");
     };
 
     const buildCopyText = () => {
@@ -1278,27 +1316,14 @@
           <span class="result-kicker">${t("result.kicker")}</span>
           <h2>${summaryTitle}</h2>
           <p>${t("result.summary")}</p>
-          <div class="helper-note">${route.summary}</div>
-          <div class="route-list">
-            ${route.steps.map((step, index) => `
-              <div class="route-item">
-                <div class="route-step">${index + 1}</div>
-                <div>
-                  <strong>${step.title}</strong>
-                  <p>${step.body}</p>
-                </div>
-              </div>
-            `).join("")}
-          </div>
+          <p class="result-line">${route.summary}</p>
           <div class="result-actions">
             <button id="restartBtn" class="primary" type="button">${t("result.action")}</button>
-            <button id="copyBtn" type="button">${t("result.share")}</button>
           </div>
         </div>
       `;
 
       document.getElementById("restartBtn").addEventListener("click", resetExperience);
-      document.getElementById("copyBtn").addEventListener("click", copySummary);
     };
 
     const renderCurrentState = () => {
@@ -1351,7 +1376,7 @@
       currentResultKey = "";
       isAnimating = false;
       saveState();
-      setTokenPosition({ left: 210, top: 44 });
+      setTokenPosition(START_POINT);
       renderCurrentState();
     };
 
@@ -1398,7 +1423,7 @@
       const row = trackRows[rowIndex];
       setTokenPosition({ left: row?.lanes?.[lastLane] || 210, top: row?.settleY || 210 });
     } else {
-      setTokenPosition({ left: 210, top: 44 });
+      setTokenPosition(START_POINT);
     }
     applyLanguage(currentLang);
   </script>
