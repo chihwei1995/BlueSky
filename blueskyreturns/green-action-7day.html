@@ -1757,7 +1757,7 @@
     import { compressImageUpload } from "../assets/image-upload-utils.js";
     import { browserLocalPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc, query, setDoc, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore-lite.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject, getBlob } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -2201,6 +2201,19 @@
       if (Array.isArray(submission?.dimensions)) return submission.dimensions[0] || "";
       return String(submission?.dimensions || "").trim();
     };
+    const loadCanvasImageFromBlob = (blob) => new Promise((resolve, reject) => {
+      const objectUrl = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        resolve(img);
+      };
+      img.onerror = (error) => {
+        URL.revokeObjectURL(objectUrl);
+        reject(error);
+      };
+      img.src = objectUrl;
+    });
     const loadCanvasImage = async (src) => {
       if (!src) throw new Error("share-image-src-missing");
       try {
@@ -2208,20 +2221,7 @@
         if (!response.ok) {
           throw new Error(`share-image-fetch-failed:${response.status}`);
         }
-        const blob = await response.blob();
-        const objectUrl = URL.createObjectURL(blob);
-        return await new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => {
-            URL.revokeObjectURL(objectUrl);
-            resolve(img);
-          };
-          img.onerror = (error) => {
-            URL.revokeObjectURL(objectUrl);
-            reject(error);
-          };
-          img.src = objectUrl;
-        });
+        return await loadCanvasImageFromBlob(await response.blob());
       } catch (fetchError) {
         return await new Promise((resolve, reject) => {
           const img = new Image();
@@ -2233,6 +2233,21 @@
           throw fetchError;
         });
       }
+    };
+    const loadSubmissionPhotoForShare = async (imageInfo) => {
+      if (!imageInfo) throw new Error("share-image-missing");
+      if (imageInfo.path) {
+        try {
+          const blob = await getBlob(ref(storage, imageInfo.path));
+          return await loadCanvasImageFromBlob(blob);
+        } catch (storageError) {
+          console.warn("Daily Green Actions share storage blob load failed.", storageError);
+        }
+      }
+      if (imageInfo.downloadURL) {
+        return loadCanvasImage(imageInfo.downloadURL);
+      }
+      throw new Error("share-image-src-missing");
     };
     const drawCover = (ctx, img, x, y, width, height) => {
       const scale = Math.max(width / img.width, height / img.height);
@@ -2317,9 +2332,9 @@
       }
 
       let photoDrawn = false;
-      if (submission.image?.downloadURL) {
+      if (submission.image?.downloadURL || submission.image?.path) {
         try {
-          const photo = await loadCanvasImage(submission.image.downloadURL);
+          const photo = await loadSubmissionPhotoForShare(submission.image);
           ctx.save();
           ctx.beginPath();
           ctx.roundRect(88, 310, 560, 760, 34);
