@@ -2338,33 +2338,46 @@
     };
     const fetchSubmissionPhotoBlobForShare = async (imageInfo) => {
       if (!imageInfo) throw new Error("share-image-missing");
+      const blobLoaders = [];
       if (imageInfo.downloadURL) {
-        try {
-          const response = await withTimeout(
-            fetch(imageInfo.downloadURL, { mode: "cors", credentials: "omit" }),
-            8000,
-            "share-download-url-timeout"
-          );
-          if (!response.ok) {
-            throw new Error(`share-image-fetch-failed:${response.status}`);
-          }
-          return response.blob();
-        } catch (downloadUrlError) {
-          console.warn("Daily Green Actions share download URL load failed.", downloadUrlError);
-        }
+        blobLoaders.push(
+          (async () => {
+            const response = await withTimeout(
+              fetch(imageInfo.downloadURL, { mode: "cors", credentials: "omit" }),
+              15000,
+              "share-download-url-timeout"
+            );
+            if (!response.ok) {
+              throw new Error(`share-image-fetch-failed:${response.status}`);
+            }
+            return response.blob();
+          })()
+        );
       }
       if (imageInfo.path) {
-        try {
-          return await withTimeout(
+        blobLoaders.push(
+          withTimeout(
             getBlob(ref(storage, imageInfo.path)),
-            8000,
+            15000,
             "share-storage-blob-timeout"
-          );
-        } catch (storageError) {
-          console.warn("Daily Green Actions share storage blob load failed.", storageError);
-        }
+          )
+        );
       }
-      throw new Error("share-image-src-missing");
+      if (!blobLoaders.length) {
+        throw new Error("share-image-src-missing");
+      }
+      const blobResults = await Promise.allSettled(blobLoaders);
+      const fulfilled = blobResults.find((result) => result.status === "fulfilled");
+      if (fulfilled?.status === "fulfilled") {
+        return fulfilled.value;
+      }
+      blobResults.forEach((result) => {
+        if (result.status === "rejected") {
+          console.warn("Daily Green Actions share photo blob load failed.", result.reason);
+        }
+      });
+      const firstError = blobResults.find((result) => result.status === "rejected");
+      throw firstError?.reason || new Error("share-image-src-missing");
     };
     const releaseSubmissionSharePhotoCache = (submission) => {
       if (submission?._sharePhotoObjectUrl) {
