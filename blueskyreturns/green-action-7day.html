@@ -2213,6 +2213,35 @@
           reject(error);
         });
     });
+    const describeSharePhotoError = (error) => {
+      const code = String(error?.code || "").trim();
+      const message = String(error?.message || error || "").trim();
+      if (code === "storage/unauthorized") {
+        return taskText("沒有讀取照片的權限。", "Photo read permission was denied.");
+      }
+      if (code === "storage/object-not-found") {
+        return taskText("找不到原始照片檔案。", "The source photo file could not be found.");
+      }
+      if (message.includes("share-storage-blob-timeout") || message.includes("share-storage-image-timeout")) {
+        return taskText("從 Storage 讀取照片逾時。", "Reading the photo from Storage timed out.");
+      }
+      if (message.includes("share-download-url-timeout") || message.includes("share-download-url-image-timeout")) {
+        return taskText("照片下載網址讀取逾時。", "Reading the photo download URL timed out.");
+      }
+      if (message.includes("share-image-fetch-failed:403")) {
+        return taskText("照片網址被拒絕存取（403）。", "The photo URL was denied (403).");
+      }
+      if (message.includes("share-image-fetch-failed:404")) {
+        return taskText("照片網址不存在（404）。", "The photo URL was not found (404).");
+      }
+      if (message.includes("Failed to fetch") || message.includes("Load failed") || message.includes("NetworkError")) {
+        return taskText("照片抓取失敗，可能是跨網域或網路限制。", "Photo fetch failed, possibly due to CORS or network restrictions.");
+      }
+      if (message.includes("share-image-src-missing")) {
+        return taskText("提交資料裡沒有可用的照片來源。", "No usable photo source was found in the submission.");
+      }
+      return taskText("照片載入失敗。", "Photo loading failed.");
+    };
     const loadCanvasImageFromBlob = (blob) => new Promise((resolve, reject) => {
       const objectUrl = URL.createObjectURL(blob);
       const img = new Image();
@@ -2367,6 +2396,7 @@
       }, "image/png");
     });
     const buildSubmissionShareBlob = async (submission) => {
+      submission._lastSharePhotoDiagnostic = "";
       const dimension = getPrimaryDimension(submission);
       const shareConfig = dimensionShareMap[dimension] || dimensionShareMap["素 Green Diet"];
       const title = document.documentElement.lang === "en" ? shareConfig.titleEn : shareConfig.titleZh;
@@ -2436,6 +2466,7 @@
         ctx.restore();
         photoDrawn = true;
       } else if (photoResult.status === "rejected") {
+        submission._lastSharePhotoDiagnostic = describeSharePhotoError(photoResult.reason);
         console.warn("Daily Green Actions share photo skipped.", photoResult.reason);
       }
       if (!photoDrawn) {
@@ -2531,12 +2562,22 @@
             url: inviteUrl,
             files: [file]
           });
-          setTaskStatus("ok", getCopy("task.shareSuccess"));
+          setTaskStatus(
+            submission._lastSharePhotoDiagnostic ? "warn" : "ok",
+            submission._lastSharePhotoDiagnostic
+              ? `${getCopy("task.shareSuccess")} ${submission._lastSharePhotoDiagnostic}`
+              : getCopy("task.shareSuccess")
+          );
           return;
         }
 
         downloadSubmissionShareBlob(blob, filename);
-        setTaskStatus("ok", getCopy("task.shareFallback"));
+        setTaskStatus(
+          submission._lastSharePhotoDiagnostic ? "warn" : "ok",
+          submission._lastSharePhotoDiagnostic
+            ? `${getCopy("task.shareFallback")} ${submission._lastSharePhotoDiagnostic}`
+            : getCopy("task.shareFallback")
+        );
       } catch (error) {
         if (error?.name === "AbortError") {
           setTaskStatus("warn", "");
