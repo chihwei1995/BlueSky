@@ -5,7 +5,10 @@ const DEFAULT_OPTIONS = {
   mimeType: "image/webp",
   quality: 0.74,
   minQuality: 0.46,
-  qualityStep: 0.06
+  qualityStep: 0.06,
+  minWidth: 720,
+  minHeight: 720,
+  resizeStep: 0.85
 };
 
 const EXTENSIONS = {
@@ -59,6 +62,29 @@ const canvasToBlob = (canvas, mimeType, quality) => new Promise((resolve, reject
   }, mimeType, quality);
 });
 
+const renderToCanvas = (source, width, height) => {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d", { alpha: true });
+  if (!ctx) return null;
+  ctx.drawImage(source, 0, 0, width, height);
+  return canvas;
+};
+
+const compressCanvas = async (canvas, settings) => {
+  let quality = settings.quality;
+  let bestBlob = await canvasToBlob(canvas, settings.mimeType, quality);
+
+  while (bestBlob.size > settings.maxBytes && quality > settings.minQuality) {
+    quality = Math.max(settings.minQuality, quality - settings.qualityStep);
+    bestBlob = await canvasToBlob(canvas, settings.mimeType, quality);
+    if (quality === settings.minQuality) break;
+  }
+
+  return bestBlob;
+};
+
 export const compressImageUpload = async (file, options = {}) => {
   if (!(file instanceof File) || !String(file.type || "").startsWith("image/")) {
     return file;
@@ -77,26 +103,29 @@ export const compressImageUpload = async (file, options = {}) => {
       settings.maxWidth / width,
       settings.maxHeight / height
     );
-    const targetWidth = Math.max(1, Math.round(width * ratio));
-    const targetHeight = Math.max(1, Math.round(height * ratio));
+    let targetWidth = Math.max(1, Math.round(width * ratio));
+    let targetHeight = Math.max(1, Math.round(height * ratio));
+    let canvas = renderToCanvas(source, targetWidth, targetHeight);
+    if (!canvas) return file;
 
-    const canvas = document.createElement("canvas");
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
-    const ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return file;
+    let bestBlob = await compressCanvas(canvas, settings);
 
-    ctx.drawImage(source, 0, 0, targetWidth, targetHeight);
-    if (typeof source.close === "function") source.close();
-
-    let quality = settings.quality;
-    let bestBlob = await canvasToBlob(canvas, settings.mimeType, quality);
-
-    while (bestBlob.size > settings.maxBytes && quality > settings.minQuality) {
-      quality = Math.max(settings.minQuality, quality - settings.qualityStep);
-      bestBlob = await canvasToBlob(canvas, settings.mimeType, quality);
-      if (quality === settings.minQuality) break;
+    while (
+      bestBlob.size > settings.maxBytes &&
+      targetWidth > settings.minWidth &&
+      targetHeight > settings.minHeight
+    ) {
+      targetWidth = Math.max(settings.minWidth, Math.round(targetWidth * settings.resizeStep));
+      targetHeight = Math.max(settings.minHeight, Math.round(targetHeight * settings.resizeStep));
+      canvas = renderToCanvas(source, targetWidth, targetHeight);
+      if (!canvas) break;
+      bestBlob = await compressCanvas(canvas, settings);
+      if (targetWidth === settings.minWidth || targetHeight === settings.minHeight) {
+        break;
+      }
     }
+
+    if (typeof source.close === "function") source.close();
 
     return blobToFile(bestBlob, renameWithMime(file.name, bestBlob.type || settings.mimeType));
   } catch (error) {

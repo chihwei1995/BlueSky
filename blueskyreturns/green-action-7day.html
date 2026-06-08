@@ -2650,38 +2650,81 @@
       link.remove();
       setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
     };
+    const downloadSubmissionShareUrl = (url, filename) => {
+      if (!url) throw new Error("share-image-src-missing");
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.rel = "noopener";
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    };
     const loadUploadedShareImageBlob = async (shareImage) => {
       if (!shareImage) throw new Error("share-image-missing");
+      const blobLoaders = [];
       if (shareImage.downloadURL) {
-        const response = await withTimeout(
-          fetch(shareImage.downloadURL, { mode: "cors", credentials: "omit" }),
-          15000,
-          "share-image-download-timeout"
+        blobLoaders.push(
+          (async () => {
+            const response = await withTimeout(
+              fetch(shareImage.downloadURL, { mode: "cors", credentials: "omit" }),
+              15000,
+              "share-image-download-timeout"
+            );
+            if (!response.ok) {
+              throw new Error(`share-image-fetch-failed:${response.status}`);
+            }
+            return response.blob();
+          })()
         );
-        if (!response.ok) {
-          throw new Error(`share-image-fetch-failed:${response.status}`);
-        }
-        return response.blob();
       }
       if (shareImage.path) {
-        return withTimeout(
-          getBlob(ref(storage, shareImage.path)),
-          15000,
-          "share-image-storage-timeout"
+        blobLoaders.push(
+          withTimeout(
+            getBlob(ref(storage, shareImage.path)),
+            15000,
+            "share-image-storage-timeout"
+          )
         );
       }
-      throw new Error("share-image-src-missing");
+      if (!blobLoaders.length) {
+        throw new Error("share-image-src-missing");
+      }
+      const blobResults = await Promise.allSettled(blobLoaders);
+      const fulfilled = blobResults.find((result) => result.status === "fulfilled");
+      if (fulfilled?.status === "fulfilled") {
+        return fulfilled.value;
+      }
+      blobResults.forEach((result) => {
+        if (result.status === "rejected") {
+          console.warn("Daily Green Actions uploaded share image load failed.", result.reason);
+        }
+      });
+      const firstError = blobResults.find((result) => result.status === "rejected");
+      throw firstError?.reason || new Error("share-image-src-missing");
     };
     const shareSubmission = async (submission) => {
       try {
         setTaskStatus("warn", taskText("正在準備分享圖片...", "Preparing your share image..."));
-        const blob = submission.shareImage
-          ? await loadUploadedShareImageBlob(submission.shareImage)
-          : await buildSubmissionShareBlob(submission);
         const dimension = getPrimaryDimension(submission);
         const shareConfig = dimensionShareMap[dimension] || dimensionShareMap["素 Green Diet"];
         const title = document.documentElement.lang === "en" ? shareConfig.titleEn : shareConfig.titleZh;
         const filename = `green-action-${Date.now()}.png`;
+        let blob;
+        try {
+          blob = submission.shareImage
+            ? await loadUploadedShareImageBlob(submission.shareImage)
+            : await buildSubmissionShareBlob(submission);
+        } catch (shareImageLoadError) {
+          if (submission.shareImage?.downloadURL) {
+            console.warn("Daily Green Actions share image blob load failed, falling back to URL download.", shareImageLoadError);
+            downloadSubmissionShareUrl(submission.shareImage.downloadURL, filename);
+            setTaskStatus("warn", getCopy("task.shareFallback"));
+            return;
+          }
+          throw shareImageLoadError;
+        }
         const file = typeof File === "function" ? new File([blob], filename, { type: "image/png" }) : null;
         const shareText = buildDailyActionShareText(submission, title);
         const inviteUrl = buildDailyActionInviteUrl();
