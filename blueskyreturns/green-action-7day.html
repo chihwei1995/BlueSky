@@ -2243,6 +2243,8 @@
       return taskText("照片載入失敗。", "Photo loading failed.");
     };
     const describeShareBuildError = (error) => {
+      const code = String(error?.code || "").trim();
+      const name = String(error?.name || "").trim();
       const message = String(error?.message || error || "").trim();
       if (message.includes("share-canvas-context-missing")) {
         return taskText("這個裝置無法建立分享畫布。", "This device could not create the share canvas.");
@@ -2255,6 +2257,13 @@
       }
       if (message.includes("canShare")) {
         return taskText("裝置不支援目前的分享方式。", "This device does not support the current sharing method.");
+      }
+      const rawDetail = [name, code, message].filter(Boolean).join(" | ");
+      if (rawDetail) {
+        return taskText(
+          `分享圖片建立失敗（${rawDetail}）。`,
+          `Could not build the share image (${rawDetail}).`
+        );
       }
       return taskText("分享圖片建立失敗。", "Could not build the share image.");
     };
