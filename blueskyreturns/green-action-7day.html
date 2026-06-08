@@ -2615,21 +2615,47 @@
         const file = typeof File === "function" ? new File([blob], filename, { type: "image/png" }) : null;
         const shareText = buildDailyActionShareText(submission, title);
         const inviteUrl = buildDailyActionInviteUrl();
+        let canNativeShareFile = false;
 
-        if (navigator.share && navigator.canShare && file && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title,
-            text: shareText,
-            url: inviteUrl,
-            files: [file]
-          });
-          setTaskStatus(
-            submission._lastSharePhotoDiagnostic ? "warn" : "ok",
-            submission._lastSharePhotoDiagnostic
-              ? `${getCopy("task.shareSuccess")} ${submission._lastSharePhotoDiagnostic}`
-              : getCopy("task.shareSuccess")
+        try {
+          canNativeShareFile = Boolean(
+            navigator.share &&
+            file &&
+            (
+              !navigator.canShare ||
+              navigator.canShare({ files: [file] })
+            )
           );
-          return;
+        } catch (shareCapabilityError) {
+          console.warn("Daily Green Actions native share capability check failed.", shareCapabilityError);
+        }
+
+        if (canNativeShareFile) {
+          try {
+            await navigator.share({
+              title,
+              text: shareText,
+              url: inviteUrl,
+              files: [file]
+            });
+            setTaskStatus(
+              submission._lastSharePhotoDiagnostic ? "warn" : "ok",
+              submission._lastSharePhotoDiagnostic
+                ? `${getCopy("task.shareSuccess")} ${submission._lastSharePhotoDiagnostic}`
+                : getCopy("task.shareSuccess")
+            );
+            return;
+          } catch (shareError) {
+            if (shareError?.name === "AbortError") {
+              setTaskStatus("warn", "");
+              return;
+            }
+            if (shareError?.name === "NotAllowedError") {
+              console.warn("Daily Green Actions native share blocked, falling back to download.", shareError);
+            } else {
+              throw shareError;
+            }
+          }
         }
 
         downloadSubmissionShareBlob(blob, filename);
@@ -2640,10 +2666,6 @@
             : getCopy("task.shareFallback")
         );
       } catch (error) {
-        if (error?.name === "AbortError") {
-          setTaskStatus("warn", "");
-          return;
-        }
         console.error(error);
         setTaskStatus("error", `${getCopy("task.shareError")} ${describeShareBuildError(error)}`);
       }
