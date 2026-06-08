@@ -2201,6 +2201,18 @@
       if (Array.isArray(submission?.dimensions)) return submission.dimensions[0] || "";
       return String(submission?.dimensions || "").trim();
     };
+    const withTimeout = (promise, ms, label = "operation-timeout") => new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(label)), ms);
+      Promise.resolve(promise)
+        .then((value) => {
+          clearTimeout(timer);
+          resolve(value);
+        })
+        .catch((error) => {
+          clearTimeout(timer);
+          reject(error);
+        });
+    });
     const loadCanvasImageFromBlob = (blob) => new Promise((resolve, reject) => {
       const objectUrl = URL.createObjectURL(blob);
       const img = new Image();
@@ -2234,18 +2246,42 @@
         });
       }
     };
+    const findRenderedSubmissionImage = (submissionId) => {
+      if (!submissionId) return null;
+      return document.querySelector(`.submission-item[data-submission-id="${submissionId}"] img`);
+    };
+    const cloneLoadedImageForCanvas = (img) => new Promise((resolve, reject) => {
+      if (!img?.currentSrc && !img?.src) {
+        reject(new Error("share-image-src-missing"));
+        return;
+      }
+      const clone = new Image();
+      clone.crossOrigin = "anonymous";
+      clone.decoding = "async";
+      clone.onload = () => resolve(clone);
+      clone.onerror = reject;
+      clone.src = img.currentSrc || img.src;
+    });
     const loadSubmissionPhotoForShare = async (imageInfo) => {
       if (!imageInfo) throw new Error("share-image-missing");
       if (imageInfo.path) {
         try {
-          const blob = await getBlob(ref(storage, imageInfo.path));
+          const blob = await withTimeout(
+            getBlob(ref(storage, imageInfo.path)),
+            4500,
+            "share-storage-blob-timeout"
+          );
           return await loadCanvasImageFromBlob(blob);
         } catch (storageError) {
           console.warn("Daily Green Actions share storage blob load failed.", storageError);
         }
       }
       if (imageInfo.downloadURL) {
-        return loadCanvasImage(imageInfo.downloadURL);
+        return withTimeout(
+          loadCanvasImage(imageInfo.downloadURL),
+          4500,
+          "share-download-url-timeout"
+        );
       }
       throw new Error("share-image-src-missing");
     };
@@ -2331,20 +2367,47 @@
         ctx.fillText(taskDateLabel, 88, 264);
       }
 
+      const shareAssetTasks = {
+        photo: submission.image?.downloadURL || submission.image?.path
+          ? (async () => {
+              const renderedImage = findRenderedSubmissionImage(submission.id);
+              if (renderedImage) {
+                try {
+                  return await withTimeout(
+                    cloneLoadedImageForCanvas(renderedImage),
+                    1200,
+                    "share-rendered-image-timeout"
+                  );
+                } catch (renderedImageError) {
+                  console.warn("Daily Green Actions rendered share photo load failed.", renderedImageError);
+                }
+              }
+              return loadSubmissionPhotoForShare(submission.image);
+            })()
+          : Promise.resolve(null),
+        character: withTimeout(
+          loadCanvasImage(shareConfig.asset),
+          3000,
+          "share-character-timeout"
+        )
+      };
+      const [photoResult, characterResult] = await Promise.allSettled([
+        shareAssetTasks.photo,
+        shareAssetTasks.character
+      ]);
+
       let photoDrawn = false;
-      if (submission.image?.downloadURL || submission.image?.path) {
-        try {
-          const photo = await loadSubmissionPhotoForShare(submission.image);
-          ctx.save();
-          ctx.beginPath();
-          ctx.roundRect(88, 310, 560, 760, 34);
-          ctx.clip();
-          drawCover(ctx, photo, 88, 310, 560, 760);
-          ctx.restore();
-          photoDrawn = true;
-        } catch (error) {
-          console.warn("Daily Green Actions share photo skipped.", error);
-        }
+      if (photoResult.status === "fulfilled" && photoResult.value) {
+        const photo = photoResult.value;
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(88, 310, 560, 760, 34);
+        ctx.clip();
+        drawCover(ctx, photo, 88, 310, 560, 760);
+        ctx.restore();
+        photoDrawn = true;
+      } else if (photoResult.status === "rejected") {
+        console.warn("Daily Green Actions share photo skipped.", photoResult.reason);
       }
       if (!photoDrawn) {
         const fallbackGradient = ctx.createLinearGradient(88, 310, 648, 1070);
@@ -2372,11 +2435,10 @@
         ctx.fillText(title, 132, 432);
       }
 
-      try {
-        const character = await loadCanvasImage(shareConfig.asset);
-        drawContain(ctx, character, 620, 220, 360, 860);
-      } catch (error) {
-        console.warn("Daily Green Actions share character skipped.", error);
+      if (characterResult.status === "fulfilled" && characterResult.value) {
+        drawContain(ctx, characterResult.value, 620, 220, 360, 860);
+      } else if (characterResult.status === "rejected") {
+        console.warn("Daily Green Actions share character skipped.", characterResult.reason);
       }
 
       ctx.fillStyle = "#173228";
@@ -2423,6 +2485,7 @@
     };
     const shareSubmission = async (submission) => {
       try {
+        setTaskStatus("warn", taskText("正在準備分享圖片...", "Preparing your share image..."));
         const blob = await buildSubmissionShareBlob(submission);
         const dimension = getPrimaryDimension(submission);
         const shareConfig = dimensionShareMap[dimension] || dimensionShareMap["素 Green Diet"];
@@ -2601,6 +2664,7 @@
     const renderSubmission = (submission) => {
       const article = document.createElement("article");
       article.className = "submission-item";
+      article.dataset.submissionId = submission.id || "";
 
       const title = document.createElement("h3");
       title.textContent = submission.title || submission.caption || "未命名任務";
