@@ -1779,6 +1779,7 @@
     const storage = getStorage(app);
     const TERMS_VERSION = "2026-04-22";
     const MAX_DAILY_SUBMISSIONS = 7;
+    const MAX_TOTAL_SUBMISSIONS = 28;
 
     const taskForm = document.getElementById("proposalTaskForm");
     const taskSubmitBtn = document.getElementById("taskSubmitBtn");
@@ -1863,7 +1864,7 @@
       let total = 0;
       if (member?.ecoMbti?.type) total += 1;
       if (completedDays > 0) {
-        total += Math.max(0, Number(completedDays || 0)) * 10;
+        total += Math.max(0, Number(completedDays || 0)) * 5;
       }
       if (hasWeeklyStreak) total += 5;
       total += Math.max(0, Number(impactCount || 0));
@@ -1977,6 +1978,16 @@
         console.error("Failed to load Daily Green Actions score:", error);
         renderTaskScoreError();
       }
+    };
+    const getLifetimeSubmissionCount = async (uid) => {
+      const cachedCount = Number(currentMemberProfile?.dailyGreenActionsLifetimeUploads);
+      if (Number.isFinite(cachedCount) && cachedCount >= 0) {
+        return cachedCount;
+      }
+      const snapshot = await getDocs(
+        query(collection(db, "greenProposalSubmissions"), where("uid", "==", uid))
+      );
+      return snapshot.size;
     };
 
     const openTermsModal = () => {
@@ -3167,6 +3178,18 @@
           setTaskStatus("error", submitState.message);
           return;
         }
+        let lifetimeSubmissionCount = Number(currentMemberProfile?.dailyGreenActionsLifetimeUploads || 0);
+        if (!editingSubmissionId) {
+          try {
+            lifetimeSubmissionCount = await getLifetimeSubmissionCount(user.uid);
+          } catch (error) {
+            throw wrapTaskStepError("lifetime submission count", error);
+          }
+          if (lifetimeSubmissionCount >= MAX_TOTAL_SUBMISSIONS) {
+            setTaskStatus("error", `此帳號累積提交次數已達上限 ${MAX_TOTAL_SUBMISSIONS} 次。`);
+            return;
+          }
+        }
 
         const uploadedImage = await uploadTaskImage(user.uid, formData.get("taskImage"));
         const image = uploadedImage
@@ -3245,6 +3268,19 @@
             await setDoc(submissionRef, payload);
           } catch (error) {
             throw wrapTaskStepError("submission create", error);
+          }
+          try {
+            await setDoc(doc(db, "members", user.uid), {
+              dailyGreenActionsLifetimeUploads: lifetimeSubmissionCount + 1,
+              dailyGreenActionsLifetimeUpdatedAt: new Date().toISOString()
+            }, { merge: true });
+            currentMemberProfile = {
+              ...(currentMemberProfile || {}),
+              dailyGreenActionsLifetimeUploads: lifetimeSubmissionCount + 1,
+              dailyGreenActionsLifetimeUpdatedAt: new Date().toISOString()
+            };
+          } catch (error) {
+            throw wrapTaskStepError("member lifetime upload count", error);
           }
           try {
             await setDoc(getDailySlotRef(user.uid, taskDate), {
