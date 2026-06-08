@@ -2242,6 +2242,39 @@
       }
       return taskText("照片載入失敗。", "Photo loading failed.");
     };
+    const describeShareBuildError = (error) => {
+      const message = String(error?.message || error || "").trim();
+      if (message.includes("share-canvas-context-missing")) {
+        return taskText("這個裝置無法建立分享畫布。", "This device could not create the share canvas.");
+      }
+      if (message.includes("share-canvas-blob-failed")) {
+        return taskText("分享畫布輸出失敗，可能是圖片來源受限制。", "Share canvas export failed, possibly due to a restricted image source.");
+      }
+      if (message.includes("roundRect") || message.includes("is not a function")) {
+        return taskText("瀏覽器不支援這個分享圖樣式，已改用相容模式。", "This browser does not support this share-card style, so a compatible mode was used.");
+      }
+      if (message.includes("canShare")) {
+        return taskText("裝置不支援目前的分享方式。", "This device does not support the current sharing method.");
+      }
+      return taskText("分享圖片建立失敗。", "Could not build the share image.");
+    };
+    const addRoundedRectPath = (ctx, x, y, width, height, radius) => {
+      const r = Math.max(0, Math.min(radius, width / 2, height / 2));
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(x, y, width, height, r);
+        return;
+      }
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + width - r, y);
+      ctx.arcTo(x + width, y, x + width, y + r, r);
+      ctx.lineTo(x + width, y + height - r);
+      ctx.arcTo(x + width, y + height, x + width - r, y + height, r);
+      ctx.lineTo(x + r, y + height);
+      ctx.arcTo(x, y + height, x, y + height - r, r);
+      ctx.lineTo(x, y + r);
+      ctx.arcTo(x, y, x + r, y, r);
+      ctx.closePath();
+    };
     const loadCanvasImageFromBlob = (blob) => new Promise((resolve, reject) => {
       const objectUrl = URL.createObjectURL(blob);
       const img = new Image();
@@ -2422,7 +2455,7 @@
 
       ctx.fillStyle = "rgba(255,255,255,0.95)";
       ctx.beginPath();
-      ctx.roundRect(54, 54, 972, 1242, 38);
+      addRoundedRectPath(ctx, 54, 54, 972, 1242, 38);
       ctx.fill();
 
       ctx.fillStyle = shareConfig.gradient[0];
@@ -2460,7 +2493,7 @@
         const photo = photoResult.value;
         ctx.save();
         ctx.beginPath();
-        ctx.roundRect(88, 310, 560, 760, 34);
+        addRoundedRectPath(ctx, 88, 310, 560, 760, 34);
         ctx.clip();
         drawCover(ctx, photo, 88, 310, 560, 760);
         ctx.restore();
@@ -2475,7 +2508,7 @@
         fallbackGradient.addColorStop(1, `${shareConfig.gradient[1]}c9`);
         ctx.fillStyle = fallbackGradient;
         ctx.beginPath();
-        ctx.roundRect(88, 310, 560, 760, 34);
+        addRoundedRectPath(ctx, 88, 310, 560, 760, 34);
         ctx.fill();
 
         ctx.fillStyle = "rgba(255,255,255,0.18)";
@@ -2584,7 +2617,7 @@
           return;
         }
         console.error(error);
-        setTaskStatus("error", getCopy("task.shareError"));
+        setTaskStatus("error", `${getCopy("task.shareError")} ${describeShareBuildError(error)}`);
       }
     };
 
