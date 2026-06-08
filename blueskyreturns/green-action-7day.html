@@ -2250,6 +2250,30 @@
       if (!submissionId) return null;
       return document.querySelector(`.submission-item[data-submission-id="${submissionId}"] img`);
     };
+    const waitForRenderedImageReady = (img) => new Promise((resolve, reject) => {
+      if (!img) {
+        reject(new Error("share-image-missing"));
+        return;
+      }
+      if (img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
+        resolve(img);
+        return;
+      }
+      const cleanup = () => {
+        img.removeEventListener("load", handleLoad);
+        img.removeEventListener("error", handleError);
+      };
+      const handleLoad = () => {
+        cleanup();
+        resolve(img);
+      };
+      const handleError = (error) => {
+        cleanup();
+        reject(error);
+      };
+      img.addEventListener("load", handleLoad, { once: true });
+      img.addEventListener("error", handleError, { once: true });
+    });
     const cloneLoadedImageForCanvas = (img) => new Promise((resolve, reject) => {
       if (!img?.currentSrc && !img?.src) {
         reject(new Error("share-image-src-missing"));
@@ -2374,12 +2398,21 @@
               if (renderedImage) {
                 try {
                   return await withTimeout(
-                    cloneLoadedImageForCanvas(renderedImage),
-                    1200,
+                    waitForRenderedImageReady(renderedImage),
+                    1800,
                     "share-rendered-image-timeout"
                   );
                 } catch (renderedImageError) {
                   console.warn("Daily Green Actions rendered share photo load failed.", renderedImageError);
+                  try {
+                    return await withTimeout(
+                      cloneLoadedImageForCanvas(renderedImage),
+                      1800,
+                      "share-rendered-image-clone-timeout"
+                    );
+                  } catch (cloneError) {
+                    console.warn("Daily Green Actions rendered share photo clone failed.", cloneError);
+                  }
                 }
               }
               return loadSubmissionPhotoForShare(submission.image);
@@ -2686,6 +2719,9 @@
 
       if (submission.image?.downloadURL) {
         const img = document.createElement("img");
+        img.crossOrigin = "anonymous";
+        img.loading = "eager";
+        img.decoding = "async";
         img.src = submission.image.downloadURL;
         img.alt = submission.title || "Daily Green Actions submission image";
         article.appendChild(img);
