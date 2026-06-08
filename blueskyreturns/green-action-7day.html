@@ -1778,6 +1778,7 @@
     const db = getFirestore(app, "default");
     const storage = getStorage(app);
     const TERMS_VERSION = "2026-04-22";
+    const MAX_DAILY_SUBMISSIONS = 7;
 
     const taskForm = document.getElementById("proposalTaskForm");
     const taskSubmitBtn = document.getElementById("taskSubmitBtn");
@@ -2849,8 +2850,8 @@
         return { ok: false, message: "今天已經提交過 1 筆任務。如要修改，請直接編輯原內容。" };
       }
 
-      if (submitCount >= 2) {
-        return { ok: false, message: "今天的補傳機會已用完，請明天再提交新的任務。" };
+      if (submitCount >= MAX_DAILY_SUBMISSIONS) {
+        return { ok: false, message: `今天的提交次數已達上限 ${MAX_DAILY_SUBMISSIONS} 次，請明天再提交新的任務。` };
       }
 
       return { ok: true, submitCount: submitCount + 1, deleteCount };
@@ -2955,10 +2956,11 @@
           }
           const nextDeleteCount = Number(slot?.deleteCount || 0) + 1;
           const submitCount = Math.max(1, Number(slot?.submitCount || 1));
+          const remainingUploads = Math.max(0, MAX_DAILY_SUBMISSIONS - submitCount);
           setTaskStatus(
             "ok",
-            submitCount < 2 && nextDeleteCount <= 1
-              ? "任務已刪除；當天分數與完成資格會一併失效。今天還可以補傳 1 次。"
+            remainingUploads > 0
+              ? `任務已刪除；當天分數與完成資格會一併失效。今天還可以再提交 ${remainingUploads} 次。`
               : "任務已刪除；當天分數與完成資格會一併失效。今天不可再重新上傳。"
           );
           await loadMySubmissions(auth.currentUser.uid);
@@ -3256,11 +3258,15 @@
           } catch (error) {
             throw wrapTaskStepError("daily slot create", error);
           }
+          const nextSubmitCount = Number(submitState.submitCount || 1);
+          const remainingUploads = Math.max(0, MAX_DAILY_SUBMISSIONS - nextSubmitCount);
           setTaskStatus(
             "ok",
-            Number(submitState.submitCount || 1) > 1
-              ? "Daily Green Actions 已成功補傳。今天不可再重新上傳。"
-              : "Daily Green Actions 已成功提交。"
+            nextSubmitCount > 1
+              ? remainingUploads > 0
+                ? `Daily Green Actions 已成功補傳。今天還可以再提交 ${remainingUploads} 次。`
+                : "Daily Green Actions 已成功補傳。今天不可再重新上傳。"
+              : `Daily Green Actions 已成功提交。今天還可以再提交 ${remainingUploads} 次。`
           );
         }
 
