@@ -1453,6 +1453,7 @@
                   <div>
                     <label for="taskImage" data-i18n="task.imageLabel">照片</label>
                     <input id="taskImage" name="taskImage" type="file" accept="image/*" />
+                    <p id="taskImageState" class="terms-copy">編輯時若要換照片，請重新選擇一張新照片。</p>
                   </div>
                   <div class="bot-guard" aria-hidden="true">
                     <input id="taskTermsConsent" name="taskTermsConsent" type="checkbox" checked />
@@ -1796,6 +1797,8 @@
     const taskDateInput = document.getElementById("taskDate");
     const taskDateDisplay = document.getElementById("taskDateDisplay");
     const taskCaptionInput = document.getElementById("taskCaption");
+    const taskImageInput = document.getElementById("taskImage");
+    const taskImageState = document.getElementById("taskImageState");
     const dimensionInlineHelp = document.getElementById("dimensionInlineHelp");
     const dimensionInlineHelpTitle = document.getElementById("dimensionInlineHelpTitle");
     const dimensionInlineHelpBody = document.getElementById("dimensionInlineHelpBody");
@@ -2116,6 +2119,22 @@
         taskDateDisplay.textContent = formatTaskDateLabel(taskDateInput.value);
       }
     };
+    const syncTaskImageState = () => {
+      if (!taskImageState) return;
+      const selectedFile = taskImageInput?.files?.[0];
+      if (selectedFile?.name) {
+        taskImageState.textContent = `已選擇新照片：${selectedFile.name}`;
+        return;
+      }
+      if (editingSubmissionData?.image?.name || editingSubmissionData?.image?.downloadURL || editingSubmissionData?.image?.path) {
+        taskImageState.textContent = "目前使用原照片。若要更換，請重新選擇一張新照片。";
+        return;
+      }
+      taskImageState.textContent = taskText(
+        "請先上傳一張照片。系統會先壓縮後再提交。",
+        "Please upload a photo first. It will be compressed before submission."
+      );
+    };
     const dimensionHelpMap = {
       "素 Green Diet": { title: "task.dimensionHelpDietTitle", body: "task.dimensionHelpDietBody" },
       "行 Low-carbon Mobility": { title: "task.dimensionHelpMobilityTitle", body: "task.dimensionHelpMobilityBody" },
@@ -2198,6 +2217,7 @@
       taskDateInput.value = new Date().toISOString().slice(0, 10);
     }
     syncTaskDateDisplay();
+    syncTaskImageState();
 
     const getCopy = (path) => {
       return String(path || "")
@@ -2771,8 +2791,15 @@
     taskForm.querySelectorAll('input[name="dimensions"]').forEach((input) => {
       input.addEventListener("change", updateDimensionInlineHelp);
     });
+    if (taskImageInput) {
+      taskImageInput.addEventListener("click", () => {
+        taskImageInput.value = "";
+      });
+      taskImageInput.addEventListener("change", syncTaskImageState);
+    }
     document.addEventListener("bsr:langchange", updateDimensionInlineHelp);
     document.addEventListener("bsr:langchange", syncTaskDateDisplay);
+    document.addEventListener("bsr:langchange", syncTaskImageState);
 
     const ensureMemberProfile = async (user) => {
       if (!user) return;
@@ -2846,19 +2873,11 @@
         return { ok: true, submitCount: 1, deleteCount: 0 };
       }
 
-      const activeSubmissionId = String(slot.activeSubmissionId || "").trim();
       const submitCount = Number(slot.submitCount || 0);
       const deleteCount = Number(slot.deleteCount || 0);
 
       if (editingId) {
-        if (activeSubmissionId && activeSubmissionId !== editingId) {
-          return { ok: false, message: "這一天已有另一筆任務，請先處理原本的提交。" };
-        }
         return { ok: true, submitCount, deleteCount, editing: true };
-      }
-
-      if (activeSubmissionId) {
-        return { ok: false, message: "今天已經提交過 1 筆任務。如要修改，請直接編輯原內容。" };
       }
 
       if (submitCount >= MAX_DAILY_SUBMISSIONS) {
@@ -2871,9 +2890,13 @@
     const populateFormForEdit = (submission) => {
       editingSubmissionId = submission.id;
       editingSubmissionData = submission;
+      if (taskImageInput) {
+        taskImageInput.value = "";
+      }
       taskDateInput.value = submission.taskDate || "";
       taskCaptionInput.value = submission.caption || "";
       syncTaskDateDisplay();
+      syncTaskImageState();
       const selectedDimension = Array.isArray(submission.dimensions) ? submission.dimensions[0] : submission.dimensions;
       Array.from(taskForm.querySelectorAll('input[name="dimensions"]')).forEach((input) => {
         input.checked = input.value === selectedDimension;
@@ -2888,9 +2911,13 @@
       editingSubmissionId = null;
       editingSubmissionData = null;
       taskForm.reset();
+      if (taskImageInput) {
+        taskImageInput.value = "";
+      }
       updateDimensionInlineHelp();
       taskDateInput.value = new Date().toISOString().slice(0, 10);
       syncTaskDateDisplay();
+      syncTaskImageState();
       taskSubmitBtn.textContent = "提交任務 / Submit";
     };
 
@@ -3253,7 +3280,7 @@
             await setDoc(getDailySlotRef(user.uid, taskDate), {
               uid: user.uid,
               taskDate,
-              activeSubmissionId: editingSubmissionId,
+              activeSubmissionId: "",
               submitCount: Math.max(1, Number(submitState.submitCount || slot?.submitCount || 1)),
               deleteCount: Number(submitState.deleteCount || slot?.deleteCount || 0),
               lastSubmittedAt: new Date().toISOString()
@@ -3286,7 +3313,7 @@
             await setDoc(getDailySlotRef(user.uid, taskDate), {
               uid: user.uid,
               taskDate,
-              activeSubmissionId: submissionRef.id,
+              activeSubmissionId: "",
               submitCount: Number(submitState.submitCount || 1),
               deleteCount: Number(submitState.deleteCount || 0),
               lastSubmittedAt: new Date().toISOString()
