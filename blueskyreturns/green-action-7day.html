@@ -1577,7 +1577,7 @@
           share: "分享",
           shareSuccess: "分享圖已準備好。",
           shareError: "分享圖片建立失敗，請稍後再試。",
-          shareFallback: "裝置不支援直接分享，已改為下載圖片。",
+          shareFallback: "已改為下載分享圖片。",
           dimensionHelpDietTitle: "綠色飲食",
           dimensionHelpDietBody: "像是蔬食、自煮、減少剩食，都算是一種更友善環境的飲食選擇。",
           dimensionHelpMobilityTitle: "低碳移動",
@@ -1593,15 +1593,15 @@
           title: "我的氣候積分",
           badge: "同步中",
           loading: "正在同步你的積分資料...",
-          guest: "登入後就會顯示你的每日任務積分、完成天數與集氣成果。",
+          guest: "登入後就會顯示你的每日任務積分、提交次數與集氣成果。",
           pointsLabel: "目前積分",
-          daysLabel: "完成天數",
+          daysLabel: "提交次數",
           impactLabel: "集氣人數",
           ready: "已同步",
           streak: "連續 7 日達成",
           noStreak: "持續累積中",
-          summary: "你目前累積 {points} 分，完成 {days} 天，已集氣 {impact} 人。",
-          summaryWithStreak: "你目前累積 {points} 分，完成 {days} 天，已集氣 {impact} 人，並達成 7 日連續行動。",
+          summary: "你目前累積 {points} 分，提交 {days} 次，已集氣 {impact} 人。",
+          summaryWithStreak: "你目前累積 {points} 分，提交 {days} 次，已集氣 {impact} 人，並達成 7 日連續行動。",
           note: "Eco-MBTI、每日行動、7 日連續與集氣人數都會一起計入。",
           unavailable: "暫時無法同步積分資料，請稍後再試。"
         },
@@ -1663,7 +1663,7 @@
           share: "Share",
           shareSuccess: "Your share image is ready.",
           shareError: "Could not create the share image. Please try again later.",
-          shareFallback: "Direct sharing is not available on this device, so the image was downloaded instead.",
+          shareFallback: "The share image was downloaded instead.",
           dimensionHelpDietTitle: "Green Diet",
           dimensionHelpDietBody: "Plant-forward meals, home cooking, and reducing food waste all count as greener food choices.",
           dimensionHelpMobilityTitle: "Low-carbon Mobility",
@@ -1679,15 +1679,15 @@
           title: "My Climate Points",
           badge: "Syncing",
           loading: "Syncing your climate points...",
-          guest: "Sign in to see your daily action points, completion days, and momentum count.",
+          guest: "Sign in to see your daily action points, upload count, and momentum count.",
           pointsLabel: "Points",
-          daysLabel: "Completed Days",
+          daysLabel: "Uploads",
           impactLabel: "Momentum",
           ready: "Synced",
           streak: "7-day streak reached",
           noStreak: "Keep going",
-          summary: "You have {points} points, {days} completed days, and {impact} momentum count.",
-          summaryWithStreak: "You have {points} points, {days} completed days, {impact} momentum count, and a 7-day streak.",
+          summary: "You have {points} points, {days} uploads, and {impact} momentum count.",
+          summaryWithStreak: "You have {points} points, {days} uploads, {impact} momentum count, and a 7-day streak.",
           note: "Eco-MBTI, daily actions, the 7-day streak, and momentum all count together.",
           unavailable: "Climate points are temporarily unavailable. Please try again later."
         },
@@ -1863,11 +1863,11 @@
       }
       return false;
     };
-    const calculateClimatePoints = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+    const calculateClimatePoints = ({ member = {}, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
       let total = 0;
       if (member?.ecoMbti?.type) total += 1;
-      if (completedDays > 0) {
-        total += Math.max(0, Number(completedDays || 0)) * 5;
+      if (uploadCount > 0) {
+        total += Math.max(0, Number(uploadCount || 0)) * 5;
       }
       if (hasWeeklyStreak) total += 5;
       total += Math.max(0, Number(impactCount || 0));
@@ -1935,15 +1935,15 @@
       taskScoreImpact.textContent = "-";
       taskScoreNote.textContent = getCopy("score.note");
     };
-    const renderTaskScore = ({ points = 0, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
-      currentTaskScoreState = { mode: "ready", points, completedDays, impactCount, hasWeeklyStreak };
+    const renderTaskScore = ({ points = 0, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+      currentTaskScoreState = { mode: "ready", points, uploadCount, impactCount, hasWeeklyStreak };
       taskScoreBadge.textContent = hasWeeklyStreak ? getCopy("score.streak") : getCopy("score.ready");
       taskScoreSummary.textContent = formatCopy(
         hasWeeklyStreak ? "score.summaryWithStreak" : "score.summary",
-        { points, days: completedDays, impact: impactCount }
+        { points, days: uploadCount, impact: impactCount }
       );
       taskScorePoints.textContent = String(points);
-      taskScoreDays.textContent = String(completedDays);
+      taskScoreDays.textContent = String(uploadCount);
       taskScoreImpact.textContent = String(impactCount);
       taskScoreNote.textContent = hasWeeklyStreak ? getCopy("score.streak") : getCopy("score.note");
     };
@@ -1967,16 +1967,16 @@
         const referralSnap = await getDocs(
           query(collection(db, "memberReferrals"), where("referredBy", "==", uid))
         );
-        const completedDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
+        const uploadCount = submissions.length;
         const impactCount = referralSnap.size;
         const weeklyStreak = hasSevenDayStreak(submissions.map((item) => item.taskDate));
         const points = calculateClimatePoints({
           member: currentMemberProfile || {},
-          completedDays,
+          uploadCount,
           impactCount,
           hasWeeklyStreak: weeklyStreak
         });
-        renderTaskScore({ points, completedDays, impactCount, hasWeeklyStreak: weeklyStreak });
+        renderTaskScore({ points, uploadCount, impactCount, hasWeeklyStreak: weeklyStreak });
       } catch (error) {
         console.error("Failed to load Daily Green Actions score:", error);
         renderTaskScoreError();
@@ -2734,11 +2734,7 @@
         try {
           canNativeShareFile = Boolean(
             navigator.share &&
-            file &&
-            (
-              !navigator.canShare ||
-              navigator.canShare({ files: [file] })
-            )
+            file
           );
         } catch (shareCapabilityError) {
           console.warn("Daily Green Actions native share capability check failed.", shareCapabilityError);
@@ -2748,12 +2744,12 @@
 
         if (canNativeShareFile) {
           try {
-            await navigator.share({
-              title,
-              text: shareText,
-              url: inviteUrl,
-              files: [file]
-            });
+            const fileSharePayload = { title, text: shareText, url: inviteUrl, files: [file] };
+            if (!navigator.canShare || navigator.canShare(fileSharePayload)) {
+              await navigator.share(fileSharePayload);
+            } else {
+              await navigator.share(fileSharePayload);
+            }
             setTaskStatus(
               submission._lastSharePhotoDiagnostic ? "warn" : "ok",
               submission._lastSharePhotoDiagnostic
@@ -2766,8 +2762,8 @@
               setTaskStatus("warn", "");
               return;
             }
-            if (shareError?.name === "NotAllowedError") {
-              console.warn("Daily Green Actions native share blocked, falling back to download.", shareError);
+            if (shareError?.name === "NotAllowedError" || shareError?.name === "TypeError") {
+              console.warn("Daily Green Actions native file share failed, falling back to text share or download.", shareError);
             } else {
               throw shareError;
             }
@@ -2793,8 +2789,8 @@
               setTaskStatus("warn", "");
               return;
             }
-            if (shareTextError?.name === "NotAllowedError") {
-              console.warn("Daily Green Actions native text share blocked, falling back to download.", shareTextError);
+            if (shareTextError?.name === "NotAllowedError" || shareTextError?.name === "TypeError") {
+              console.warn("Daily Green Actions native text share failed, falling back to download.", shareTextError);
             } else {
               throw shareTextError;
             }
