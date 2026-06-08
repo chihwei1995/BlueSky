@@ -2639,18 +2639,35 @@
 
       return canvasToBlob(canvas);
     };
-    const downloadSubmissionShareBlob = (blob, filename) => {
+    const downloadSubmissionShareBlob = (blob, filename, fallbackWindow = null) => {
       const link = document.createElement("a");
       const downloadUrl = URL.createObjectURL(blob);
       link.href = downloadUrl;
       link.download = filename;
       link.rel = "noopener";
       document.body.appendChild(link);
-      link.click();
+      try {
+        link.click();
+      } catch (error) {
+        console.warn("Daily Green Actions blob download click failed.", error);
+      }
       link.remove();
+      if (fallbackWindow && !fallbackWindow.closed) {
+        try {
+          fallbackWindow.location.replace(downloadUrl);
+        } catch (error) {
+          console.warn("Daily Green Actions fallback window blob navigation failed.", error);
+        }
+      } else if (typeof window !== "undefined") {
+        try {
+          window.open(downloadUrl, "_blank", "noopener");
+        } catch (error) {
+          console.warn("Daily Green Actions blob window open failed.", error);
+        }
+      }
       setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
     };
-    const downloadSubmissionShareUrl = (url, filename) => {
+    const downloadSubmissionShareUrl = (url, filename, fallbackWindow = null) => {
       if (!url) throw new Error("share-image-src-missing");
       const link = document.createElement("a");
       link.href = url;
@@ -2658,8 +2675,25 @@
       link.rel = "noopener";
       link.target = "_blank";
       document.body.appendChild(link);
-      link.click();
+      try {
+        link.click();
+      } catch (error) {
+        console.warn("Daily Green Actions share URL click failed.", error);
+      }
       link.remove();
+      if (fallbackWindow && !fallbackWindow.closed) {
+        try {
+          fallbackWindow.location.replace(url);
+        } catch (error) {
+          console.warn("Daily Green Actions fallback window URL navigation failed.", error);
+        }
+      } else if (typeof window !== "undefined") {
+        try {
+          window.open(url, "_blank", "noopener");
+        } catch (error) {
+          console.warn("Daily Green Actions share URL window open failed.", error);
+        }
+      }
     };
     const loadUploadedShareImageBlob = async (shareImage) => {
       if (!shareImage) throw new Error("share-image-missing");
@@ -2705,6 +2739,7 @@
       throw firstError?.reason || new Error("share-image-src-missing");
     };
     const shareSubmission = async (submission) => {
+      const fallbackWindow = typeof window !== "undefined" ? window.open("", "_blank", "noopener") : null;
       try {
         setTaskStatus("warn", taskText("正在準備分享圖片...", "Preparing your share image..."));
         const dimension = getPrimaryDimension(submission);
@@ -2719,7 +2754,7 @@
         } catch (shareImageLoadError) {
           if (submission.shareImage?.downloadURL) {
             console.warn("Daily Green Actions share image blob load failed, falling back to URL download.", shareImageLoadError);
-            downloadSubmissionShareUrl(submission.shareImage.downloadURL, filename);
+            downloadSubmissionShareUrl(submission.shareImage.downloadURL, filename, fallbackWindow);
             setTaskStatus("warn", getCopy("task.shareFallback"));
             return;
           }
@@ -2756,9 +2791,11 @@
                 ? `${getCopy("task.shareSuccess")} ${submission._lastSharePhotoDiagnostic}`
                 : getCopy("task.shareSuccess")
             );
+            if (fallbackWindow && !fallbackWindow.closed) fallbackWindow.close();
             return;
           } catch (shareError) {
             if (shareError?.name === "AbortError") {
+              if (fallbackWindow && !fallbackWindow.closed) fallbackWindow.close();
               setTaskStatus("warn", "");
               return;
             }
@@ -2783,9 +2820,11 @@
                 ? `${getCopy("task.shareSuccess")} ${submission._lastSharePhotoDiagnostic}`
                 : getCopy("task.shareSuccess")
             );
+            if (fallbackWindow && !fallbackWindow.closed) fallbackWindow.close();
             return;
           } catch (shareTextError) {
             if (shareTextError?.name === "AbortError") {
+              if (fallbackWindow && !fallbackWindow.closed) fallbackWindow.close();
               setTaskStatus("warn", "");
               return;
             }
@@ -2797,7 +2836,7 @@
           }
         }
 
-        downloadSubmissionShareBlob(blob, filename);
+        downloadSubmissionShareBlob(blob, filename, fallbackWindow);
         setTaskStatus(
           submission._lastSharePhotoDiagnostic ? "warn" : "ok",
           submission._lastSharePhotoDiagnostic
@@ -2805,6 +2844,7 @@
             : getCopy("task.shareFallback")
         );
       } catch (error) {
+        if (fallbackWindow && !fallbackWindow.closed) fallbackWindow.close();
         console.error(error);
         setTaskStatus("error", `${getCopy("task.shareError")} ${describeShareBuildError(error)}`);
       }
