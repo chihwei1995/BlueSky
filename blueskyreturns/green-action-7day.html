@@ -2327,27 +2327,31 @@
     };
     const fetchSubmissionPhotoBlobForShare = async (imageInfo) => {
       if (!imageInfo) throw new Error("share-image-missing");
+      if (imageInfo.downloadURL) {
+        try {
+          const response = await withTimeout(
+            fetch(imageInfo.downloadURL, { mode: "cors", credentials: "omit" }),
+            8000,
+            "share-download-url-timeout"
+          );
+          if (!response.ok) {
+            throw new Error(`share-image-fetch-failed:${response.status}`);
+          }
+          return response.blob();
+        } catch (downloadUrlError) {
+          console.warn("Daily Green Actions share download URL load failed.", downloadUrlError);
+        }
+      }
       if (imageInfo.path) {
         try {
           return await withTimeout(
             getBlob(ref(storage, imageInfo.path)),
-            4500,
+            8000,
             "share-storage-blob-timeout"
           );
         } catch (storageError) {
           console.warn("Daily Green Actions share storage blob load failed.", storageError);
         }
-      }
-      if (imageInfo.downloadURL) {
-        const response = await withTimeout(
-          fetch(imageInfo.downloadURL, { mode: "cors", credentials: "omit" }),
-          4500,
-          "share-download-url-timeout"
-        );
-        if (!response.ok) {
-          throw new Error(`share-image-fetch-failed:${response.status}`);
-        }
-        return response.blob();
       }
       throw new Error("share-image-src-missing");
     };
@@ -2385,7 +2389,7 @@
       if (submission.image.path) {
         const blob = await withTimeout(
           getBlob(ref(storage, submission.image.path)),
-          4500,
+          8000,
           "share-storage-image-timeout"
         );
         return loadCanvasImageFromBlob(blob);
@@ -2393,7 +2397,7 @@
       if (submission.image.downloadURL) {
         return withTimeout(
           loadCanvasImage(submission.image.downloadURL),
-          4500,
+          8000,
           "share-download-url-image-timeout"
         );
       }
