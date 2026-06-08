@@ -2246,65 +2246,76 @@
         });
       }
     };
-    const findRenderedSubmissionImage = (submissionId) => {
-      if (!submissionId) return null;
-      return document.querySelector(`.submission-item[data-submission-id="${submissionId}"] img`);
-    };
-    const waitForRenderedImageReady = (img) => new Promise((resolve, reject) => {
-      if (!img) {
-        reject(new Error("share-image-missing"));
-        return;
-      }
-      if (img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
-        resolve(img);
-        return;
-      }
-      const cleanup = () => {
-        img.removeEventListener("load", handleLoad);
-        img.removeEventListener("error", handleError);
-      };
-      const handleLoad = () => {
-        cleanup();
-        resolve(img);
-      };
-      const handleError = (error) => {
-        cleanup();
-        reject(error);
-      };
-      img.addEventListener("load", handleLoad, { once: true });
-      img.addEventListener("error", handleError, { once: true });
-    });
-    const cloneLoadedImageForCanvas = (img) => new Promise((resolve, reject) => {
-      if (!img?.currentSrc && !img?.src) {
-        reject(new Error("share-image-src-missing"));
-        return;
-      }
-      const clone = new Image();
-      clone.crossOrigin = "anonymous";
-      clone.decoding = "async";
-      clone.onload = () => resolve(clone);
-      clone.onerror = reject;
-      clone.src = img.currentSrc || img.src;
-    });
-    const loadSubmissionPhotoForShare = async (imageInfo) => {
+    const fetchSubmissionPhotoBlobForShare = async (imageInfo) => {
       if (!imageInfo) throw new Error("share-image-missing");
       if (imageInfo.path) {
         try {
-          const blob = await withTimeout(
+          return await withTimeout(
             getBlob(ref(storage, imageInfo.path)),
             4500,
             "share-storage-blob-timeout"
           );
-          return await loadCanvasImageFromBlob(blob);
         } catch (storageError) {
           console.warn("Daily Green Actions share storage blob load failed.", storageError);
         }
       }
       if (imageInfo.downloadURL) {
-        return withTimeout(
-          loadCanvasImage(imageInfo.downloadURL),
+        const response = await withTimeout(
+          fetch(imageInfo.downloadURL, { mode: "cors", credentials: "omit" }),
           4500,
           "share-download-url-timeout"
+        );
+        if (!response.ok) {
+          throw new Error(`share-image-fetch-failed:${response.status}`);
+        }
+        return response.blob();
+      }
+      throw new Error("share-image-src-missing");
+    };
+    const releaseSubmissionSharePhotoCache = (submission) => {
+      if (submission?._sharePhotoObjectUrl) {
+        URL.revokeObjectURL(submission._sharePhotoObjectUrl);
+        delete submission._sharePhotoObjectUrl;
+      }
+      delete submission?._sharePhotoPromise;
+    };
+    const primeSubmissionPhotoForShare = async (submission) => {
+      if (!submission?.image) throw new Error("share-image-missing");
+      if (submission._sharePhotoObjectUrl) return submission._sharePhotoObjectUrl;
+      if (submission._sharePhotoPromise) return submission._sharePhotoPromise;
+      submission._sharePhotoPromise = (async () => {
+        const blob = await fetchSubmissionPhotoBlobForShare(submission.image);
+        const objectUrl = URL.createObjectURL(blob);
+        submission._sharePhotoObjectUrl = objectUrl;
+        delete submission._sharePhotoPromise;
+        return objectUrl;
+      })().catch((error) => {
+        delete submission._sharePhotoPromise;
+        throw error;
+      });
+      return submission._sharePhotoPromise;
+    };
+    const loadSubmissionPhotoForShare = async (submission) => {
+      if (!submission?.image) throw new Error("share-image-missing");
+      try {
+        const objectUrl = await primeSubmissionPhotoForShare(submission);
+        return await loadCanvasImage(objectUrl);
+      } catch (cacheError) {
+        console.warn("Daily Green Actions share cached photo load failed.", cacheError);
+      }
+      if (submission.image.path) {
+        const blob = await withTimeout(
+          getBlob(ref(storage, submission.image.path)),
+          4500,
+          "share-storage-image-timeout"
+        );
+        return loadCanvasImageFromBlob(blob);
+      }
+      if (submission.image.downloadURL) {
+        return withTimeout(
+          loadCanvasImage(submission.image.downloadURL),
+          4500,
+          "share-download-url-image-timeout"
         );
       }
       throw new Error("share-image-src-missing");
@@ -2393,30 +2404,7 @@
 
       const shareAssetTasks = {
         photo: submission.image?.downloadURL || submission.image?.path
-          ? (async () => {
-              const renderedImage = findRenderedSubmissionImage(submission.id);
-              if (renderedImage) {
-                try {
-                  return await withTimeout(
-                    waitForRenderedImageReady(renderedImage),
-                    1800,
-                    "share-rendered-image-timeout"
-                  );
-                } catch (renderedImageError) {
-                  console.warn("Daily Green Actions rendered share photo load failed.", renderedImageError);
-                  try {
-                    return await withTimeout(
-                      cloneLoadedImageForCanvas(renderedImage),
-                      1800,
-                      "share-rendered-image-clone-timeout"
-                    );
-                  } catch (cloneError) {
-                    console.warn("Daily Green Actions rendered share photo clone failed.", cloneError);
-                  }
-                }
-              }
-              return loadSubmissionPhotoForShare(submission.image);
-            })()
+          ? loadSubmissionPhotoForShare(submission)
           : Promise.resolve(null),
         character: withTimeout(
           loadCanvasImage(shareConfig.asset),
@@ -2719,7 +2707,6 @@
 
       if (submission.image?.downloadURL) {
         const img = document.createElement("img");
-        img.crossOrigin = "anonymous";
         img.loading = "eager";
         img.decoding = "async";
         img.src = submission.image.downloadURL;
@@ -2788,6 +2775,8 @@
 
     const loadMySubmissions = async (uid) => {
       const loadToken = ++submissionLoadToken;
+      submissionList.__shareCacheSubmissions?.forEach((submission) => releaseSubmissionSharePhotoCache(submission));
+      submissionList.__shareCacheSubmissions = [];
       submissionList.innerHTML = "";
       submissionList.hidden = true;
       submissionEmpty.hidden = false;
@@ -2812,6 +2801,12 @@
         }
 
         submissions.forEach((submission) => submissionList.appendChild(renderSubmission(submission)));
+        submissionList.__shareCacheSubmissions = submissions;
+        submissions.forEach((submission) => {
+          primeSubmissionPhotoForShare(submission).catch((error) => {
+            console.warn("Daily Green Actions share photo prefetch skipped.", error);
+          });
+        });
         submissionEmpty.hidden = true;
         submissionList.hidden = false;
         startSubmissionMarquee();
