@@ -2469,7 +2469,7 @@
         }
       }, "image/png");
     });
-    const buildSubmissionShareBlob = async (submission) => {
+    const buildSubmissionShareBlob = async (submission, options = {}) => {
       submission._lastSharePhotoDiagnostic = "";
       const dimension = getPrimaryDimension(submission);
       const shareConfig = dimensionShareMap[dimension] || dimensionShareMap["素 Green Diet"];
@@ -2515,7 +2515,9 @@
       }
 
       const shareAssetTasks = {
-        photo: submission.image?.downloadURL || submission.image?.path
+        photo: options.photoBlob
+          ? decodeCanvasSourceFromBlob(options.photoBlob)
+          : submission.image?.downloadURL || submission.image?.path
           ? loadSubmissionPhotoForShare(submission)
           : Promise.resolve(null),
         character: withTimeout(
@@ -2617,10 +2619,34 @@
       link.remove();
       setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
     };
+    const loadUploadedShareImageBlob = async (shareImage) => {
+      if (!shareImage) throw new Error("share-image-missing");
+      if (shareImage.downloadURL) {
+        const response = await withTimeout(
+          fetch(shareImage.downloadURL, { mode: "cors", credentials: "omit" }),
+          15000,
+          "share-image-download-timeout"
+        );
+        if (!response.ok) {
+          throw new Error(`share-image-fetch-failed:${response.status}`);
+        }
+        return response.blob();
+      }
+      if (shareImage.path) {
+        return withTimeout(
+          getBlob(ref(storage, shareImage.path)),
+          15000,
+          "share-image-storage-timeout"
+        );
+      }
+      throw new Error("share-image-src-missing");
+    };
     const shareSubmission = async (submission) => {
       try {
         setTaskStatus("warn", taskText("正在準備分享圖片...", "Preparing your share image..."));
-        const blob = await buildSubmissionShareBlob(submission);
+        const blob = submission.shareImage
+          ? await loadUploadedShareImageBlob(submission.shareImage)
+          : await buildSubmissionShareBlob(submission);
         const dimension = getPrimaryDimension(submission);
         const shareConfig = dimensionShareMap[dimension] || dimensionShareMap["素 Green Diet"];
         const title = document.documentElement.lang === "en" ? shareConfig.titleEn : shareConfig.titleZh;
@@ -2885,6 +2911,7 @@
           const slotRef = getDailySlotRef(submission.uid, submission.taskDate);
           const slot = await getDailySlot(submission.uid, submission.taskDate);
           await deleteTaskImage(submission.image);
+          await deleteTaskImage(submission.shareImage);
           await deleteDoc(doc(db, "greenProposalSubmissions", submission.id));
           await setDoc(slotRef, {
             uid: submission.uid,
@@ -2977,6 +3004,22 @@
         type: uploadFile.type || "",
         size: uploadFile.size,
         path: snapshot.metadata.fullPath,
+        downloadURL,
+        file: uploadFile
+      };
+    };
+
+    const uploadTaskShareImage = async (uid, blob, baseName = "share-card.png") => {
+      if (!blob) return null;
+      const safeName = String(baseName || "share-card.png").replace(/[^a-zA-Z0-9._-]/g, "_");
+      const fileRef = ref(storage, `green-proposal-submissions-share/${uid}/${Date.now()}-${safeName.replace(/\.[^.]+$/, "")}.png`);
+      const snapshot = await uploadBytes(fileRef, blob, { contentType: "image/png" });
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      return {
+        name: safeName.replace(/\.[^.]+$/, "") + ".png",
+        type: "image/png",
+        size: blob.size,
+        path: snapshot.metadata.fullPath,
         downloadURL
       };
     };
@@ -2989,6 +3032,16 @@
         if (error?.code === "storage/object-not-found") return;
         throw error;
       }
+    };
+    const buildSubmissionShareUploadBlob = async ({ caption, dimensions, taskDate, image, imageBlob }) => {
+      return buildSubmissionShareBlob({
+        caption,
+        dimensions,
+        taskDate,
+        image: image || null
+      }, {
+        photoBlob: imageBlob || null
+      });
     };
 
     onAuthStateChanged(auth, async (user) => {
@@ -3085,7 +3138,29 @@
         }
 
         const uploadedImage = await uploadTaskImage(user.uid, formData.get("taskImage"));
-        const image = uploadedImage || editingSubmissionData?.image || null;
+        const image = uploadedImage
+          ? {
+              name: uploadedImage.name,
+              type: uploadedImage.type,
+              size: uploadedImage.size,
+              path: uploadedImage.path,
+              downloadURL: uploadedImage.downloadURL
+            }
+          : editingSubmissionData?.image || null;
+        const shareSourceBlob = uploadedImage?.file
+          || (image ? await fetchSubmissionPhotoBlobForShare(image) : null);
+        const shareBlob = await buildSubmissionShareUploadBlob({
+          caption,
+          dimensions,
+          taskDate,
+          image,
+          imageBlob: shareSourceBlob
+        });
+        const uploadedShareImage = await uploadTaskShareImage(
+          user.uid,
+          shareBlob,
+          `${caption.slice(0, 24) || "daily-green-action"}-share.png`
+        );
         const payload = {
           uid: user.uid,
           email: user.email || "",
@@ -3103,6 +3178,7 @@
           dimensions,
           caption,
           image,
+          shareImage: uploadedShareImage,
           createdAt: editingSubmissionData?.createdAt || new Date().toISOString(),
           updatedAt: new Date().toISOString()
         };
@@ -3110,6 +3186,9 @@
         if (editingSubmissionId) {
           if (uploadedImage && editingSubmissionData?.image?.path && editingSubmissionData.image.path !== uploadedImage.path) {
             await deleteTaskImage(editingSubmissionData.image);
+          }
+          if (editingSubmissionData?.shareImage?.path && editingSubmissionData.shareImage.path !== uploadedShareImage?.path) {
+            await deleteTaskImage(editingSubmissionData.shareImage);
           }
           try {
             await updateDoc(doc(db, "greenProposalSubmissions", editingSubmissionId), payload);
