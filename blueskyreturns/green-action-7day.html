@@ -2297,6 +2297,17 @@
       };
       img.src = objectUrl;
     });
+    const decodeCanvasSourceFromBlob = async (blob) => {
+      if (!blob) throw new Error("share-image-missing");
+      if (typeof createImageBitmap === "function") {
+        try {
+          return await createImageBitmap(blob);
+        } catch (bitmapError) {
+          console.warn("Daily Green Actions share image bitmap decode failed.", bitmapError);
+        }
+      }
+      return loadCanvasImageFromBlob(blob);
+    };
     const loadCanvasImageDirect = (src, useCors = false) => new Promise((resolve, reject) => {
       if (!src) {
         reject(new Error("share-image-src-missing"));
@@ -2360,18 +2371,18 @@
         URL.revokeObjectURL(submission._sharePhotoObjectUrl);
         delete submission._sharePhotoObjectUrl;
       }
+      delete submission?._sharePhotoBlob;
       delete submission?._sharePhotoPromise;
     };
     const primeSubmissionPhotoForShare = async (submission) => {
       if (!submission?.image) throw new Error("share-image-missing");
-      if (submission._sharePhotoObjectUrl) return submission._sharePhotoObjectUrl;
+      if (submission._sharePhotoBlob) return submission._sharePhotoBlob;
       if (submission._sharePhotoPromise) return submission._sharePhotoPromise;
       submission._sharePhotoPromise = (async () => {
         const blob = await fetchSubmissionPhotoBlobForShare(submission.image);
-        const objectUrl = URL.createObjectURL(blob);
-        submission._sharePhotoObjectUrl = objectUrl;
+        submission._sharePhotoBlob = blob;
         delete submission._sharePhotoPromise;
-        return objectUrl;
+        return blob;
       })().catch((error) => {
         delete submission._sharePhotoPromise;
         throw error;
@@ -2381,8 +2392,8 @@
     const loadSubmissionPhotoForShare = async (submission) => {
       if (!submission?.image) throw new Error("share-image-missing");
       try {
-        const objectUrl = await primeSubmissionPhotoForShare(submission);
-        return await loadCanvasImageDirect(objectUrl, false);
+        const blob = await primeSubmissionPhotoForShare(submission);
+        return await decodeCanvasSourceFromBlob(blob);
       } catch (cacheError) {
         console.warn("Daily Green Actions share cached photo load failed.", cacheError);
       }
@@ -2392,14 +2403,18 @@
           8000,
           "share-storage-image-timeout"
         );
-        return loadCanvasImageFromBlob(blob);
+        return decodeCanvasSourceFromBlob(blob);
       }
       if (submission.image.downloadURL) {
-        return withTimeout(
-          loadCanvasImage(submission.image.downloadURL),
+        const response = await withTimeout(
+          fetch(submission.image.downloadURL, { mode: "cors", credentials: "omit" }),
           8000,
           "share-download-url-image-timeout"
         );
+        if (!response.ok) {
+          throw new Error(`share-image-fetch-failed:${response.status}`);
+        }
+        return decodeCanvasSourceFromBlob(await response.blob());
       }
       throw new Error("share-image-src-missing");
     };
