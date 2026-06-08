@@ -1,11 +1,11 @@
 const DEFAULT_OPTIONS = {
-  maxWidth: 1600,
-  maxHeight: 1600,
-  maxBytes: 900 * 1024,
+  maxWidth: 1200,
+  maxHeight: 1200,
+  maxBytes: 500 * 1024,
   mimeType: "image/webp",
-  quality: 0.82,
-  minQuality: 0.6,
-  qualityStep: 0.08
+  quality: 0.74,
+  minQuality: 0.46,
+  qualityStep: 0.06
 };
 
 const EXTENSIONS = {
@@ -96,10 +96,6 @@ export const compressImageUpload = async (file, options = {}) => {
       quality = Math.max(settings.minQuality, quality - settings.qualityStep);
       bestBlob = await canvasToBlob(canvas, settings.mimeType, quality);
       if (quality === settings.minQuality) break;
-    }
-
-    if (bestBlob.size >= file.size * 0.97) {
-      return file;
     }
 
     return blobToFile(bestBlob, renameWithMime(file.name, bestBlob.type || settings.mimeType));
