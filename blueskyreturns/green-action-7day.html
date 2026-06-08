@@ -3060,13 +3060,39 @@
         stopSubmissionMarquee();
       }
     };
+    const ensureStorageUploadReady = async () => {
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        const error = new Error("storage-upload-auth-missing");
+        error.code = "unauthenticated";
+        throw error;
+      }
+      await currentUser.getIdToken(true);
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      return currentUser;
+    };
+    const uploadWithAuthRetry = async (uploadFactory) => {
+      try {
+        await ensureStorageUploadReady();
+        return await uploadFactory();
+      } catch (error) {
+        if (error?.code === "storage/unauthorized" || error?.code === "storage/unauthenticated") {
+          console.warn("Daily Green Actions upload retried after auth refresh.", error);
+          await ensureStorageUploadReady();
+          return uploadFactory();
+        }
+        throw error;
+      }
+    };
 
     const uploadTaskImage = async (uid, file) => {
       if (!file || !file.name) return null;
       const uploadFile = await compressImageUpload(file);
       const safeName = uploadFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
       const fileRef = ref(storage, `green-proposal-submissions/${uid}/${Date.now()}-${safeName}`);
-      const snapshot = await uploadBytes(fileRef, uploadFile, { contentType: uploadFile.type || "application/octet-stream" });
+      const snapshot = await uploadWithAuthRetry(() =>
+        uploadBytes(fileRef, uploadFile, { contentType: uploadFile.type || "application/octet-stream" })
+      );
       const downloadURL = await getDownloadURL(snapshot.ref);
       return {
         name: uploadFile.name,
@@ -3081,8 +3107,10 @@
     const uploadTaskShareImage = async (uid, blob, baseName = "share-card.png") => {
       if (!blob) return null;
       const safeName = String(baseName || "share-card.png").replace(/[^a-zA-Z0-9._-]/g, "_");
-      const fileRef = ref(storage, `green-proposal-submissions-share/${uid}/${Date.now()}-${safeName.replace(/\.[^.]+$/, "")}.png`);
-      const snapshot = await uploadBytes(fileRef, blob, { contentType: "image/png" });
+      const fileRef = ref(storage, `green-proposal-submissions/${uid}/share-${Date.now()}-${safeName.replace(/\.[^.]+$/, "")}.png`);
+      const snapshot = await uploadWithAuthRetry(() =>
+        uploadBytes(fileRef, blob, { contentType: "image/png" })
+      );
       const downloadURL = await getDownloadURL(snapshot.ref);
       return {
         name: safeName.replace(/\.[^.]+$/, "") + ".png",
