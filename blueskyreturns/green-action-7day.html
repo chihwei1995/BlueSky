@@ -2639,6 +2639,25 @@
 
       return canvasToBlob(canvas);
     };
+    const prepareFallbackWindow = () => {
+      if (typeof window === "undefined") return null;
+      const popup = window.open("", "_blank");
+      if (!popup) return null;
+      try {
+        popup.document.title = "Preparing share image...";
+        popup.document.body.style.margin = "0";
+        popup.document.body.style.fontFamily = "Segoe UI, sans-serif";
+        popup.document.body.style.display = "grid";
+        popup.document.body.style.placeItems = "center";
+        popup.document.body.style.minHeight = "100vh";
+        popup.document.body.style.background = "#f4fbf6";
+        popup.document.body.style.color = "#145c3a";
+        popup.document.body.textContent = "Preparing share image...";
+      } catch (error) {
+        console.warn("Daily Green Actions fallback window preparation failed.", error);
+      }
+      return popup;
+    };
     const downloadSubmissionShareBlob = (blob, filename, fallbackWindow = null) => {
       const link = document.createElement("a");
       const downloadUrl = URL.createObjectURL(blob);
@@ -2660,7 +2679,7 @@
         }
       } else if (typeof window !== "undefined") {
         try {
-          window.open(downloadUrl, "_blank", "noopener");
+          window.open(downloadUrl, "_blank");
         } catch (error) {
           console.warn("Daily Green Actions blob window open failed.", error);
         }
@@ -2689,7 +2708,7 @@
         }
       } else if (typeof window !== "undefined") {
         try {
-          window.open(url, "_blank", "noopener");
+          window.open(url, "_blank");
         } catch (error) {
           console.warn("Daily Green Actions share URL window open failed.", error);
         }
@@ -2739,7 +2758,7 @@
       throw firstError?.reason || new Error("share-image-src-missing");
     };
     const shareSubmission = async (submission) => {
-      const fallbackWindow = typeof window !== "undefined" ? window.open("", "_blank", "noopener") : null;
+      const fallbackWindow = prepareFallbackWindow();
       try {
         setTaskStatus("warn", taskText("正在準備分享圖片...", "Preparing your share image..."));
         const dimension = getPrimaryDimension(submission);
