@@ -1095,7 +1095,7 @@
     const storage = getStorage(app);
     const ai = getAI(app, { backend: new GoogleAIBackend() });
     const imageModel = getGenerativeModel(ai, {
-      model: "gemini-2.5-flash-image",
+      model: "gemini-3.1-flash-image",
       generationConfig: {
         responseModalities: [ResponseModality.TEXT, ResponseModality.IMAGE],
         temperature: 0.8
@@ -1189,6 +1189,7 @@
         statusNeedPhoto: "先上傳照片，再開始生成證書主視覺。",
         statusReady: "已載入你的證書編號與可用的限量氣候行動徽章，現在可以開始生成。",
         statusSuccess: "生成完成，現在可以下載 PNG 證書。",
+        statusSuccessUnsaved: "生成完成，現在可以下載 PNG 證書。雲端存檔暫時失敗，但這次生成結果仍可先使用。",
         statusError: "生成失敗，請稍後再試；若仍失敗，請確認 Firebase AI Logic 已啟用且額度可用。",
         statusTokenUsed: "你目前沒有可用的限量氣候行動徽章；若已使用完畢，請回氣候行動者中心查看目前資格狀態。",
         statusSaved: "已更新你的 AI 證書工作室設定。",
@@ -1266,6 +1267,7 @@
         statusNeedPhoto: "Upload a photo first, then start generating the certificate visual.",
         statusReady: "Your certificate code and available Climate Badges are loaded. You can start generating now.",
         statusSuccess: "Generation complete. You can now download the PNG certificate.",
+        statusSuccessUnsaved: "Generation complete. You can now download the PNG certificate. Cloud save failed for now, but this generated result is still available to use.",
         statusError: "Generation failed. Please try again later, and make sure Firebase AI Logic is enabled with available quota.",
         statusTokenUsed: "You do not have an available Climate Badge right now. If it has already been used, please check your current reward status in the member center.",
         statusSaved: "Your AI certificate studio settings have been updated.",
@@ -1439,6 +1441,15 @@
       const candidateParts = response?.candidates?.flatMap((candidate) => candidate?.content?.parts || []) || [];
       const fallback = candidateParts.find((part) => part?.inlineData?.mimeType?.startsWith?.("image/"));
       return fallback?.inlineData || null;
+    };
+    const formatAiError = (error) => {
+      const code = String(error?.code || error?.status || "").trim();
+      const message = String(error?.message || "").trim();
+      if (!code && !message) return t("statusError");
+      if (currentLang === "zh") {
+        return `生成失敗：${code || "unknown"}${message ? ` / ${message}` : ""}`;
+      }
+      return `Generation failed: ${code || "unknown"}${message ? ` / ${message}` : ""}`;
     };
 
     const createThemePalette = (theme) => {
@@ -1840,46 +1851,66 @@
         if (!generated?.data || !generated?.mimeType) {
           throw new Error("no-generated-image");
         }
-        generatedImageUrl = `data:${generated.mimeType};base64,${generated.data}`;
-        const generatedAt = new Date().toISOString();
-        const storagePath = `certificate-studio/${currentUser.uid}/${generatedAt.replace(/[:.]/g, "-")}.png`;
-        const imageRef = storageRef(storage, storagePath);
-        await uploadString(imageRef, generatedImageUrl, "data_url");
-        const downloadUrl = await getDownloadURL(imageRef);
-        generatedImageUrl = downloadUrl;
+        const localGeneratedImageUrl = `data:${generated.mimeType};base64,${generated.data}`;
+        generatedImageUrl = localGeneratedImageUrl;
         updateCertificateStage();
+        downloadBtn.disabled = false;
+        shareBtn.disabled = false;
+        const generatedAt = new Date().toISOString();
+        let persistedImageUrl = localGeneratedImageUrl;
+        let storagePath = "";
+        let persistOk = true;
+
+        try {
+          storagePath = `certificate-studio/${currentUser.uid}/${generatedAt.replace(/[:.]/g, "-")}.png`;
+          const imageRef = storageRef(storage, storagePath);
+          await uploadString(imageRef, localGeneratedImageUrl, "data_url");
+          persistedImageUrl = await getDownloadURL(imageRef);
+          generatedImageUrl = persistedImageUrl;
+          updateCertificateStage();
+        } catch (storageError) {
+          persistOk = false;
+          console.warn("Certificate image upload skipped:", storageError);
+        }
+
         const consumedTokenCodes = Array.from(new Set([...getConsumedTokenCodes(currentReward), activeTokenCode]));
         const firstGeneratedAt = currentReward?.certificateStudio?.firstGeneratedAt || generatedAt;
         const firstUsedTokenCode = currentReward?.certificateStudio?.firstUsedTokenCode || activeTokenCode;
-        await saveStudioMetadata({
-          rewardPatch: {
-            consumedTokenCodes
-          },
-          studioPatch: {
-            displayName: displayNameInput.value.trim(),
-            chapter: chapterInput.value.trim(),
-            theme: themeSelect.value,
-            promptTemplate: promptTemplateSelect.value,
-            prompt: prompt,
-            photoName: selectedPhotoFile?.name || "",
-            usedAiVisual: true,
-            lastGeneratedAt: generatedAt,
-            generatedAt,
-            firstGeneratedAt,
-            firstUsedTokenCode,
-            lastUsedTokenCode: activeTokenCode,
-            tokenConsumedAt: generatedAt,
-            imageUrl: downloadUrl,
-            storagePath
-          }
-        });
-        setStatus(t("statusSuccess"), "ok");
+        try {
+          await saveStudioMetadata({
+            rewardPatch: {
+              consumedTokenCodes
+            },
+            studioPatch: {
+              displayName: displayNameInput.value.trim(),
+              chapter: chapterInput.value.trim(),
+              theme: themeSelect.value,
+              promptTemplate: promptTemplateSelect.value,
+              prompt: prompt,
+              photoName: selectedPhotoFile?.name || "",
+              usedAiVisual: true,
+              lastGeneratedAt: generatedAt,
+              generatedAt,
+              firstGeneratedAt,
+              firstUsedTokenCode,
+              lastUsedTokenCode: activeTokenCode,
+              tokenConsumedAt: generatedAt,
+              imageUrl: persistedImageUrl,
+              storagePath
+            }
+          });
+        } catch (metadataError) {
+          persistOk = false;
+          console.warn("Certificate metadata save skipped:", metadataError);
+        }
+
+        setStatus(t(persistOk ? "statusSuccess" : "statusSuccessUnsaved"), persistOk ? "ok" : "warn");
         downloadBtn.disabled = false;
         shareBtn.disabled = false;
         generateBtn.disabled = !hasAvailableToken(currentReward);
       } catch (error) {
         console.error(error);
-        setStatus(t("statusError"), "error");
+        setStatus(formatAiError(error), "error");
       } finally {
         if (hasAvailableToken(currentReward)) {
           generateBtn.disabled = false;
