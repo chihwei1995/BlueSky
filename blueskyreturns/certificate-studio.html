@@ -650,6 +650,37 @@
       gap: 10px;
     }
 
+    .certificate-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .certificate-info-card {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+      min-width: 0;
+    }
+
+    .certificate-info-card span {
+      display: block;
+      color: rgba(255,255,255,0.72);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .certificate-info-card strong {
+      display: block;
+      margin-top: 5px;
+      color: #fff;
+      font-size: 0.96rem;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
     .certificate-achievement-list {
       display: grid;
       gap: 10px;
@@ -843,11 +874,61 @@
       }
 
       .certificate-panel {
-        padding: 18px;
+        padding: 16px;
+        gap: 12px;
       }
 
       .certificate-stage {
-        min-height: 700px;
+        min-height: auto;
+      }
+
+      .certificate-title {
+        font-size: clamp(1.7rem, 9vw, 2.35rem);
+      }
+
+      .year-stamp,
+      .certificate-kicker {
+        width: 100%;
+      }
+
+      .recipient-block {
+        padding: 14px 15px;
+      }
+
+      .certificate-info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .certificate-code-item,
+      .certificate-info-card,
+      .achievement-card {
+        padding: 12px;
+        border-radius: 14px;
+      }
+
+      .certificate-code-item {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .certificate-code-item strong {
+        text-align: left;
+      }
+
+      .certificate-foot {
+        display: grid;
+        gap: 6px;
+      }
+
+      .art-side {
+        padding: 0 12px 12px;
+        gap: 10px;
+      }
+
+      .art-card {
+        width: 100%;
+        padding: 14px;
+        border-radius: 18px;
       }
     }
   </style>
@@ -1014,6 +1095,24 @@
                     <strong id="recipientName">你的名字</strong>
                     <p id="recipientChapter" class="certificate-note">JCI Peninsula / Blue Sky Returns</p>
                   </div>
+                  <div class="certificate-info-grid">
+                    <div class="certificate-info-card">
+                      <span id="chapterInfoLabel">Chapter / Region</span>
+                      <strong id="chapterInfoValue">JCI Peninsula / Blue Sky Returns</strong>
+                    </div>
+                    <div class="certificate-info-card">
+                      <span id="issueDateLabel">Issued On</span>
+                      <strong id="issueDateValue">2026-04-22</strong>
+                    </div>
+                    <div class="certificate-info-card">
+                      <span id="stageThemeLabel">Certificate Style</span>
+                      <strong id="stageThemeValue">Emerald Atmosphere</strong>
+                    </div>
+                    <div class="certificate-info-card">
+                      <span id="stageModeLabel">Generation Mode</span>
+                      <strong id="stageModeValue">Photo Preview</strong>
+                    </div>
+                  </div>
                   <div class="certificate-code-list">
                     <div class="certificate-code-item">
                       <div>
@@ -1029,6 +1128,11 @@
                     </div>
                   </div>
                   <div class="certificate-achievement-list">
+                    <div class="achievement-card">
+                      <span id="stepLabel">Take One Step Result</span>
+                      <strong id="stepValue">-</strong>
+                      <p id="stepBody">-</p>
+                    </div>
                     <div class="achievement-card">
                       <span id="mbtiLabel">Eco-MBTI 角色卡</span>
                       <strong id="mbtiValue">-</strong>
@@ -1170,11 +1274,23 @@
         certTitle: "2026 氣候行動證書",
         certSubtitle: "表彰你完成步入行動、Eco-MBTI 與 Daily Green Actions 的氣候行動參與。",
         recipientLabel: "頒發給",
+        chapterInfoLabel: "分會 / 地區",
+        issueDateLabel: "頒發日期",
+        stageThemeLabel: "證書風格",
+        stageModeLabel: "生成模式",
         recipientChapterFallback: "JCI Peninsula / Blue Sky Returns",
         stageCertLabel: "證書編號",
         stageTokenLabel: "Climate Badge 編號",
+        stepLabel: "步入行動結果",
         mbtiLabel: "Eco-MBTI 角色卡",
         proposalLabel: "Daily Green Actions Climate Badge 進度",
+        photoPreviewMode: "照片預覽版",
+        aiGeneratedMode: "AI 生成版",
+        stepBodyFallback: "完成步入行動問卷後，這裡會顯示你的角色結果與分數。",
+        stepBodyWithScore: "步入行動分數：{score}",
+        themeEmerald: "綠色自然感",
+        themeBlue: "藍天未來感",
+        themeGold: "榮譽典藏感",
         proposalValue: "1 / 1 枚徽章",
         proposalBody: "你在 Daily Green Actions 的累積完成度，會決定目前已獲得幾枚可用的限量氣候行動徽章。",
         stageFootNote: "AI Certificate Design • Blue Sky Returns",
@@ -1248,11 +1364,23 @@
         certTitle: "2026 Climate Action Certificate",
         certSubtitle: "Presented in recognition of completing Take One Step, Eco-MBTI, and the Daily Green Actions journey.",
         recipientLabel: "Presented To",
+        chapterInfoLabel: "Chapter / Region",
+        issueDateLabel: "Issued On",
+        stageThemeLabel: "Certificate Style",
+        stageModeLabel: "Generation Mode",
         recipientChapterFallback: "JCI Peninsula / Blue Sky Returns",
         stageCertLabel: "Certificate Code",
         stageTokenLabel: "Climate Badge Code",
+        stepLabel: "Take One Step Result",
         mbtiLabel: "Eco-MBTI Role Card",
         proposalLabel: "Daily Green Actions Climate Badge Progress",
+        photoPreviewMode: "Photo Preview",
+        aiGeneratedMode: "AI Generated",
+        stepBodyFallback: "Complete Take One Step first to show your role result and score here.",
+        stepBodyWithScore: "Take One Step score: {score}",
+        themeEmerald: "Emerald Atmosphere",
+        themeBlue: "Blue Sky Energy",
+        themeGold: "Golden Honor",
         proposalValue: "1 / 1 Badge",
         proposalBody: "Your accumulated Daily Green Actions progress determines how many usable limited Climate Badges you have earned so far.",
         stageFootNote: "AI Certificate Design • Blue Sky Returns",
@@ -1305,6 +1433,12 @@
     const recipientChapter = document.getElementById("recipientChapter");
     const stageCertCode = document.getElementById("stageCertCode");
     const stageTokenCode = document.getElementById("stageTokenCode");
+    const chapterInfoValue = document.getElementById("chapterInfoValue");
+    const issueDateValue = document.getElementById("issueDateValue");
+    const stageThemeValue = document.getElementById("stageThemeValue");
+    const stageModeValue = document.getElementById("stageModeValue");
+    const stepValue = document.getElementById("stepValue");
+    const stepBody = document.getElementById("stepBody");
     const mbtiValue = document.getElementById("mbtiValue");
     const mbtiBody = document.getElementById("mbtiBody");
     const proposalValue = document.getElementById("proposalValue");
@@ -1330,6 +1464,18 @@
 
     const getEcoAction = (member = {}) => {
       return member?.ecoMbti?.actionsZh || member?.ecoMbti?.actionsEn || "-";
+    };
+    const getStepRole = (member = {}) => {
+      return String(member?.resultRole || member?.profile?.resultRole || "").trim() || "-";
+    };
+    const getStepScore = (member = {}) => {
+      const score = member?.totalScore ?? member?.profile?.totalScore;
+      return Number.isFinite(Number(score)) ? Number(score) : null;
+    };
+    const getThemeLabel = (theme) => {
+      if (theme === "blue") return t("themeBlue");
+      if (theme === "gold") return t("themeGold");
+      return t("themeEmerald");
     };
 
     const createRandomCode = (prefix, length = 6) => {
@@ -1524,15 +1670,28 @@
 
     const updateCertificateStage = () => {
       const displayName = displayNameInput.value.trim() || getDisplayName(currentUser, currentMember) || (currentLang === "zh" ? "你的名字" : "Your Name");
+      const chapterText = chapterInput.value.trim() || t("recipientChapterFallback");
+      const issuedDate = getPrimaryIssueDate(currentReward);
+      const stepRoleText = getStepRole(currentMember);
+      const stepScore = getStepScore(currentMember);
+      const stepBodyText = stepScore == null
+        ? t("stepBodyFallback")
+        : t("stepBodyWithScore").replace("{score}", String(stepScore));
       recipientName.textContent = displayName;
-      recipientChapter.textContent = chapterInput.value.trim() || t("recipientChapterFallback");
+      recipientChapter.textContent = chapterText;
+      chapterInfoValue.textContent = chapterText;
+      issueDateValue.textContent = issuedDate;
+      stageThemeValue.textContent = getThemeLabel(themeSelect.value);
+      stageModeValue.textContent = generatedImageUrl ? t("aiGeneratedMode") : uploadedPreviewUrl ? t("photoPreviewMode") : t("photoPreviewMode");
       stageCertCode.textContent = normalizeCertificateCode(currentReward?.certificateCode) || "-";
       stageTokenCode.textContent = getCurrentTokenCode(currentReward);
+      stepValue.textContent = stepRoleText;
+      stepBody.textContent = stepBodyText;
       mbtiValue.textContent = getEcoLabel(currentMember);
       mbtiBody.textContent = getEcoAction(currentMember);
       proposalValue.textContent = `${Math.min(Math.floor(currentCompletedDays / 7), 1)} / 1`;
       proposalBody.textContent = t("proposalBody");
-      stageIssuedAt.textContent = `${t("issuePrefix")} ${getPrimaryIssueDate(currentReward)}`;
+      stageIssuedAt.textContent = `${t("issuePrefix")} ${issuedDate}`;
       const mediaUrl = generatedImageUrl || uploadedPreviewUrl || "";
       certificateMedia.style.backgroundImage = mediaUrl ? `url("${mediaUrl}")` : "none";
       generationNote.textContent = generatedImageUrl
@@ -1592,9 +1751,13 @@
       document.getElementById("certTitle").textContent = t("certTitle");
       document.getElementById("certSubtitle").textContent = t("certSubtitle");
       document.getElementById("recipientLabel").textContent = t("recipientLabel");
+      document.getElementById("chapterInfoLabel").textContent = t("chapterInfoLabel");
+      document.getElementById("issueDateLabel").textContent = t("issueDateLabel");
+      document.getElementById("stageThemeLabel").textContent = t("stageThemeLabel");
+      document.getElementById("stageModeLabel").textContent = t("stageModeLabel");
       document.getElementById("stageCertLabel").textContent = t("stageCertLabel");
-      document.getElementById("stageLotteryLabel").textContent = t("stageLotteryLabel");
       document.getElementById("stageTokenLabel").textContent = t("stageTokenLabel");
+      document.getElementById("stepLabel").textContent = t("stepLabel");
       document.getElementById("mbtiLabel").textContent = t("mbtiLabel");
       document.getElementById("proposalLabel").textContent = t("proposalLabel");
       document.getElementById("stageFootNote").textContent = t("stageFootNote");
@@ -1739,35 +1902,59 @@
       ctx.font = "900 46px 'Segoe UI', 'Noto Sans TC', sans-serif";
       drawWrappedText(ctx, recipientName.textContent, 124, 608, 580, 54, 2);
 
+      ctx.fillStyle = "rgba(255,255,255,0.1)";
+      ctx.beginPath();
+      ctx.roundRect(96, 646, 640, 114, 24);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.16)";
+      ctx.stroke();
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.font = "700 16px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(`${t("chapterInfoLabel")}:`, 124, 686);
+      ctx.fillText(`${t("issueDateLabel")}:`, 124, 728);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "700 18px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      drawWrappedText(ctx, chapterInfoValue.textContent, 286, 686, 420, 24, 2);
+      ctx.fillText(issueDateValue.textContent, 286, 728);
+
       ctx.fillStyle = palette.code;
       ctx.font = "800 20px 'Segoe UI', 'Noto Sans TC', sans-serif";
-      ctx.fillText(`${t("stageCertLabel")}: ${stageCertCode.textContent}`, 96, 700);
-      ctx.fillText(`${t("stageLotteryLabel")}: ${stageLotteryCode.textContent}`, 96, 740);
-      ctx.fillText(`${t("stageTokenLabel")}: ${stageTokenCode.textContent}`, 96, 780);
+      ctx.fillText(`${t("stageCertLabel")}: ${stageCertCode.textContent}`, 96, 800);
+      ctx.fillText(`${t("stageTokenLabel")}: ${stageTokenCode.textContent}`, 96, 840);
 
       ctx.fillStyle = "rgba(255,255,255,0.12)";
       ctx.beginPath();
-      ctx.roundRect(920, 620, 540, 162, 28);
+      ctx.roundRect(920, 560, 540, 258, 28);
       ctx.fill();
       ctx.strokeStyle = "rgba(255,255,255,0.16)";
       ctx.stroke();
 
       ctx.fillStyle = "rgba(255,255,255,0.7)";
       ctx.font = "700 16px 'Segoe UI', 'Noto Sans TC', sans-serif";
-      ctx.fillText(t("mbtiLabel"), 950, 660);
+      ctx.fillText(t("stepLabel"), 950, 602);
       ctx.fillStyle = "#ffffff";
       ctx.font = "800 24px 'Segoe UI', 'Noto Sans TC', sans-serif";
-      drawWrappedText(ctx, mbtiValue.textContent, 950, 694, 470, 28, 2);
+      drawWrappedText(ctx, stepValue.textContent, 950, 636, 470, 28, 2);
       ctx.fillStyle = "rgba(255,255,255,0.86)";
       ctx.font = "500 17px 'Segoe UI', 'Noto Sans TC', sans-serif";
-      drawWrappedText(ctx, mbtiBody.textContent, 950, 730, 470, 24, 3);
+      drawWrappedText(ctx, stepBody.textContent, 950, 670, 470, 24, 2);
 
       ctx.fillStyle = "rgba(255,255,255,0.7)";
       ctx.font = "700 16px 'Segoe UI', 'Noto Sans TC', sans-serif";
-      ctx.fillText(t("proposalLabel"), 950, 816);
+      ctx.fillText(t("mbtiLabel"), 950, 722);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 24px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      drawWrappedText(ctx, mbtiValue.textContent, 950, 756, 470, 28, 2);
+      ctx.fillStyle = "rgba(255,255,255,0.86)";
+      ctx.font = "500 17px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      drawWrappedText(ctx, mbtiBody.textContent, 950, 790, 470, 24, 2);
+
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.font = "700 16px 'Segoe UI', 'Noto Sans TC', sans-serif";
+      ctx.fillText(t("proposalLabel"), 950, 846);
       ctx.fillStyle = "#ffffff";
       ctx.font = "800 22px 'Segoe UI', 'Noto Sans TC', sans-serif";
-      ctx.fillText(proposalValue.textContent, 1098, 816);
+      ctx.fillText(proposalValue.textContent, 1202, 846);
 
       ctx.fillStyle = "rgba(255,255,255,0.82)";
       ctx.font = "600 18px 'Segoe UI', 'Noto Sans TC', sans-serif";
