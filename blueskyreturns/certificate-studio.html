@@ -1112,6 +1112,10 @@
                       <span id="stageModeLabel">Generation Mode</span>
                       <strong id="stageModeValue">Photo Preview</strong>
                     </div>
+                    <div class="certificate-info-card">
+                      <span id="tokenStatusLabel">Climate Badge Status</span>
+                      <strong id="tokenStatusValue">-</strong>
+                    </div>
                   </div>
                   <div class="certificate-code-list">
                     <div class="certificate-code-item">
@@ -1278,6 +1282,7 @@
         issueDateLabel: "頒發日期",
         stageThemeLabel: "證書風格",
         stageModeLabel: "生成模式",
+        tokenStatusLabel: "徽章狀態",
         recipientChapterFallback: "JCI Peninsula / Blue Sky Returns",
         stageCertLabel: "證書編號",
         stageTokenLabel: "Climate Badge 編號",
@@ -1288,6 +1293,10 @@
         aiGeneratedMode: "AI 生成版",
         stepBodyFallback: "完成步入行動問卷後，這裡會顯示你的角色結果與分數。",
         stepBodyWithScore: "步入行動分數：{score}",
+        tokenStatusReady: "{available}/{total} 枚可用",
+        tokenStatusUsedOut: "{total} 枚已領用完成",
+        tokenStatusLocked: "尚未領取",
+        proposalBodyWithDays: "目前已完成 {days} 天 Daily Green Actions，已獲得 {earned}/1 枚可用徽章。",
         themeEmerald: "綠色自然感",
         themeBlue: "藍天未來感",
         themeGold: "榮譽典藏感",
@@ -1368,6 +1377,7 @@
         issueDateLabel: "Issued On",
         stageThemeLabel: "Certificate Style",
         stageModeLabel: "Generation Mode",
+        tokenStatusLabel: "Climate Badge Status",
         recipientChapterFallback: "JCI Peninsula / Blue Sky Returns",
         stageCertLabel: "Certificate Code",
         stageTokenLabel: "Climate Badge Code",
@@ -1378,6 +1388,10 @@
         aiGeneratedMode: "AI Generated",
         stepBodyFallback: "Complete Take One Step first to show your role result and score here.",
         stepBodyWithScore: "Take One Step score: {score}",
+        tokenStatusReady: "{available}/{total} badges available",
+        tokenStatusUsedOut: "{total} badge(s) fully used",
+        tokenStatusLocked: "Not claimed yet",
+        proposalBodyWithDays: "{days} Daily Green Actions days completed, {earned}/1 badge earned so far.",
         themeEmerald: "Emerald Atmosphere",
         themeBlue: "Blue Sky Energy",
         themeGold: "Golden Honor",
@@ -1437,6 +1451,7 @@
     const issueDateValue = document.getElementById("issueDateValue");
     const stageThemeValue = document.getElementById("stageThemeValue");
     const stageModeValue = document.getElementById("stageModeValue");
+    const tokenStatusValue = document.getElementById("tokenStatusValue");
     const stepValue = document.getElementById("stepValue");
     const stepBody = document.getElementById("stepBody");
     const mbtiValue = document.getElementById("mbtiValue");
@@ -1476,6 +1491,18 @@
       if (theme === "blue") return t("themeBlue");
       if (theme === "gold") return t("themeGold");
       return t("themeEmerald");
+    };
+    const getTokenStatusText = (reward = {}) => {
+      const tokenCodes = getRewardTokenCodes(reward);
+      if (!tokenCodes.length) return t("tokenStatusLocked");
+      const availableCount = getAvailableTokenCodes(reward).length;
+      if (availableCount <= 0) {
+        return t("tokenStatusUsedOut")
+          .replace("{total}", String(tokenCodes.length));
+      }
+      return t("tokenStatusReady")
+        .replace("{available}", String(availableCount))
+        .replace("{total}", String(tokenCodes.length));
     };
 
     const createRandomCode = (prefix, length = 6) => {
@@ -1674,6 +1701,7 @@
       const issuedDate = getPrimaryIssueDate(currentReward);
       const stepRoleText = getStepRole(currentMember);
       const stepScore = getStepScore(currentMember);
+      const earnedBadgeCount = Math.min(Math.floor(currentCompletedDays / 7), 1);
       const stepBodyText = stepScore == null
         ? t("stepBodyFallback")
         : t("stepBodyWithScore").replace("{score}", String(stepScore));
@@ -1683,14 +1711,17 @@
       issueDateValue.textContent = issuedDate;
       stageThemeValue.textContent = getThemeLabel(themeSelect.value);
       stageModeValue.textContent = generatedImageUrl ? t("aiGeneratedMode") : uploadedPreviewUrl ? t("photoPreviewMode") : t("photoPreviewMode");
+      tokenStatusValue.textContent = getTokenStatusText(currentReward);
       stageCertCode.textContent = normalizeCertificateCode(currentReward?.certificateCode) || "-";
       stageTokenCode.textContent = getCurrentTokenCode(currentReward);
       stepValue.textContent = stepRoleText;
       stepBody.textContent = stepBodyText;
       mbtiValue.textContent = getEcoLabel(currentMember);
       mbtiBody.textContent = getEcoAction(currentMember);
-      proposalValue.textContent = `${Math.min(Math.floor(currentCompletedDays / 7), 1)} / 1`;
-      proposalBody.textContent = t("proposalBody");
+      proposalValue.textContent = `${earnedBadgeCount} / 1`;
+      proposalBody.textContent = t("proposalBodyWithDays")
+        .replace("{days}", String(currentCompletedDays))
+        .replace("{earned}", String(earnedBadgeCount));
       stageIssuedAt.textContent = `${t("issuePrefix")} ${issuedDate}`;
       const mediaUrl = generatedImageUrl || uploadedPreviewUrl || "";
       certificateMedia.style.backgroundImage = mediaUrl ? `url("${mediaUrl}")` : "none";
@@ -1755,6 +1786,7 @@
       document.getElementById("issueDateLabel").textContent = t("issueDateLabel");
       document.getElementById("stageThemeLabel").textContent = t("stageThemeLabel");
       document.getElementById("stageModeLabel").textContent = t("stageModeLabel");
+      document.getElementById("tokenStatusLabel").textContent = t("tokenStatusLabel");
       document.getElementById("stageCertLabel").textContent = t("stageCertLabel");
       document.getElementById("stageTokenLabel").textContent = t("stageTokenLabel");
       document.getElementById("stepLabel").textContent = t("stepLabel");

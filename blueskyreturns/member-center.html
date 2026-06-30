@@ -568,7 +568,6 @@
     .reward-thumbnail {
       display: grid;
       gap: 10px;
-      margin-top: 4px;
     }
 
     .reward-thumbnail img {
@@ -578,6 +577,51 @@
       border-radius: 18px;
       border: 1px solid var(--line);
       box-shadow: 0 12px 26px rgba(16, 34, 54, 0.1);
+    }
+
+    .reward-snapshot {
+      display: grid;
+      gap: 16px;
+    }
+
+    .reward-snapshot-main {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .reward-summary-copy {
+      display: grid;
+      gap: 12px;
+    }
+
+    .reward-summary-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .reward-summary-item {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(242,248,255,0.94));
+    }
+
+    .reward-summary-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .reward-summary-item strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--ink);
+      font-size: 0.98rem;
+      line-height: 1.35;
+      word-break: break-word;
     }
 
     .token-grid {
@@ -782,6 +826,11 @@
       .grid.two,
       .stats-strip,
       .reward-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .reward-snapshot-main,
+      .reward-summary-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1066,21 +1115,49 @@
           <article class="reward-result">
             <h3 id="rewardResultTitle">已領取內容 / Reward Details</h3>
             <p id="rewardResultBody">達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的限量氣候行動徽章。</p>
-            <div id="rewardResultList" class="reward-result-list" hidden>
-              <div class="reward-result-item">
-                <span id="rewardCertCodeLabel">電子證書編號</span>
-                <strong id="rewardCertCode">-</strong>
-              </div>
-              <div class="reward-result-item">
-                <span id="rewardTokenLabel">Climate Badge 編號</span>
-                <strong id="rewardTokenCode">-</strong>
+            <div id="rewardSnapshot" class="reward-snapshot" hidden>
+              <div class="reward-snapshot-main">
+                <div id="rewardThumbnail" class="reward-thumbnail" hidden>
+                  <img id="rewardThumbnailImg" alt="AI certificate thumbnail" />
+                  <p id="rewardThumbnailBody">已生成的 AI 證書主視覺會顯示在這裡。</p>
+                </div>
+                <div class="reward-summary-copy">
+                  <div id="rewardResultList" class="reward-result-list" hidden>
+                    <div class="reward-result-item">
+                      <span id="rewardCertCodeLabel">電子證書編號</span>
+                      <strong id="rewardCertCode">-</strong>
+                    </div>
+                    <div class="reward-result-item">
+                      <span id="rewardTokenLabel">Climate Badge 編號</span>
+                      <strong id="rewardTokenCode">-</strong>
+                    </div>
+                  </div>
+                  <div class="reward-summary-grid">
+                    <div class="reward-summary-item">
+                      <span id="rewardChapterLabel">分會 / 地區</span>
+                      <strong id="rewardChapterValue">-</strong>
+                    </div>
+                    <div class="reward-summary-item">
+                      <span id="rewardIssuedOnLabel">領取日期</span>
+                      <strong id="rewardIssuedOnValue">-</strong>
+                    </div>
+                    <div class="reward-summary-item">
+                      <span id="rewardStepSummaryLabel">步入行動</span>
+                      <strong id="rewardStepSummaryValue">-</strong>
+                    </div>
+                    <div class="reward-summary-item">
+                      <span id="rewardEcoSummaryLabel">Eco-MBTI</span>
+                      <strong id="rewardEcoSummaryValue">-</strong>
+                    </div>
+                    <div class="reward-summary-item">
+                      <span id="rewardProposalSummaryLabel">Daily Green Actions</span>
+                      <strong id="rewardProposalSummaryValue">-</strong>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div id="rewardTokenGrid" class="token-grid" hidden></div>
-            <div id="rewardThumbnail" class="reward-thumbnail" hidden>
-              <img id="rewardThumbnailImg" alt="AI certificate thumbnail" />
-              <p id="rewardThumbnailBody">已生成的 AI 證書主視覺會顯示在這裡。</p>
-            </div>
             <div id="rewardResultEmpty" class="empty-box">尚未領取 2026 氣候行動資格。</div>
             <div class="reward-actions inline">
               <a id="certificateStudioLink" class="pill primary" href="./certificate-studio.html" hidden>開啟 AI 證書工作室</a>
@@ -1243,6 +1320,14 @@
           resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的限量氣候行動徽章。",
           cert: "電子證書編號",
           token: "Climate Badge 狀態",
+          chapter: "分會 / 地區",
+          issuedOn: "領取日期",
+          stepSummary: "步入行動",
+          ecoSummary: "Eco-MBTI",
+          proposalSummary: "Daily Green Actions",
+          defaultChapter: "Blue Sky Returns",
+          stepWithScore: "{role} · {score} 分",
+          proposalWithDays: "已完成 {days} 天",
           thumbBody: "已生成的 AI 證書主視覺會顯示在這裡。",
           studioLink: "開啟 AI 證書工作室",
           studioHintReady: "你可以上傳自己的照片，帶入證書編號與 Climate Badge，使用 AI 生成專屬證書設計。",
@@ -1355,6 +1440,14 @@
           resultBody: "After you meet the requirements and claim the reward, your certificate code and current Climate Badge status will appear here.",
           cert: "Certificate Code",
           token: "Climate Badge Status",
+          chapter: "Chapter / Region",
+          issuedOn: "Issued On",
+          stepSummary: "Take One Step",
+          ecoSummary: "Eco-MBTI",
+          proposalSummary: "Daily Green Actions",
+          defaultChapter: "Blue Sky Returns",
+          stepWithScore: "{role} · {score} pts",
+          proposalWithDays: "{days} days completed",
           thumbBody: "Your generated AI certificate visual appears here.",
           studioLink: "Open AI Certificate Studio",
           studioHintReady: "Upload your photo, bring in your certificate code and Climate Badge, and use AI to generate a personalized certificate design.",
@@ -1473,6 +1566,7 @@
     const rewardStatus = document.getElementById("rewardStatus");
     const rewardResultTitle = document.getElementById("rewardResultTitle");
     const rewardResultBody = document.getElementById("rewardResultBody");
+    const rewardSnapshot = document.getElementById("rewardSnapshot");
     const rewardResultList = document.getElementById("rewardResultList");
     const rewardResultEmpty = document.getElementById("rewardResultEmpty");
     const rewardTokenGrid = document.getElementById("rewardTokenGrid");
@@ -1483,6 +1577,16 @@
     const rewardCertCode = document.getElementById("rewardCertCode");
     const rewardTokenLabel = document.getElementById("rewardTokenLabel");
     const rewardTokenCode = document.getElementById("rewardTokenCode");
+    const rewardChapterLabel = document.getElementById("rewardChapterLabel");
+    const rewardChapterValue = document.getElementById("rewardChapterValue");
+    const rewardIssuedOnLabel = document.getElementById("rewardIssuedOnLabel");
+    const rewardIssuedOnValue = document.getElementById("rewardIssuedOnValue");
+    const rewardStepSummaryLabel = document.getElementById("rewardStepSummaryLabel");
+    const rewardStepSummaryValue = document.getElementById("rewardStepSummaryValue");
+    const rewardEcoSummaryLabel = document.getElementById("rewardEcoSummaryLabel");
+    const rewardEcoSummaryValue = document.getElementById("rewardEcoSummaryValue");
+    const rewardProposalSummaryLabel = document.getElementById("rewardProposalSummaryLabel");
+    const rewardProposalSummaryValue = document.getElementById("rewardProposalSummaryValue");
     const certificateStudioLink = document.getElementById("certificateStudioLink");
     const certificateStudioHint = document.getElementById("certificateStudioHint");
 
@@ -1898,6 +2002,28 @@
       if (plain) return plain[1].padStart(4, "0");
       return raw;
     };
+    const getRewardChapterText = (member = {}) => {
+      const region = getMemberRegionLabel(member);
+      return region && region !== "-" ? region : t("rewards.defaultChapter");
+    };
+    const getRewardEcoText = (member = {}) => {
+      if (!member?.ecoMbti?.type) return "-";
+      const title = currentLang === "zh"
+        ? (member.ecoMbti.titleZh || member.ecoMbti.titleEn || "")
+        : (member.ecoMbti.titleEn || member.ecoMbti.titleZh || "");
+      return title ? `${member.ecoMbti.type} / ${title}` : member.ecoMbti.type;
+    };
+    const getRewardStepText = (member = {}) => {
+      const role = getMemberRoleLabel(member) || "-";
+      const score = getMemberScore(member);
+      if (score === "-" || score === "" || score == null) return role;
+      return t("rewards.stepWithScore")
+        .replace("{role}", role)
+        .replace("{score}", String(score));
+    };
+    const getRewardProposalText = (completedDays = 0) => (
+      t("rewards.proposalWithDays").replace("{days}", String(completedDays))
+    );
     const getCertificateInventory = async () => {
       const snap = await getDocs(collection(db, "members"));
       let issuedCount = 0;
@@ -1980,11 +2106,17 @@
     };
     const renderRewardRecord = (record) => {
       if (!record) {
+        rewardSnapshot.hidden = true;
         rewardResultList.hidden = true;
         rewardResultEmpty.hidden = false;
         rewardResultEmpty.textContent = t("states.rewardEmpty");
         rewardCertCode.textContent = "-";
         rewardTokenCode.textContent = "-";
+        rewardChapterValue.textContent = "-";
+        rewardIssuedOnValue.textContent = "-";
+        rewardStepSummaryValue.textContent = "-";
+        rewardEcoSummaryValue.textContent = "-";
+        rewardProposalSummaryValue.textContent = "-";
         rewardTokenGrid.hidden = true;
         rewardTokenGrid.innerHTML = "";
         rewardThumbnail.hidden = true;
@@ -2004,7 +2136,13 @@
             ? `${availableCount}/${tokenCodes.length} 可用：${tokenCodes.join(", ")}`
             : `${availableCount}/${tokenCodes.length} available: ${tokenCodes.join(", ")}`)
         : "-";
+      rewardChapterValue.textContent = getRewardChapterText(currentMemberData);
+      rewardIssuedOnValue.textContent = formatDate(record.claimedAt);
+      rewardStepSummaryValue.textContent = getRewardStepText(currentMemberData);
+      rewardEcoSummaryValue.textContent = getRewardEcoText(currentMemberData);
+      rewardProposalSummaryValue.textContent = getRewardProposalText(currentRewardEligibility.completedDays);
       rewardResultEmpty.hidden = true;
+      rewardSnapshot.hidden = false;
       rewardResultList.hidden = false;
       const tokenSlots = createTokenSlots(record, currentRewardEligibility.earnedTokenCount);
       rewardTokenGrid.innerHTML = "";
@@ -2138,6 +2276,11 @@
       rewardThumbnailBody.textContent = t("rewards.thumbBody");
       rewardCertCodeLabel.textContent = t("rewards.cert");
       rewardTokenLabel.textContent = t("rewards.token");
+      rewardChapterLabel.textContent = t("rewards.chapter");
+      rewardIssuedOnLabel.textContent = t("rewards.issuedOn");
+      rewardStepSummaryLabel.textContent = t("rewards.stepSummary");
+      rewardEcoSummaryLabel.textContent = t("rewards.ecoSummary");
+      rewardProposalSummaryLabel.textContent = t("rewards.proposalSummary");
       certificateStudioLink.textContent = t("rewards.studioLink");
       if (!auth.currentUser) {
         inviteLinkStatus.textContent = t("invite.guest");
