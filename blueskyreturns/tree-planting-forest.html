@@ -696,13 +696,13 @@
 
         <div class="formula">
           <div class="formula-row"><span id="formulaPartnersLabel">每 100 位註冊氣候行動者</span><strong id="formulaPartnersValue">= 0 個名額</strong></div>
-          <div class="formula-row"><span id="formulaPointsLabel">每 100 分 Climate Points</span><strong id="formulaPointsValue">= 0 個名額</strong></div>
+          <div class="formula-row"><span id="formulaPointsLabel">每 10 分 Climate Points</span><strong id="formulaPointsValue">= 0 個名額</strong></div>
           <div class="formula-row"><span id="formulaCapLabel">總上限</span><strong id="formulaCapValue">321 個名額</strong></div>
         </div>
 
         <div class="target-note" hidden>
           <h2 id="targetTitle">321 棵樹怎麼累積</h2>
-          <p id="targetBody">若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 32,100 分。實際上可由兩者一起累積，慢慢長出整座森林。</p>
+          <p id="targetBody">若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 3,210 分。實際上可由兩者一起累積，慢慢長出整座森林。</p>
         </div>
 
         <div class="my-forest">
@@ -798,13 +798,13 @@
         treesLabel: "目前對應植樹名額",
         remainingLabel: "距離上限剩餘",
         formulaPartnersLabel: "每 100 位註冊氣候行動者",
-        formulaPointsLabel: "每 100 分 Climate Points",
+        formulaPointsLabel: "每 10 分 Climate Points",
         formulaCapLabel: "總上限",
         formulaPartnersValue: (value) => `= ${value} 個名額`,
         formulaPointsValue: (value) => `= ${value} 個名額`,
         formulaCapValue: "321 個名額",
         targetTitle: "321 棵樹怎麼累積",
-        targetBody: "若只靠註冊人數，約需 32,100 位註冊氣候行動者；若只靠 Climate Points，約需 32,100 分。實際上可由兩者一起累積，慢慢長出整座森林。",
+        targetBody: "若只靠註冊人數，約需 32,100 位註冊氣候行動者；若只靠 Climate Points，約需 3,210 分。實際上可由兩者一起累積，慢慢長出整座森林。",
         myForestTitle: "我的四葉草 / My Clover",
         myForestBody: "登入後可查看你的四葉草累積與進度。",
         myForestGuest: "尚未登入，先到氣候行動者中心登入即可查看。",
@@ -833,7 +833,7 @@
         noTrees: "目前尚未累積到植樹名額",
         treeInfoTitle: (slot) => `第 ${slot} 個植樹名額`,
         treeInfoPartner: (order) => `這棵樹來自註冊人數累積名額，第 ${order} 棵由每 100 位註冊氣候行動者換算而來。`,
-        treeInfoPoints: (order) => `這棵樹來自 Climate Points 累積名額，第 ${order} 棵由每 100 分 Climate Points 換算而來。`,
+        treeInfoPoints: (order) => `這棵樹來自 Climate Points 累積名額，第 ${order} 棵由每 10 分 Climate Points 換算而來。`,
         treeInfoMeta: (source, cap) => `<ul><li>來源：${source}</li><li>名額序號：${cap} / 321</li></ul>`,
         sourcePartner: "註冊人數",
         sourcePoints: "Climate Points",
@@ -857,13 +857,13 @@
         treesLabel: "Current Tree Planting Slots",
         remainingLabel: "Remaining to Cap",
         formulaPartnersLabel: "Every 100 Registered Climate Action Partners",
-        formulaPointsLabel: "Every 100 Climate Points",
+        formulaPointsLabel: "Every 10 Climate Points",
         formulaCapLabel: "Cap",
         formulaPartnersValue: (value) => `= ${value} slots`,
         formulaPointsValue: (value) => `= ${value} slots`,
         formulaCapValue: "321 slots",
         targetTitle: "How 321 trees can be reached",
-        targetBody: "If this goal came only from registrations, it would take about 32,100 registered climate action partners. If it came only from Climate Points, it would take about 32,100 points. In practice, both can grow the forest together.",
+        targetBody: "If this goal came only from registrations, it would take about 32,100 registered climate action partners. If it came only from Climate Points, it would take about 3,210 points. In practice, both can grow the forest together.",
         myForestTitle: "My Clover",
         myForestBody: "Sign in to view your clover progress.",
         myForestGuest: "Sign in from the member center to view your personal clover summary.",
@@ -892,7 +892,7 @@
         noTrees: "No tree planting slots have been accumulated yet.",
         treeInfoTitle: (slot) => `Tree Planting Slot ${slot}`,
         treeInfoPartner: (order) => `This tree comes from the registered member count. It is slot ${order} created by the “every 100 registered partners” rule.`,
-        treeInfoPoints: (order) => `This tree comes from Climate Points. It is slot ${order} created by the “every 100 Climate Points” rule.`,
+        treeInfoPoints: (order) => `This tree comes from Climate Points. It is slot ${order} created by the “every 10 Climate Points” rule.`,
         treeInfoMeta: (source, cap) => `<ul><li>Source: ${source}</li><li>Slot number: ${cap} / 321</li></ul>`,
         sourcePartner: "Registered member count",
         sourcePoints: "Climate Points",
@@ -1502,7 +1502,7 @@
         });
 
         const partnerTrees = Math.floor(participants / 100);
-        const pointTrees = Math.floor(points / 100);
+        const pointTrees = Math.floor(points / 10);
         const totalTrees = Math.min(MAX_SLOTS, partnerTrees + pointTrees);
         const remaining = Math.max(0, MAX_SLOTS - totalTrees);
 
