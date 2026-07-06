@@ -565,63 +565,212 @@
       word-break: break-word;
     }
 
-    .reward-thumbnail {
-      display: grid;
-      gap: 10px;
-    }
-
-    .reward-thumbnail img {
-      width: 100%;
-      max-height: 240px;
-      object-fit: cover;
-      border-radius: 18px;
-      border: 1px solid var(--line);
-      box-shadow: 0 12px 26px rgba(16, 34, 54, 0.1);
-    }
-
     .reward-snapshot {
       display: grid;
       gap: 16px;
     }
 
-    .reward-snapshot-main {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
-      align-items: start;
+    .reward-certificate-shell {
+      width: 100%;
+      border-radius: 24px;
+      border: 1px solid rgba(213,232,222,0.92);
+      background: linear-gradient(135deg, #0f4b40, #6fbf72);
+      padding: 14px;
+      box-shadow: 0 18px 40px rgba(16, 34, 54, 0.14);
     }
 
-    .reward-summary-copy {
+    .reward-certificate-stage {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      min-height: 520px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background:
+        linear-gradient(135deg, rgba(11, 54, 82, 0.88), rgba(13, 103, 78, 0.62)),
+        radial-gradient(circle at top right, rgba(255,255,255,0.26), transparent 34%),
+        linear-gradient(135deg, #0e4156, #5fa86e);
+      color: #fff;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .reward-certificate-media {
+      position: absolute;
+      inset: 0;
+      background-position: 76% center;
+      background-size: cover;
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+
+    .reward-certificate-wash {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(8,31,47,0.92) 0%, rgba(8,31,47,0.82) 34%, rgba(8,31,47,0.44) 56%, rgba(8,31,47,0.08) 74%, rgba(8,31,47,0.02) 100%);
+      pointer-events: none;
+    }
+
+    .reward-certificate-panel {
+      position: relative;
+      z-index: 1;
+      width: min(58%, 760px);
+      max-width: 760px;
+      padding: 24px;
+      display: grid;
+      gap: 14px;
+      align-content: space-between;
+    }
+
+    .reward-certificate-panel::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.22);
+      pointer-events: none;
+    }
+
+    .reward-certificate-top {
       display: grid;
       gap: 12px;
     }
 
-    .reward-summary-grid {
-      display: grid;
-      gap: 10px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .reward-certificate-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .reward-summary-item {
-      padding: 14px;
+    .reward-certificate-brand img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.96);
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .reward-certificate-brand strong,
+    .reward-certificate-brand span {
+      display: block;
+    }
+
+    .reward-certificate-brand span,
+    .reward-certificate-subtitle,
+    .reward-certificate-note,
+    .reward-certificate-field span,
+    .reward-certificate-code-item span,
+    .reward-achievement-card span,
+    .reward-certificate-foot {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .reward-certificate-title {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.04;
+    }
+
+    .reward-certificate-subtitle,
+    .reward-certificate-note {
+      margin: 0;
+    }
+
+    .reward-recipient-block,
+    .reward-certificate-field,
+    .reward-certificate-code-item,
+    .reward-achievement-card {
       border-radius: 16px;
-      border: 1px solid var(--line);
-      background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(242,248,255,0.94));
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(8px);
     }
 
-    .reward-summary-item span {
-      display: block;
-      color: var(--muted);
-      font-size: 0.8rem;
+    .reward-recipient-block {
+      padding: 16px 18px;
+      display: grid;
+      gap: 6px;
     }
 
-    .reward-summary-item strong {
+    .reward-recipient-block span {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .reward-recipient-block strong {
+      font-size: clamp(1.4rem, 2.2vw, 1.96rem);
+    }
+
+    .reward-certificate-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .reward-certificate-field,
+    .reward-achievement-card,
+    .reward-certificate-code-item {
+      padding: 12px 14px;
+      min-width: 0;
+    }
+
+    .reward-certificate-field span,
+    .reward-achievement-card span {
       display: block;
-      margin-top: 6px;
-      color: var(--ink);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .reward-certificate-field strong,
+    .reward-achievement-card strong {
+      display: block;
+      margin-top: 5px;
+      color: #fff;
       font-size: 0.98rem;
       line-height: 1.35;
       word-break: break-word;
+    }
+
+    .reward-certificate-code-list,
+    .reward-certificate-achievement-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .reward-certificate-code-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .reward-certificate-code-item strong {
+      display: block;
+      margin-top: 4px;
+      color: #fff7de;
+      letter-spacing: 0.06em;
+      font-size: 0.96rem;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .reward-certificate-achievement-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .reward-certificate-foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.86rem;
     }
 
     .token-grid {
@@ -829,9 +978,13 @@
         grid-template-columns: 1fr;
       }
 
-      .reward-snapshot-main,
-      .reward-summary-grid {
+      .reward-certificate-info-grid,
+      .reward-certificate-achievement-list {
         grid-template-columns: 1fr;
+      }
+
+      .reward-certificate-panel {
+        width: min(68%, 620px);
       }
 
       .token-grid {
@@ -896,6 +1049,40 @@
       .panel {
         padding: 20px 18px;
         border-radius: 24px;
+      }
+
+      .reward-certificate-shell {
+        padding: 10px;
+      }
+
+      .reward-certificate-panel {
+        width: 100%;
+        max-width: none;
+        padding: 16px;
+        gap: 12px;
+      }
+
+      .reward-certificate-stage {
+        aspect-ratio: 4 / 5.7;
+        min-height: auto;
+      }
+
+      .reward-certificate-title {
+        font-size: clamp(1.7rem, 9vw, 2.35rem);
+      }
+
+      .reward-certificate-code-item {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .reward-certificate-code-item strong {
+        text-align: left;
+      }
+
+      .reward-certificate-foot {
+        display: grid;
+        gap: 6px;
       }
 
       .actions {
@@ -1116,42 +1303,72 @@
             <h3 id="rewardResultTitle">已領取內容 / Reward Details</h3>
             <p id="rewardResultBody">達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的限量氣候行動徽章。</p>
             <div id="rewardSnapshot" class="reward-snapshot" hidden>
-              <div class="reward-snapshot-main">
-                <div id="rewardThumbnail" class="reward-thumbnail" hidden>
-                  <img id="rewardThumbnailImg" alt="AI certificate thumbnail" />
-                  <p id="rewardThumbnailBody">已生成的 AI 證書主視覺會顯示在這裡。</p>
-                </div>
-                <div class="reward-summary-copy">
-                  <div id="rewardResultList" class="reward-result-list" hidden>
-                    <div class="reward-result-item">
-                      <span id="rewardCertCodeLabel">電子證書編號</span>
-                      <strong id="rewardCertCode">-</strong>
+              <div class="reward-certificate-shell">
+                <div class="reward-certificate-stage">
+                  <div id="rewardCertificateMedia" class="reward-certificate-media"></div>
+                  <div class="reward-certificate-wash"></div>
+                  <div class="reward-certificate-panel">
+                    <div class="reward-certificate-top">
+                      <div class="reward-certificate-brand">
+                        <img src="../Enter.PNG" alt="Blue Sky Returns logo" />
+                        <div>
+                          <strong>Blue Sky Returns</strong>
+                          <span id="rewardCertBrandSub">2026 Climate Action Certificate</span>
+                        </div>
+                      </div>
+                      <h4 id="rewardCertStageTitle" class="reward-certificate-title">2026 氣候行動證書</h4>
+                      <p id="rewardCertStageSubtitle" class="reward-certificate-subtitle">表彰你完成步入行動、Eco-MBTI 與 Daily Green Actions 的氣候行動參與。</p>
                     </div>
-                    <div class="reward-result-item">
-                      <span id="rewardTokenLabel">Climate Badge 編號</span>
-                      <strong id="rewardTokenCode">-</strong>
+                    <div class="reward-recipient-block">
+                      <span id="rewardPresentedLabel">Presented To</span>
+                      <strong id="rewardRecipientName">-</strong>
+                      <p id="rewardRecipientChapter" class="reward-certificate-note">-</p>
                     </div>
-                  </div>
-                  <div class="reward-summary-grid">
-                    <div class="reward-summary-item">
-                      <span id="rewardChapterLabel">分會 / 地區</span>
-                      <strong id="rewardChapterValue">-</strong>
+                    <div class="reward-certificate-info-grid">
+                      <div class="reward-certificate-field">
+                        <span id="rewardChapterLabel">分會 / 地區</span>
+                        <strong id="rewardChapterValue">-</strong>
+                      </div>
+                      <div class="reward-certificate-field">
+                        <span id="rewardIssuedOnLabel">領取日期</span>
+                        <strong id="rewardIssuedOnValue">-</strong>
+                      </div>
+                      <div class="reward-certificate-field">
+                        <span id="rewardTokenLabel">Climate Badge 狀態</span>
+                        <strong id="rewardTokenCode">-</strong>
+                      </div>
                     </div>
-                    <div class="reward-summary-item">
-                      <span id="rewardIssuedOnLabel">領取日期</span>
-                      <strong id="rewardIssuedOnValue">-</strong>
+                    <div id="rewardResultList" class="reward-certificate-code-list" hidden>
+                      <div class="reward-certificate-code-item">
+                        <div>
+                          <span id="rewardCertCodeLabel">電子證書編號</span>
+                        </div>
+                        <strong id="rewardCertCode">-</strong>
+                      </div>
+                      <div class="reward-certificate-code-item">
+                        <div>
+                          <span id="rewardTokenCodeLabel">Climate Badge 編號</span>
+                        </div>
+                        <strong id="rewardTokenCodePlain">-</strong>
+                      </div>
                     </div>
-                    <div class="reward-summary-item">
-                      <span id="rewardStepSummaryLabel">步入行動</span>
-                      <strong id="rewardStepSummaryValue">-</strong>
+                    <div class="reward-certificate-achievement-list">
+                      <div class="reward-achievement-card">
+                        <span id="rewardStepSummaryLabel">步入行動</span>
+                        <strong id="rewardStepSummaryValue">-</strong>
+                      </div>
+                      <div class="reward-achievement-card">
+                        <span id="rewardEcoSummaryLabel">Eco-MBTI</span>
+                        <strong id="rewardEcoSummaryValue">-</strong>
+                      </div>
+                      <div class="reward-achievement-card">
+                        <span id="rewardProposalSummaryLabel">Daily Green Actions</span>
+                        <strong id="rewardProposalSummaryValue">-</strong>
+                      </div>
                     </div>
-                    <div class="reward-summary-item">
-                      <span id="rewardEcoSummaryLabel">Eco-MBTI</span>
-                      <strong id="rewardEcoSummaryValue">-</strong>
-                    </div>
-                    <div class="reward-summary-item">
-                      <span id="rewardProposalSummaryLabel">Daily Green Actions</span>
-                      <strong id="rewardProposalSummaryValue">-</strong>
+                    <div class="reward-certificate-foot">
+                      <span id="rewardStageIssuedAt">Issued on -</span>
+                      <span id="rewardStageFootNote">AI Certificate Design • Blue Sky Returns</span>
                     </div>
                   </div>
                 </div>
@@ -1318,8 +1535,13 @@
           claim: "領取 2026 氣候行動資格",
           resultTitle: "已領取內容 / Reward Details",
           resultBody: "達成條件並領取後，這裡會顯示你的電子證書編號，以及目前累積與可用的限量氣候行動徽章。",
+          certBrandSub: "2026 年氣候行動證書",
+          certStageTitle: "2026 氣候行動證書",
+          certStageSubtitle: "表彰你完成步入行動、Eco-MBTI 與 Daily Green Actions 的氣候行動參與。",
+          presentedTo: "頒發給",
           cert: "電子證書編號",
           token: "Climate Badge 狀態",
+          tokenCode: "Climate Badge 編號",
           chapter: "分會 / 地區",
           issuedOn: "領取日期",
           stepSummary: "步入行動",
@@ -1328,6 +1550,8 @@
           defaultChapter: "Blue Sky Returns",
           stepWithScore: "{role} · {score} 分",
           proposalWithDays: "已完成 {days} 天",
+          issuedPrefix: "頒發日期",
+          footNote: "AI 證書設計 • Blue Sky Returns",
           thumbBody: "已生成的 AI 證書主視覺會顯示在這裡。",
           studioLink: "開啟 AI 證書工作室",
           studioHintReady: "你可以上傳自己的照片，帶入證書編號與 Climate Badge，使用 AI 生成專屬證書設計。",
@@ -1438,8 +1662,13 @@
           claim: "Claim 2026 Climate Action Reward",
           resultTitle: "Reward Details",
           resultBody: "After you meet the requirements and claim the reward, your certificate code and current Climate Badge status will appear here.",
+          certBrandSub: "2026 Climate Action Certificate",
+          certStageTitle: "2026 Climate Action Certificate",
+          certStageSubtitle: "Recognizing your participation in Take One Step, Eco-MBTI, and Daily Green Actions.",
+          presentedTo: "Presented To",
           cert: "Certificate Code",
           token: "Climate Badge Status",
+          tokenCode: "Climate Badge Code",
           chapter: "Chapter / Region",
           issuedOn: "Issued On",
           stepSummary: "Take One Step",
@@ -1448,6 +1677,8 @@
           defaultChapter: "Blue Sky Returns",
           stepWithScore: "{role} · {score} pts",
           proposalWithDays: "{days} days completed",
+          issuedPrefix: "Issued on",
+          footNote: "AI Certificate Design • Blue Sky Returns",
           thumbBody: "Your generated AI certificate visual appears here.",
           studioLink: "Open AI Certificate Studio",
           studioHintReady: "Upload your photo, bring in your certificate code and Climate Badge, and use AI to generate a personalized certificate design.",
@@ -1567,16 +1798,22 @@
     const rewardResultTitle = document.getElementById("rewardResultTitle");
     const rewardResultBody = document.getElementById("rewardResultBody");
     const rewardSnapshot = document.getElementById("rewardSnapshot");
+    const rewardCertificateMedia = document.getElementById("rewardCertificateMedia");
     const rewardResultList = document.getElementById("rewardResultList");
     const rewardResultEmpty = document.getElementById("rewardResultEmpty");
     const rewardTokenGrid = document.getElementById("rewardTokenGrid");
-    const rewardThumbnail = document.getElementById("rewardThumbnail");
-    const rewardThumbnailImg = document.getElementById("rewardThumbnailImg");
-    const rewardThumbnailBody = document.getElementById("rewardThumbnailBody");
+    const rewardCertBrandSub = document.getElementById("rewardCertBrandSub");
+    const rewardCertStageTitle = document.getElementById("rewardCertStageTitle");
+    const rewardCertStageSubtitle = document.getElementById("rewardCertStageSubtitle");
+    const rewardPresentedLabel = document.getElementById("rewardPresentedLabel");
+    const rewardRecipientName = document.getElementById("rewardRecipientName");
+    const rewardRecipientChapter = document.getElementById("rewardRecipientChapter");
     const rewardCertCodeLabel = document.getElementById("rewardCertCodeLabel");
     const rewardCertCode = document.getElementById("rewardCertCode");
     const rewardTokenLabel = document.getElementById("rewardTokenLabel");
     const rewardTokenCode = document.getElementById("rewardTokenCode");
+    const rewardTokenCodeLabel = document.getElementById("rewardTokenCodeLabel");
+    const rewardTokenCodePlain = document.getElementById("rewardTokenCodePlain");
     const rewardChapterLabel = document.getElementById("rewardChapterLabel");
     const rewardChapterValue = document.getElementById("rewardChapterValue");
     const rewardIssuedOnLabel = document.getElementById("rewardIssuedOnLabel");
@@ -1587,6 +1824,8 @@
     const rewardEcoSummaryValue = document.getElementById("rewardEcoSummaryValue");
     const rewardProposalSummaryLabel = document.getElementById("rewardProposalSummaryLabel");
     const rewardProposalSummaryValue = document.getElementById("rewardProposalSummaryValue");
+    const rewardStageIssuedAt = document.getElementById("rewardStageIssuedAt");
+    const rewardStageFootNote = document.getElementById("rewardStageFootNote");
     const certificateStudioLink = document.getElementById("certificateStudioLink");
     const certificateStudioHint = document.getElementById("certificateStudioHint");
 
@@ -2112,15 +2351,18 @@
         rewardResultEmpty.textContent = t("states.rewardEmpty");
         rewardCertCode.textContent = "-";
         rewardTokenCode.textContent = "-";
+        rewardTokenCodePlain.textContent = "-";
         rewardChapterValue.textContent = "-";
         rewardIssuedOnValue.textContent = "-";
         rewardStepSummaryValue.textContent = "-";
         rewardEcoSummaryValue.textContent = "-";
         rewardProposalSummaryValue.textContent = "-";
+        rewardRecipientName.textContent = "-";
+        rewardRecipientChapter.textContent = "-";
+        rewardStageIssuedAt.textContent = `${t("rewards.issuedPrefix")} -`;
         rewardTokenGrid.hidden = true;
         rewardTokenGrid.innerHTML = "";
-        rewardThumbnail.hidden = true;
-        rewardThumbnailImg.removeAttribute("src");
+        rewardCertificateMedia.style.backgroundImage = "none";
         certificateStudioLink.hidden = true;
         certificateStudioHint.textContent = t("rewards.studioHintLocked");
         certificateStudioHint.className = "status warn";
@@ -2136,11 +2378,16 @@
             ? `${availableCount}/${tokenCodes.length} 可用：${tokenCodes.join(", ")}`
             : `${availableCount}/${tokenCodes.length} available: ${tokenCodes.join(", ")}`)
         : "-";
+      rewardTokenCodePlain.textContent = tokenCodes.join(", ") || "-";
       rewardChapterValue.textContent = getRewardChapterText(currentMemberData);
-      rewardIssuedOnValue.textContent = formatDate(record.claimedAt);
+      const issuedOn = formatDate(record.claimedAt);
+      rewardIssuedOnValue.textContent = issuedOn;
       rewardStepSummaryValue.textContent = getRewardStepText(currentMemberData);
       rewardEcoSummaryValue.textContent = getRewardEcoText(currentMemberData);
       rewardProposalSummaryValue.textContent = getRewardProposalText(currentRewardEligibility.completedDays);
+      rewardRecipientName.textContent = getMemberDisplayName(currentMemberData, auth.currentUser) || "-";
+      rewardRecipientChapter.textContent = getRewardChapterText(currentMemberData);
+      rewardStageIssuedAt.textContent = `${t("rewards.issuedPrefix")} ${issuedOn}`;
       rewardResultEmpty.hidden = true;
       rewardSnapshot.hidden = false;
       rewardResultList.hidden = false;
@@ -2162,11 +2409,9 @@
       rewardTokenGrid.hidden = false;
       const imageUrl = record.certificateStudio?.imageUrl || "";
       if (imageUrl) {
-        rewardThumbnailImg.src = imageUrl;
-        rewardThumbnail.hidden = false;
+        rewardCertificateMedia.style.backgroundImage = `url("${imageUrl}")`;
       } else {
-        rewardThumbnailImg.removeAttribute("src");
-        rewardThumbnail.hidden = true;
+        rewardCertificateMedia.style.backgroundImage = "none";
       }
       certificateStudioLink.hidden = false;
       certificateStudioHint.textContent = t("rewards.studioHintReady");
@@ -2273,14 +2518,19 @@
       claimRewardBtn.textContent = t("rewards.claim");
       rewardResultTitle.textContent = t("rewards.resultTitle");
       rewardResultBody.textContent = t("rewards.resultBody");
-      rewardThumbnailBody.textContent = t("rewards.thumbBody");
+      rewardCertBrandSub.textContent = t("rewards.certBrandSub");
+      rewardCertStageTitle.textContent = t("rewards.certStageTitle");
+      rewardCertStageSubtitle.textContent = t("rewards.certStageSubtitle");
+      rewardPresentedLabel.textContent = t("rewards.presentedTo");
       rewardCertCodeLabel.textContent = t("rewards.cert");
       rewardTokenLabel.textContent = t("rewards.token");
+      rewardTokenCodeLabel.textContent = t("rewards.tokenCode");
       rewardChapterLabel.textContent = t("rewards.chapter");
       rewardIssuedOnLabel.textContent = t("rewards.issuedOn");
       rewardStepSummaryLabel.textContent = t("rewards.stepSummary");
       rewardEcoSummaryLabel.textContent = t("rewards.ecoSummary");
       rewardProposalSummaryLabel.textContent = t("rewards.proposalSummary");
+      rewardStageFootNote.textContent = t("rewards.footNote");
       certificateStudioLink.textContent = t("rewards.studioLink");
       if (!auth.currentUser) {
         inviteLinkStatus.textContent = t("invite.guest");
