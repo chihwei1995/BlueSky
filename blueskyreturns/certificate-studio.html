@@ -505,7 +505,7 @@
     .certificate-media {
       position: absolute;
       inset: 0;
-      background-position: center;
+      background-position: 76% center;
       background-size: cover;
       opacity: 0.9;
       transform: scale(1.02);
@@ -516,7 +516,7 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(90deg, rgba(8, 31, 47, 0.88) 0%, rgba(8,31,47,0.76) 42%, rgba(8,31,47,0.26) 70%, rgba(8,31,47,0.16) 100%);
+        linear-gradient(90deg, rgba(8, 31, 47, 0.92) 0%, rgba(8,31,47,0.82) 34%, rgba(8,31,47,0.44) 56%, rgba(8,31,47,0.08) 74%, rgba(8,31,47,0.02) 100%);
       pointer-events: none;
     }
 
@@ -524,6 +524,8 @@
       position: relative;
       z-index: 1;
       padding: 26px;
+      width: min(58%, 760px);
+      max-width: 760px;
       display: grid;
       gap: 16px;
       align-content: space-between;
@@ -722,6 +724,10 @@
       .certificate-stage {
         grid-template-columns: 1fr;
       }
+
+      .certificate-panel {
+        width: min(68%, 620px);
+      }
     }
 
     @media (max-width: 640px) {
@@ -789,6 +795,8 @@
       }
 
       .certificate-panel {
+        width: 100%;
+        max-width: none;
         padding: 16px;
         gap: 12px;
       }
