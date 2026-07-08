@@ -1937,8 +1937,7 @@
       let total = 0;
       if (member?.ecoMbti?.type) total += 1;
       if (completedDays > 0) {
-        total += 5;
-        total += Math.max(0, completedDays - 1);
+        total += Math.max(0, Number(completedDays || 0)) * 10;
       }
       if (hasWeeklyStreak) {
         total += 5;

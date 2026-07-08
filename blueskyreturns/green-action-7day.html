@@ -1593,15 +1593,15 @@
           title: "我的氣候積分",
           badge: "同步中",
           loading: "正在同步你的積分資料...",
-          guest: "登入後就會顯示你的每日任務積分、提交次數與集氣成果。",
+          guest: "登入後就會顯示你的每日任務積分、完成天數與集氣成果。",
           pointsLabel: "目前積分",
-          daysLabel: "提交次數",
+          daysLabel: "完成天數",
           impactLabel: "集氣人數",
           ready: "已同步",
           streak: "連續 7 日達成",
           noStreak: "持續累積中",
-          summary: "你目前累積 {points} 分，提交 {days} 次，已集氣 {impact} 人。",
-          summaryWithStreak: "你目前累積 {points} 分，提交 {days} 次，已集氣 {impact} 人，並達成 7 日連續行動。",
+          summary: "你目前累積 {points} 分，完成 {days} 天，已集氣 {impact} 人。",
+          summaryWithStreak: "你目前累積 {points} 分，完成 {days} 天，已集氣 {impact} 人，並達成 7 日連續行動。",
           note: "Eco-MBTI、每日行動、7 日連續與集氣人數都會一起計入。",
           unavailable: "暫時無法同步積分資料，請稍後再試。"
         },
@@ -1679,15 +1679,15 @@
           title: "My Climate Points",
           badge: "Syncing",
           loading: "Syncing your climate points...",
-          guest: "Sign in to see your daily action points, upload count, and momentum count.",
+          guest: "Sign in to see your daily action points, completed days, and momentum count.",
           pointsLabel: "Points",
-          daysLabel: "Uploads",
+          daysLabel: "Days Completed",
           impactLabel: "Momentum",
           ready: "Synced",
           streak: "7-day streak reached",
           noStreak: "Keep going",
-          summary: "You have {points} points, {days} uploads, and {impact} momentum count.",
-          summaryWithStreak: "You have {points} points, {days} uploads, {impact} momentum count, and a 7-day streak.",
+          summary: "You have {points} points, completed {days} days, and gathered {impact} momentum.",
+          summaryWithStreak: "You have {points} points, completed {days} days, gathered {impact} momentum, and reached a 7-day streak.",
           note: "Eco-MBTI, daily actions, the 7-day streak, and momentum all count together.",
           unavailable: "Climate points are temporarily unavailable. Please try again later."
         },
@@ -1863,11 +1863,11 @@
       }
       return false;
     };
-    const calculateClimatePoints = ({ member = {}, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+    const calculateClimatePoints = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
       let total = 0;
       if (member?.ecoMbti?.type) total += 1;
-      if (uploadCount > 0) {
-        total += Math.max(0, Number(uploadCount || 0)) * 5;
+      if (completedDays > 0) {
+        total += Math.max(0, Number(completedDays || 0)) * 10;
       }
       if (hasWeeklyStreak) total += 5;
       total += Math.max(0, Number(impactCount || 0));
@@ -1935,15 +1935,15 @@
       taskScoreImpact.textContent = "-";
       taskScoreNote.textContent = getCopy("score.note");
     };
-    const renderTaskScore = ({ points = 0, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
-      currentTaskScoreState = { mode: "ready", points, uploadCount, impactCount, hasWeeklyStreak };
+    const renderTaskScore = ({ points = 0, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+      currentTaskScoreState = { mode: "ready", points, completedDays, impactCount, hasWeeklyStreak };
       taskScoreBadge.textContent = hasWeeklyStreak ? getCopy("score.streak") : getCopy("score.ready");
       taskScoreSummary.textContent = formatCopy(
         hasWeeklyStreak ? "score.summaryWithStreak" : "score.summary",
-        { points, days: uploadCount, impact: impactCount }
+        { points, days: completedDays, impact: impactCount }
       );
       taskScorePoints.textContent = String(points);
-      taskScoreDays.textContent = String(uploadCount);
+      taskScoreDays.textContent = String(completedDays);
       taskScoreImpact.textContent = String(impactCount);
       taskScoreNote.textContent = hasWeeklyStreak ? getCopy("score.streak") : getCopy("score.note");
     };
@@ -1967,16 +1967,16 @@
         const referralSnap = await getDocs(
           query(collection(db, "memberReferrals"), where("referredBy", "==", uid))
         );
-        const uploadCount = submissions.length;
+        const completedDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
         const impactCount = referralSnap.size;
         const weeklyStreak = hasSevenDayStreak(submissions.map((item) => item.taskDate));
         const points = calculateClimatePoints({
           member: currentMemberProfile || {},
-          uploadCount,
+          completedDays,
           impactCount,
           hasWeeklyStreak: weeklyStreak
         });
-        renderTaskScore({ points, uploadCount, impactCount, hasWeeklyStreak: weeklyStreak });
+        renderTaskScore({ points, completedDays, impactCount, hasWeeklyStreak: weeklyStreak });
       } catch (error) {
         console.error("Failed to load Daily Green Actions score:", error);
         renderTaskScoreError();
