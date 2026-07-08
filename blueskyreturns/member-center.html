@@ -1933,11 +1933,11 @@
       }
       return false;
     };
-    const calculateBoostScore = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+    const calculateBoostScore = ({ member = {}, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
       let total = 0;
       if (member?.ecoMbti?.type) total += 1;
-      if (completedDays > 0) {
-        total += Math.max(0, Number(completedDays || 0)) * 10;
+      if (uploadCount > 0) {
+        total += Math.max(0, Number(uploadCount || 0)) * 10;
       }
       if (hasWeeklyStreak) {
         total += 5;
@@ -1957,12 +1957,15 @@
       ]);
 
       const members = memberSnap.docs.map((docSnap) => ({ uid: docSnap.id, ...docSnap.data() }));
+      const submissionCounts = new Map();
       const submissionDays = new Map();
       submissionSnap.docs.forEach((docSnap) => {
         const data = docSnap.data() || {};
         const uid = String(data.uid || "").trim();
         const taskDate = String(data.taskDate || "").trim();
-        if (!uid || !taskDate) return;
+        if (!uid) return;
+        submissionCounts.set(uid, (submissionCounts.get(uid) || 0) + 1);
+        if (!taskDate) return;
         if (!submissionDays.has(uid)) submissionDays.set(uid, new Set());
         submissionDays.get(uid).add(taskDate);
       });
@@ -1980,7 +1983,7 @@
           uid: member.uid,
           score: calculateBoostScore({
             member,
-            completedDays: submissionDays.get(member.uid)?.size || 0,
+            uploadCount: submissionCounts.get(member.uid) || 0,
             hasWeeklyStreak: hasSevenDayStreak(Array.from(submissionDays.get(member.uid) || [])),
             impactCount: referralCounts.get(member.uid) || 0
           })
@@ -2044,12 +2047,15 @@
       ]);
 
       const members = memberSnap.docs.map((docSnap) => ({ uid: docSnap.id, ...docSnap.data() }));
+      const submissionCounts = new Map();
       const submissionDays = new Map();
       submissionSnap.docs.forEach((docSnap) => {
         const data = docSnap.data() || {};
         const uid = String(data.uid || "").trim();
         const taskDate = String(data.taskDate || "").trim();
-        if (!uid || !taskDate) return;
+        if (!uid) return;
+        submissionCounts.set(uid, (submissionCounts.get(uid) || 0) + 1);
+        if (!taskDate) return;
         if (!submissionDays.has(uid)) submissionDays.set(uid, new Set());
         submissionDays.get(uid).add(taskDate);
       });
@@ -2068,7 +2074,7 @@
           name: getLeaderboardName(member),
           score: calculateBoostScore({
             member,
-            completedDays: submissionDays.get(member.uid)?.size || 0,
+            uploadCount: submissionCounts.get(member.uid) || 0,
             hasWeeklyStreak: hasSevenDayStreak(Array.from(submissionDays.get(member.uid) || [])),
             impactCount: referralCounts.get(member.uid) || 0
           })

@@ -3,6 +3,7 @@
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const {execFileSync} = require("child_process");
 
 const PROJECT_ID = "blueskyreturns";
 const DATABASE_ID = "default";
@@ -12,9 +13,13 @@ const DRY_RUN = !APPLY;
 
 const TOKEN_PATH = path.join(os.homedir(), ".config", "configstore", "firebase-tools.json");
 
-const readFirebaseAccessToken = () => {
+const readFirebaseConfig = () => {
   const raw = fs.readFileSync(TOKEN_PATH, "utf8");
-  const parsed = JSON.parse(raw);
+  return JSON.parse(raw);
+};
+
+const readFirebaseAccessToken = () => {
+  const parsed = readFirebaseConfig();
   const token = parsed?.tokens?.access_token;
   if (!token) {
     throw new Error(`Could not find Firebase access token in ${TOKEN_PATH}`);
@@ -22,13 +27,16 @@ const readFirebaseAccessToken = () => {
   return token;
 };
 
-const accessToken = readFirebaseAccessToken();
+const refreshFirebaseAccessToken = () => {
+  execFileSync("npx", ["-y", "firebase-tools@latest", "projects:list", "--json"], {
+    stdio: "ignore"
+  });
+  return readFirebaseAccessToken();
+};
+
+let accessToken = readFirebaseAccessToken();
 
 const baseUrl = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/${DATABASE_ID}/documents`;
-
-const authHeaders = {
-  Authorization: `Bearer ${accessToken}`
-};
 
 const encodeValue = (value) => {
   if (value === null || value === undefined) return { nullValue: null };
@@ -82,16 +90,20 @@ const decodeDocument = (doc) => {
   };
 };
 
-const fetchJson = async (url, options = {}) => {
+const fetchJson = async (url, options = {}, allowRefresh = true) => {
   const response = await fetch(url, {
     ...options,
     headers: {
-      ...authHeaders,
+      Authorization: `Bearer ${accessToken}`,
       ...(options.headers || {})
     }
   });
   const text = await response.text();
   const json = text ? JSON.parse(text) : null;
+  if (response.status === 401 && allowRefresh) {
+    accessToken = refreshFirebaseAccessToken();
+    return fetchJson(url, options, false);
+  }
   if (!response.ok) {
     throw new Error(`${response.status} ${response.statusText}: ${text}`);
   }
@@ -134,22 +146,22 @@ const hasSevenDayStreak = (dates = []) => {
   return false;
 };
 
-const calculateClimatePoints = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+const calculateClimatePoints = ({ member = {}, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
   let total = 0;
   const ecoMbtiBonus = member?.ecoMbti?.type ? 1 : 0;
-  const completedDaysPoints = Math.max(0, Number(completedDays || 0)) * 10;
+  const uploadPoints = Math.max(0, Number(uploadCount || 0)) * 10;
   const streakBonus = hasWeeklyStreak ? 5 : 0;
   const impactPoints = Math.max(0, Number(impactCount || 0));
   total += ecoMbtiBonus;
-  total += completedDaysPoints;
+  total += uploadPoints;
   total += streakBonus;
   total += impactPoints;
   return {
     total,
     breakdown: {
       ecoMbtiBonus,
-      completedDays,
-      completedDaysPoints,
+      uploadCount,
+      uploadPoints,
       streakBonus,
       impactCount,
       impactPoints
@@ -159,8 +171,8 @@ const calculateClimatePoints = ({ member = {}, completedDays = 0, impactCount = 
 
 const normalizeBreakdown = (breakdown = {}) => ({
   ecoMbtiBonus: Number(breakdown.ecoMbtiBonus || 0),
-  completedDays: Number(breakdown.completedDays || 0),
-  completedDaysPoints: Number(breakdown.completedDaysPoints || 0),
+  uploadCount: Number(breakdown.uploadCount || 0),
+  uploadPoints: Number(breakdown.uploadPoints || 0),
   streakBonus: Number(breakdown.streakBonus || 0),
   impactCount: Number(breakdown.impactCount || 0),
   impactPoints: Number(breakdown.impactPoints || 0)
@@ -210,13 +222,15 @@ const main = async () => {
 
   for (const member of members) {
     const uid = member.id;
-    const completedDates = normalizeCreditedDates(submissionDays.get(uid) || []);
+    const submissionDates = submissionDays.get(uid) || [];
+    const completedDates = normalizeCreditedDates(submissionDates);
+    const uploadCount = submissionDates.length;
     const completedDays = completedDates.length;
     const weeklyStreak = hasSevenDayStreak(completedDates);
     const impactCount = referralCounts.get(uid) || 0;
     const { total, breakdown } = calculateClimatePoints({
       member: member.fields,
-      completedDays,
+      uploadCount,
       impactCount,
       hasWeeklyStreak: weeklyStreak
     });
@@ -224,6 +238,7 @@ const main = async () => {
     const nextState = {
       climatePoints: total,
       climatePointsUpdatedAt: new Date().toISOString(),
+      dailyGreenActionsUploadCount: uploadCount,
       dailyGreenActionsCompletedDays: completedDays,
       dailyGreenActionsWeeklyStreak: weeklyStreak,
       climateImpactCount: impactCount,
@@ -232,6 +247,7 @@ const main = async () => {
 
     const currentComparable = {
       climatePoints: Number(member.fields.climatePoints || 0),
+      dailyGreenActionsUploadCount: Number(member.fields.dailyGreenActionsUploadCount || 0),
       dailyGreenActionsCompletedDays: Number(member.fields.dailyGreenActionsCompletedDays || 0),
       dailyGreenActionsWeeklyStreak: Boolean(member.fields.dailyGreenActionsWeeklyStreak || false),
       climateImpactCount: Number(member.fields.climateImpactCount || 0),
@@ -240,6 +256,7 @@ const main = async () => {
 
     const nextComparable = {
       climatePoints: nextState.climatePoints,
+      dailyGreenActionsUploadCount: nextState.dailyGreenActionsUploadCount,
       dailyGreenActionsCompletedDays: nextState.dailyGreenActionsCompletedDays,
       dailyGreenActionsWeeklyStreak: nextState.dailyGreenActionsWeeklyStreak,
       climateImpactCount: nextState.climateImpactCount,
@@ -253,6 +270,7 @@ const main = async () => {
         uid,
         name: member.fields.name || member.fields.email || uid,
         climatePoints: total,
+        uploadCount,
         completedDays,
         weeklyStreak,
         impactCount,
@@ -273,6 +291,7 @@ const main = async () => {
       fields: {
         climatePoints: encodeValue(nextState.climatePoints),
         climatePointsUpdatedAt: encodeValue(nextState.climatePointsUpdatedAt),
+        dailyGreenActionsUploadCount: encodeValue(nextState.dailyGreenActionsUploadCount),
         dailyGreenActionsCompletedDays: encodeValue(nextState.dailyGreenActionsCompletedDays),
         dailyGreenActionsWeeklyStreak: encodeValue(nextState.dailyGreenActionsWeeklyStreak),
         climateImpactCount: encodeValue(nextState.climateImpactCount),
@@ -299,7 +318,7 @@ const main = async () => {
   console.log("Preview:");
   preview.slice(0, 10).forEach((item, index) => {
     console.log(
-      `${index + 1}. ${item.name} (${item.uid}) -> ${item.climatePoints} pts | days=${item.completedDays} | streak=${item.weeklyStreak} | impact=${item.impactCount} | ecoMbti=${item.ecoMbti}`
+      `${index + 1}. ${item.name} (${item.uid}) -> ${item.climatePoints} pts | uploads=${item.uploadCount} | days=${item.completedDays} | streak=${item.weeklyStreak} | impact=${item.impactCount} | ecoMbti=${item.ecoMbti}`
     );
   });
 };

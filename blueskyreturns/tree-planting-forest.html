@@ -1357,11 +1357,11 @@
       return false;
     };
 
-    const calculateClimatePoints = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+    const calculateClimatePoints = ({ member = {}, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
       let total = 0;
       if (member?.ecoMbti?.type) total += 1;
-      if (completedDays > 0) {
-        total += Math.max(0, Number(completedDays || 0)) * 10;
+      if (uploadCount > 0) {
+        total += Math.max(0, Number(uploadCount || 0)) * 10;
       }
       if (hasWeeklyStreak) total += 5;
       total += Math.max(0, Number(impactCount || 0));
@@ -1471,10 +1471,10 @@
         const ranked = [];
         members.forEach((member) => {
           const submissions = submissionsByUid.get(member.id) || [];
-          const completedDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
+          const uploadCount = submissions.length;
           const score = calculateClimatePoints({
             member,
-            completedDays,
+            uploadCount,
             impactCount: referralCounts.get(member.id) || 0,
             hasWeeklyStreak: hasSevenDayStreak(submissions.map((item) => item.taskDate))
           });
@@ -1593,9 +1593,10 @@
         }
 
         const actionDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
+        const uploadCount = submissions.length;
         const points = calculateClimatePoints({
           member,
-          completedDays: actionDays,
+          uploadCount,
           impactCount,
           hasWeeklyStreak: hasSevenDayStreak(submissions.map((item) => item.taskDate))
         });

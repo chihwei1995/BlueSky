@@ -1863,11 +1863,11 @@
       }
       return false;
     };
-    const calculateClimatePoints = ({ member = {}, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+    const calculateClimatePoints = ({ member = {}, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
       let total = 0;
       if (member?.ecoMbti?.type) total += 1;
-      if (completedDays > 0) {
-        total += Math.max(0, Number(completedDays || 0)) * 10;
+      if (uploadCount > 0) {
+        total += Math.max(0, Number(uploadCount || 0)) * 10;
       }
       if (hasWeeklyStreak) total += 5;
       total += Math.max(0, Number(impactCount || 0));
@@ -1968,12 +1968,11 @@
           query(collection(db, "memberReferrals"), where("referredBy", "==", uid))
         );
         const uploadCount = submissions.length;
-        const completedDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
         const impactCount = referralSnap.size;
         const weeklyStreak = hasSevenDayStreak(submissions.map((item) => item.taskDate));
         const points = calculateClimatePoints({
           member: currentMemberProfile || {},
-          completedDays,
+          uploadCount,
           impactCount,
           hasWeeklyStreak: weeklyStreak
         });
