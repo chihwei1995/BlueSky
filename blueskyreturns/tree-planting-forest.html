@@ -790,11 +790,40 @@
           <p id="targetBody">若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 3,210 分。實際上可由兩者一起累積，慢慢長出整座森林。</p>
         </div>
 
-        <details class="activity-reference">
+        <details class="activity-reference" open>
           <summary id="activityReferenceSummary">線下實體活動參考</summary>
           <div class="activity-reference-body">
             <p id="activityReferenceBody">以下人數會以每位參加者 +10 分的方式，換算進植樹森林的整體 Climate Points。</p>
-            <div id="activityReferenceList" class="activity-reference-list"></div>
+            <div id="activityReferenceList" class="activity-reference-list">
+              <div class="activity-reference-item">
+                <span class="activity-reference-name">實體展覽與教育啟動</span>
+                <span class="activity-reference-count">171 人</span>
+              </div>
+              <div class="activity-reference-item">
+                <span class="activity-reference-name">氣候變化博物館互動體驗</span>
+                <span class="activity-reference-count">24 人</span>
+              </div>
+              <div class="activity-reference-item">
+                <span class="activity-reference-name">海廢慈善體能挑戰賽</span>
+                <span class="activity-reference-count">3 人</span>
+              </div>
+              <div class="activity-reference-item">
+                <span class="activity-reference-name">一同步，跑出藍天里程</span>
+                <span class="activity-reference-count">26 人</span>
+              </div>
+              <div class="activity-reference-item">
+                <span class="activity-reference-name">AIRSIDE 綠色建築導覽</span>
+                <span class="activity-reference-count">10 人</span>
+              </div>
+              <div class="activity-reference-item">
+                <span class="activity-reference-name">素「食」減碳・包餃子體驗</span>
+                <span class="activity-reference-count">32 人</span>
+              </div>
+              <div class="activity-reference-item">
+                <span class="activity-reference-name">ASPAC 新潟期間｜永續發展論壇分享</span>
+                <span class="activity-reference-count">80 人</span>
+              </div>
+            </div>
           </div>
         </details>
 
@@ -1011,6 +1040,11 @@
       { titleZh: "素「食」減碳・包餃子體驗", titleEn: "Plant-based Dumpling Carbon Reduction Workshop", participantCount: 32 },
       { titleZh: "ASPAC 新潟期間｜永續發展論壇分享", titleEn: "ASPAC Niigata Sustainability Forum Sharing", participantCount: 80 }
     ];
+
+    const getOfflineActivityReferencePoints = () => OFFLINE_ACTIVITY_REFERENCES.reduce(
+      (total, item) => total + Math.max(0, Number(item.participantCount || 0)) * 10,
+      0
+    );
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -1577,12 +1611,20 @@
       els.treeDetailBody.textContent = t("loading");
 
       try {
-        const [memberSnap, submissionSnap, referralSnap, relatedActivitySnap] = await Promise.all([
+        const [memberResult, submissionResult, referralResult, relatedActivityResult] = await Promise.allSettled([
           getDocs(collection(db, "members")),
           getDocs(collection(db, "greenProposalSubmissions")),
           getDocs(collection(db, "memberReferrals")),
           getDocs(collection(db, "relatedActivityParticipants"))
         ]);
+
+        if (memberResult.status !== "fulfilled") throw memberResult.reason;
+        if (submissionResult.status !== "fulfilled") throw submissionResult.reason;
+        if (referralResult.status !== "fulfilled") throw referralResult.reason;
+
+        const memberSnap = memberResult.value;
+        const submissionSnap = submissionResult.value;
+        const referralSnap = referralResult.value;
 
         const members = memberSnap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
         const submissionsByUid = new Map();
@@ -1601,14 +1643,19 @@
           referralCounts.set(referredBy, (referralCounts.get(referredBy) || 0) + 1);
         });
 
-        let relatedActivityPoints = 0;
-        relatedActivitySnap.docs.forEach((docSnap) => {
-          const data = docSnap.data() || {};
-          if (data.active === false) return;
-          const participantCount = Math.max(0, Number(data.participantCount || 0));
-          const pointsPerParticipant = Math.max(0, Number(data.pointsPerParticipant || 10));
-          relatedActivityPoints += participantCount * pointsPerParticipant;
-        });
+        let relatedActivityPoints = getOfflineActivityReferencePoints();
+        if (relatedActivityResult.status === "fulfilled") {
+          relatedActivityPoints = 0;
+          relatedActivityResult.value.docs.forEach((docSnap) => {
+            const data = docSnap.data() || {};
+            if (data.active === false) return;
+            const participantCount = Math.max(0, Number(data.participantCount || 0));
+            const pointsPerParticipant = Math.max(0, Number(data.pointsPerParticipant || 10));
+            relatedActivityPoints += participantCount * pointsPerParticipant;
+          });
+        } else {
+          console.warn("Failed to load relatedActivityParticipants, using built-in fallback data:", relatedActivityResult.reason);
+        }
 
         const participants = members.length;
         let points = relatedActivityPoints;
