@@ -88,6 +88,15 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    match /closingCeremonyRegistrations/{registrationId} {
+      allow create: if isSignedIn() &&
+        request.resource.data.uid == request.auth.uid;
+      allow read: if isSignedIn();
+      allow update: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow delete: if false;
+    }
+
     match /members/{userId} {
       allow read: if isSignedIn();
       allow create, update: if isOwner(userId) || hasPermissionLevel(3);
