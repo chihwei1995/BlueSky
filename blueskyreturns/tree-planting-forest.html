@@ -1695,15 +1695,14 @@
     const applyAuthState = async (user, syncToken) => {
       if (syncToken !== state.authSyncToken) return;
       state.authResolved = true;
-      if (!user) {
-        renderStatsUnavailable(t("statsGuest"));
-        renderMyForestGuest();
-        return;
-      }
       if (!state.statsLoading) {
         await loadStats();
       }
       if (syncToken !== state.authSyncToken) return;
+      if (!user) {
+        renderMyForestGuest();
+        return;
+      }
       state.myForestLoading = true;
       els.myForestStatus.textContent = t("myForestLoading");
       try {
