@@ -1422,14 +1422,14 @@
         </div>
         <div class="stats-strip">
           <div class="stat-box">
-            <span id="statDaysLabel">完成天數 / Days Completed</span>
+            <span id="statDaysLabel">上傳次數 / Upload Count</span>
             <strong id="statCompletedDays">0</strong>
-            <p id="statDaysBody">以不同日期計算，方便看目前完成了幾天。</p>
+            <p id="statDaysBody">顯示目前累積上傳了幾筆 Daily Green Actions 紀錄。</p>
           </div>
           <div class="stat-box">
-            <span id="statTasksLabel">任務總數 / Total Tasks</span>
+            <span id="statTasksLabel">完成天數 / Completed Days</span>
             <strong id="statTotalTasks">0</strong>
-            <p id="statTasksBody">包含所有已提交的 Daily Green Actions 紀錄。</p>
+            <p id="statTasksBody">以不同日期計算，方便看目前完成了幾天。</p>
           </div>
           <div class="stat-box">
             <span id="statLatestLabel">最近提交 / Latest Submission</span>
@@ -1580,7 +1580,7 @@
           proposalSummary: "Daily Green Actions",
           defaultChapter: "Blue Sky Returns",
           stepWithScore: "{role} · {score} 分",
-          proposalWithDays: "已完成 {days} 天",
+          proposalWithDays: "已完成 {days} 次",
           issuedPrefix: "頒發日期",
           footNote: "AI 證書設計 • Blue Sky Returns",
           thumbBody: "已生成的 AI 證書主視覺會顯示在這裡。",
@@ -1606,10 +1606,10 @@
           reviewerLink: "前往管理區"
         },
         stats: {
-          daysLabel: "完成天數 / Days Completed",
-          daysBody: "以不同日期計算，方便看目前完成了幾天。",
-          tasksLabel: "任務總數 / Total Tasks",
-          tasksBody: "包含所有已提交的 Daily Green Actions 紀錄。",
+          daysLabel: "上傳次數 / Upload Count",
+          daysBody: "顯示目前累積上傳了幾筆 Daily Green Actions 紀錄。",
+          tasksLabel: "完成天數 / Completed Days",
+          tasksBody: "以不同日期計算，方便看目前完成了幾天。",
           latestLabel: "最近提交 / Latest Submission",
           latestBody: "最後一次提交任務的日期。"
         },
@@ -1707,7 +1707,7 @@
           proposalSummary: "Daily Green Actions",
           defaultChapter: "Blue Sky Returns",
           stepWithScore: "{role} · {score} pts",
-          proposalWithDays: "{days} days completed",
+          proposalWithDays: "{days} completions",
           issuedPrefix: "Issued on",
           footNote: "AI Certificate Design • Blue Sky Returns",
           thumbBody: "Your generated AI certificate visual appears here.",
@@ -1733,10 +1733,10 @@
           reviewerLink: "Open Management Desk"
         },
         stats: {
-          daysLabel: "Days Completed",
-          daysBody: "Counted by unique dates so you can see how many days are already completed.",
-          tasksLabel: "Total Tasks",
-          tasksBody: "Includes every submitted Daily Green Actions entry.",
+          daysLabel: "Upload Count",
+          daysBody: "Shows how many Daily Green Actions uploads you have recorded so far.",
+          tasksLabel: "Completed Days",
+          tasksBody: "Counted by unique dates so you can see how many days are already completed.",
           latestLabel: "Latest Submission",
           latestBody: "The date of your most recent task submission."
         },
@@ -2468,8 +2468,8 @@
       setRewardStepState(rewardEcoStatus, currentRewardEligibility.ecoDone);
       setRewardStepState(rewardProposalStatus, currentRewardEligibility.proposalDone);
       rewardProposalHint.textContent = currentLang === "zh"
-        ? `目前已完成 ${currentRewardEligibility.completedDays} 天，已獲得 ${currentRewardEligibility.earnedTokenCount} / 1 枚限量氣候行動徽章`
-        : `${currentRewardEligibility.completedDays} days completed, ${currentRewardEligibility.earnedTokenCount} / 1 limited Climate Badge earned`;
+        ? `目前已完成 ${currentRewardEligibility.completedDays} 次，已獲得 ${currentRewardEligibility.earnedTokenCount} / 1 枚限量氣候行動徽章`
+        : `${currentRewardEligibility.completedDays} completions, ${currentRewardEligibility.earnedTokenCount} / 1 limited Climate Badge earned`;
       claimRewardBtn.disabled = !currentRewardEligibility.eligible || Boolean(rewardRecord) || !auth.currentUser;
       if (rewardRecord) {
         rewardStatus.textContent = t("states.rewardAlreadyClaimed");
@@ -2799,8 +2799,8 @@
         .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
 
       currentUserCompletionDates = normalizeCreditedDates(submissions.map((item) => item.taskDate));
-      statTotalTasks.textContent = String(submissions.length);
-      statCompletedDays.textContent = String(currentUserCompletionDates.length);
+      statCompletedDays.textContent = String(submissions.length);
+      statTotalTasks.textContent = String(currentUserCompletionDates.length);
       statLatestDate.textContent = currentUserCompletionDates[currentUserCompletionDates.length - 1] || "-";
 
       if (!submissions.length) {

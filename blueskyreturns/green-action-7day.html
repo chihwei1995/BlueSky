@@ -1502,7 +1502,7 @@
                     <strong id="taskScorePoints" class="score-stat-value">-</strong>
                   </div>
                   <div class="score-stat">
-                    <span class="score-stat-label" data-i18n="score.daysLabel">完成天數</span>
+                    <span class="score-stat-label" data-i18n="score.daysLabel">上傳次數</span>
                     <strong id="taskScoreDays" class="score-stat-value">-</strong>
                   </div>
                   <div class="score-stat">
@@ -1510,7 +1510,7 @@
                     <strong id="taskScoreImpact" class="score-stat-value">-</strong>
                   </div>
                 </div>
-                <p id="taskScoreNote" class="score-note" data-i18n="score.guest">登入後就會顯示你的每日任務積分、完成天數與集氣成果。</p>
+                <p id="taskScoreNote" class="score-note" data-i18n="score.guest">登入後就會顯示你的每日任務積分、上傳次數與集氣成果。</p>
               </article>
             </div>
           </section>
@@ -1593,15 +1593,15 @@
           title: "我的氣候積分",
           badge: "同步中",
           loading: "正在同步你的積分資料...",
-          guest: "登入後就會顯示你的每日任務積分、完成天數與集氣成果。",
+          guest: "登入後就會顯示你的每日任務積分、上傳次數與集氣成果。",
           pointsLabel: "目前積分",
-          daysLabel: "完成天數",
+          daysLabel: "上傳次數",
           impactLabel: "集氣人數",
           ready: "已同步",
           streak: "連續 7 日達成",
           noStreak: "持續累積中",
-          summary: "你目前累積 {points} 分，完成 {days} 天，已集氣 {impact} 人。",
-          summaryWithStreak: "你目前累積 {points} 分，完成 {days} 天，已集氣 {impact} 人，並達成 7 日連續行動。",
+          summary: "你目前累積 {points} 分，上傳 {days} 次，已集氣 {impact} 人。",
+          summaryWithStreak: "你目前累積 {points} 分，上傳 {days} 次，已集氣 {impact} 人，並達成 7 日連續行動。",
           note: "Eco-MBTI、每日行動、7 日連續與集氣人數都會一起計入。",
           unavailable: "暫時無法同步積分資料，請稍後再試。"
         },
@@ -1679,15 +1679,15 @@
           title: "My Climate Points",
           badge: "Syncing",
           loading: "Syncing your climate points...",
-          guest: "Sign in to see your daily action points, completed days, and momentum count.",
+          guest: "Sign in to see your daily action points, upload count, and momentum count.",
           pointsLabel: "Points",
-          daysLabel: "Days Completed",
+          daysLabel: "Upload Count",
           impactLabel: "Momentum",
           ready: "Synced",
           streak: "7-day streak reached",
           noStreak: "Keep going",
-          summary: "You have {points} points, completed {days} days, and gathered {impact} momentum.",
-          summaryWithStreak: "You have {points} points, completed {days} days, gathered {impact} momentum, and reached a 7-day streak.",
+          summary: "You have {points} points, uploaded {days} times, and gathered {impact} momentum.",
+          summaryWithStreak: "You have {points} points, uploaded {days} times, gathered {impact} momentum, and reached a 7-day streak.",
           note: "Eco-MBTI, daily actions, the 7-day streak, and momentum all count together.",
           unavailable: "Climate points are temporarily unavailable. Please try again later."
         },
@@ -1935,15 +1935,15 @@
       taskScoreImpact.textContent = "-";
       taskScoreNote.textContent = getCopy("score.note");
     };
-    const renderTaskScore = ({ points = 0, completedDays = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
-      currentTaskScoreState = { mode: "ready", points, completedDays, impactCount, hasWeeklyStreak };
+    const renderTaskScore = ({ points = 0, uploadCount = 0, impactCount = 0, hasWeeklyStreak = false } = {}) => {
+      currentTaskScoreState = { mode: "ready", points, uploadCount, impactCount, hasWeeklyStreak };
       taskScoreBadge.textContent = hasWeeklyStreak ? getCopy("score.streak") : getCopy("score.ready");
       taskScoreSummary.textContent = formatCopy(
         hasWeeklyStreak ? "score.summaryWithStreak" : "score.summary",
-        { points, days: completedDays, impact: impactCount }
+        { points, days: uploadCount, impact: impactCount }
       );
       taskScorePoints.textContent = String(points);
-      taskScoreDays.textContent = String(completedDays);
+      taskScoreDays.textContent = String(uploadCount);
       taskScoreImpact.textContent = String(impactCount);
       taskScoreNote.textContent = hasWeeklyStreak ? getCopy("score.streak") : getCopy("score.note");
     };
@@ -1967,6 +1967,7 @@
         const referralSnap = await getDocs(
           query(collection(db, "memberReferrals"), where("referredBy", "==", uid))
         );
+        const uploadCount = submissions.length;
         const completedDays = normalizeCreditedDates(submissions.map((item) => item.taskDate)).length;
         const impactCount = referralSnap.size;
         const weeklyStreak = hasSevenDayStreak(submissions.map((item) => item.taskDate));
@@ -1976,7 +1977,7 @@
           impactCount,
           hasWeeklyStreak: weeklyStreak
         });
-        renderTaskScore({ points, completedDays, impactCount, hasWeeklyStreak: weeklyStreak });
+        renderTaskScore({ points, uploadCount, impactCount, hasWeeklyStreak: weeklyStreak });
       } catch (error) {
         console.error("Failed to load Daily Green Actions score:", error);
         renderTaskScoreError();
