@@ -344,6 +344,91 @@
       font-size: 0.93rem;
     }
 
+    .activity-reference {
+      border-radius: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(208, 241, 224, 0.12);
+      overflow: hidden;
+    }
+
+    .activity-reference summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      padding: 18px 20px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .activity-reference summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .activity-reference summary::after {
+      content: "+";
+      flex: none;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      color: var(--mint);
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .activity-reference[open] summary::after {
+      content: "−";
+    }
+
+    .activity-reference-body {
+      display: grid;
+      gap: 12px;
+      padding: 0 20px 18px;
+    }
+
+    .activity-reference-body p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .activity-reference-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .activity-reference-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(208, 241, 224, 0.1);
+    }
+
+    .activity-reference-name {
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .activity-reference-count {
+      color: var(--gold);
+      font-weight: 800;
+      white-space: nowrap;
+      font-size: 0.92rem;
+    }
+
     .my-forest-item {
       padding: 14px;
       border-radius: 18px;
@@ -705,6 +790,14 @@
           <p id="targetBody">若只靠人數，約需 32,100 位氣候行動者；若只靠 Climate Points，約需 3,210 分。實際上可由兩者一起累積，慢慢長出整座森林。</p>
         </div>
 
+        <details class="activity-reference">
+          <summary id="activityReferenceSummary">線下實體活動參考</summary>
+          <div class="activity-reference-body">
+            <p id="activityReferenceBody">以下人數會以每位參加者 +10 分的方式，換算進植樹森林的整體 Climate Points。</p>
+            <div id="activityReferenceList" class="activity-reference-list"></div>
+          </div>
+        </details>
+
         <div class="my-forest">
           <div class="my-forest-head">
             <h2 id="myForestTitle">我的四葉草 / My Clover</h2>
@@ -792,19 +885,19 @@
         navForest: "植樹森林",
         eyebrow: "TREE PROGRESS",
         heroTitle: "植樹森林",
-        heroBody: "看目前已累積多少植樹名額。",
+        heroBody: "看目前已累積多少植樹名額。線下相關活動參加者也會以每人 +10 分換算進整體 Climate Points。",
         participantsLabel: "目前註冊人數",
-        pointsLabel: "目前 Climate Points",
+        pointsLabel: "目前 Climate Points（含線下活動）",
         treesLabel: "目前對應植樹名額",
         remainingLabel: "距離上限剩餘",
         formulaPartnersLabel: "每 100 位註冊氣候行動者",
-        formulaPointsLabel: "每 10 分 Climate Points",
+        formulaPointsLabel: "每 10 分 Climate Points（含線下每人 +10）",
         formulaCapLabel: "總上限",
         formulaPartnersValue: (value) => `= ${value} 個名額`,
         formulaPointsValue: (value) => `= ${value} 個名額`,
         formulaCapValue: "321 個名額",
         targetTitle: "321 棵樹怎麼累積",
-        targetBody: "若只靠註冊人數，約需 32,100 位註冊氣候行動者；若只靠 Climate Points，約需 3,210 分。實際上可由兩者一起累積，慢慢長出整座森林。",
+        targetBody: "若只靠註冊人數，約需 32,100 位註冊氣候行動者；若只靠 Climate Points，約需 3,210 分。線下相關活動的實體參加者也會以每人 +10 分計入整體分數，和註冊人數一起慢慢長出整座森林。",
         myForestTitle: "我的四葉草 / My Clover",
         myForestBody: "登入後可查看你的四葉草累積與進度。",
         myForestGuest: "尚未登入，先到氣候行動者中心登入即可查看。",
@@ -819,7 +912,7 @@
         sceneTitle: "互動森林",
         sceneBody: "拖曳旋轉，點樹查看來源。",
         legendPartners: "由註冊人數累積的名額",
-        legendPoints: "由 Climate Points 累積的名額",
+        legendPoints: "由 Climate Points 與線下活動人數積分累積的名額",
         sceneStatusText: "棵樹正在場景中生長",
         treeDetailTitle: "樹木名額詳情",
         treeDetailBody: "載入後，點擊畫面中的樹木即可查看它對應的名額來源。",
@@ -833,10 +926,13 @@
         noTrees: "目前尚未累積到植樹名額",
         treeInfoTitle: (slot) => `第 ${slot} 個植樹名額`,
         treeInfoPartner: (order) => `這棵樹來自註冊人數累積名額，第 ${order} 棵由每 100 位註冊氣候行動者換算而來。`,
-        treeInfoPoints: (order) => `這棵樹來自 Climate Points 累積名額，第 ${order} 棵由每 10 分 Climate Points 換算而來。`,
+        treeInfoPoints: (order) => `這棵樹來自 Climate Points 累積名額，第 ${order} 棵由每 10 分 Climate Points（含線下活動人數積分）換算而來。`,
         treeInfoMeta: (source, cap) => `<ul><li>來源：${source}</li><li>名額序號：${cap} / 321</li></ul>`,
         sourcePartner: "註冊人數",
-        sourcePoints: "Climate Points",
+        sourcePoints: "Climate Points／線下活動積分",
+        activityReferenceSummary: "線下實體活動參考",
+        activityReferenceBody: "以下人數會以每位參加者 +10 分的方式，換算進植樹森林的整體 Climate Points。",
+        participantCountLabel: (count) => `${count} 人`,
         statusText: (count) => `${count} 棵樹正在場景中生長`,
         countsSuffix: "人",
         treeSuffix: "棵",
@@ -851,19 +947,19 @@
         navForest: "Tree Forest",
         eyebrow: "TREE PROGRESS",
         heroTitle: "Tree Planting Forest",
-        heroBody: "See how many tree planting slots have been unlocked.",
+        heroBody: "See how many tree planting slots have been unlocked. Related offline activity participants also add +10 points each into the shared Climate Points total.",
         participantsLabel: "Registered Members",
-        pointsLabel: "Climate Points",
+        pointsLabel: "Climate Points (Including Offline Activities)",
         treesLabel: "Current Tree Planting Slots",
         remainingLabel: "Remaining to Cap",
         formulaPartnersLabel: "Every 100 Registered Climate Action Partners",
-        formulaPointsLabel: "Every 10 Climate Points",
+        formulaPointsLabel: "Every 10 Climate Points (Offline +10 Each)",
         formulaCapLabel: "Cap",
         formulaPartnersValue: (value) => `= ${value} slots`,
         formulaPointsValue: (value) => `= ${value} slots`,
         formulaCapValue: "321 slots",
         targetTitle: "How 321 trees can be reached",
-        targetBody: "If this goal came only from registrations, it would take about 32,100 registered climate action partners. If it came only from Climate Points, it would take about 3,210 points. In practice, both can grow the forest together.",
+        targetBody: "If this goal came only from registrations, it would take about 32,100 registered climate action partners. If it came only from Climate Points, it would take about 3,210 points. Related offline activity participants also add +10 points each, so both sources can grow the forest together.",
         myForestTitle: "My Clover",
         myForestBody: "Sign in to view your clover progress.",
         myForestGuest: "Sign in from the member center to view your personal clover summary.",
@@ -878,7 +974,7 @@
         sceneTitle: "Interactive Forest",
         sceneBody: "Drag to rotate. Click a tree to see its source.",
         legendPartners: "Slots accumulated from registered members",
-        legendPoints: "Slots accumulated from Climate Points",
+        legendPoints: "Slots accumulated from Climate Points and offline activity attendance points",
         sceneStatusText: "trees are currently growing in the scene",
         treeDetailTitle: "Tree Slot Details",
         treeDetailBody: "After loading, click a tree in the scene to see which slot source it represents.",
@@ -892,16 +988,29 @@
         noTrees: "No tree planting slots have been accumulated yet.",
         treeInfoTitle: (slot) => `Tree Planting Slot ${slot}`,
         treeInfoPartner: (order) => `This tree comes from the registered member count. It is slot ${order} created by the “every 100 registered partners” rule.`,
-        treeInfoPoints: (order) => `This tree comes from Climate Points. It is slot ${order} created by the “every 10 Climate Points” rule.`,
+        treeInfoPoints: (order) => `This tree comes from Climate Points. It is slot ${order} created by the “every 10 Climate Points” rule, including offline activity attendance bonuses.`,
         treeInfoMeta: (source, cap) => `<ul><li>Source: ${source}</li><li>Slot number: ${cap} / 321</li></ul>`,
         sourcePartner: "Registered member count",
-        sourcePoints: "Climate Points",
+        sourcePoints: "Climate Points / Offline Activity Bonus",
+        activityReferenceSummary: "Related Offline Activity Reference",
+        activityReferenceBody: "These attendance counts are converted into the shared Tree Planting Forest Climate Points at +10 points per participant.",
+        participantCountLabel: (count) => `${count} participants`,
         statusText: (count) => `${count} trees are currently growing in the scene`,
         countsSuffix: "",
         treeSuffix: "",
         error: "The tree planting data could not be loaded right now. Please try again later."
       }
     };
+
+    const OFFLINE_ACTIVITY_REFERENCES = [
+      { titleZh: "實體展覽與教育啟動", titleEn: "Exhibition & Education Kickoff", participantCount: 171 },
+      { titleZh: "氣候變化博物館互動體驗", titleEn: "Climate Museum Interactive Experience", participantCount: 24 },
+      { titleZh: "海廢慈善體能挑戰賽", titleEn: "Marine Debris Charity Fitness Challenge", participantCount: 3 },
+      { titleZh: "一同步，跑出藍天里程", titleEn: "Blue Sky Mileage Challenge", participantCount: 26 },
+      { titleZh: "AIRSIDE 綠色建築導覽", titleEn: "AIRSIDE Green Architecture Tour", participantCount: 10 },
+      { titleZh: "素「食」減碳・包餃子體驗", titleEn: "Plant-based Dumpling Carbon Reduction Workshop", participantCount: 32 },
+      { titleZh: "ASPAC 新潟期間｜永續發展論壇分享", titleEn: "ASPAC Niigata Sustainability Forum Sharing", participantCount: 80 }
+    ];
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -966,6 +1075,9 @@
       formulaPointsValue: document.getElementById("formulaPointsValue"),
       targetTitle: document.getElementById("targetTitle"),
       targetBody: document.getElementById("targetBody"),
+      activityReferenceSummary: document.getElementById("activityReferenceSummary"),
+      activityReferenceBody: document.getElementById("activityReferenceBody"),
+      activityReferenceList: document.getElementById("activityReferenceList"),
       myForestTitle: document.getElementById("myForestTitle"),
       myForestBody: document.getElementById("myForestBody"),
       myForestStatus: document.getElementById("myForestStatus"),
@@ -996,6 +1108,27 @@
       langButtons: Array.from(document.querySelectorAll(".lang-btn"))
     };
 
+    const renderActivityReferences = () => {
+      els.activityReferenceSummary.textContent = t("activityReferenceSummary");
+      els.activityReferenceBody.textContent = t("activityReferenceBody");
+      els.activityReferenceList.innerHTML = "";
+      OFFLINE_ACTIVITY_REFERENCES.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "activity-reference-item";
+
+        const name = document.createElement("span");
+        name.className = "activity-reference-name";
+        name.textContent = state.lang === "zh" ? item.titleZh : item.titleEn;
+
+        const count = document.createElement("span");
+        count.className = "activity-reference-count";
+        count.textContent = t("participantCountLabel", item.participantCount);
+
+        row.append(name, count);
+        els.activityReferenceList.appendChild(row);
+      });
+    };
+
     const setLanguage = (lang) => {
       state.lang = lang;
       localStorage.setItem("bsr_lang", lang);
@@ -1019,6 +1152,7 @@
       els.formulaCapValue.textContent = t("formulaCapValue");
       els.targetTitle.textContent = t("targetTitle");
       els.targetBody.textContent = t("targetBody");
+      renderActivityReferences();
       els.myForestTitle.textContent = t("myForestTitle");
       els.myForestBody.textContent = t("myForestBody");
       els.myForestPointsLabel.textContent = t("myForestPointsLabel");
@@ -1443,10 +1577,11 @@
       els.treeDetailBody.textContent = t("loading");
 
       try {
-        const [memberSnap, submissionSnap, referralSnap] = await Promise.all([
+        const [memberSnap, submissionSnap, referralSnap, relatedActivitySnap] = await Promise.all([
           getDocs(collection(db, "members")),
           getDocs(collection(db, "greenProposalSubmissions")),
-          getDocs(collection(db, "memberReferrals"))
+          getDocs(collection(db, "memberReferrals")),
+          getDocs(collection(db, "relatedActivityParticipants"))
         ]);
 
         const members = memberSnap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
@@ -1466,8 +1601,17 @@
           referralCounts.set(referredBy, (referralCounts.get(referredBy) || 0) + 1);
         });
 
+        let relatedActivityPoints = 0;
+        relatedActivitySnap.docs.forEach((docSnap) => {
+          const data = docSnap.data() || {};
+          if (data.active === false) return;
+          const participantCount = Math.max(0, Number(data.participantCount || 0));
+          const pointsPerParticipant = Math.max(0, Number(data.pointsPerParticipant || 10));
+          relatedActivityPoints += participantCount * pointsPerParticipant;
+        });
+
         const participants = members.length;
-        let points = 0;
+        let points = relatedActivityPoints;
         const ranked = [];
         members.forEach((member) => {
           const submissions = submissionsByUid.get(member.id) || [];

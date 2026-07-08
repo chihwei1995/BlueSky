@@ -10,6 +10,8 @@
     "logs": "firebase functions:log",
     "upload:globe-data": "node scripts/upload-globe-data.js",
     "queue:organization-events": "node scripts/queue-organization-events.js",
+    "seed:related-activity-participants": "node scripts/upsert-related-activity-participants.js",
+    "seed:related-activity-participants:apply": "node scripts/upsert-related-activity-participants.js --apply",
     "recalc:climate-points": "node scripts/recalculate-climate-points.js",
     "recalc:climate-points:apply": "node scripts/recalculate-climate-points.js --apply"
   },
