@@ -311,6 +311,229 @@
       pointer-events: none;
     }
 
+    .workshop-section {
+      margin-top: 32px;
+      padding: 28px;
+      border: 1px solid rgba(17, 49, 39, 0.1);
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+    }
+
+    .workshop-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .workshop-heading h2 {
+      margin: 8px 0 4px;
+      color: var(--green-deep);
+      font-size: clamp(1.65rem, 4vw, 2.4rem);
+    }
+
+    .workshop-heading p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .live-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: #e8f7ed;
+      color: #0f6c3b;
+      font-weight: 900;
+      font-size: 0.86rem;
+    }
+
+    .live-chip::before {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #22a45b;
+      box-shadow: 0 0 0 5px rgba(34, 164, 91, 0.12);
+      content: "";
+    }
+
+    .workshop-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .workshop-card {
+      display: grid;
+      grid-template-columns: minmax(150px, 190px) minmax(0, 1fr);
+      gap: 0;
+      overflow: hidden;
+      border: 1px solid rgba(17, 49, 39, 0.1);
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 16px 34px rgba(17, 49, 39, 0.09);
+    }
+
+    .workshop-poster {
+      width: 100%;
+      height: 100%;
+      min-height: 310px;
+      object-fit: cover;
+      object-position: center top;
+      background: #d9f1df;
+    }
+
+    .workshop-content {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .workshop-title-row {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .workshop-title-row h3 {
+      margin: 0;
+      color: var(--green-deep);
+      font-size: 1.2rem;
+      line-height: 1.25;
+    }
+
+    .workshop-state {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #eef2f0;
+      color: #52635c;
+      font-size: 0.76rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .workshop-state[data-status="open"],
+    .workshop-state[data-status="calling"] {
+      background: #dcfce7;
+      color: #14713f;
+    }
+
+    .workshop-state[data-status="paused"],
+    .workshop-state[data-status="full"] {
+      background: #fff4cf;
+      color: #8a5a00;
+    }
+
+    .workshop-state[data-status="closed"] {
+      background: #fee8e7;
+      color: #a52a22;
+    }
+
+    .calling-panel {
+      padding: 14px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #0f6b3b, #1b9a58);
+      color: #fff;
+    }
+
+    .calling-panel span {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      opacity: 0.82;
+    }
+
+    .calling-panel strong {
+      display: block;
+      overflow-wrap: anywhere;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      line-height: 1.1;
+      letter-spacing: 0.05em;
+    }
+
+    .workshop-announcement {
+      min-height: 44px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .ticket-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 2px;
+    }
+
+    .ticket-number {
+      min-width: 0;
+    }
+
+    .ticket-number span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+
+    .ticket-number strong {
+      display: block;
+      color: var(--green-deep);
+      font-size: 1.45rem;
+      letter-spacing: 0.08em;
+    }
+
+    .ticket-number strong.is-ready {
+      color: #db7b00;
+      animation: ticketPulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes ticketPulse {
+      50% { transform: scale(1.04); }
+    }
+
+    .ticket-btn {
+      min-height: 44px;
+      padding: 10px 13px;
+      border: none;
+      border-radius: 14px;
+      background: var(--green);
+      color: #fff;
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .ticket-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .workshop-message {
+      min-height: 22px;
+      margin: -2px 0 0;
+      color: #9a6700;
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
     @media (max-width: 960px) {
       .hero {
         grid-template-columns: 1fr;
@@ -318,6 +541,10 @@
 
       .register-card {
         position: static;
+      }
+
+      .workshop-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -359,6 +586,99 @@
       .register-card {
         padding: 20px;
       }
+
+      .nav-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+      }
+
+      .pill {
+        min-height: 40px;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+        text-align: center;
+      }
+
+      .workshop-section {
+        margin-top: 20px;
+        padding: 18px 12px;
+        border-radius: 24px;
+      }
+
+      .workshop-heading {
+        display: grid;
+        align-items: start;
+      }
+
+      .live-chip {
+        justify-self: start;
+      }
+
+      .workshop-grid {
+        gap: 14px;
+      }
+
+      .workshop-card {
+        grid-template-columns: 108px minmax(0, 1fr);
+        border-radius: 20px;
+      }
+
+      .workshop-poster {
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 1122 / 1402;
+      }
+
+      .workshop-content {
+        gap: 9px;
+        padding: 13px 12px;
+      }
+
+      .workshop-title-row {
+        display: grid;
+        gap: 7px;
+      }
+
+      .workshop-title-row h3 {
+        font-size: 1.02rem;
+      }
+
+      .workshop-state {
+        justify-self: start;
+      }
+
+      .calling-panel {
+        padding: 11px;
+        border-radius: 14px;
+      }
+
+      .calling-panel strong {
+        font-size: 1.35rem;
+      }
+
+      .workshop-announcement {
+        min-height: 0;
+        font-size: 0.8rem;
+      }
+
+      .ticket-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .ticket-btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .workshop-card {
+        grid-template-columns: 94px minmax(0, 1fr);
+      }
+
+      .workshop-content {
+        padding: 11px 10px;
+      }
     }
   </style>
 </head>
@@ -373,6 +693,7 @@
         </div>
       </a>
       <div class="nav-actions">
+        <a id="workshopControlLink" class="pill" href="./closing-ceremony-workshop-control-2026-07-18.html" hidden>工作坊控制台</a>
         <a class="pill" href="./member-center.html">氣候行動者中心</a>
         <a class="pill" href="./green-action-7day.html">Daily Green Actions</a>
       </div>
@@ -428,6 +749,18 @@
         </div>
       </aside>
     </section>
+
+    <section id="workshopSection" class="workshop-section" aria-labelledby="workshopTitle" hidden>
+      <div class="workshop-heading">
+        <div>
+          <span class="eyebrow">Live Workshop Queue</span>
+          <h2 id="workshopTitle">工作坊即時叫號</h2>
+          <p>每個帳號可為每個工作坊領取一個號碼。請留意即時叫號與現場公告。</p>
+        </div>
+        <span id="workshopLiveStatus" class="live-chip">同步連線中</span>
+      </div>
+      <div id="workshopGrid" class="workshop-grid"></div>
+    </section>
   </main>
 
   <script type="module">
@@ -446,6 +779,8 @@
       getCountFromServer,
       getDoc,
       getFirestore,
+      onSnapshot,
+      runTransaction,
       serverTimestamp,
       setDoc
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
@@ -454,6 +789,36 @@
     const EVENT_ID = "closing-ceremony-2026-07-18";
     const EVENT_TITLE_ZH = "一步・藍天閉幕典禮";
     const EVENT_TITLE_EN = "Blue Sky Returns Closing Ceremony";
+    const WORKSHOPS = [
+      {
+        id: "clothing-recycling",
+        title: "衣物環保回收活動",
+        image: "./assets/workshop-clothing-recycling.webp"
+      },
+      {
+        id: "recycling-racing",
+        title: "舊衣回收實景挑戰賽",
+        image: "./assets/workshop-recycling-racing.webp"
+      },
+      {
+        id: "seed-paper-planting",
+        title: "紙種植物",
+        image: "./assets/workshop-seed-paper-planting.webp"
+      },
+      {
+        id: "mugwort-sachet",
+        title: "艾草香包製作",
+        image: "./assets/workshop-mugwort-sachet.webp"
+      }
+    ];
+    const WORKSHOP_STATUS_LABELS = {
+      preparing: "準備中",
+      open: "開放領號",
+      calling: "叫號中",
+      paused: "暫停入場",
+      full: "名額已滿",
+      closed: "已結束"
+    };
 
     const firebaseConfig = {
       apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
@@ -478,8 +843,19 @@
     const successCard = document.getElementById("successCard");
     const successTitle = document.getElementById("successTitle");
     const successBody = document.getElementById("successBody");
+    const workshopControlLink = document.getElementById("workshopControlLink");
+    const workshopSection = document.getElementById("workshopSection");
+    const workshopGrid = document.getElementById("workshopGrid");
+    const workshopLiveStatus = document.getElementById("workshopLiveStatus");
 
     let currentUser = null;
+    let activeRegistrationUid = null;
+    let authSequence = 0;
+    let workshopUnsubscribers = [];
+    const workshopStates = new Map();
+    const workshopTickets = new Map();
+    const workshopErrors = new Map();
+    const claimingWorkshops = new Set();
 
     const setStatus = (type = "", text = "") => {
       statusEl.className = `status${type ? ` ${type}` : ""}`;
@@ -487,6 +863,247 @@
     };
 
     const makeGuestName = () => "訪客 / Guest";
+
+    const getDefaultWorkshopState = (workshopId) => ({
+      workshopId,
+      status: "preparing",
+      callingStart: 0,
+      callingEnd: 0,
+      announcement: "現場正在準備，請稍候最新公告。"
+    });
+
+    const formatTicketNumber = (number) =>
+      `#${String(Math.max(0, Number(number) || 0)).padStart(3, "0")}`;
+
+    const buildWorkshopCards = () => {
+      workshopGrid.innerHTML = WORKSHOPS.map((workshop) => `
+        <article class="workshop-card" data-workshop-id="${workshop.id}">
+          <img class="workshop-poster" src="${workshop.image}" alt="${workshop.title}活動介紹" loading="lazy" />
+          <div class="workshop-content">
+            <div class="workshop-title-row">
+              <h3>${workshop.title}</h3>
+              <span class="workshop-state" data-role="state">準備中</span>
+            </div>
+            <div class="calling-panel">
+              <span>目前可入場號碼</span>
+              <strong data-role="calling">尚未叫號</strong>
+            </div>
+            <p class="workshop-announcement" data-role="announcement">現場正在準備，請稍候最新公告。</p>
+            <div class="ticket-panel">
+              <div class="ticket-number">
+                <span>我的號碼牌</span>
+                <strong data-role="ticket">未領取</strong>
+              </div>
+              <button class="ticket-btn" type="button" data-action="claim" data-workshop-id="${workshop.id}" disabled>尚未開放</button>
+            </div>
+            <p class="workshop-message" data-role="message" aria-live="polite"></p>
+          </div>
+        </article>
+      `).join("");
+    };
+
+    const getWorkshopCard = (workshopId) =>
+      workshopGrid.querySelector(`[data-workshop-id="${workshopId}"]`);
+
+    const renderWorkshop = (workshopId) => {
+      const card = getWorkshopCard(workshopId);
+      if (!card) return;
+
+      const state = workshopStates.get(workshopId) || getDefaultWorkshopState(workshopId);
+      const ticket = workshopTickets.get(workshopId) || null;
+      const status = WORKSHOP_STATUS_LABELS[state.status] ? state.status : "preparing";
+      const callingStart = Number(state.callingStart || 0);
+      const callingEnd = Number(state.callingEnd || 0);
+      const hasCallingRange = callingStart > 0 && callingEnd >= callingStart;
+      const canClaim = ["open", "calling"].includes(status) && !ticket && !claimingWorkshops.has(workshopId);
+      const ticketNumber = Number(ticket?.ticketNumber || 0);
+      const isUsed = ticket?.status === "used";
+      const isReady = !isUsed && status === "calling" && hasCallingRange &&
+        ticketNumber >= callingStart && ticketNumber <= callingEnd;
+
+      const stateEl = card.querySelector('[data-role="state"]');
+      const callingEl = card.querySelector('[data-role="calling"]');
+      const announcementEl = card.querySelector('[data-role="announcement"]');
+      const ticketEl = card.querySelector('[data-role="ticket"]');
+      const messageEl = card.querySelector('[data-role="message"]');
+      const claimButton = card.querySelector('[data-action="claim"]');
+
+      stateEl.dataset.status = status;
+      stateEl.textContent = WORKSHOP_STATUS_LABELS[status];
+      callingEl.textContent = hasCallingRange
+        ? (callingStart === callingEnd
+          ? formatTicketNumber(callingStart)
+          : `${formatTicketNumber(callingStart)} – ${formatTicketNumber(callingEnd)}`)
+        : "尚未叫號";
+      announcementEl.textContent = String(state.announcement || "請留意現場最新公告。");
+      ticketEl.textContent = ticket ? formatTicketNumber(ticketNumber) : "未領取";
+      ticketEl.classList.toggle("is-ready", isReady);
+
+      if (claimingWorkshops.has(workshopId)) {
+        claimButton.disabled = true;
+        claimButton.textContent = "領取中...";
+      } else if (ticket) {
+        claimButton.disabled = true;
+        claimButton.textContent = isUsed ? "已入場" : (isReady ? "現在可入場" : "已領取");
+      } else {
+        claimButton.disabled = !canClaim;
+        claimButton.textContent = canClaim ? "領取號碼牌" : "尚未開放";
+      }
+
+      if (workshopErrors.has(workshopId)) {
+        messageEl.textContent = workshopErrors.get(workshopId);
+      } else if (isUsed) {
+        messageEl.textContent = "此號碼已完成入場。";
+      } else if (isReady) {
+        messageEl.textContent = "輪到你了，請帶同此號碼前往工作坊入口。";
+      } else if (ticket) {
+        messageEl.textContent = "號碼牌每個帳號限領一次，請保留此頁等候叫號。";
+      } else if (["open", "calling"].includes(status)) {
+        messageEl.textContent = "每個帳號在這個工作坊限領一個號碼。";
+      } else {
+        messageEl.textContent = "工作人員開放領號後即可領取。";
+      }
+    };
+
+    const stopWorkshopListeners = () => {
+      workshopUnsubscribers.forEach((unsubscribe) => unsubscribe());
+      workshopUnsubscribers = [];
+      workshopStates.clear();
+      workshopTickets.clear();
+      workshopErrors.clear();
+    };
+
+    const startWorkshopListeners = (user) => {
+      stopWorkshopListeners();
+      workshopSection.hidden = false;
+      workshopLiveStatus.textContent = "即時同步已連線";
+
+      WORKSHOPS.forEach((workshop) => {
+        const stateUnsubscribe = onSnapshot(
+          doc(db, "closingCeremonyWorkshopStates", workshop.id),
+          (snapshot) => {
+            workshopStates.set(
+              workshop.id,
+              snapshot.exists() ? snapshot.data() : getDefaultWorkshopState(workshop.id)
+            );
+            renderWorkshop(workshop.id);
+          },
+          (error) => {
+            console.error(`Workshop state listener failed (${workshop.id}):`, error);
+            workshopLiveStatus.textContent = "同步暫時中斷";
+          }
+        );
+
+        const ticketId = `${workshop.id}__${user.uid}`;
+        const ticketUnsubscribe = onSnapshot(
+          doc(db, "closingCeremonyWorkshopTickets", ticketId),
+          (snapshot) => {
+            if (snapshot.exists()) {
+              workshopTickets.set(workshop.id, snapshot.data());
+            } else {
+              workshopTickets.delete(workshop.id);
+            }
+            renderWorkshop(workshop.id);
+          },
+          (error) => {
+            console.error(`Workshop ticket listener failed (${workshop.id}):`, error);
+          }
+        );
+
+        workshopUnsubscribers.push(stateUnsubscribe, ticketUnsubscribe);
+      });
+    };
+
+    const activateRegisteredExperience = (user, registrationData = {}) => {
+      activeRegistrationUid = user.uid;
+      form.hidden = true;
+      successCard.hidden = false;
+      successTitle.textContent = "登記完成 / Registration Complete";
+      successBody.textContent = `${registrationData.attendeeName || user.displayName || makeGuestName()} 已完成 ${EVENT_TITLE_ZH} 登記，可在下方查看即時叫號及領取工作坊號碼牌。`;
+      setStatus("ok", "你已完成活動登記。工作坊資料會自動同步更新。");
+      startWorkshopListeners(user);
+    };
+
+    const claimWorkshopTicket = async (workshopId) => {
+      const workshop = WORKSHOPS.find((item) => item.id === workshopId);
+      const user = currentUser;
+      if (!workshop || !user || activeRegistrationUid !== user.uid || claimingWorkshops.has(workshopId)) return;
+
+      const state = workshopStates.get(workshopId) || getDefaultWorkshopState(workshopId);
+      if (!["open", "calling"].includes(state.status)) {
+        renderWorkshop(workshopId);
+        return;
+      }
+
+      claimingWorkshops.add(workshopId);
+      workshopErrors.delete(workshopId);
+      renderWorkshop(workshopId);
+
+      try {
+        const result = await runTransaction(db, async (transaction) => {
+          const registrationRef = doc(db, "closingCeremonyRegistrations", user.uid);
+          const ticketRef = doc(db, "closingCeremonyWorkshopTickets", `${workshopId}__${user.uid}`);
+          const counterRef = doc(db, "closingCeremonyWorkshopCounters", workshopId);
+          const registrationSnapshot = await transaction.get(registrationRef);
+          const ticketSnapshot = await transaction.get(ticketRef);
+          const counterSnapshot = await transaction.get(counterRef);
+
+          if (!registrationSnapshot.exists()) {
+            throw new Error("registration-required");
+          }
+
+          if (ticketSnapshot.exists()) {
+            return ticketSnapshot.data();
+          }
+
+          const ticketNumber = counterSnapshot.exists()
+            ? Number(counterSnapshot.data().nextNumber || 1)
+            : 1;
+
+          if (!Number.isInteger(ticketNumber) || ticketNumber < 1 || ticketNumber > 9999) {
+            throw new Error("ticket-limit-reached");
+          }
+
+          transaction.set(counterRef, {
+            eventId: EVENT_ID,
+            workshopId,
+            nextNumber: ticketNumber + 1,
+            updatedAt: serverTimestamp()
+          });
+          transaction.set(ticketRef, {
+            eventId: EVENT_ID,
+            workshopId,
+            uid: user.uid,
+            ticketNumber,
+            status: "issued",
+            issuedAt: serverTimestamp(),
+            usedAt: null
+          });
+
+          return { ticketNumber, status: "issued" };
+        });
+
+        workshopTickets.set(workshopId, result);
+      } catch (error) {
+        console.error(`Workshop ticket claim failed (${workshopId}):`, error);
+        workshopErrors.set(
+          workshopId,
+          error?.message === "ticket-limit-reached"
+            ? "此工作坊號碼已派完，請向現場工作人員查詢。"
+            : "領取失敗，請確認網絡連線後再試。"
+        );
+      } finally {
+        claimingWorkshops.delete(workshopId);
+        renderWorkshop(workshopId);
+      }
+    };
+
+    buildWorkshopCards();
+    workshopGrid.addEventListener("click", (event) => {
+      const button = event.target.closest('[data-action="claim"]');
+      if (!button) return;
+      claimWorkshopTicket(button.dataset.workshopId);
+    });
 
     const makeGeneratedAccount = () => {
       const stamp = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -593,6 +1210,10 @@
           ? `${savedName} 已完成 ${EVENT_TITLE_ZH} 登記，你是本次活動第 ${participantNumber} 位參與者。`
           : `${savedName} 已完成 ${EVENT_TITLE_ZH} 登記。`;
         successCard.hidden = false;
+        activateRegisteredExperience(user, { attendeeName: savedName });
+        window.setTimeout(() => {
+          workshopSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 120);
       } catch (error) {
         console.error("Closing ceremony registration failed:", error);
         setStatus("error", "登記失敗，請稍後再試。");
@@ -601,11 +1222,38 @@
       }
     });
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
+      const sequence = ++authSequence;
       currentUser = user || null;
       if (user) {
-        setStatus("", "你目前已登入，可直接完成活動登記。");
+        try {
+          const [registrationSnapshot, memberSnapshot] = await Promise.all([
+            getDoc(doc(db, "closingCeremonyRegistrations", user.uid)),
+            getDoc(doc(db, "members", user.uid))
+          ]);
+          if (sequence !== authSequence || currentUser?.uid !== user.uid) return;
+          workshopControlLink.hidden = Number(memberSnapshot.data()?.permissionLevel || 0) !== 3;
+          if (registrationSnapshot.exists()) {
+            activateRegisteredExperience(user, registrationSnapshot.data());
+          } else if (activeRegistrationUid !== user.uid) {
+            form.hidden = false;
+            successCard.hidden = true;
+            workshopSection.hidden = true;
+            setStatus("", "你目前已登入，可直接完成活動登記。");
+          }
+        } catch (error) {
+          console.error("Registration status check failed:", error);
+          if (sequence === authSequence && activeRegistrationUid !== user.uid) {
+            setStatus("warn", "暫時無法確認登記狀態，仍可按下登記按鈕重試。");
+          }
+        }
       } else {
+        activeRegistrationUid = null;
+        workshopControlLink.hidden = true;
+        stopWorkshopListeners();
+        form.hidden = false;
+        successCard.hidden = true;
+        workshopSection.hidden = true;
         setStatus("", "可直接按登記，系統會自動完成註冊。");
       }
     });

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>閉幕典禮工作坊叫號控制台 | Blue Sky Returns</title>
+  <link rel="icon" type="image/png" href="/Enter.PNG" />
+  <style>
+    :root {
+      --bg: #edf7ef;
+      --card: #ffffff;
+      --ink: #143229;
+      --muted: #5c756c;
+      --line: rgba(20, 50, 41, 0.13);
+      --green: #16844d;
+      --green-deep: #0d5a33;
+      --lime: #83c53c;
+      --amber: #b86a00;
+      --red: #b42318;
+      --shadow: 0 22px 55px rgba(17, 49, 39, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(131, 197, 60, 0.16), transparent 25%),
+        linear-gradient(180deg, #f8fcf8, var(--bg));
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(248, 252, 248, 0.92);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 13px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 11px;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+      object-fit: contain;
+    }
+
+    .brand strong, .brand span { display: block; }
+    .brand strong { color: var(--green-deep); }
+    .brand span { color: var(--muted); font-size: 0.78rem; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--green-deep);
+      font-weight: 850;
+    }
+
+    main { padding: 28px 0 56px; }
+
+    .gate, .panel {
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .gate {
+      max-width: 660px;
+      margin: 8vh auto 0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .gate h1 { margin: 8px 0 10px; color: var(--green-deep); }
+    .gate p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+    .eyebrow {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(131, 197, 60, 0.17);
+      color: var(--green-deep);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .dashboard-header h1 {
+      margin: 8px 0 5px;
+      color: var(--green-deep);
+      font-size: clamp(1.75rem, 4vw, 2.7rem);
+    }
+
+    .dashboard-header p { margin: 0; color: var(--muted); }
+
+    .sync-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #126c3d;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .sync-chip::before {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #20a257;
+      content: "";
+    }
+
+    .control-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 410px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel { padding: 22px; }
+    .control-panel { position: sticky; top: 92px; }
+
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--green-deep);
+      font-size: 0.88rem;
+      font-weight: 900;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      border: 1px solid rgba(20, 50, 41, 0.16);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    select, input { min-height: 50px; padding: 11px 13px; }
+    textarea { min-height: 104px; padding: 13px; resize: vertical; line-height: 1.55; }
+    select:focus, input:focus, textarea:focus { outline: 3px solid rgba(22, 132, 77, 0.13); border-color: var(--green); }
+
+    .selected-workshop {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      margin: 4px 0 18px;
+      padding: 10px;
+      border-radius: 18px;
+      background: #eff8f1;
+    }
+
+    .selected-workshop img {
+      width: 80px;
+      aspect-ratio: 1122 / 1402;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .selected-workshop strong { display: block; color: var(--green-deep); }
+    .selected-workshop span { display: block; margin-top: 5px; color: var(--muted); font-size: 0.78rem; }
+
+    .range-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin: -4px 0 16px;
+    }
+
+    .secondary-btn, .primary-btn {
+      min-height: 46px;
+      border-radius: 14px;
+      padding: 10px 13px;
+      font-weight: 900;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--line);
+      background: #f6faf7;
+      color: var(--green-deep);
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: none;
+      background: linear-gradient(135deg, var(--green), var(--lime));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(22, 132, 77, 0.2);
+    }
+
+    .primary-btn:disabled, .secondary-btn:disabled { cursor: wait; opacity: 0.6; }
+
+    .save-status {
+      min-height: 24px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .save-status.ok { color: var(--green); }
+    .save-status.error { color: var(--red); }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 11px;
+      margin-bottom: 18px;
+    }
+
+    .metric {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #f9fcfa;
+    }
+
+    .metric span { display: block; color: var(--muted); font-size: 0.76rem; font-weight: 800; }
+    .metric strong { display: block; margin-top: 4px; color: var(--green-deep); font-size: 1.55rem; }
+
+    .range-banner {
+      margin-bottom: 18px;
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #0f683a, #1b9a58);
+      color: #fff;
+    }
+
+    .range-banner span { display: block; font-size: 0.8rem; font-weight: 800; opacity: 0.82; }
+    .range-banner strong { display: block; margin-top: 5px; font-size: clamp(1.65rem, 5vw, 2.5rem); letter-spacing: 0.06em; }
+
+    .number-section + .number-section { margin-top: 20px; }
+    .number-section header {
+      position: static;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      border: none;
+      background: transparent;
+      backdrop-filter: none;
+    }
+
+    .number-section h2 { margin: 0; color: var(--green-deep); font-size: 1.05rem; }
+    .number-section header span { color: var(--muted); font-size: 0.8rem; }
+
+    .number-list { display: flex; flex-wrap: wrap; gap: 8px; min-height: 42px; }
+
+    .number-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f5faf6;
+      color: var(--green-deep);
+      font-weight: 900;
+    }
+
+    button.number-chip:hover { border-color: var(--green); }
+    .number-chip.ready { border-color: #f2b84b; background: #fff4cf; color: #895900; }
+    .number-chip.used { border-color: #a5d7b6; background: #e2f6e8; color: #176c3e; }
+    .number-chip small { font-size: 0.66rem; font-weight: 800; opacity: 0.72; }
+    .empty { margin: 0; color: var(--muted); font-size: 0.86rem; }
+
+    @media (max-width: 900px) {
+      .control-layout { grid-template-columns: 1fr; }
+      .control-panel { position: static; }
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100%, calc(100% - 22px)); }
+      .nav { padding-top: calc(10px + env(safe-area-inset-top)); }
+      .brand span { display: none; }
+      .back-link { min-height: 38px; padding: 8px 11px; font-size: 0.78rem; }
+      main { padding-top: 18px; }
+      .dashboard-header { display: grid; align-items: start; }
+      .sync-chip { justify-self: start; }
+      .panel { padding: 16px 13px; border-radius: 21px; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .quick-actions { grid-template-columns: 1fr; }
+      .number-chip { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <a class="brand" href="./index.html">
+        <img src="../Enter.PNG" alt="Blue Sky Returns" />
+        <div>
+          <strong>工作坊叫號控制台</strong>
+          <span>Closing Ceremony Workshop Control</span>
+        </div>
+      </a>
+      <a class="back-link" href="./closing-ceremony-2026-07-18.html">返回參加者頁</a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="accessGate" class="gate">
+      <span class="eyebrow">Staff Access</span>
+      <h1 id="accessTitle">正在確認工作人員權限</h1>
+      <p id="accessMessage">請保持登入，系統正在讀取你的權限。</p>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div class="dashboard-header">
+        <div>
+          <span class="eyebrow">2026.07.18 Live Control</span>
+          <h1>四個工作坊即時叫號</h1>
+          <p>切換工作坊後，可更新狀況、可入場號碼及公告，並標記已使用號碼。</p>
+        </div>
+        <span id="syncStatus" class="sync-chip">即時同步已連線</span>
+      </div>
+
+      <div class="control-layout">
+        <section class="panel control-panel" aria-labelledby="controlTitle">
+          <div class="field">
+            <label id="controlTitle" for="workshopSelect">選擇工作坊</label>
+            <select id="workshopSelect"></select>
+          </div>
+
+          <div class="selected-workshop">
+            <img id="selectedWorkshopImage" src="./assets/workshop-clothing-recycling.webp" alt="衣物環保回收活動介紹" />
+            <div>
+              <strong id="selectedWorkshopTitle"></strong>
+              <span id="selectedWorkshopMeta">尚未建立叫號資料</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="workshopStatus">工作坊狀況</label>
+            <select id="workshopStatus">
+              <option value="preparing">準備中</option>
+              <option value="open">開放領號</option>
+              <option value="calling">叫號中</option>
+              <option value="paused">暫停入場</option>
+              <option value="full">名額已滿</option>
+              <option value="closed">已結束</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>目前可入場號碼</label>
+            <div class="range-grid">
+              <input id="callingStart" type="number" inputmode="numeric" min="0" max="9999" aria-label="可入場起始號碼" placeholder="起始號碼" />
+              <input id="callingEnd" type="number" inputmode="numeric" min="0" max="9999" aria-label="可入場結束號碼" placeholder="結束號碼" />
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <button id="nextOneBtn" class="secondary-btn" type="button">叫下一位</button>
+            <button id="nextFiveBtn" class="secondary-btn" type="button">叫下一批 5 位</button>
+          </div>
+
+          <div class="field">
+            <label for="announcement">現場公告（最多 240 字）</label>
+            <textarea id="announcement" maxlength="240" placeholder="例如：請先到入口排隊，並準備出示號碼牌。"></textarea>
+          </div>
+
+          <button id="saveBtn" class="primary-btn" type="button">儲存並即時發布</button>
+          <p id="saveStatus" class="save-status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel" aria-label="號碼牌即時總覽">
+          <div class="metrics">
+            <div class="metric"><span>已領取</span><strong id="issuedCount">0</strong></div>
+            <div class="metric"><span>已使用</span><strong id="usedCount">0</strong></div>
+            <div class="metric"><span>等待中</span><strong id="waitingCount">0</strong></div>
+            <div class="metric"><span>下一號</span><strong id="nextNumber">#001</strong></div>
+          </div>
+
+          <div class="range-banner">
+            <span>目前可入場號碼</span>
+            <strong id="currentRange">尚未叫號</strong>
+          </div>
+
+          <section class="number-section">
+            <header><h2>現在可入場</h2><span>點號碼可標記已入場</span></header>
+            <div id="readyNumbers" class="number-list"></div>
+          </section>
+
+          <section class="number-section">
+            <header><h2>已領取號碼</h2><span>所有未使用號碼</span></header>
+            <div id="issuedNumbers" class="number-list"></div>
+          </section>
+
+          <section class="number-section">
+            <header><h2>已使用號碼</h2><span>點號碼可復原為未使用</span></header>
+            <div id="usedNumbers" class="number-list"></div>
+          </section>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import {
+      collection,
+      doc,
+      getDoc,
+      getFirestore,
+      onSnapshot,
+      serverTimestamp,
+      setDoc,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
+
+    const EVENT_ID = "closing-ceremony-2026-07-18";
+    const WORKSHOPS = [
+      { id: "clothing-recycling", title: "衣物環保回收活動", image: "./assets/workshop-clothing-recycling.webp" },
+      { id: "recycling-racing", title: "舊衣回收實景挑戰賽", image: "./assets/workshop-recycling-racing.webp" },
+      { id: "seed-paper-planting", title: "紙種植物", image: "./assets/workshop-seed-paper-planting.webp" },
+      { id: "mugwort-sachet", title: "艾草香包製作", image: "./assets/workshop-mugwort-sachet.webp" }
+    ];
+    const STATUS_LABELS = {
+      preparing: "準備中",
+      open: "開放領號",
+      calling: "叫號中",
+      paused: "暫停入場",
+      full: "名額已滿",
+      closed: "已結束"
+    };
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "closing-ceremony-workshop-control-2026-07-18" });
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+
+    const accessGate = document.getElementById("accessGate");
+    const accessTitle = document.getElementById("accessTitle");
+    const accessMessage = document.getElementById("accessMessage");
+    const dashboard = document.getElementById("dashboard");
+    const syncStatus = document.getElementById("syncStatus");
+    const workshopSelect = document.getElementById("workshopSelect");
+    const selectedWorkshopImage = document.getElementById("selectedWorkshopImage");
+    const selectedWorkshopTitle = document.getElementById("selectedWorkshopTitle");
+    const selectedWorkshopMeta = document.getElementById("selectedWorkshopMeta");
+    const workshopStatus = document.getElementById("workshopStatus");
+    const callingStart = document.getElementById("callingStart");
+    const callingEnd = document.getElementById("callingEnd");
+    const announcement = document.getElementById("announcement");
+    const nextOneBtn = document.getElementById("nextOneBtn");
+    const nextFiveBtn = document.getElementById("nextFiveBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const saveStatus = document.getElementById("saveStatus");
+    const issuedCount = document.getElementById("issuedCount");
+    const usedCount = document.getElementById("usedCount");
+    const waitingCount = document.getElementById("waitingCount");
+    const nextNumber = document.getElementById("nextNumber");
+    const currentRange = document.getElementById("currentRange");
+    const readyNumbers = document.getElementById("readyNumbers");
+    const issuedNumbers = document.getElementById("issuedNumbers");
+    const usedNumbers = document.getElementById("usedNumbers");
+
+    let currentUser = null;
+    let selectedWorkshopId = WORKSHOPS[0].id;
+    let unsubscribers = [];
+    const states = new Map();
+    const counters = new Map();
+    let tickets = [];
+
+    const formatNumber = (value) => `#${String(Math.max(0, Number(value) || 0)).padStart(3, "0")}`;
+    const defaultState = (workshopId) => ({ workshopId, status: "preparing", callingStart: 0, callingEnd: 0, announcement: "" });
+    const selectedWorkshop = () => WORKSHOPS.find((item) => item.id === selectedWorkshopId) || WORKSHOPS[0];
+
+    const setSaveStatus = (type = "", text = "") => {
+      saveStatus.className = `save-status${type ? ` ${type}` : ""}`;
+      saveStatus.textContent = text;
+    };
+
+    const selectedTickets = () => tickets
+      .filter((ticket) => ticket.workshopId === selectedWorkshopId)
+      .sort((a, b) => Number(a.ticketNumber || 0) - Number(b.ticketNumber || 0));
+
+    const renderNumberList = (element, list, options = {}) => {
+      if (!list.length) {
+        element.innerHTML = `<p class="empty">${options.emptyText || "目前沒有號碼"}</p>`;
+        return;
+      }
+
+      element.innerHTML = list.map((ticket) => `
+        <button
+          class="number-chip${options.className ? ` ${options.className}` : ""}"
+          type="button"
+          data-ticket-id="${ticket.id}"
+          data-action="${options.action || "mark-used"}"
+          title="${options.title || "標記為已使用"}"
+        >
+          ${formatNumber(ticket.ticketNumber)}
+          <small>${options.label || "標記入場"}</small>
+        </button>
+      `).join("");
+    };
+
+    const renderDashboard = ({ syncForm = false } = {}) => {
+      const workshop = selectedWorkshop();
+      const state = states.get(selectedWorkshopId) || defaultState(selectedWorkshopId);
+      const counter = counters.get(selectedWorkshopId);
+      const all = selectedTickets();
+      const unused = all.filter((ticket) => ticket.status !== "used");
+      const used = all.filter((ticket) => ticket.status === "used");
+      const start = Number(state.callingStart || 0);
+      const end = Number(state.callingEnd || 0);
+      const hasRange = start > 0 && end >= start;
+      const ready = state.status === "calling" && hasRange
+        ? unused.filter((ticket) => Number(ticket.ticketNumber) >= start && Number(ticket.ticketNumber) <= end)
+        : [];
+
+      selectedWorkshopImage.src = workshop.image;
+      selectedWorkshopImage.alt = `${workshop.title}活動介紹`;
+      selectedWorkshopTitle.textContent = workshop.title;
+      selectedWorkshopMeta.textContent = `${STATUS_LABELS[state.status] || STATUS_LABELS.preparing} · ${all.length} 個號碼已領取`;
+      if (syncForm) {
+        workshopStatus.value = STATUS_LABELS[state.status] ? state.status : "preparing";
+        callingStart.value = start || "";
+        callingEnd.value = end || "";
+        announcement.value = String(state.announcement || "");
+      }
+
+      issuedCount.textContent = String(all.length);
+      usedCount.textContent = String(used.length);
+      waitingCount.textContent = String(unused.length);
+      nextNumber.textContent = formatNumber(counter?.nextNumber || 1);
+      currentRange.textContent = hasRange
+        ? (start === end ? formatNumber(start) : `${formatNumber(start)} – ${formatNumber(end)}`)
+        : "尚未叫號";
+
+      renderNumberList(readyNumbers, ready, { className: "ready", emptyText: "目前沒有可入場的已領號碼", label: "標記入場" });
+      renderNumberList(issuedNumbers, unused, { emptyText: "目前沒有等待中的號碼", label: "標記入場" });
+      renderNumberList(usedNumbers, used, { className: "used", emptyText: "目前沒有已使用號碼", action: "restore", label: "復原", title: "復原為未使用" });
+    };
+
+    const stopListeners = () => {
+      unsubscribers.forEach((unsubscribe) => unsubscribe());
+      unsubscribers = [];
+      states.clear();
+      counters.clear();
+      tickets = [];
+    };
+
+    const startListeners = () => {
+      stopListeners();
+      WORKSHOPS.forEach((workshop) => {
+        unsubscribers.push(onSnapshot(
+          doc(db, "closingCeremonyWorkshopStates", workshop.id),
+          (snapshot) => {
+            states.set(workshop.id, snapshot.exists() ? snapshot.data() : defaultState(workshop.id));
+            if (workshop.id === selectedWorkshopId) renderDashboard({ syncForm: true });
+          },
+          (error) => {
+            console.error("Workshop state sync failed:", error);
+            syncStatus.textContent = "同步暫時中斷";
+          }
+        ));
+        unsubscribers.push(onSnapshot(
+          doc(db, "closingCeremonyWorkshopCounters", workshop.id),
+          (snapshot) => {
+            if (snapshot.exists()) counters.set(workshop.id, snapshot.data());
+            else counters.delete(workshop.id);
+            if (workshop.id === selectedWorkshopId) renderDashboard();
+          }
+        ));
+      });
+
+      unsubscribers.push(onSnapshot(
+        collection(db, "closingCeremonyWorkshopTickets"),
+        (snapshot) => {
+          tickets = snapshot.docs.map((ticketDoc) => ({ id: ticketDoc.id, ...ticketDoc.data() }));
+          renderDashboard();
+        },
+        (error) => {
+          console.error("Workshop ticket sync failed:", error);
+          syncStatus.textContent = "號碼同步中斷";
+        }
+      ));
+    };
+
+    const saveSelectedState = async () => {
+      if (!currentUser) return;
+      const start = Number(callingStart.value || 0);
+      const end = Number(callingEnd.value || 0);
+      const status = workshopStatus.value;
+      const message = announcement.value.trim();
+
+      if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < 0 || start > 9999 || end > 9999) {
+        setSaveStatus("error", "號碼必須是 0 至 9999 的整數。");
+        return;
+      }
+      if ((start === 0) !== (end === 0) || (start > 0 && end < start)) {
+        setSaveStatus("error", "未叫號時兩格留空；叫號時結束號碼不可小於起始號碼。");
+        return;
+      }
+
+      saveBtn.disabled = true;
+      setSaveStatus("", "正在同步更新...");
+      try {
+        await setDoc(doc(db, "closingCeremonyWorkshopStates", selectedWorkshopId), {
+          eventId: EVENT_ID,
+          workshopId: selectedWorkshopId,
+          status,
+          callingStart: start,
+          callingEnd: end,
+          announcement: message,
+          updatedAt: serverTimestamp(),
+          updatedBy: currentUser.uid
+        });
+        setSaveStatus("ok", "已發布，參加者頁會即時更新。");
+      } catch (error) {
+        console.error("Workshop state save failed:", error);
+        setSaveStatus("error", "更新失敗，請確認權限及網絡後再試。");
+      } finally {
+        saveBtn.disabled = false;
+      }
+    };
+
+    const setNextRange = (size) => {
+      const state = states.get(selectedWorkshopId) || defaultState(selectedWorkshopId);
+      const first = Math.max(1, Number(callingEnd.value || state.callingEnd || 0) + 1);
+      callingStart.value = String(first);
+      callingEnd.value = String(Math.min(9999, first + size - 1));
+      workshopStatus.value = "calling";
+      setSaveStatus("", "號碼已填入，按「儲存並即時發布」後生效。");
+    };
+
+    const updateTicketUsage = async (ticketId, used) => {
+      try {
+        await updateDoc(doc(db, "closingCeremonyWorkshopTickets", ticketId), {
+          status: used ? "used" : "issued",
+          usedAt: used ? serverTimestamp() : null
+        });
+      } catch (error) {
+        console.error("Ticket usage update failed:", error);
+        setSaveStatus("error", "號碼狀態更新失敗，請稍後再試。");
+      }
+    };
+
+    workshopSelect.innerHTML = WORKSHOPS.map((workshop) =>
+      `<option value="${workshop.id}">${workshop.title}</option>`
+    ).join("");
+
+    workshopSelect.addEventListener("change", () => {
+      selectedWorkshopId = workshopSelect.value;
+      setSaveStatus();
+      renderDashboard({ syncForm: true });
+    });
+    saveBtn.addEventListener("click", saveSelectedState);
+    nextOneBtn.addEventListener("click", () => setNextRange(1));
+    nextFiveBtn.addEventListener("click", () => setNextRange(5));
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-ticket-id]");
+      if (!button) return;
+      updateTicketUsage(button.dataset.ticketId, button.dataset.action !== "restore");
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+      stopListeners();
+      dashboard.hidden = true;
+      accessGate.hidden = false;
+
+      if (!user) {
+        accessTitle.textContent = "請先登入工作人員帳號";
+        accessMessage.innerHTML = "請先到<a href=\"./member-center.html\" style=\"color:#0d6b3b;font-weight:900\">氣候行動者中心</a>登入具 Level 3 權限的帳號，再返回此頁。";
+        return;
+      }
+
+      try {
+        const memberSnapshot = await getDoc(doc(db, "members", user.uid));
+        const permissionLevel = Number(memberSnapshot.data()?.permissionLevel || 0);
+        if (permissionLevel !== 3) {
+          accessTitle.textContent = "此帳號沒有控制權限";
+          accessMessage.textContent = "工作坊控制台只開放給 Level 3 工作人員帳號。";
+          return;
+        }
+
+        accessGate.hidden = true;
+        dashboard.hidden = false;
+        syncStatus.textContent = "即時同步已連線";
+        renderDashboard({ syncForm: true });
+        startListeners();
+      } catch (error) {
+        console.error("Staff permission check failed:", error);
+        accessTitle.textContent = "暫時無法確認權限";
+        accessMessage.textContent = "請檢查網絡後重新整理頁面。";
+      }
+    });
+  </script>
+</body>
+</html>

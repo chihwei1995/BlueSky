@@ -1,5 +1,26 @@
 rules_version = '2';
 
+// ===============================================================
+// Assumed data model for the 2026 closing ceremony workshop queue
+// ===============================================================
+// closingCeremonyWorkshopStates/{workshopId}
+//   eventId, workshopId, status, announcement: bounded strings
+//   callingStart, callingEnd: integers from 0 to 9999
+//   updatedAt: server timestamp; updatedBy: staff UID
+// closingCeremonyWorkshopCounters/{workshopId}
+//   eventId, workshopId: fixed strings; nextNumber: integer 2..10000
+//   updatedAt: server timestamp
+// closingCeremonyWorkshopTickets/{workshopId}__{uid}
+//   eventId, workshopId, uid, status: bounded strings
+//   ticketNumber: integer 1..9999; issuedAt: immutable timestamp
+//   usedAt: timestamp or null
+// closingCeremonyRegistrations/{uid}
+//   fixed event metadata plus attendeeName/email, registeredAt timestamp
+// members/{uid}
+//   Existing flexible profile schema. permissionLevel is required and cannot
+//   be self-promoted by a non-admin owner.
+// ===============================================================
+
 service cloud.firestore {
   match /databases/{database}/documents {
     function isSignedIn() {
@@ -23,6 +44,134 @@ service cloud.firestore {
     function isOwnDailySlot(slotId) {
       return isSignedIn() &&
         slotId.matches('^' + request.auth.uid + '__.*$');
+    }
+
+    function isClosingCeremonyWorkshop(workshopId) {
+      return workshopId in [
+        "clothing-recycling",
+        "recycling-racing",
+        "seed-paper-planting",
+        "mugwort-sachet"
+      ];
+    }
+
+    function isClosingCeremonyRegistrant() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/closingCeremonyRegistrations/$(request.auth.uid));
+    }
+
+    function workshopTicketId(workshopId) {
+      return workshopId + "__" + request.auth.uid;
+    }
+
+    function isValidClosingCeremonyRegistration(data) {
+      return data.keys().hasAll([
+          "uid", "email", "attendeeName", "isGuest", "eventId",
+          "eventTitleZh", "eventTitleEn", "dateLabel", "timeLabel",
+          "venueZh", "registeredAt", "source"
+        ]) &&
+        data.keys().hasOnly([
+          "uid", "email", "attendeeName", "isGuest", "eventId",
+          "eventTitleZh", "eventTitleEn", "dateLabel", "timeLabel",
+          "venueZh", "registeredAt", "source"
+        ]) &&
+        data.uid is string && data.uid == request.auth.uid &&
+        data.email is string && data.email.size() <= 320 &&
+        data.attendeeName is string && data.attendeeName.size() >= 1 && data.attendeeName.size() <= 60 &&
+        data.isGuest is bool &&
+        data.eventId == "closing-ceremony-2026-07-18" &&
+        data.eventTitleZh == "一步・藍天閉幕典禮" &&
+        data.eventTitleEn == "Blue Sky Returns Closing Ceremony" &&
+        data.dateLabel == "2026-07-18" &&
+        data.timeLabel == "14:00-17:00" &&
+        data.venueZh == "九龍橫頭磡聯合道 198 號 樂富廣場 A 區一樓" &&
+        data.registeredAt is timestamp && data.registeredAt == request.time &&
+        data.source == "closing-ceremony-page";
+    }
+
+    function isValidWorkshopState(data, workshopId) {
+      return data.keys().hasAll([
+          "eventId", "workshopId", "status", "callingStart", "callingEnd",
+          "announcement", "updatedAt", "updatedBy"
+        ]) &&
+        data.keys().hasOnly([
+          "eventId", "workshopId", "status", "callingStart", "callingEnd",
+          "announcement", "updatedAt", "updatedBy"
+        ]) &&
+        isClosingCeremonyWorkshop(workshopId) &&
+        data.eventId == "closing-ceremony-2026-07-18" &&
+        data.workshopId == workshopId &&
+        data.status in ["preparing", "open", "calling", "paused", "full", "closed"] &&
+        data.callingStart is int && data.callingStart >= 0 && data.callingStart <= 9999 &&
+        data.callingEnd is int && data.callingEnd >= 0 && data.callingEnd <= 9999 &&
+        (
+          (data.callingStart == 0 && data.callingEnd == 0) ||
+          (data.callingStart >= 1 && data.callingEnd >= data.callingStart)
+        ) &&
+        data.announcement is string && data.announcement.size() <= 240 &&
+        data.updatedAt is timestamp && data.updatedAt == request.time &&
+        data.updatedBy is string && data.updatedBy == request.auth.uid;
+    }
+
+    function isValidWorkshopCounter(data, workshopId) {
+      return data.keys().hasAll(["eventId", "workshopId", "nextNumber", "updatedAt"]) &&
+        data.keys().hasOnly(["eventId", "workshopId", "nextNumber", "updatedAt"]) &&
+        isClosingCeremonyWorkshop(workshopId) &&
+        data.eventId == "closing-ceremony-2026-07-18" &&
+        data.workshopId == workshopId &&
+        data.nextNumber is int && data.nextNumber >= 2 && data.nextNumber <= 10000 &&
+        data.updatedAt is timestamp && data.updatedAt == request.time;
+    }
+
+    function isValidNewWorkshopTicket(data, workshopId, ticketId) {
+      return data.keys().hasAll([
+          "eventId", "workshopId", "uid", "ticketNumber", "status", "issuedAt", "usedAt"
+        ]) &&
+        data.keys().hasOnly([
+          "eventId", "workshopId", "uid", "ticketNumber", "status", "issuedAt", "usedAt"
+        ]) &&
+        isClosingCeremonyWorkshop(workshopId) &&
+        ticketId == workshopTicketId(workshopId) &&
+        data.eventId == "closing-ceremony-2026-07-18" &&
+        data.workshopId == workshopId &&
+        data.uid is string && data.uid == request.auth.uid &&
+        data.ticketNumber is int && data.ticketNumber >= 1 && data.ticketNumber <= 9999 &&
+        data.status == "issued" &&
+        data.issuedAt is timestamp && data.issuedAt == request.time &&
+        data.usedAt == null &&
+        getAfter(/databases/$(database)/documents/closingCeremonyWorkshopCounters/$(workshopId)).data.nextNumber == data.ticketNumber + 1;
+    }
+
+    function isValidUpdatedWorkshopTicket(data, ticketId) {
+      return data.keys().hasAll([
+          "eventId", "workshopId", "uid", "ticketNumber", "status", "issuedAt", "usedAt"
+        ]) &&
+        data.keys().hasOnly([
+          "eventId", "workshopId", "uid", "ticketNumber", "status", "issuedAt", "usedAt"
+        ]) &&
+        isClosingCeremonyWorkshop(data.workshopId) &&
+        ticketId == data.workshopId + "__" + data.uid &&
+        data.eventId == "closing-ceremony-2026-07-18" &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 &&
+        data.ticketNumber is int && data.ticketNumber >= 1 && data.ticketNumber <= 9999 &&
+        data.issuedAt is timestamp &&
+        data.status in ["issued", "used"] &&
+        (
+          (data.status == "issued" && data.usedAt == null) ||
+          (data.status == "used" && data.usedAt is timestamp && data.usedAt == request.time)
+        );
+    }
+
+    function ownerCreatesSafeMember(userId) {
+      return isOwner(userId) &&
+        request.resource.data.permissionLevel is int &&
+        request.resource.data.permissionLevel == 1;
+    }
+
+    function ownerUpdatesSafeMember(userId) {
+      return isOwner(userId) &&
+        request.resource.data.permissionLevel is int &&
+        request.resource.data.permissionLevel == resource.data.permissionLevel;
     }
 
     match /globeEvents/{eventId} {
@@ -89,17 +238,61 @@ service cloud.firestore {
     }
 
     match /closingCeremonyRegistrations/{registrationId} {
-      allow create: if isSignedIn() &&
-        request.resource.data.uid == request.auth.uid;
-      allow read: if isSignedIn();
-      allow update: if isSignedIn() &&
-        (resource.data.uid == request.auth.uid || hasPermissionLevel(3));
+      allow create: if isSignedIn() && registrationId == request.auth.uid &&
+        isValidClosingCeremonyRegistration(request.resource.data);
+      allow read: if isSignedIn() &&
+        (registrationId == request.auth.uid || hasPermissionLevel(3));
+      allow update: if isSignedIn() && registrationId == request.auth.uid &&
+        resource.data.uid == request.auth.uid &&
+        isValidClosingCeremonyRegistration(request.resource.data);
+      allow delete: if false;
+    }
+
+    match /closingCeremonyWorkshopStates/{workshopId} {
+      allow read: if isClosingCeremonyRegistrant() || hasPermissionLevel(3);
+      allow create, update: if hasPermissionLevel(3) &&
+        isValidWorkshopState(request.resource.data, workshopId);
+      allow delete: if false;
+    }
+
+    match /closingCeremonyWorkshopCounters/{workshopId} {
+      allow read: if isClosingCeremonyRegistrant() || hasPermissionLevel(3);
+      allow create: if isClosingCeremonyRegistrant() &&
+        isValidWorkshopCounter(request.resource.data, workshopId) &&
+        request.resource.data.nextNumber == 2 &&
+        !exists(/databases/$(database)/documents/closingCeremonyWorkshopTickets/$(workshopTicketId(workshopId))) &&
+        getAfter(/databases/$(database)/documents/closingCeremonyWorkshopTickets/$(workshopTicketId(workshopId))).data.ticketNumber == 1;
+      allow update: if isClosingCeremonyRegistrant() &&
+        isValidWorkshopCounter(request.resource.data, workshopId) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(["nextNumber", "updatedAt"]) &&
+        request.resource.data.nextNumber == resource.data.nextNumber + 1 &&
+        !exists(/databases/$(database)/documents/closingCeremonyWorkshopTickets/$(workshopTicketId(workshopId))) &&
+        getAfter(/databases/$(database)/documents/closingCeremonyWorkshopTickets/$(workshopTicketId(workshopId))).data.ticketNumber == resource.data.nextNumber;
+      allow delete: if false;
+    }
+
+    match /closingCeremonyWorkshopTickets/{ticketId} {
+      allow get: if hasPermissionLevel(3) ||
+        (isClosingCeremonyRegistrant() && ticketId in [
+          workshopTicketId("clothing-recycling"),
+          workshopTicketId("recycling-racing"),
+          workshopTicketId("seed-paper-planting"),
+          workshopTicketId("mugwort-sachet")
+        ]);
+      allow list: if hasPermissionLevel(3);
+      allow create: if isClosingCeremonyRegistrant() &&
+        isValidNewWorkshopTicket(request.resource.data, request.resource.data.workshopId, ticketId) &&
+        get(/databases/$(database)/documents/closingCeremonyWorkshopStates/$(request.resource.data.workshopId)).data.status in ["open", "calling"];
+      allow update: if hasPermissionLevel(3) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "usedAt"]) &&
+        isValidUpdatedWorkshopTicket(request.resource.data, ticketId);
       allow delete: if false;
     }
 
     match /members/{userId} {
       allow read: if isSignedIn();
-      allow create, update: if isOwner(userId) || hasPermissionLevel(3);
+      allow create: if ownerCreatesSafeMember(userId) || hasPermissionLevel(3);
+      allow update: if ownerUpdatesSafeMember(userId) || hasPermissionLevel(3);
       allow delete: if false;
     }
   }
