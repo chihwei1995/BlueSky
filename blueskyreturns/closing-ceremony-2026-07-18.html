@@ -133,9 +133,9 @@
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 420px);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 24px;
-      align-items: start;
+      align-items: stretch;
     }
 
     .poster-card,
@@ -147,14 +147,27 @@
     }
 
     .poster-card {
+      display: flex;
+      min-height: 0;
       overflow: hidden;
       padding: 16px;
     }
 
     .poster-frame {
+      position: relative;
+      width: 100%;
+      min-height: 0;
       border-radius: 24px;
       overflow: hidden;
       background: #d9f1df;
+    }
+
+    .poster-frame img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .register-card {
@@ -381,9 +394,11 @@
 
     .workshop-poster {
       width: 100%;
-      height: 100%;
-      min-height: 310px;
-      object-fit: cover;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 1122 / 1402;
+      align-self: start;
+      object-fit: contain;
       object-position: center top;
       background: #d9f1df;
     }
@@ -503,6 +518,10 @@
       animation: ticketPulse 1.4s ease-in-out infinite;
     }
 
+    .ticket-number strong.is-missed {
+      color: #b42318;
+    }
+
     @keyframes ticketPulse {
       50% { transform: scale(1.04); }
     }
@@ -537,6 +556,11 @@
     @media (max-width: 960px) {
       .hero {
         grid-template-columns: 1fr;
+      }
+
+      .poster-frame {
+        height: min(62vh, 560px);
+        min-height: 320px;
       }
 
       .register-card {
@@ -581,6 +605,11 @@
 
       .poster-card {
         padding: 10px;
+      }
+
+      .poster-frame {
+        height: min(56vh, 440px);
+        min-height: 280px;
       }
 
       .register-card {
@@ -628,6 +657,7 @@
         height: auto;
         min-height: 0;
         aspect-ratio: 1122 / 1402;
+        object-fit: contain;
       }
 
       .workshop-content {
@@ -918,7 +948,8 @@
       const canClaim = ["open", "calling"].includes(status) && !ticket && !claimingWorkshops.has(workshopId);
       const ticketNumber = Number(ticket?.ticketNumber || 0);
       const isUsed = ticket?.status === "used";
-      const isReady = !isUsed && status === "calling" && hasCallingRange &&
+      const isMissed = ticket?.status === "missed";
+      const isReady = !isUsed && !isMissed && status === "calling" && hasCallingRange &&
         ticketNumber >= callingStart && ticketNumber <= callingEnd;
 
       const stateEl = card.querySelector('[data-role="state"]');
@@ -938,13 +969,14 @@
       announcementEl.textContent = String(state.announcement || "請留意現場最新公告。");
       ticketEl.textContent = ticket ? formatTicketNumber(ticketNumber) : "未領取";
       ticketEl.classList.toggle("is-ready", isReady);
+      ticketEl.classList.toggle("is-missed", isMissed);
 
       if (claimingWorkshops.has(workshopId)) {
         claimButton.disabled = true;
         claimButton.textContent = "領取中...";
       } else if (ticket) {
         claimButton.disabled = true;
-        claimButton.textContent = isUsed ? "已入場" : (isReady ? "現在可入場" : "已領取");
+        claimButton.textContent = isUsed ? "已入場" : (isMissed ? "已過號" : (isReady ? "現在可入場" : "已領取"));
       } else {
         claimButton.disabled = !canClaim;
         claimButton.textContent = canClaim ? "領取號碼牌" : "尚未開放";
@@ -954,6 +986,8 @@
         messageEl.textContent = workshopErrors.get(workshopId);
       } else if (isUsed) {
         messageEl.textContent = "此號碼已完成入場。";
+      } else if (isMissed) {
+        messageEl.textContent = "此號碼已過號，請向現場工作人員查詢安排。";
       } else if (isReady) {
         messageEl.textContent = "輪到你了，請帶同此號碼前往工作坊入口。";
       } else if (ticket) {

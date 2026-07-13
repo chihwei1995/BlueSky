@@ -221,7 +221,7 @@
       margin: -4px 0 16px;
     }
 
-    .secondary-btn, .primary-btn {
+    .secondary-btn, .primary-btn, .danger-btn {
       min-height: 46px;
       border-radius: 14px;
       padding: 10px 13px;
@@ -242,7 +242,27 @@
       box-shadow: 0 14px 28px rgba(22, 132, 77, 0.2);
     }
 
-    .primary-btn:disabled, .secondary-btn:disabled { cursor: wait; opacity: 0.6; }
+    .danger-zone {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px dashed rgba(180, 35, 24, 0.24);
+    }
+
+    .danger-zone p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .danger-btn {
+      width: 100%;
+      border: 1px solid rgba(180, 35, 24, 0.24);
+      background: #fff1f0;
+      color: var(--red);
+    }
+
+    .primary-btn:disabled, .secondary-btn:disabled, .danger-btn:disabled { cursor: wait; opacity: 0.6; }
 
     .save-status {
       min-height: 24px;
@@ -258,7 +278,7 @@
 
     .metrics {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 11px;
       margin-bottom: 18px;
     }
@@ -302,6 +322,12 @@
 
     .number-list { display: flex; flex-wrap: wrap; gap: 8px; min-height: 42px; }
 
+    .number-entry {
+      display: inline-flex;
+      align-items: stretch;
+      gap: 5px;
+    }
+
     .number-chip {
       display: inline-flex;
       align-items: center;
@@ -318,7 +344,20 @@
     button.number-chip:hover { border-color: var(--green); }
     .number-chip.ready { border-color: #f2b84b; background: #fff4cf; color: #895900; }
     .number-chip.used { border-color: #a5d7b6; background: #e2f6e8; color: #176c3e; }
+    .number-chip.missed { border-color: #efaaa5; background: #fff1f0; color: #9f241b; }
     .number-chip small { font-size: 0.66rem; font-weight: 800; opacity: 0.72; }
+
+    .missed-btn {
+      min-width: 44px;
+      border: 1px solid rgba(180, 35, 24, 0.2);
+      border-radius: 12px;
+      background: #fff7f6;
+      color: var(--red);
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+
+    .missed-btn:hover { border-color: var(--red); }
     .empty { margin: 0; color: var(--muted); font-size: 0.86rem; }
 
     @media (max-width: 900px) {
@@ -367,7 +406,7 @@
         <div>
           <span class="eyebrow">2026.07.18 Live Control</span>
           <h1>四個工作坊即時叫號</h1>
-          <p>切換工作坊後，可更新狀況、可入場號碼及公告，並標記已使用號碼。</p>
+          <p>切換工作坊後，可更新狀況、可入場號碼及公告，並管理已使用與過號號碼。</p>
         </div>
         <span id="syncStatus" class="sync-chip">即時同步已連線</span>
       </div>
@@ -419,12 +458,18 @@
 
           <button id="saveBtn" class="primary-btn" type="button">儲存並即時發布</button>
           <p id="saveStatus" class="save-status" aria-live="polite"></p>
+
+          <div class="danger-zone">
+            <button id="resetWorkshopBtn" class="danger-btn" type="button">重新開始此工作坊</button>
+            <p>會先停止領號，再清除這個工作坊全部號碼牌及計數，下一輪將由 #001 重新開始。</p>
+          </div>
         </section>
 
         <section class="panel" aria-label="號碼牌即時總覽">
           <div class="metrics">
             <div class="metric"><span>已領取</span><strong id="issuedCount">0</strong></div>
             <div class="metric"><span>已使用</span><strong id="usedCount">0</strong></div>
+            <div class="metric"><span>過號</span><strong id="missedCount">0</strong></div>
             <div class="metric"><span>等待中</span><strong id="waitingCount">0</strong></div>
             <div class="metric"><span>下一號</span><strong id="nextNumber">#001</strong></div>
           </div>
@@ -448,6 +493,11 @@
             <header><h2>已使用號碼</h2><span>點號碼可復原為未使用</span></header>
             <div id="usedNumbers" class="number-list"></div>
           </section>
+
+          <section class="number-section">
+            <header><h2>過號</h2><span>獨立保留，點號碼可恢復等待</span></header>
+            <div id="missedNumbers" class="number-list"></div>
+          </section>
         </section>
       </div>
     </section>
@@ -458,13 +508,18 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
     import {
       collection,
+      deleteDoc,
       doc,
       getDoc,
+      getDocs,
       getFirestore,
       onSnapshot,
+      query,
       serverTimestamp,
       setDoc,
-      updateDoc
+      updateDoc,
+      where,
+      writeBatch
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
 
@@ -514,15 +569,18 @@
     const nextOneBtn = document.getElementById("nextOneBtn");
     const nextFiveBtn = document.getElementById("nextFiveBtn");
     const saveBtn = document.getElementById("saveBtn");
+    const resetWorkshopBtn = document.getElementById("resetWorkshopBtn");
     const saveStatus = document.getElementById("saveStatus");
     const issuedCount = document.getElementById("issuedCount");
     const usedCount = document.getElementById("usedCount");
+    const missedCount = document.getElementById("missedCount");
     const waitingCount = document.getElementById("waitingCount");
     const nextNumber = document.getElementById("nextNumber");
     const currentRange = document.getElementById("currentRange");
     const readyNumbers = document.getElementById("readyNumbers");
     const issuedNumbers = document.getElementById("issuedNumbers");
     const usedNumbers = document.getElementById("usedNumbers");
+    const missedNumbers = document.getElementById("missedNumbers");
 
     let currentUser = null;
     let selectedWorkshopId = WORKSHOPS[0].id;
@@ -551,16 +609,27 @@
       }
 
       element.innerHTML = list.map((ticket) => `
-        <button
-          class="number-chip${options.className ? ` ${options.className}` : ""}"
-          type="button"
-          data-ticket-id="${ticket.id}"
-          data-action="${options.action || "mark-used"}"
-          title="${options.title || "標記為已使用"}"
-        >
-          ${formatNumber(ticket.ticketNumber)}
-          <small>${options.label || "標記入場"}</small>
-        </button>
+        <span class="number-entry">
+          <button
+            class="number-chip${options.className ? ` ${options.className}` : ""}"
+            type="button"
+            data-ticket-id="${ticket.id}"
+            data-action="${options.action || "mark-used"}"
+            title="${options.title || "標記為已使用"}"
+          >
+            ${formatNumber(ticket.ticketNumber)}
+            <small>${options.label || "標記入場"}</small>
+          </button>
+          ${options.allowMissed ? `
+            <button
+              class="missed-btn"
+              type="button"
+              data-ticket-id="${ticket.id}"
+              data-action="mark-missed"
+              title="移到過號清單"
+            >過號</button>
+          ` : ""}
+        </span>
       `).join("");
     };
 
@@ -569,8 +638,9 @@
       const state = states.get(selectedWorkshopId) || defaultState(selectedWorkshopId);
       const counter = counters.get(selectedWorkshopId);
       const all = selectedTickets();
-      const unused = all.filter((ticket) => ticket.status !== "used");
+      const unused = all.filter((ticket) => ticket.status === "issued");
       const used = all.filter((ticket) => ticket.status === "used");
+      const missed = all.filter((ticket) => ticket.status === "missed");
       const start = Number(state.callingStart || 0);
       const end = Number(state.callingEnd || 0);
       const hasRange = start > 0 && end >= start;
@@ -591,15 +661,17 @@
 
       issuedCount.textContent = String(all.length);
       usedCount.textContent = String(used.length);
+      missedCount.textContent = String(missed.length);
       waitingCount.textContent = String(unused.length);
       nextNumber.textContent = formatNumber(counter?.nextNumber || 1);
       currentRange.textContent = hasRange
         ? (start === end ? formatNumber(start) : `${formatNumber(start)} – ${formatNumber(end)}`)
         : "尚未叫號";
 
-      renderNumberList(readyNumbers, ready, { className: "ready", emptyText: "目前沒有可入場的已領號碼", label: "標記入場" });
-      renderNumberList(issuedNumbers, unused, { emptyText: "目前沒有等待中的號碼", label: "標記入場" });
+      renderNumberList(readyNumbers, ready, { className: "ready", emptyText: "目前沒有可入場的已領號碼", label: "標記入場", allowMissed: true });
+      renderNumberList(issuedNumbers, unused, { emptyText: "目前沒有等待中的號碼", label: "標記入場", allowMissed: true });
       renderNumberList(usedNumbers, used, { className: "used", emptyText: "目前沒有已使用號碼", action: "restore", label: "復原", title: "復原為未使用" });
+      renderNumberList(missedNumbers, missed, { className: "missed", emptyText: "目前沒有過號號碼", action: "restore", label: "恢復", title: "恢復為等待中" });
     };
 
     const stopListeners = () => {
@@ -694,15 +766,79 @@
       setSaveStatus("", "號碼已填入，按「儲存並即時發布」後生效。");
     };
 
-    const updateTicketUsage = async (ticketId, used) => {
+    const updateTicketStatus = async (ticketId, status) => {
       try {
         await updateDoc(doc(db, "closingCeremonyWorkshopTickets", ticketId), {
-          status: used ? "used" : "issued",
-          usedAt: used ? serverTimestamp() : null
+          status,
+          usedAt: status === "used" ? serverTimestamp() : null
         });
       } catch (error) {
-        console.error("Ticket usage update failed:", error);
+        console.error("Ticket status update failed:", error);
         setSaveStatus("error", "號碼狀態更新失敗，請稍後再試。");
+      }
+    };
+
+    const resetSelectedWorkshop = async () => {
+      if (!currentUser) return;
+      const workshopId = selectedWorkshopId;
+      const workshop = selectedWorkshop();
+      const currentTicketCount = selectedTickets().length;
+      const confirmed = window.confirm(
+        `確定重新開始「${workshop.title}」？\n\n` +
+        `這會永久清除目前 ${currentTicketCount} 個號碼牌及叫號進度，並由 #001 重新開始。`
+      );
+      if (!confirmed) return;
+
+      saveBtn.disabled = true;
+      resetWorkshopBtn.disabled = true;
+      nextOneBtn.disabled = true;
+      nextFiveBtn.disabled = true;
+      setSaveStatus("", "正在停止領號並重新開始...");
+
+      try {
+        const stateRef = doc(db, "closingCeremonyWorkshopStates", workshopId);
+        await setDoc(stateRef, {
+          eventId: EVENT_ID,
+          workshopId,
+          status: "preparing",
+          callingStart: 0,
+          callingEnd: 0,
+          announcement: "工作坊正在重新開始，請稍候重新開放領號。",
+          updatedAt: serverTimestamp(),
+          updatedBy: currentUser.uid
+        });
+
+        const ticketSnapshot = await getDocs(query(
+          collection(db, "closingCeremonyWorkshopTickets"),
+          where("workshopId", "==", workshopId)
+        ));
+        const ticketDocs = ticketSnapshot.docs;
+        for (let index = 0; index < ticketDocs.length; index += 400) {
+          const batch = writeBatch(db);
+          ticketDocs.slice(index, index + 400).forEach((ticketDoc) => batch.delete(ticketDoc.ref));
+          await batch.commit();
+        }
+
+        await deleteDoc(doc(db, "closingCeremonyWorkshopCounters", workshopId));
+        await setDoc(stateRef, {
+          eventId: EVENT_ID,
+          workshopId,
+          status: "preparing",
+          callingStart: 0,
+          callingEnd: 0,
+          announcement: "新一輪尚未開放領號，請留意現場公告。",
+          updatedAt: serverTimestamp(),
+          updatedBy: currentUser.uid
+        });
+        setSaveStatus("ok", `已重新開始「${workshop.title}」，下一個號碼為 #001。`);
+      } catch (error) {
+        console.error("Workshop reset failed:", error);
+        setSaveStatus("error", "重新開始未完成。工作坊已暫停領號，請檢查網絡後再按一次重新開始。");
+      } finally {
+        saveBtn.disabled = false;
+        resetWorkshopBtn.disabled = false;
+        nextOneBtn.disabled = false;
+        nextFiveBtn.disabled = false;
       }
     };
 
@@ -716,12 +852,16 @@
       renderDashboard({ syncForm: true });
     });
     saveBtn.addEventListener("click", saveSelectedState);
+    resetWorkshopBtn.addEventListener("click", resetSelectedWorkshop);
     nextOneBtn.addEventListener("click", () => setNextRange(1));
     nextFiveBtn.addEventListener("click", () => setNextRange(5));
     document.addEventListener("click", (event) => {
       const button = event.target.closest("[data-ticket-id]");
       if (!button) return;
-      updateTicketUsage(button.dataset.ticketId, button.dataset.action !== "restore");
+      const nextStatus = button.dataset.action === "restore"
+        ? "issued"
+        : (button.dataset.action === "mark-missed" ? "missed" : "used");
+      updateTicketStatus(button.dataset.ticketId, nextStatus);
     });
 
     onAuthStateChanged(auth, async (user) => {

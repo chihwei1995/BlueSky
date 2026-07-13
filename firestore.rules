@@ -13,7 +13,7 @@ rules_version = '2';
 // closingCeremonyWorkshopTickets/{workshopId}__{uid}
 //   eventId, workshopId, uid, status: bounded strings
 //   ticketNumber: integer 1..9999; issuedAt: immutable timestamp
-//   usedAt: timestamp or null
+//   status: issued, used, or missed; usedAt: timestamp for used, otherwise null
 // closingCeremonyRegistrations/{uid}
 //   fixed event metadata plus attendeeName/email, registeredAt timestamp
 // members/{uid}
@@ -62,6 +62,11 @@ service cloud.firestore {
 
     function workshopTicketId(workshopId) {
       return workshopId + "__" + request.auth.uid;
+    }
+
+    function isWorkshopPreparing(workshopId) {
+      return isClosingCeremonyWorkshop(workshopId) &&
+        get(/databases/$(database)/documents/closingCeremonyWorkshopStates/$(workshopId)).data.status == "preparing";
     }
 
     function isValidClosingCeremonyRegistration(data) {
@@ -155,10 +160,11 @@ service cloud.firestore {
         data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 &&
         data.ticketNumber is int && data.ticketNumber >= 1 && data.ticketNumber <= 9999 &&
         data.issuedAt is timestamp &&
-        data.status in ["issued", "used"] &&
+        data.status in ["issued", "used", "missed"] &&
         (
           (data.status == "issued" && data.usedAt == null) ||
-          (data.status == "used" && data.usedAt is timestamp && data.usedAt == request.time)
+          (data.status == "used" && data.usedAt is timestamp && data.usedAt == request.time) ||
+          (data.status == "missed" && data.usedAt == null)
         );
     }
 
@@ -268,7 +274,7 @@ service cloud.firestore {
         request.resource.data.nextNumber == resource.data.nextNumber + 1 &&
         !exists(/databases/$(database)/documents/closingCeremonyWorkshopTickets/$(workshopTicketId(workshopId))) &&
         getAfter(/databases/$(database)/documents/closingCeremonyWorkshopTickets/$(workshopTicketId(workshopId))).data.ticketNumber == resource.data.nextNumber;
-      allow delete: if false;
+      allow delete: if hasPermissionLevel(3) && isWorkshopPreparing(workshopId);
     }
 
     match /closingCeremonyWorkshopTickets/{ticketId} {
@@ -286,7 +292,8 @@ service cloud.firestore {
       allow update: if hasPermissionLevel(3) &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "usedAt"]) &&
         isValidUpdatedWorkshopTicket(request.resource.data, ticketId);
-      allow delete: if false;
+      allow delete: if hasPermissionLevel(3) &&
+        isWorkshopPreparing(resource.data.workshopId);
     }
 
     match /members/{userId} {
