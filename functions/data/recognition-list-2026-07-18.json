@@ -1,0 +1,1972 @@
+[
+  {
+    "id": "rec_8048acc6dbf08faf",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 2,
+    "sequence": 1,
+    "displayName": "主禮嘉賓 黃大仙區議員 潘卓斌 先生",
+    "matchName": "潘卓斌",
+    "matchKey": "潘卓斌",
+    "isActive": true
+  },
+  {
+    "id": "rec_e4f43c77051b36ca",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 3,
+    "sequence": 2,
+    "displayName": "分享嘉賓 長春社 凌慧芬 女士",
+    "matchName": "凌慧芬",
+    "matchKey": "凌慧芬",
+    "isActive": true
+  },
+  {
+    "id": "rec_7ce09ad0db14adb8",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 4,
+    "sequence": 3,
+    "displayName": "香港青年商會基金代表 國際青年商會中國香港總會前總會會長 胡惠基先生",
+    "matchName": "胡惠基",
+    "matchKey": "胡惠基",
+    "isActive": true
+  },
+  {
+    "id": "rec_b0ebe6326644e4fc",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 5,
+    "sequence": 4,
+    "displayName": "香港青年商會基金代表 國際青年商會中國香港總會前總會會長 伍進超先生",
+    "matchName": "伍進超",
+    "matchKey": "伍進超",
+    "isActive": true
+  },
+  {
+    "id": "rec_5be55378d58546f4",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 6,
+    "sequence": 5,
+    "displayName": "半島青年商會發展基金主席 雲騰龍 先生",
+    "matchName": "雲騰龍",
+    "matchKey": "雲騰龍",
+    "isActive": true
+  },
+  {
+    "id": "rec_75cda77e7fa0c44a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 7,
+    "sequence": 6,
+    "displayName": "環保社區慈善基金會有限公司 謝詠怡女士",
+    "matchName": "謝詠怡",
+    "matchKey": "謝詠怡",
+    "isActive": true
+  },
+  {
+    "id": "rec_11212dfed0c43caf",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 8,
+    "sequence": 7,
+    "displayName": "好自然環保有限公司 林健成先生",
+    "matchName": "林健成",
+    "matchKey": "林健成",
+    "isActive": true
+  },
+  {
+    "id": "rec_0eef510501b692ad",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 9,
+    "sequence": 9,
+    "displayName": "綠線通 陳詩祈女士",
+    "matchName": "陳詩祈",
+    "matchKey": "陳詩祈",
+    "isActive": true
+  },
+  {
+    "id": "rec_6b34b7d571bdaa75",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 10,
+    "sequence": 10,
+    "displayName": "珠港青年交流促進會主席",
+    "matchName": "",
+    "matchKey": "",
+    "isActive": true
+  },
+  {
+    "id": "rec_b3b9211fc004cb3e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 11,
+    "sequence": 11,
+    "displayName": "總會會長 連冠鴻參議員 (Daryl)",
+    "matchName": "連冠鴻",
+    "matchKey": "連冠鴻",
+    "isActive": true
+  },
+  {
+    "id": "rec_ba0b704541e3f55d",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 12,
+    "sequence": 12,
+    "displayName": "國際青年商會資訊科技與創新委員會主席、參議會主席及總會上屆會長 王師堯參議員 (Rafael)",
+    "matchName": "王師堯",
+    "matchKey": "王師堯",
+    "isActive": true
+  },
+  {
+    "id": "rec_627e00df30c36158",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 13,
+    "sequence": 13,
+    "displayName": "1988年國際青年商會會長 余葉展華參議員",
+    "matchName": "余葉展華",
+    "matchKey": "余葉展華",
+    "isActive": true
+  },
+  {
+    "id": "rec_c3d3b545ae170331",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 14,
+    "sequence": 14,
+    "displayName": "國際青年商會榮譽顧問及1979年總會會長 余振宇參議員",
+    "matchName": "余振宇",
+    "matchKey": "余振宇",
+    "isActive": true
+  },
+  {
+    "id": "rec_6772797696362b26",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 15,
+    "sequence": 15,
+    "displayName": "國際青年商會顧問團主席、香港青年商會基金主席及2008年總會會長 鄧仕堅參議員",
+    "matchName": "鄧仕堅",
+    "matchKey": "鄧仕堅",
+    "isActive": true
+  },
+  {
+    "id": "rec_3af043b68d8b8d30",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 16,
+    "sequence": 16,
+    "displayName": "國際青年商會執行副會長及 2024年總會會長 麥頌斌參議員 (Ben)",
+    "matchName": "麥頌斌",
+    "matchKey": "麥頌斌",
+    "isActive": true
+  },
+  {
+    "id": "rec_e294d543db57521d",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 17,
+    "sequence": 17,
+    "displayName": "國際青年商會基金董事、總會顧問團成員及2006年總會會長 徐小龍博士參議員 MH",
+    "matchName": "士參議員",
+    "matchKey": "士",
+    "isActive": true
+  },
+  {
+    "id": "rec_309042904ab6ab8e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 18,
+    "sequence": 18,
+    "displayName": "國際青年商會基金委員會委員 (亞洲及太平洋區) 韓諾文參議員",
+    "matchName": "韓諾文",
+    "matchKey": "韓諾文",
+    "isActive": true
+  },
+  {
+    "id": "rec_cf1d382e9c456b92",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 19,
+    "sequence": 19,
+    "displayName": "推進人類責任委員會委員 (亞洲及太平洋區)、會務顧問及2022年會長施展豪參議員 (Howard)",
+    "matchName": "長施展豪",
+    "matchKey": "長施展豪",
+    "isActive": true
+  },
+  {
+    "id": "rec_b622fc2a4a331fae",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 20,
+    "sequence": 20,
+    "displayName": "市場推廣委員會委員(亞洲及太平洋區) 梁醒標參議員",
+    "matchName": "梁醒標",
+    "matchKey": "梁醒標",
+    "isActive": true
+  },
+  {
+    "id": "rec_8574661616599a18",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 21,
+    "sequence": 21,
+    "displayName": "可持續發展委員會委員(亞洲及太平洋區) 劉慕珊參議員",
+    "matchName": "劉慕珊",
+    "matchKey": "劉慕珊",
+    "isActive": true
+  },
+  {
+    "id": "rec_dfbfb5f7bf5c1c86",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 22,
+    "sequence": 22,
+    "displayName": "國際青年商會審計委員會主席及2015年總會會長 梁國柱參議員",
+    "matchName": "梁國柱",
+    "matchKey": "梁國柱",
+    "isActive": true
+  },
+  {
+    "id": "rec_8e72542fb2e72bcb",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 23,
+    "sequence": 23,
+    "displayName": "國際青年商會亞太區參議會秘書長 陳曼華參議員",
+    "matchName": "陳曼華",
+    "matchKey": "陳曼華",
+    "isActive": true
+  },
+  {
+    "id": "rec_725188d31abdb2ed",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 24,
+    "sequence": 24,
+    "displayName": "國際青年商會亞太區參議會董事、香港青年商會基金主席及2013年總會會長 胡惠基參議員",
+    "matchName": "胡惠基",
+    "matchKey": "胡惠基",
+    "isActive": true
+  },
+  {
+    "id": "rec_aef3fbc150d0db46",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 25,
+    "sequence": 25,
+    "displayName": "國際青年商會 亞太區發展委員會委員 王詠詩參議員",
+    "matchName": "王詠詩",
+    "matchKey": "王詠詩",
+    "isActive": true
+  },
+  {
+    "id": "rec_bd5d764e9778572b",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 26,
+    "sequence": 26,
+    "displayName": "總會會長顧問及2017年總會會長 潘沁怡參議員",
+    "matchName": "潘沁怡",
+    "matchKey": "潘沁怡",
+    "isActive": true
+  },
+  {
+    "id": "rec_f9255b43cf9ebc1a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 27,
+    "sequence": 27,
+    "displayName": "總會顧問團成員及1976年總會會長 尹德勝參議員 SBS, JP",
+    "matchName": "",
+    "matchKey": "",
+    "isActive": true
+  },
+  {
+    "id": "rec_6dee857cbf81d8ae",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 28,
+    "sequence": 28,
+    "displayName": "總會顧問團成員、永遠名譽會長及1980年總會會長鄧兆偉參議員",
+    "matchName": "長鄧兆偉",
+    "matchKey": "長鄧兆偉",
+    "isActive": true
+  },
+  {
+    "id": "rec_fbcb10441ce2649c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 29,
+    "sequence": 29,
+    "displayName": "總會顧問團成員及1991年總會會長 湛家雄參議員 BBS, MH, BH, JP",
+    "matchName": "BH",
+    "matchKey": "bh",
+    "isActive": true
+  },
+  {
+    "id": "rec_c60828499dda0013",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 30,
+    "sequence": 30,
+    "displayName": "總會顧問團成員及1993年總會會長 龍子明參議員 SBS, MH, JP",
+    "matchName": "",
+    "matchKey": "",
+    "isActive": true
+  },
+  {
+    "id": "rec_1a2bec3d7ccb38e5",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 31,
+    "sequence": 31,
+    "displayName": "十大傑出青年選舉指導委員會主席及1984年總會會長 陳榮灝參議員",
+    "matchName": "陳榮灝",
+    "matchKey": "陳榮灝",
+    "isActive": true
+  },
+  {
+    "id": "rec_9eb643ba89be3195",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 32,
+    "sequence": 32,
+    "displayName": "策略規劃委員會主席及2014年總會會長 關俊華參議員",
+    "matchName": "關俊華",
+    "matchKey": "關俊華",
+    "isActive": true
+  },
+  {
+    "id": "rec_2ba2f1e4daddf942",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 34,
+    "sequence": 33,
+    "displayName": "1950-51年總會會長Edward Tan參議員",
+    "matchName": "Tan",
+    "matchKey": "tan",
+    "isActive": true
+  },
+  {
+    "id": "rec_4b779c0342b49b0b",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 35,
+    "sequence": 34,
+    "displayName": "1956-57年總會會長許賢昌參議員",
+    "matchName": "長許賢昌",
+    "matchKey": "長許賢昌",
+    "isActive": true
+  },
+  {
+    "id": "rec_7b4cb0a978b6adfa",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 36,
+    "sequence": 35,
+    "displayName": "1957-58年總會會長陳其海參議員",
+    "matchName": "長陳其海",
+    "matchKey": "長陳其海",
+    "isActive": true
+  },
+  {
+    "id": "rec_059be43c8406c58f",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 37,
+    "sequence": 36,
+    "displayName": "1958-59年總會會長Colin J Ure參議員",
+    "matchName": "Ure",
+    "matchKey": "ure",
+    "isActive": true
+  },
+  {
+    "id": "rec_4973dd5096ea0beb",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 38,
+    "sequence": 37,
+    "displayName": "1959-60年總會會長麥健士參議員",
+    "matchName": "長麥健士",
+    "matchKey": "長麥健士",
+    "isActive": true
+  },
+  {
+    "id": "rec_e88cb8b138441372",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 39,
+    "sequence": 38,
+    "displayName": "1961年總會會長John R D'Eath 參議員 JP",
+    "matchName": "",
+    "matchKey": "",
+    "isActive": true
+  },
+  {
+    "id": "rec_0fc66e5750f4c5d7",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 40,
+    "sequence": 39,
+    "displayName": "1963年總會會長鮑明參議員 ISO, JP",
+    "matchName": "ISO",
+    "matchKey": "iso",
+    "isActive": true
+  },
+  {
+    "id": "rec_ffb6ddf2a97bcb2e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 41,
+    "sequence": 40,
+    "displayName": "1964年總會會長黃沛棠參議員 JP",
+    "matchName": "棠參議員",
+    "matchKey": "棠",
+    "isActive": true
+  },
+  {
+    "id": "rec_42623ae13d234b56",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 42,
+    "sequence": 41,
+    "displayName": "1968年總會會長華立參議員",
+    "matchName": "會長華立",
+    "matchKey": "華立",
+    "isActive": true
+  },
+  {
+    "id": "rec_9b48112dd18b0e22",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 43,
+    "sequence": 42,
+    "displayName": "1969年總會會長第邑參議員",
+    "matchName": "會長第邑",
+    "matchKey": "第邑",
+    "isActive": true
+  },
+  {
+    "id": "rec_334aeb75a48bef9c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 44,
+    "sequence": 43,
+    "displayName": "永遠名譽會長及1971年總會會長楊少初參議員 OBE, JP",
+    "matchName": "OBE",
+    "matchKey": "obe",
+    "isActive": true
+  },
+  {
+    "id": "rec_c4ad933a24dd3c03",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 45,
+    "sequence": 44,
+    "displayName": "1972年總會會長關自立參議員",
+    "matchName": "長關自立",
+    "matchKey": "長關自立",
+    "isActive": true
+  },
+  {
+    "id": "rec_ef7ea3b90b7b1685",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 46,
+    "sequence": 45,
+    "displayName": "1974年總會會長曾慶忠參議員",
+    "matchName": "長曾慶忠",
+    "matchKey": "長曾慶忠",
+    "isActive": true
+  },
+  {
+    "id": "rec_64adb5fb7178f0e1",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 47,
+    "sequence": 46,
+    "displayName": "1975年總會會長曾祥參議員JP",
+    "matchName": "祥參議員",
+    "matchKey": "祥",
+    "isActive": true
+  },
+  {
+    "id": "rec_e286f4cd3726cd7a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 48,
+    "sequence": 47,
+    "displayName": "1977年總會會長陳炎光參議員",
+    "matchName": "長陳炎光",
+    "matchKey": "長陳炎光",
+    "isActive": true
+  },
+  {
+    "id": "rec_002a365d05a22314",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 49,
+    "sequence": 48,
+    "displayName": "1978年總會會長羅永全參議員",
+    "matchName": "長羅永全",
+    "matchKey": "長羅永全",
+    "isActive": true
+  },
+  {
+    "id": "rec_7befc9b6d834309a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 50,
+    "sequence": 49,
+    "displayName": "1981年總會會長彭建文參議員",
+    "matchName": "長彭建文",
+    "matchKey": "長彭建文",
+    "isActive": true
+  },
+  {
+    "id": "rec_4df9266ad948fb4a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 51,
+    "sequence": 50,
+    "displayName": "1983年總會會長梁周修娟參議員",
+    "matchName": "梁周修娟",
+    "matchKey": "梁周修娟",
+    "isActive": true
+  },
+  {
+    "id": "rec_2164cbab74788a3f",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 52,
+    "sequence": 51,
+    "displayName": "1985年總會會長張國斌參議員",
+    "matchName": "長張國斌",
+    "matchKey": "長張國斌",
+    "isActive": true
+  },
+  {
+    "id": "rec_6a2315f8762e89cd",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 53,
+    "sequence": 52,
+    "displayName": "1987年總會會長鄭璧年參議員",
+    "matchName": "長鄭璧年",
+    "matchKey": "長鄭璧年",
+    "isActive": true
+  },
+  {
+    "id": "rec_7b17e1ed58c698b0",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 54,
+    "sequence": 53,
+    "displayName": "1988年總會會長李文超參議員",
+    "matchName": "長李文超",
+    "matchKey": "長李文超",
+    "isActive": true
+  },
+  {
+    "id": "rec_9bde594d37c48b09",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 55,
+    "sequence": 54,
+    "displayName": "1990年總會會長劉敬賢參議員",
+    "matchName": "長劉敬賢",
+    "matchKey": "長劉敬賢",
+    "isActive": true
+  },
+  {
+    "id": "rec_2100492bf8043a2b",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 56,
+    "sequence": 55,
+    "displayName": "1992年總會會長及1988年會長黃志榮參議員 (Eddy)",
+    "matchName": "長黃志榮",
+    "matchKey": "長黃志榮",
+    "isActive": true
+  },
+  {
+    "id": "rec_1a93b1586aee94c8",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 57,
+    "sequence": 56,
+    "displayName": "1994年總會會長何耀雄參議員",
+    "matchName": "長何耀雄",
+    "matchKey": "長何耀雄",
+    "isActive": true
+  },
+  {
+    "id": "rec_f4949b73a43dd8cb",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 58,
+    "sequence": 57,
+    "displayName": "1995年總會會長余文星參議員",
+    "matchName": "長余文星",
+    "matchKey": "長余文星",
+    "isActive": true
+  },
+  {
+    "id": "rec_5b20348b08e6fac2",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 59,
+    "sequence": 58,
+    "displayName": "1996年總會會長雷永強參議員",
+    "matchName": "長雷永強",
+    "matchKey": "長雷永強",
+    "isActive": true
+  },
+  {
+    "id": "rec_ce78dbb15a38a60e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 60,
+    "sequence": 59,
+    "displayName": "1997年總會會長余國雄參議員",
+    "matchName": "長余國雄",
+    "matchKey": "長余國雄",
+    "isActive": true
+  },
+  {
+    "id": "rec_0d6f12d166a7463d",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 61,
+    "sequence": 60,
+    "displayName": "會長顧問、1999年總會會長及1996年會長陳展霞參議員 (Louise)",
+    "matchName": "長陳展霞",
+    "matchKey": "長陳展霞",
+    "isActive": true
+  },
+  {
+    "id": "rec_afdf13c31717d7d0",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 62,
+    "sequence": 61,
+    "displayName": "2000年總會會長李榮貴參議員 (Spencer)",
+    "matchName": "長李榮貴",
+    "matchKey": "長李榮貴",
+    "isActive": true
+  },
+  {
+    "id": "rec_8adcf34cfa4c4c1e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 63,
+    "sequence": 62,
+    "displayName": "2001年總會會長鄧慧思參議員",
+    "matchName": "長鄧慧思",
+    "matchKey": "長鄧慧思",
+    "isActive": true
+  },
+  {
+    "id": "rec_55d40aca0316d865",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 64,
+    "sequence": 63,
+    "displayName": "2002年總會會長陳國民參議員",
+    "matchName": "長陳國民",
+    "matchKey": "長陳國民",
+    "isActive": true
+  },
+  {
+    "id": "rec_208afc8a929c44fe",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 65,
+    "sequence": 64,
+    "displayName": "2003年總會會長廖懿珍參議員",
+    "matchName": "長廖懿珍",
+    "matchKey": "長廖懿珍",
+    "isActive": true
+  },
+  {
+    "id": "rec_a559d3931837e5a8",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 66,
+    "sequence": 65,
+    "displayName": "2004年總會會長白富鴻參議員 JP",
+    "matchName": "鴻參議員",
+    "matchKey": "鴻",
+    "isActive": true
+  },
+  {
+    "id": "rec_17de7968bfd76420",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 67,
+    "sequence": 66,
+    "displayName": "2005年總會會長曾鳳珠參議員 JP",
+    "matchName": "珠參議員",
+    "matchKey": "珠",
+    "isActive": true
+  },
+  {
+    "id": "rec_07fd91d3637f6901",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 68,
+    "sequence": 67,
+    "displayName": "2007年總會會長胡健民參議員 MH, JP (Clement)",
+    "matchName": "",
+    "matchKey": "",
+    "isActive": true
+  },
+  {
+    "id": "rec_8553ec6311d5fd0e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 69,
+    "sequence": 68,
+    "displayName": "2009年總會會長黃文健參議員",
+    "matchName": "長黃文健",
+    "matchKey": "長黃文健",
+    "isActive": true
+  },
+  {
+    "id": "rec_9859af2d9a07fd57",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 70,
+    "sequence": 69,
+    "displayName": "會務顧問、2010年總會會長及2006年會長鄧長政參議員 (Gene)",
+    "matchName": "長鄧長政",
+    "matchKey": "長鄧長政",
+    "isActive": true
+  },
+  {
+    "id": "rec_c3e49a2ba02b653e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 71,
+    "sequence": 70,
+    "displayName": "2011年總會會長李騰駿參議員 MH",
+    "matchName": "駿參議員",
+    "matchKey": "駿",
+    "isActive": true
+  },
+  {
+    "id": "rec_ce1563c5878b30ad",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 72,
+    "sequence": 71,
+    "displayName": "2012年總會會長伍進超參議員",
+    "matchName": "長伍進超",
+    "matchKey": "長伍進超",
+    "isActive": true
+  },
+  {
+    "id": "rec_d0d3c6496a8dfa3c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 73,
+    "sequence": 73,
+    "displayName": "2016年總會會長關德仁參議員 (Brian)",
+    "matchName": "長關德仁",
+    "matchKey": "長關德仁",
+    "isActive": true
+  },
+  {
+    "id": "rec_6d35a36b2900fc30",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 74,
+    "sequence": 74,
+    "displayName": "2017年總會會長潘沁怡參議員",
+    "matchName": "長潘沁怡",
+    "matchKey": "長潘沁怡",
+    "isActive": true
+  },
+  {
+    "id": "rec_1ae58eaa6655e34c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 75,
+    "sequence": 75,
+    "displayName": "2018年總會會長簡汝謙參議員",
+    "matchName": "長簡汝謙",
+    "matchKey": "長簡汝謙",
+    "isActive": true
+  },
+  {
+    "id": "rec_95aaaa4811dd499e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 76,
+    "sequence": 76,
+    "displayName": "2019年總會會長連冠豪參議員",
+    "matchName": "長連冠豪",
+    "matchKey": "長連冠豪",
+    "isActive": true
+  },
+  {
+    "id": "rec_f277382d0eca4012",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 77,
+    "sequence": 77,
+    "displayName": "2020年總會會長鄭永翔參議員",
+    "matchName": "長鄭永翔",
+    "matchKey": "長鄭永翔",
+    "isActive": true
+  },
+  {
+    "id": "rec_971f6ca4f6b46db9",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 78,
+    "sequence": 78,
+    "displayName": "2021年總會會長楊穎琳參議員 (Winnie)",
+    "matchName": "長楊穎琳",
+    "matchKey": "長楊穎琳",
+    "isActive": true
+  },
+  {
+    "id": "rec_d0b5d64833fc6cd1",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 79,
+    "sequence": 79,
+    "displayName": "2022年總會會長楊甘琳參議員 (Karen)",
+    "matchName": "長楊甘琳",
+    "matchKey": "長楊甘琳",
+    "isActive": true
+  },
+  {
+    "id": "rec_56d4dc939fc2ce79",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 80,
+    "sequence": 80,
+    "displayName": "2023年總會會長余修賢參議員 (Kenneth)",
+    "matchName": "長余修賢",
+    "matchKey": "長余修賢",
+    "isActive": true
+  },
+  {
+    "id": "rec_9c8ca005d407ec16",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 82,
+    "sequence": 81,
+    "displayName": "總會資深青商會主席 林妙玲參議員 (Irene)",
+    "matchName": "林妙玲",
+    "matchKey": "林妙玲",
+    "isActive": true
+  },
+  {
+    "id": "rec_81de8a63f8a11274",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 83,
+    "sequence": 82,
+    "displayName": "總會法制顧問及2023年會長 曹佩詩參議員 (Priscilla)",
+    "matchName": "曹佩詩",
+    "matchKey": "曹佩詩",
+    "isActive": true
+  },
+  {
+    "id": "rec_4db2efca91af4ec1",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 84,
+    "sequence": 83,
+    "displayName": "總會執行副會長 陳明衛參議員 (Calvin)",
+    "matchName": "陳明衛",
+    "matchKey": "陳明衛",
+    "isActive": true
+  },
+  {
+    "id": "rec_0a92271092aa6321",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 85,
+    "sequence": 84,
+    "displayName": "總會執行副會長 陳曉晴 (Christy)",
+    "matchName": "陳曉晴",
+    "matchKey": "陳曉晴",
+    "isActive": true
+  },
+  {
+    "id": "rec_b5dddeee57cfbfbf",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 86,
+    "sequence": 85,
+    "displayName": "國際青年商會女性領袖委員會副主席及總會副會長 卓虹宇 (Rycho)",
+    "matchName": "卓虹宇",
+    "matchKey": "卓虹宇",
+    "isActive": true
+  },
+  {
+    "id": "rec_be5d65f248b1d29a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 87,
+    "sequence": 86,
+    "displayName": "總會副會長 劉浩榮參議員 (Hob)",
+    "matchName": "劉浩榮",
+    "matchKey": "劉浩榮",
+    "isActive": true
+  },
+  {
+    "id": "rec_0ecaff21e275dee3",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 88,
+    "sequence": 87,
+    "displayName": "總會副會長 岑廸樺參議員 (Dara)",
+    "matchName": "岑廸樺",
+    "matchKey": "岑廸樺",
+    "isActive": true
+  },
+  {
+    "id": "rec_758412ee9d05568d",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 89,
+    "sequence": 88,
+    "displayName": "總會副會長 黃珮欣參議員 (Yannes)",
+    "matchName": "黃珮欣",
+    "matchKey": "黃珮欣",
+    "isActive": true
+  },
+  {
+    "id": "rec_88314669e6ab29ec",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 90,
+    "sequence": 89,
+    "displayName": "總會副會長及上屆會長 方瑀楨 (Jenny)",
+    "matchName": "方瑀楨",
+    "matchKey": "方瑀楨",
+    "isActive": true
+  },
+  {
+    "id": "rec_2b915ea66f9969d9",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 91,
+    "sequence": 90,
+    "displayName": "總會副會長 郭澤豐 (Dickson)",
+    "matchName": "郭澤豐",
+    "matchKey": "郭澤豐",
+    "isActive": true
+  },
+  {
+    "id": "rec_a9f965c1b3814019",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 92,
+    "sequence": 91,
+    "displayName": "總會副會長 李駿瑜 (Bosco)",
+    "matchName": "李駿瑜",
+    "matchKey": "李駿瑜",
+    "isActive": true
+  },
+  {
+    "id": "rec_4a94847e85616806",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 93,
+    "sequence": 92,
+    "displayName": "總會副會長 鄧中維 (Dickey)",
+    "matchName": "鄧中維",
+    "matchKey": "鄧中維",
+    "isActive": true
+  },
+  {
+    "id": "rec_c788526c0ae05471",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 94,
+    "sequence": 93,
+    "displayName": "總會副會長 黃麗興 (Theresa)",
+    "matchName": "黃麗興",
+    "matchKey": "黃麗興",
+    "isActive": true
+  },
+  {
+    "id": "rec_43ce8c6efc1668d9",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 95,
+    "sequence": 94,
+    "displayName": "總會秘書長 梁樂熙參議員 (Hei)",
+    "matchName": "梁樂熙",
+    "matchKey": "梁樂熙",
+    "isActive": true
+  },
+  {
+    "id": "rec_4c858e4616975633",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 96,
+    "sequence": 95,
+    "displayName": "總會財務長暨總會指派執行委員 梁芷琳 (Tiffany)",
+    "matchName": "梁芷琳",
+    "matchKey": "梁芷琳",
+    "isActive": true
+  },
+  {
+    "id": "rec_045d1e4b76b16cb3",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 97,
+    "sequence": 96,
+    "displayName": "總會數碼發展董事 羅景泰",
+    "matchName": "羅景泰",
+    "matchKey": "羅景泰",
+    "isActive": true
+  },
+  {
+    "id": "rec_830c108ca1f9d51e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 98,
+    "sequence": 97,
+    "displayName": "總會經濟發展董事 葉梓堅",
+    "matchName": "葉梓堅",
+    "matchKey": "葉梓堅",
+    "isActive": true
+  },
+  {
+    "id": "rec_f864c2a95f30f64e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 99,
+    "sequence": 98,
+    "displayName": "總會全球議題及聯合國事務董事 葉柏伶",
+    "matchName": "葉柏伶",
+    "matchKey": "葉柏伶",
+    "isActive": true
+  },
+  {
+    "id": "rec_b328ec4fbeedea64",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 100,
+    "sequence": 99,
+    "displayName": "總會國際事務董事 梁晃瑋",
+    "matchName": "梁晃瑋",
+    "matchKey": "梁晃瑋",
+    "isActive": true
+  },
+  {
+    "id": "rec_b6be13c9469596ea",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 101,
+    "sequence": 100,
+    "displayName": "總會領導才能發展董事 李旆賢",
+    "matchName": "李旆賢",
+    "matchKey": "李旆賢",
+    "isActive": true
+  },
+  {
+    "id": "rec_ae9806cc7d8dda3b",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 102,
+    "sequence": 101,
+    "displayName": "總會內地事務董事 歐陽明昌",
+    "matchName": "歐陽明昌",
+    "matchKey": "歐陽明昌",
+    "isActive": true
+  },
+  {
+    "id": "rec_a65f5350a827f262",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 103,
+    "sequence": 102,
+    "displayName": "總會會員事務董事 駱恩彤",
+    "matchName": "駱恩彤",
+    "matchKey": "駱恩彤",
+    "isActive": true
+  },
+  {
+    "id": "rec_cd0f2f912b1b005a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 104,
+    "sequence": 103,
+    "displayName": "總會夥伴關係及公共關係董事 吳棋棋",
+    "matchName": "吳棋棋",
+    "matchKey": "吳棋棋",
+    "isActive": true
+  },
+  {
+    "id": "rec_b83d622d121ce700",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 105,
+    "sequence": 104,
+    "displayName": "總會紀錄及獎勵董事 林旭蕾",
+    "matchName": "林旭蕾",
+    "matchKey": "林旭蕾",
+    "isActive": true
+  },
+  {
+    "id": "rec_3293e9b58607f143",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 106,
+    "sequence": 105,
+    "displayName": "總會青年及社區事務董事 陳鎧琪",
+    "matchName": "陳鎧琪",
+    "matchKey": "陳鎧琪",
+    "isActive": true
+  },
+  {
+    "id": "rec_bad558f3193738f5",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 107,
+    "sequence": 106,
+    "displayName": "總會數碼發展委員會主席 盧展煌",
+    "matchName": "盧展煌",
+    "matchKey": "盧展煌",
+    "isActive": true
+  },
+  {
+    "id": "rec_fa6c1065749000eb",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 108,
+    "sequence": 107,
+    "displayName": "總會外交事務委員會主席 黃鈺琪參議員",
+    "matchName": "黃鈺琪",
+    "matchKey": "黃鈺琪",
+    "isActive": true
+  },
+  {
+    "id": "rec_af42b5f68be515d0",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 109,
+    "sequence": 108,
+    "displayName": "總會國際事務委員會主席 周啟賢",
+    "matchName": "周啟賢",
+    "matchKey": "周啟賢",
+    "isActive": true
+  },
+  {
+    "id": "rec_ad247205c3262ba2",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 110,
+    "sequence": 109,
+    "displayName": "總會商業交流委員會主席 岑浩然",
+    "matchName": "岑浩然",
+    "matchKey": "岑浩然",
+    "isActive": true
+  },
+  {
+    "id": "rec_5079b359a6e959e0",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 111,
+    "sequence": 110,
+    "displayName": "總會內地事務委員會主席 姚嘉志",
+    "matchName": "姚嘉志",
+    "matchKey": "姚嘉志",
+    "isActive": true
+  },
+  {
+    "id": "rec_54effab7c0f4045c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 112,
+    "sequence": 111,
+    "displayName": "總會會員事務委員會主席 余善晴",
+    "matchName": "余善晴",
+    "matchKey": "余善晴",
+    "isActive": true
+  },
+  {
+    "id": "rec_f460f1e44b4a0d86",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 113,
+    "sequence": 112,
+    "displayName": "總會會員擴展委員會主席 李韋晴",
+    "matchName": "李韋晴",
+    "matchKey": "李韋晴",
+    "isActive": true
+  },
+  {
+    "id": "rec_70f56eb51990e7fb",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 114,
+    "sequence": 113,
+    "displayName": "總會合作伙伴及贊助事務委員會主席 曾鈺霖",
+    "matchName": "曾鈺霖",
+    "matchKey": "曾鈺霖",
+    "isActive": true
+  },
+  {
+    "id": "rec_e92003781b2e4b14",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 115,
+    "sequence": 114,
+    "displayName": "總會出版事務委員會主席 黃國熙",
+    "matchName": "黃國熙",
+    "matchKey": "黃國熙",
+    "isActive": true
+  },
+  {
+    "id": "rec_1bad7c3eb55705c9",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 116,
+    "sequence": 115,
+    "displayName": "總會培訓及發展委員會主席 李文浩",
+    "matchName": "李文浩",
+    "matchKey": "李文浩",
+    "isActive": true
+  },
+  {
+    "id": "rec_894cfe5df50efcf3",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 117,
+    "sequence": 116,
+    "displayName": "總會青年及社區事務委員會主席 劉家瑩",
+    "matchName": "劉家瑩",
+    "matchKey": "劉家瑩",
+    "isActive": true
+  },
+  {
+    "id": "rec_0a1ba3548fae0f31",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 118,
+    "sequence": 117,
+    "displayName": "2025 亞太青年微電影節籌委會主席 吳德偉",
+    "matchName": "吳德偉",
+    "matchKey": "吳德偉",
+    "isActive": true
+  },
+  {
+    "id": "rec_4cb14682bedf7ac9",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 119,
+    "sequence": 118,
+    "displayName": "第六十一屆國際青年商會中國香港總會周年大會總監 郭啟源參議員",
+    "matchName": "郭啟源",
+    "matchKey": "郭啟源",
+    "isActive": true
+  },
+  {
+    "id": "rec_5d20cc8ec82261d8",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 120,
+    "sequence": 119,
+    "displayName": "2026 國際青年商會中國香港總會就職典禮籌委會主席 彭卓耀參議員",
+    "matchName": "彭卓耀",
+    "matchKey": "彭卓耀",
+    "isActive": true
+  },
+  {
+    "id": "rec_45b2c9d94276bbc9",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 121,
+    "sequence": 120,
+    "displayName": "2026 青年企業家比賽籌委會主席 麥頴芹",
+    "matchName": "麥頴芹",
+    "matchKey": "麥頴芹",
+    "isActive": true
+  },
+  {
+    "id": "rec_d4c251cb70cc47c1",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 122,
+    "sequence": 121,
+    "displayName": "2026 國際青年商會中國香港總會亞太大會統籌籌委會主席 俞珺寧",
+    "matchName": "俞珺寧",
+    "matchKey": "俞珺寧",
+    "isActive": true
+  },
+  {
+    "id": "rec_ce3724f6f794c217",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 124,
+    "sequence": 122,
+    "displayName": "維多利亞青年商會會長 薛沅雯",
+    "matchName": "薛沅雯",
+    "matchKey": "薛沅雯",
+    "isActive": true
+  },
+  {
+    "id": "rec_45727a083e0708a6",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 125,
+    "sequence": 123,
+    "displayName": "九龍青年商會會長 譚芷晴",
+    "matchName": "譚芷晴",
+    "matchKey": "譚芷晴",
+    "isActive": true
+  },
+  {
+    "id": "rec_3db19f56a6195e9b",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 126,
+    "sequence": 124,
+    "displayName": "港島青年商會會長 嚴騫",
+    "matchName": "嚴騫",
+    "matchKey": "嚴騫",
+    "isActive": true
+  },
+  {
+    "id": "rec_75e77e08e879269c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 127,
+    "sequence": 125,
+    "displayName": "香港女青年商會會長 關小菁",
+    "matchName": "關小菁",
+    "matchKey": "關小菁",
+    "isActive": true
+  },
+  {
+    "id": "rec_2534aec7bf11aae1",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 128,
+    "sequence": 126,
+    "displayName": "獅子山青年商會會長 吳嘉麗",
+    "matchName": "吳嘉麗",
+    "matchKey": "吳嘉麗",
+    "isActive": true
+  },
+  {
+    "id": "rec_c9ba2c9521a21343",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 129,
+    "sequence": 127,
+    "displayName": "海港青年商會會長 陳正融",
+    "matchName": "陳正融",
+    "matchKey": "陳正融",
+    "isActive": true
+  },
+  {
+    "id": "rec_4edb1a644117771a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 130,
+    "sequence": 128,
+    "displayName": "元朗青年商會會長 梁鈞証",
+    "matchName": "梁鈞証",
+    "matchKey": "梁鈞証",
+    "isActive": true
+  },
+  {
+    "id": "rec_36b33dc982523aa2",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 131,
+    "sequence": 129,
+    "displayName": "太平山青年商會會長 黃穎筠",
+    "matchName": "黃穎筠",
+    "matchKey": "黃穎筠",
+    "isActive": true
+  },
+  {
+    "id": "rec_aca9f0a3b9eff618",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 132,
+    "sequence": 130,
+    "displayName": "紫荊青年商會會長 鄧慧儀",
+    "matchName": "鄧慧儀",
+    "matchKey": "鄧慧儀",
+    "isActive": true
+  },
+  {
+    "id": "rec_0222535e739d99c5",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 133,
+    "sequence": 131,
+    "displayName": "騰龍青年商會會長 陳羽豐",
+    "matchName": "陳羽豐",
+    "matchKey": "陳羽豐",
+    "isActive": true
+  },
+  {
+    "id": "rec_34db3cca26627974",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 134,
+    "sequence": 132,
+    "displayName": "東九龍青年商會會長 黃映彤",
+    "matchName": "黃映彤",
+    "matchKey": "黃映彤",
+    "isActive": true
+  },
+  {
+    "id": "rec_fa1554aba400a88d",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 135,
+    "sequence": 133,
+    "displayName": "城市青年商會會長 李旭鈞",
+    "matchName": "李旭鈞",
+    "matchKey": "李旭鈞",
+    "isActive": true
+  },
+  {
+    "id": "rec_f2af0866321f0814",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 136,
+    "sequence": 134,
+    "displayName": "經緯青年商會會長 張家耀",
+    "matchName": "張家耀",
+    "matchKey": "張家耀",
+    "isActive": true
+  },
+  {
+    "id": "rec_868c4b658ff9cb25",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 137,
+    "sequence": 135,
+    "displayName": "北區青年商會會長 李安瑩",
+    "matchName": "李安瑩",
+    "matchKey": "李安瑩",
+    "isActive": true
+  },
+  {
+    "id": "rec_43468f479d57b617",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 138,
+    "sequence": 136,
+    "displayName": "浩洋青年商會會長 彭思銘",
+    "matchName": "彭思銘",
+    "matchKey": "彭思銘",
+    "isActive": true
+  },
+  {
+    "id": "rec_01f0a108b305b1ec",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 139,
+    "sequence": 137,
+    "displayName": "沙田青年商會會長 任曉欣",
+    "matchName": "任曉欣",
+    "matchKey": "任曉欣",
+    "isActive": true
+  },
+  {
+    "id": "rec_66d252267dbe7cf1",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 140,
+    "sequence": 138,
+    "displayName": "晉峰青年商會會長 曾麗卿",
+    "matchName": "曾麗卿",
+    "matchKey": "曾麗卿",
+    "isActive": true
+  },
+  {
+    "id": "rec_bbd0852fcda8219c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 141,
+    "sequence": 139,
+    "displayName": "城市女青年商會會長 楊彩紅",
+    "matchName": "楊彩紅",
+    "matchKey": "楊彩紅",
+    "isActive": true
+  },
+  {
+    "id": "rec_3eb860d54fd794bc",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 142,
+    "sequence": 140,
+    "displayName": "荃灣青年商會會長 辛建邦",
+    "matchName": "辛建邦",
+    "matchKey": "辛建邦",
+    "isActive": true
+  },
+  {
+    "id": "rec_fec666a56c4efec2",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 143,
+    "sequence": 141,
+    "displayName": "大嶼山青年商會會長 李其恩",
+    "matchName": "李其恩",
+    "matchKey": "李其恩",
+    "isActive": true
+  },
+  {
+    "id": "rec_5a870734f5ad28cc",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 145,
+    "sequence": 142,
+    "displayName": "會長顧問及2019年會長雲騰龍參議員 (Ivan)",
+    "matchName": "長雲騰龍",
+    "matchKey": "長雲騰龍",
+    "isActive": true
+  },
+  {
+    "id": "rec_51d6228bd7f5e3c6",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 146,
+    "sequence": 143,
+    "displayName": "會長顧問及2020年會長陳雋昆參議員 (Jonathan)",
+    "matchName": "長陳雋昆",
+    "matchKey": "長陳雋昆",
+    "isActive": true
+  },
+  {
+    "id": "rec_b6ee6b564f13b89c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 147,
+    "sequence": 144,
+    "displayName": "會務顧問及2015會長黃文瀚參議員 (John)",
+    "matchName": "長黃文瀚",
+    "matchKey": "長黃文瀚",
+    "isActive": true
+  },
+  {
+    "id": "rec_8c613fd8cf38f93d",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 148,
+    "sequence": 145,
+    "displayName": "會務顧問及2021年會長駱嘉安參議員 (Kenny)",
+    "matchName": "長駱嘉安",
+    "matchKey": "長駱嘉安",
+    "isActive": true
+  },
+  {
+    "id": "rec_c5a4d6c7d1882eab",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 149,
+    "sequence": 146,
+    "displayName": "1981年會長彭振聲參議員 (Joseph)",
+    "matchName": "長彭振聲",
+    "matchKey": "長彭振聲",
+    "isActive": true
+  },
+  {
+    "id": "rec_5ea13dbf64c05154",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 150,
+    "sequence": 147,
+    "displayName": "1983年會長雷少紅參議員 (Rebecca)",
+    "matchName": "長雷少紅",
+    "matchKey": "長雷少紅",
+    "isActive": true
+  },
+  {
+    "id": "rec_cc4f9ed487088158",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 151,
+    "sequence": 148,
+    "displayName": "1984年會長陳海雲參議員 (Ocean)",
+    "matchName": "長陳海雲",
+    "matchKey": "長陳海雲",
+    "isActive": true
+  },
+  {
+    "id": "rec_53a5f5baf1cff45c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 152,
+    "sequence": 149,
+    "displayName": "1985年會長胡𨭥明參議員 (William)",
+    "matchName": "1985年會長胡𨭥明",
+    "matchKey": "1985年胡𨭥明",
+    "isActive": true
+  },
+  {
+    "id": "rec_10eca35642d98e68",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 153,
+    "sequence": 150,
+    "displayName": "1986年會長袁滿忠參議員 (Wallace)",
+    "matchName": "長袁滿忠",
+    "matchKey": "長袁滿忠",
+    "isActive": true
+  },
+  {
+    "id": "rec_7056c5afe12e0ca1",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 154,
+    "sequence": 151,
+    "displayName": "1987年會長吳梓堅參議員 (David)",
+    "matchName": "長吳梓堅",
+    "matchKey": "長吳梓堅",
+    "isActive": true
+  },
+  {
+    "id": "rec_90cab4e25828ed18",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 155,
+    "sequence": 152,
+    "displayName": "1989年會長周家廣參議員 (Frankie)",
+    "matchName": "長周家廣",
+    "matchKey": "長周家廣",
+    "isActive": true
+  },
+  {
+    "id": "rec_be7c31187268a885",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 156,
+    "sequence": 153,
+    "displayName": "1990年會長陳少賢參議員 (Marco)",
+    "matchName": "長陳少賢",
+    "matchKey": "長陳少賢",
+    "isActive": true
+  },
+  {
+    "id": "rec_5f239632a163a7fc",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 157,
+    "sequence": 154,
+    "displayName": "1991年會長莫羨儀參議員 (Cindy)",
+    "matchName": "長莫羨儀",
+    "matchKey": "長莫羨儀",
+    "isActive": true
+  },
+  {
+    "id": "rec_718c9217faf090a9",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 158,
+    "sequence": 155,
+    "displayName": "1992年會長馮郁秀參議員 (Diana)",
+    "matchName": "長馮郁秀",
+    "matchKey": "長馮郁秀",
+    "isActive": true
+  },
+  {
+    "id": "rec_5ae65d0794b615fb",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 159,
+    "sequence": 156,
+    "displayName": "1993年會長馬家莊參議員 (John)",
+    "matchName": "長馬家莊",
+    "matchKey": "長馬家莊",
+    "isActive": true
+  },
+  {
+    "id": "rec_30e29f99bb1ab730",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 160,
+    "sequence": 157,
+    "displayName": "1994年會長俞美華參議員 (Cariann)",
+    "matchName": "長俞美華",
+    "matchKey": "長俞美華",
+    "isActive": true
+  },
+  {
+    "id": "rec_91890d8a2740e4c7",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 161,
+    "sequence": 158,
+    "displayName": "1997年會長甘耀成參議員 (Tony)",
+    "matchName": "長甘耀成",
+    "matchKey": "長甘耀成",
+    "isActive": true
+  },
+  {
+    "id": "rec_0cb431f3f37d35f3",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 162,
+    "sequence": 159,
+    "displayName": "1998年會長張學敏參議員 (Ritchie)",
+    "matchName": "長張學敏",
+    "matchKey": "長張學敏",
+    "isActive": true
+  },
+  {
+    "id": "rec_f8fbd0b7f532b07a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 163,
+    "sequence": 160,
+    "displayName": "1999年會長歐陽美雲參議員 (Emily)",
+    "matchName": "歐陽美雲",
+    "matchKey": "歐陽美雲",
+    "isActive": true
+  },
+  {
+    "id": "rec_e8682324223412d9",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 164,
+    "sequence": 161,
+    "displayName": "2000年會長麥錫忠 (Mak Sik Chung)",
+    "matchName": "長麥錫忠",
+    "matchKey": "長麥錫忠",
+    "isActive": true
+  },
+  {
+    "id": "rec_9b21ac16aa39f607",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 165,
+    "sequence": 162,
+    "displayName": "2001年會長古麗芳參議員 (Ada)",
+    "matchName": "長古麗芳",
+    "matchKey": "長古麗芳",
+    "isActive": true
+  },
+  {
+    "id": "rec_1d3b6b1baa4ce6a6",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 166,
+    "sequence": 163,
+    "displayName": "2002年會長阮淑勤參議員 (Florence)",
+    "matchName": "長阮淑勤",
+    "matchKey": "長阮淑勤",
+    "isActive": true
+  },
+  {
+    "id": "rec_0ed1ff64132b5b2a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 167,
+    "sequence": 164,
+    "displayName": "2003年會長楊少琼參議員 (Sandy）",
+    "matchName": "",
+    "matchKey": "",
+    "isActive": true
+  },
+  {
+    "id": "rec_923e840a119a03ef",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 168,
+    "sequence": 165,
+    "displayName": "2004年會長鄭展榮參議員 (Boris)",
+    "matchName": "長鄭展榮",
+    "matchKey": "長鄭展榮",
+    "isActive": true
+  },
+  {
+    "id": "rec_38a0e89bd60c934e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 169,
+    "sequence": 166,
+    "displayName": "2005年會長許秋成參議員 (Ludwig)",
+    "matchName": "長許秋成",
+    "matchKey": "長許秋成",
+    "isActive": true
+  },
+  {
+    "id": "rec_e21c2c898032840f",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 170,
+    "sequence": 167,
+    "displayName": "2007年會長唐慶華參議員 (Micky)",
+    "matchName": "長唐慶華",
+    "matchKey": "長唐慶華",
+    "isActive": true
+  },
+  {
+    "id": "rec_689357681d77d4c4",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 171,
+    "sequence": 168,
+    "displayName": "2008年會長施德利參議員 (Michael)",
+    "matchName": "長施德利",
+    "matchKey": "長施德利",
+    "isActive": true
+  },
+  {
+    "id": "rec_a855584d73eeaf86",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 172,
+    "sequence": 169,
+    "displayName": "2009年會長馬家强參議員 (Franco)",
+    "matchName": "長馬家强",
+    "matchKey": "長馬家强",
+    "isActive": true
+  },
+  {
+    "id": "rec_6fac3a427b544fb0",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 173,
+    "sequence": 170,
+    "displayName": "2010年會長陳玉桂參議員 (Alvina)",
+    "matchName": "長陳玉桂",
+    "matchKey": "長陳玉桂",
+    "isActive": true
+  },
+  {
+    "id": "rec_d7a11284604ebbc3",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 174,
+    "sequence": 171,
+    "displayName": "2011年會長李銘津參議員 (Matthew)",
+    "matchName": "長李銘津",
+    "matchKey": "長李銘津",
+    "isActive": true
+  },
+  {
+    "id": "rec_464d29a48effbc22",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 175,
+    "sequence": 172,
+    "displayName": "2012年會長關啟亮參議員 (Daniel)",
+    "matchName": "長關啟亮",
+    "matchKey": "長關啟亮",
+    "isActive": true
+  },
+  {
+    "id": "rec_205269737a400866",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 176,
+    "sequence": 173,
+    "displayName": "2013年會長張智恆參議員 (Angus)",
+    "matchName": "長張智恆",
+    "matchKey": "長張智恆",
+    "isActive": true
+  },
+  {
+    "id": "rec_2bcb272c356ea6d8",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 177,
+    "sequence": 174,
+    "displayName": "2014年會長伍致豐參議員 (Jeff)",
+    "matchName": "長伍致豐",
+    "matchKey": "長伍致豐",
+    "isActive": true
+  },
+  {
+    "id": "rec_02a186d43f211123",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 178,
+    "sequence": 175,
+    "displayName": "2016年會長杜月嬋參議員 (Oliver)",
+    "matchName": "長杜月嬋",
+    "matchKey": "長杜月嬋",
+    "isActive": true
+  },
+  {
+    "id": "rec_ed663edd0e0b7545",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 179,
+    "sequence": 176,
+    "displayName": "2017年會長林偉洛參議員 (Kelvin)",
+    "matchName": "長林偉洛",
+    "matchKey": "長林偉洛",
+    "isActive": true
+  },
+  {
+    "id": "rec_f2241e83c2cd4dec",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 180,
+    "sequence": 177,
+    "displayName": "2018年會長何卓燊參議員 (Jackal)",
+    "matchName": "長何卓燊",
+    "matchKey": "長何卓燊",
+    "isActive": true
+  },
+  {
+    "id": "rec_607eea60472d2d0e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 181,
+    "sequence": 179,
+    "displayName": "培訓及發展委員會主席及2024年會長朱韋謙參議員 (Alyse)",
+    "matchName": "長朱韋謙",
+    "matchKey": "長朱韋謙",
+    "isActive": true
+  },
+  {
+    "id": "rec_d7c38a04b9f1aba3",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 183,
+    "sequence": 180,
+    "displayName": "永遠名譽會員張偉良參議員",
+    "matchName": "員張偉良",
+    "matchKey": "員張偉良",
+    "isActive": true
+  },
+  {
+    "id": "rec_f1baf1e5047b4480",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 184,
+    "sequence": 181,
+    "displayName": "永遠名譽會員林漢武參議員",
+    "matchName": "員林漢武",
+    "matchKey": "員林漢武",
+    "isActive": true
+  },
+  {
+    "id": "rec_4406c75e3e2cdf86",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 185,
+    "sequence": 182,
+    "displayName": "永遠名譽會員李光中參議員",
+    "matchName": "員李光中",
+    "matchKey": "員李光中",
+    "isActive": true
+  },
+  {
+    "id": "rec_aca1e699669db729",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 186,
+    "sequence": 183,
+    "displayName": "永遠名譽會員蔡大維參議員 (David)",
+    "matchName": "員蔡大維",
+    "matchKey": "員蔡大維",
+    "isActive": true
+  },
+  {
+    "id": "rec_a358cdef21fd4e05",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 187,
+    "sequence": 184,
+    "displayName": "永遠名譽會員趙少雄參議員 (Connie)",
+    "matchName": "員趙少雄",
+    "matchKey": "員趙少雄",
+    "isActive": true
+  },
+  {
+    "id": "rec_0579335d1f35e18f",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 189,
+    "sequence": 185,
+    "displayName": "資深青商會主席鄭天殷 (Tina)",
+    "matchName": "席鄭天殷",
+    "matchKey": "席鄭天殷",
+    "isActive": true
+  },
+  {
+    "id": "rec_714fd2e630095f69",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 190,
+    "sequence": 186,
+    "displayName": "鍾慕貞參議員 (Angel)",
+    "matchName": "鍾慕貞",
+    "matchKey": "鍾慕貞",
+    "isActive": true
+  },
+  {
+    "id": "rec_4610bec2fbe55122",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 191,
+    "sequence": 187,
+    "displayName": "張利敏參議員 (Ronnie)",
+    "matchName": "張利敏",
+    "matchKey": "張利敏",
+    "isActive": true
+  },
+  {
+    "id": "rec_1d7997a2209fc4eb",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 192,
+    "sequence": 188,
+    "displayName": "李燕芬參議員 (Carmen)",
+    "matchName": "李燕芬",
+    "matchKey": "李燕芬",
+    "isActive": true
+  },
+  {
+    "id": "rec_97b52ebedc5938c3",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 193,
+    "sequence": 189,
+    "displayName": "莊銘錦參議員 (Leslie)",
+    "matchName": "莊銘錦",
+    "matchKey": "莊銘錦",
+    "isActive": true
+  },
+  {
+    "id": "rec_06cd9b0932a5900b",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 194,
+    "sequence": 190,
+    "displayName": "郭淑貞參議員 (Susanna)",
+    "matchName": "郭淑貞",
+    "matchKey": "郭淑貞",
+    "isActive": true
+  },
+  {
+    "id": "rec_1ad044669356e58a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 195,
+    "sequence": 191,
+    "displayName": "陳炫亨參議員 (Victor)",
+    "matchName": "陳炫亨",
+    "matchKey": "陳炫亨",
+    "isActive": true
+  },
+  {
+    "id": "rec_427a65c5ab7be82e",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 196,
+    "sequence": 192,
+    "displayName": "黎浩賢參議員 (Dennis)",
+    "matchName": "黎浩賢",
+    "matchKey": "黎浩賢",
+    "isActive": true
+  },
+  {
+    "id": "rec_84f96052d2d4bc7b",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 197,
+    "sequence": 193,
+    "displayName": "陳國偉參議員 (Stephen)",
+    "matchName": "陳國偉",
+    "matchKey": "陳國偉",
+    "isActive": true
+  },
+  {
+    "id": "rec_2872971091dbfc8b",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 198,
+    "sequence": 194,
+    "displayName": "李德敏參議員 (Annalisa)",
+    "matchName": "李德敏",
+    "matchKey": "李德敏",
+    "isActive": true
+  },
+  {
+    "id": "rec_db43ef68f515759c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 199,
+    "sequence": 195,
+    "displayName": "鄧福彬參議員 (Bun)",
+    "matchName": "鄧福彬",
+    "matchKey": "鄧福彬",
+    "isActive": true
+  },
+  {
+    "id": "rec_10fb8774c34de45a",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 200,
+    "sequence": 196,
+    "displayName": "雷潔嫦參議員 (Peggy)",
+    "matchName": "雷潔嫦",
+    "matchKey": "雷潔嫦",
+    "isActive": true
+  },
+  {
+    "id": "rec_5cbdc77eb4604ece",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 201,
+    "sequence": 197,
+    "displayName": "黃永康參議員 (Vincent)",
+    "matchName": "黃永康",
+    "matchKey": "黃永康",
+    "isActive": true
+  },
+  {
+    "id": "rec_38cf39265ba24fdb",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 202,
+    "sequence": 198,
+    "displayName": "鍾曉茵參議員 (Miranda)",
+    "matchName": "鍾曉茵",
+    "matchKey": "鍾曉茵",
+    "isActive": true
+  },
+  {
+    "id": "rec_74a4d420e83c356c",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 203,
+    "sequence": 199,
+    "displayName": "鍾齊清參議員 (Rebecca)",
+    "matchName": "鍾齊清",
+    "matchKey": "鍾齊清",
+    "isActive": true
+  },
+  {
+    "id": "rec_4c9effff848aec48",
+    "eventId": "closing-ceremony-2026-07-18",
+    "sourceRow": 205,
+    "sequence": 200,
+    "displayName": "籌委會主席 朱家欣",
+    "matchName": "朱家欣",
+    "matchKey": "朱家欣",
+    "isActive": true
+  }
+]

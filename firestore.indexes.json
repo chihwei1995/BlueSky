@@ -1,0 +1,16 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "closingCeremonyRecognitionPeople",
+      "queryScope": "COLLECTION",
+      "density": "SPARSE_ANY",
+      "fields": [
+        {
+          "fieldPath": "matchKey",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

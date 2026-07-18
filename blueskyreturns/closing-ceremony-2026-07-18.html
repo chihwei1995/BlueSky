@@ -738,6 +738,8 @@
       </a>
       <div class="nav-actions">
         <a id="workshopControlLink" class="pill" href="./closing-ceremony-workshop-control-2026-07-18.html" hidden>工作坊控制台</a>
+        <a id="recognitionListLink" class="pill" href="./closing-ceremony-recognition-list-2026-07-18.html" hidden>Recognition 名單</a>
+        <a id="recognitionArrivalsLink" class="pill" href="./closing-ceremony-recognition-arrivals-2026-07-18.html" hidden>到場介紹</a>
         <a class="pill" href="./member-center.html">氣候行動者中心</a>
         <a class="pill" href="./green-action-7day.html">Daily Green Actions</a>
       </div>
@@ -828,6 +830,7 @@
       serverTimestamp,
       setDoc
     } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-functions.js";
     import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
 
     const EVENT_ID = "closing-ceremony-2026-07-18";
@@ -878,6 +881,8 @@
     setupBlueSkyAppCheck(app, { pageName: "closing-ceremony-2026-07-18" });
     const auth = getAuth(app);
     const db = getFirestore(app, "default");
+    const functions = getFunctions(app);
+    const autoCheckInRecognition = httpsCallable(functions, "autoCheckInClosingCeremonyRecognition");
 
     const form = document.getElementById("registrationForm");
     const attendeeNameInput = document.getElementById("attendeeName");
@@ -888,6 +893,8 @@
     const successTitle = document.getElementById("successTitle");
     const successBody = document.getElementById("successBody");
     const workshopControlLink = document.getElementById("workshopControlLink");
+    const recognitionListLink = document.getElementById("recognitionListLink");
+    const recognitionArrivalsLink = document.getElementById("recognitionArrivalsLink");
     const workshopSection = document.getElementById("workshopSection");
     const workshopGrid = document.getElementById("workshopGrid");
     const workshopLiveStatus = document.getElementById("workshopLiveStatus");
@@ -1208,6 +1215,22 @@
       }, { merge: true });
     };
 
+    const tryRecognitionAutoCheckIn = async () => {
+      try {
+        const result = await autoCheckInRecognition();
+        const status = result?.data?.status || "";
+        if (status === "checked-in") {
+          return "Recognition 名單已自動簽到。";
+        }
+        if (status === "already-arrived") {
+          return "Recognition 名單已是到場狀態。";
+        }
+      } catch (error) {
+        console.warn("Recognition auto check-in skipped:", error);
+      }
+      return "";
+    };
+
     const fetchRegistrationCount = async () => {
       const countSnap = await getCountFromServer(collection(db, "closingCeremonyRegistrations"));
       return Number(countSnap.data().count || 0);
@@ -1250,13 +1273,17 @@
         currentUser = user;
         const savedName = await ensureEventMemberProfile(user, attendeeName);
         await createRegistrationRecord(user, savedName);
+        const recognitionMessage = await tryRecognitionAutoCheckIn();
         const participantNumber = await fetchRegistrationCount().catch(() => 0);
 
-        setStatus("ok", "登記完成。");
+        setStatus("ok", recognitionMessage || "登記完成。");
         successTitle.textContent = "登記完成 / Registration Complete";
         successBody.textContent = participantNumber > 0
           ? `${savedName} 已完成 ${EVENT_TITLE_ZH} 登記，你是本次活動第 ${participantNumber} 位參與者。`
           : `${savedName} 已完成 ${EVENT_TITLE_ZH} 登記。`;
+        if (recognitionMessage) {
+          successBody.textContent += ` ${recognitionMessage}`;
+        }
         successCard.hidden = false;
         activateRegisteredExperience(user, { attendeeName: savedName });
         window.setTimeout(() => {
@@ -1280,7 +1307,10 @@
             getDoc(doc(db, "members", user.uid))
           ]);
           if (sequence !== authSequence || currentUser?.uid !== user.uid) return;
-          workshopControlLink.hidden = Number(memberSnapshot.data()?.permissionLevel || 0) !== 3;
+          const isStaff = Number(memberSnapshot.data()?.permissionLevel || 0) === 3;
+          workshopControlLink.hidden = !isStaff;
+          recognitionListLink.hidden = !isStaff;
+          recognitionArrivalsLink.hidden = !isStaff;
           if (registrationSnapshot.exists()) {
             activateRegisteredExperience(user, registrationSnapshot.data());
           } else if (activeRegistrationUid !== user.uid) {
@@ -1298,6 +1328,8 @@
       } else {
         activeRegistrationUid = null;
         workshopControlLink.hidden = true;
+        recognitionListLink.hidden = true;
+        recognitionArrivalsLink.hidden = true;
         stopWorkshopListeners();
         form.hidden = false;
         successCard.hidden = true;

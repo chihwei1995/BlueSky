@@ -16,6 +16,10 @@ rules_version = '2';
 //   status: issued, used, or missed; usedAt: timestamp for used, otherwise null
 // closingCeremonyRegistrations/{uid}
 //   fixed event metadata plus attendeeName/email, registeredAt timestamp
+// closingCeremonyRecognitionPeople/{personId}
+//   Recognition list for the closing ceremony. Contains display names and
+//   arrival/introduction audit fields. Level 3 staff only; visitor auto
+//   check-in is handled by Cloud Functions Admin SDK.
 // members/{uid}
 //   Existing flexible profile schema. permissionLevel is required and cannot
 //   be self-promoted by a non-admin owner.
@@ -168,6 +172,67 @@ service cloud.firestore {
         );
     }
 
+    function isValidRecognitionArrival(data) {
+      return (
+          data.arrivedAt == null &&
+          data.arrivedByUid == "" &&
+          data.arrivalSource == ""
+        ) ||
+        (
+          data.arrivedAt is timestamp &&
+          data.arrivedByUid is string &&
+          data.arrivedByUid.size() >= 1 &&
+          data.arrivedByUid.size() <= 128 &&
+          data.arrivalSource in ["manual", "event-name"]
+        );
+    }
+
+    function isValidRecognitionIntroduction(data) {
+      return (
+          data.introducedRound == 0 &&
+          data.introducedAt == null &&
+          data.introducedByUid == ""
+        ) ||
+        (
+          data.introducedRound is int &&
+          data.introducedRound >= 1 &&
+          data.introducedRound <= 999 &&
+          data.introducedAt is timestamp &&
+          data.introducedByUid is string &&
+          data.introducedByUid.size() >= 1 &&
+          data.introducedByUid.size() <= 128 &&
+          data.arrivedAt is timestamp
+        );
+    }
+
+    function isValidRecognitionPerson(data) {
+      return data.keys().hasAll([
+          "eventId", "sourceRow", "sequence", "displayName", "matchName",
+          "matchKey", "isActive", "arrivedAt", "arrivedByUid", "arrivalSource",
+          "introducedRound", "introducedAt", "introducedByUid", "createdAt",
+          "createdByUid", "updatedAt", "updatedByUid"
+        ]) &&
+        data.keys().hasOnly([
+          "eventId", "sourceRow", "sequence", "displayName", "matchName",
+          "matchKey", "isActive", "arrivedAt", "arrivedByUid", "arrivalSource",
+          "introducedRound", "introducedAt", "introducedByUid", "createdAt",
+          "createdByUid", "updatedAt", "updatedByUid"
+        ]) &&
+        data.eventId == "closing-ceremony-2026-07-18" &&
+        data.sourceRow is int && data.sourceRow >= 0 && data.sourceRow <= 9999 &&
+        data.sequence is int && data.sequence >= 0 && data.sequence <= 9999 &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 240 &&
+        data.matchName is string && data.matchName.size() <= 60 &&
+        data.matchKey is string && data.matchKey.size() <= 60 &&
+        data.isActive is bool &&
+        data.createdAt is timestamp &&
+        data.createdByUid is string && data.createdByUid.size() >= 1 && data.createdByUid.size() <= 128 &&
+        data.updatedAt is timestamp && data.updatedAt == request.time &&
+        data.updatedByUid is string && data.updatedByUid == request.auth.uid &&
+        isValidRecognitionArrival(data) &&
+        isValidRecognitionIntroduction(data);
+    }
+
     function ownerCreatesSafeMember(userId) {
       return isOwner(userId) &&
         request.resource.data.permissionLevel is int &&
@@ -294,6 +359,32 @@ service cloud.firestore {
         isValidUpdatedWorkshopTicket(request.resource.data, ticketId);
       allow delete: if hasPermissionLevel(3) &&
         isWorkshopPreparing(resource.data.workshopId);
+    }
+
+    match /closingCeremonyRecognitionPeople/{personId} {
+      allow read: if hasPermissionLevel(3);
+      allow create: if hasPermissionLevel(3) &&
+        isValidRecognitionPerson(request.resource.data) &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.createdByUid == request.auth.uid &&
+        request.resource.data.arrivedAt == null &&
+        request.resource.data.introducedRound == 0 &&
+        request.resource.data.introducedAt == null;
+      allow update: if hasPermissionLevel(3) &&
+        isValidRecognitionPerson(request.resource.data) &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.createdByUid == resource.data.createdByUid &&
+        (
+          request.resource.data.arrivedAt == resource.data.arrivedAt ||
+          request.resource.data.arrivedAt == null ||
+          request.resource.data.arrivedAt == request.time
+        ) &&
+        (
+          request.resource.data.introducedAt == resource.data.introducedAt ||
+          request.resource.data.introducedAt == null ||
+          request.resource.data.introducedAt == request.time
+        );
+      allow delete: if false;
     }
 
     match /members/{userId} {

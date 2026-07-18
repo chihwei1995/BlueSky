@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Recognition 名單簽到 | Blue Sky Returns</title>
+  <link rel="icon" type="image/png" href="/Enter.PNG" />
+  <style>
+    :root {
+      --bg: #edf7ef;
+      --card: #fff;
+      --ink: #143229;
+      --muted: #5c756c;
+      --line: rgba(20, 50, 41, 0.13);
+      --green: #16844d;
+      --green-deep: #0d5a33;
+      --lime: #83c53c;
+      --amber: #a86100;
+      --red: #b42318;
+      --shadow: 0 22px 55px rgba(17, 49, 39, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(131, 197, 60, 0.16), transparent 25%),
+        linear-gradient(180deg, #f8fcf8, var(--bg));
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell { width: min(1220px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(248, 252, 248, 0.92);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 13px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand { display: flex; align-items: center; min-width: 0; gap: 11px; }
+    .brand img {
+      width: 44px;
+      height: 44px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+      object-fit: contain;
+    }
+    .brand strong, .brand span { display: block; }
+    .brand strong { color: var(--green-deep); }
+    .brand span { color: var(--muted); font-size: 0.78rem; }
+    .nav-actions { display: flex; gap: 9px; flex-wrap: wrap; }
+
+    .pill, .primary-btn, .secondary-btn, .danger-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border-radius: 14px;
+      padding: 9px 13px;
+      font-weight: 900;
+    }
+
+    .pill, .secondary-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--green-deep);
+    }
+
+    .primary-btn {
+      border: none;
+      background: linear-gradient(135deg, var(--green), var(--lime));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(22, 132, 77, 0.2);
+    }
+
+    .danger-btn {
+      border: 1px solid rgba(180, 35, 24, 0.24);
+      background: #fff1f0;
+      color: var(--red);
+    }
+
+    button:disabled { cursor: wait; opacity: 0.58; }
+    main { padding: 28px 0 56px; }
+
+    .gate, .panel {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .gate {
+      max-width: 660px;
+      margin: 8vh auto 0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .gate h1 { margin: 8px 0 10px; color: var(--green-deep); }
+    .gate p { margin: 0; color: var(--muted); line-height: 1.7; }
+    .eyebrow {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(131, 197, 60, 0.17);
+      color: var(--green-deep);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    .dashboard-header h1 {
+      margin: 8px 0 5px;
+      color: var(--green-deep);
+      font-size: clamp(1.75rem, 4vw, 2.7rem);
+    }
+    .dashboard-header p { margin: 0; color: var(--muted); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel { padding: 20px; }
+    .editor { position: sticky; top: 92px; }
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--green-deep);
+      font-size: 0.86rem;
+      font-weight: 900;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid rgba(20, 50, 41, 0.16);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+    }
+    input { min-height: 48px; padding: 11px 13px; }
+    textarea { min-height: 94px; padding: 13px; resize: vertical; line-height: 1.55; }
+    input:focus, textarea:focus { outline: 3px solid rgba(22, 132, 77, 0.13); border-color: var(--green); }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 4px 0 15px;
+      color: var(--green-deep);
+      font-weight: 900;
+    }
+    .toggle-row input { width: 22px; min-height: 22px; }
+
+    .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .status { min-height: 24px; margin: 10px 0 0; color: var(--muted); font-size: 0.84rem; font-weight: 800; line-height: 1.45; }
+    .status.ok { color: var(--green); }
+    .status.error { color: var(--red); }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .metric {
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #f9fcfa;
+    }
+    .metric span { display: block; color: var(--muted); font-size: 0.74rem; font-weight: 800; }
+    .metric strong { display: block; margin-top: 3px; color: var(--green-deep); font-size: 1.42rem; }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) auto auto auto;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+    .toolbar button[aria-pressed="true"] { border-color: var(--green); background: #e8f7ed; }
+
+    .list {
+      display: grid;
+      gap: 9px;
+      max-height: calc(100vh - 310px);
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .person {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+    }
+    .person.inactive { opacity: 0.58; }
+    .seq {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      min-height: 42px;
+      border-radius: 13px;
+      background: #eff8f1;
+      color: var(--green-deep);
+      font-weight: 900;
+    }
+    .person strong { display: block; color: var(--ink); line-height: 1.35; overflow-wrap: anywhere; }
+    .person small { display: block; margin-top: 4px; color: var(--muted); font-weight: 800; }
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+    .chip {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #edf2f0;
+      color: #52635c;
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+    .chip.ok { background: #dcfce7; color: #14713f; }
+    .chip.warn { background: #fff4cf; color: var(--amber); }
+    .chip.bad { background: #fee8e7; color: var(--red); }
+    .actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: end; }
+    .actions button { min-height: 38px; border-radius: 12px; padding: 7px 10px; font-size: 0.78rem; }
+    .empty { margin: 0; padding: 22px; color: var(--muted); text-align: center; }
+
+    @media (max-width: 940px) {
+      .layout { grid-template-columns: 1fr; }
+      .editor { position: static; }
+      .list { max-height: none; }
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100%, calc(100% - 22px)); }
+      .brand span { display: none; }
+      .dashboard-header { display: grid; }
+      .panel { padding: 15px 12px; }
+      .person { grid-template-columns: 1fr; }
+      .seq { width: auto; justify-content: start; padding: 0 11px; }
+      .actions { justify-content: start; }
+      .toolbar, .button-row, .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <a class="brand" href="./closing-ceremony-2026-07-18.html">
+        <img src="../Enter.PNG" alt="Blue Sky Returns" />
+        <div>
+          <strong>Recognition 名單</strong>
+          <span>Closing Ceremony Check-in</span>
+        </div>
+      </a>
+      <nav class="nav-actions" aria-label="Recognition navigation">
+        <a class="pill" href="./closing-ceremony-recognition-arrivals-2026-07-18.html">到場介紹頁</a>
+        <a class="pill" href="./closing-ceremony-workshop-control-2026-07-18.html">工作坊控制台</a>
+        <a class="pill" href="./closing-ceremony-2026-07-18.html">返回活動頁</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="accessGate" class="gate">
+      <span class="eyebrow">Staff Access</span>
+      <h1 id="accessTitle">正在確認工作人員權限</h1>
+      <p id="accessMessage">請保持登入，系統正在讀取你的權限。</p>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div class="dashboard-header">
+        <div>
+          <span class="eyebrow">2026.07.18 Recognition</span>
+          <h1>名單管理與簽到</h1>
+          <p>可新增、修改、手動簽到；活動頁會用比對名自動簽到唯一命中的嘉賓。</p>
+        </div>
+        <button id="seedBtn" class="primary-btn" type="button">匯入 Excel 名單</button>
+      </div>
+
+      <div class="layout">
+        <section class="panel editor" aria-labelledby="editorTitle">
+          <span class="eyebrow" id="editorMode">新增</span>
+          <h2 id="editorTitle">Recognition 資料</h2>
+          <div class="form-grid">
+            <div class="field">
+              <label for="sequence">序號</label>
+              <input id="sequence" type="number" min="0" max="9999" inputmode="numeric" />
+            </div>
+            <div class="field">
+              <label for="matchName">簽到比對名</label>
+              <input id="matchName" maxlength="60" placeholder="例如：潘卓斌" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="displayName">顯示名稱 / 稱謂</label>
+            <textarea id="displayName" maxlength="240" placeholder="例如：主禮嘉賓 黃大仙區議員 潘卓斌 先生"></textarea>
+          </div>
+          <label class="toggle-row">
+            <span>啟用自動簽到比對</span>
+            <input id="isActive" type="checkbox" checked />
+          </label>
+          <div class="button-row">
+            <button id="saveBtn" class="primary-btn" type="button">儲存</button>
+            <button id="newBtn" class="secondary-btn" type="button">清空新增</button>
+          </div>
+          <p id="formStatus" class="status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel" aria-label="Recognition list">
+          <div class="metrics">
+            <div class="metric"><span>全部</span><strong id="totalCount">0</strong></div>
+            <div class="metric"><span>已到</span><strong id="arrivedCount">0</strong></div>
+            <div class="metric"><span>未到</span><strong id="pendingCount">0</strong></div>
+            <div class="metric"><span>已介紹</span><strong id="introducedCount">0</strong></div>
+            <div class="metric"><span>需整理</span><strong id="warningCount">0</strong></div>
+          </div>
+
+          <div class="toolbar">
+            <input id="searchInput" type="search" placeholder="搜尋姓名、稱謂或比對名" />
+            <button class="secondary-btn" type="button" data-filter="all" aria-pressed="true">全部</button>
+            <button class="secondary-btn" type="button" data-filter="arrived">已到</button>
+            <button class="secondary-btn" type="button" data-filter="warnings">需整理</button>
+          </div>
+
+          <div id="personList" class="list"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import {
+      collection,
+      doc,
+      getDoc,
+      getFirestore,
+      onSnapshot,
+      serverTimestamp,
+      setDoc,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-functions.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
+
+    const EVENT_ID = "closing-ceremony-2026-07-18";
+    const COLLECTION = "closingCeremonyRecognitionPeople";
+    const HONORIFICS = ["太平紳士", "參議員", "議員", "博士", "教授", "校長", "主席", "會長", "先生", "女士", "小姐", "MH", "M.H.", "JP", "SBS", "BBS", "GBS"];
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "closing-ceremony-recognition-list-2026-07-18" });
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+    const functions = getFunctions(app);
+    const seedRecognition = httpsCallable(functions, "seedClosingCeremonyRecognition");
+
+    const accessGate = document.getElementById("accessGate");
+    const accessTitle = document.getElementById("accessTitle");
+    const accessMessage = document.getElementById("accessMessage");
+    const dashboard = document.getElementById("dashboard");
+    const seedBtn = document.getElementById("seedBtn");
+    const editorMode = document.getElementById("editorMode");
+    const sequence = document.getElementById("sequence");
+    const matchName = document.getElementById("matchName");
+    const displayName = document.getElementById("displayName");
+    const isActive = document.getElementById("isActive");
+    const saveBtn = document.getElementById("saveBtn");
+    const newBtn = document.getElementById("newBtn");
+    const formStatus = document.getElementById("formStatus");
+    const searchInput = document.getElementById("searchInput");
+    const personList = document.getElementById("personList");
+    const totalCount = document.getElementById("totalCount");
+    const arrivedCount = document.getElementById("arrivedCount");
+    const pendingCount = document.getElementById("pendingCount");
+    const introducedCount = document.getElementById("introducedCount");
+    const warningCount = document.getElementById("warningCount");
+
+    let currentUser = null;
+    let unsubscribe = null;
+    let people = [];
+    let editingId = "";
+    let filterMode = "all";
+
+    const setStatus = (type = "", text = "") => {
+      formStatus.className = `status${type ? ` ${type}` : ""}`;
+      formStatus.textContent = text;
+    };
+
+    const normalizeName = (value = "") => {
+      let next = String(value || "").normalize("NFKC").trim().toLowerCase();
+      next = next.replace(/\([^)]*\)|（[^）]*）/g, "");
+      HONORIFICS.forEach((honorific) => {
+        next = next.replaceAll(honorific.toLowerCase(), "");
+      });
+      return next.replace(/[\s\u3000·・,，、.。:：;；\-/\\]+/g, "");
+    };
+
+    const formatDate = (value) => {
+      const date = value?.toDate ? value.toDate() : null;
+      return date ? date.toLocaleString("zh-HK", { hour12: false }) : "";
+    };
+
+    const makeDocId = () => `rec_manual_${crypto.randomUUID().replaceAll("-", "").slice(0, 18)}`;
+
+    const duplicateKeys = () => {
+      const counts = new Map();
+      people.forEach((person) => {
+        const key = person.matchKey || "";
+        if (key) counts.set(key, (counts.get(key) || 0) + 1);
+      });
+      return counts;
+    };
+
+    const resetForm = () => {
+      editingId = "";
+      editorMode.textContent = "新增";
+      sequence.value = "";
+      matchName.value = "";
+      displayName.value = "";
+      isActive.checked = true;
+      setStatus();
+    };
+
+    const editPerson = (person) => {
+      editingId = person.id;
+      editorMode.textContent = "修改";
+      sequence.value = Number(person.sequence || 0) || "";
+      matchName.value = person.matchName || "";
+      displayName.value = person.displayName || "";
+      isActive.checked = person.isActive !== false;
+      setStatus("", "正在修改現有資料。");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const render = () => {
+      const counts = duplicateKeys();
+      const search = normalizeName(searchInput.value);
+      const sorted = [...people].sort((a, b) =>
+        Number(a.sequence || 0) - Number(b.sequence || 0) ||
+        String(a.displayName || "").localeCompare(String(b.displayName || ""), "zh-Hant")
+      );
+      const warnings = sorted.filter((person) =>
+        !person.matchKey || (person.matchKey && counts.get(person.matchKey) > 1)
+      );
+      const visible = sorted.filter((person) => {
+        const haystack = normalizeName(`${person.displayName || ""} ${person.matchName || ""} ${person.matchKey || ""}`);
+        const matchesSearch = !search || haystack.includes(search);
+        const matchesFilter =
+          filterMode === "all" ||
+          (filterMode === "arrived" && person.arrivedAt) ||
+          (filterMode === "warnings" && warnings.some((item) => item.id === person.id));
+        return matchesSearch && matchesFilter;
+      });
+
+      totalCount.textContent = String(people.length);
+      arrivedCount.textContent = String(people.filter((person) => person.arrivedAt).length);
+      pendingCount.textContent = String(people.filter((person) => !person.arrivedAt).length);
+      introducedCount.textContent = String(people.filter((person) => person.introducedAt).length);
+      warningCount.textContent = String(warnings.length);
+
+      if (!visible.length) {
+        personList.innerHTML = `<p class="empty">目前沒有符合條件的 Recognition 資料。</p>`;
+        return;
+      }
+
+      personList.innerHTML = visible.map((person) => {
+        const duplicate = person.matchKey && counts.get(person.matchKey) > 1;
+        const missingKey = !person.matchKey;
+        const arrived = Boolean(person.arrivedAt);
+        const introduced = Boolean(person.introducedAt);
+        return `
+          <article class="person${person.isActive === false ? " inactive" : ""}" data-id="${person.id}">
+            <span class="seq">${Number(person.sequence || 0) || "-"}</span>
+            <div>
+              <strong>${person.displayName || "(未命名)"}</strong>
+              <small>比對名：${person.matchName || "未設定"}${person.arrivedAt ? ` · 到場 ${formatDate(person.arrivedAt)}` : ""}</small>
+              <div class="chips">
+                <span class="chip ${arrived ? "ok" : ""}">${arrived ? "已到" : "未到"}</span>
+                <span class="chip ${introduced ? "ok" : ""}">${introduced ? `第 ${person.introducedRound || "-"} 輪已介紹` : "未介紹"}</span>
+                ${person.isActive === false ? `<span class="chip warn">停用</span>` : ""}
+                ${missingKey ? `<span class="chip bad">缺比對名</span>` : ""}
+                ${duplicate ? `<span class="chip warn">同名鍵</span>` : ""}
+              </div>
+            </div>
+            <div class="actions">
+              <button class="secondary-btn" type="button" data-action="edit">修改</button>
+              <button class="${arrived ? "danger-btn" : "primary-btn"}" type="button" data-action="${arrived ? "clear-arrival" : "arrive"}">${arrived ? "取消簽到" : "簽到"}</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    };
+
+    const startListener = () => {
+      if (unsubscribe) unsubscribe();
+      unsubscribe = onSnapshot(collection(db, COLLECTION), (snapshot) => {
+        people = snapshot.docs
+          .map((personDoc) => ({ id: personDoc.id, ...personDoc.data() }))
+          .filter((person) => person.eventId === EVENT_ID);
+        render();
+      }, (error) => {
+        console.error("Recognition sync failed:", error);
+        personList.innerHTML = `<p class="empty">名單同步中斷，請重新整理頁面。</p>`;
+      });
+    };
+
+    const savePerson = async () => {
+      if (!currentUser) return;
+      const display = displayName.value.trim();
+      const match = matchName.value.trim();
+      const seq = Number(sequence.value || 0);
+      if (!display || display.length > 240) {
+        setStatus("error", "顯示名稱必須填寫，最多 240 字。");
+        return;
+      }
+      if (!Number.isInteger(seq) || seq < 0 || seq > 9999) {
+        setStatus("error", "序號必須是 0 至 9999 的整數。");
+        return;
+      }
+
+      saveBtn.disabled = true;
+      setStatus("", "正在儲存...");
+      try {
+        const id = editingId || makeDocId();
+        const existing = people.find((person) => person.id === id);
+        const ref = doc(db, COLLECTION, id);
+        const payload = {
+          eventId: EVENT_ID,
+          sourceRow: Number(existing?.sourceRow || 0),
+          sequence: seq,
+          displayName: display,
+          matchName: match,
+          matchKey: normalizeName(match),
+          isActive: isActive.checked,
+          arrivedAt: existing?.arrivedAt || null,
+          arrivedByUid: existing?.arrivedByUid || "",
+          arrivalSource: existing?.arrivalSource || "",
+          introducedRound: Number(existing?.introducedRound || 0),
+          introducedAt: existing?.introducedAt || null,
+          introducedByUid: existing?.introducedByUid || "",
+          createdAt: existing?.createdAt || serverTimestamp(),
+          createdByUid: existing?.createdByUid || currentUser.uid,
+          updatedAt: serverTimestamp(),
+          updatedByUid: currentUser.uid
+        };
+        await setDoc(ref, payload, { merge: false });
+        setStatus("ok", "已儲存。");
+        resetForm();
+      } catch (error) {
+        console.error("Recognition save failed:", error);
+        setStatus("error", "儲存失敗，請確認權限及網絡。");
+      } finally {
+        saveBtn.disabled = false;
+      }
+    };
+
+    const updateArrival = async (person, arrived) => {
+      if (!currentUser) return;
+      try {
+        await updateDoc(doc(db, COLLECTION, person.id), {
+          arrivedAt: arrived ? serverTimestamp() : null,
+          arrivedByUid: arrived ? currentUser.uid : "",
+          arrivalSource: arrived ? "manual" : "",
+          updatedAt: serverTimestamp(),
+          updatedByUid: currentUser.uid
+        });
+      } catch (error) {
+        console.error("Recognition arrival update failed:", error);
+        setStatus("error", "簽到狀態更新失敗。");
+      }
+    };
+
+    seedBtn.addEventListener("click", async () => {
+      seedBtn.disabled = true;
+      seedBtn.textContent = "匯入中...";
+      setStatus("", "正在匯入 Excel seed 名單...");
+      try {
+        const result = await seedRecognition();
+        const { created = 0, updated = 0, total = 0 } = result.data || {};
+        setStatus("ok", `匯入完成：新增 ${created}，更新 ${updated}，合共 ${total} 筆。`);
+      } catch (error) {
+        console.error("Recognition seed failed:", error);
+        setStatus("error", "匯入失敗，請確認 Functions 已部署及帳號權限。");
+      } finally {
+        seedBtn.disabled = false;
+        seedBtn.textContent = "匯入 Excel 名單";
+      }
+    });
+
+    saveBtn.addEventListener("click", savePerson);
+    newBtn.addEventListener("click", resetForm);
+    searchInput.addEventListener("input", render);
+    document.querySelectorAll("[data-filter]").forEach((button) => {
+      button.addEventListener("click", () => {
+        filterMode = button.dataset.filter;
+        document.querySelectorAll("[data-filter]").forEach((item) =>
+          item.setAttribute("aria-pressed", String(item === button))
+        );
+        render();
+      });
+    });
+    personList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-action]");
+      const card = event.target.closest("[data-id]");
+      if (!button || !card) return;
+      const person = people.find((item) => item.id === card.dataset.id);
+      if (!person) return;
+      if (button.dataset.action === "edit") editPerson(person);
+      if (button.dataset.action === "arrive") updateArrival(person, true);
+      if (button.dataset.action === "clear-arrival") updateArrival(person, false);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+      dashboard.hidden = true;
+      accessGate.hidden = false;
+      if (unsubscribe) unsubscribe();
+
+      if (!user) {
+        accessTitle.textContent = "請先登入工作人員帳號";
+        accessMessage.innerHTML = "請先到<a href=\"./member-center.html\" style=\"color:#0d6b3b;font-weight:900\">氣候行動者中心</a>登入具 Level 3 權限的帳號，再返回此頁。";
+        return;
+      }
+
+      try {
+        const memberSnapshot = await getDoc(doc(db, "members", user.uid));
+        if (Number(memberSnapshot.data()?.permissionLevel || 0) !== 3) {
+          accessTitle.textContent = "此帳號沒有管理權限";
+          accessMessage.textContent = "Recognition 名單只開放給 Level 3 工作人員帳號。";
+          return;
+        }
+        accessGate.hidden = true;
+        dashboard.hidden = false;
+        startListener();
+      } catch (error) {
+        console.error("Staff permission check failed:", error);
+        accessTitle.textContent = "暫時無法確認權限";
+        accessMessage.textContent = "請檢查網絡後重新整理頁面。";
+      }
+    });
+  </script>
+</body>
+</html>

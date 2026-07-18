@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Recognition 到場與介紹 | Blue Sky Returns</title>
+  <link rel="icon" type="image/png" href="/Enter.PNG" />
+  <style>
+    :root {
+      --bg: #edf7ef;
+      --card: #fff;
+      --ink: #143229;
+      --muted: #5c756c;
+      --line: rgba(20, 50, 41, 0.13);
+      --green: #16844d;
+      --green-deep: #0d5a33;
+      --lime: #83c53c;
+      --amber: #a86100;
+      --red: #b42318;
+      --shadow: 0 22px 55px rgba(17, 49, 39, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(131, 197, 60, 0.16), transparent 25%),
+        linear-gradient(180deg, #f8fcf8, var(--bg));
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell { width: min(1220px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(248, 252, 248, 0.92);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 13px 0;
+      flex-wrap: wrap;
+    }
+
+    .brand { display: flex; align-items: center; min-width: 0; gap: 11px; }
+    .brand img {
+      width: 44px;
+      height: 44px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+      object-fit: contain;
+    }
+    .brand strong, .brand span { display: block; }
+    .brand strong { color: var(--green-deep); }
+    .brand span { color: var(--muted); font-size: 0.78rem; }
+    .nav-actions { display: flex; gap: 9px; flex-wrap: wrap; }
+
+    .pill, .primary-btn, .secondary-btn, .danger-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border-radius: 14px;
+      padding: 9px 13px;
+      font-weight: 900;
+    }
+
+    .pill, .secondary-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--green-deep);
+    }
+
+    .primary-btn {
+      border: none;
+      background: linear-gradient(135deg, var(--green), var(--lime));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(22, 132, 77, 0.2);
+    }
+
+    .danger-btn {
+      border: 1px solid rgba(180, 35, 24, 0.24);
+      background: #fff1f0;
+      color: var(--red);
+    }
+
+    button:disabled { cursor: wait; opacity: 0.58; }
+    main { padding: 28px 0 56px; }
+
+    .gate, .panel {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .gate {
+      max-width: 660px;
+      margin: 8vh auto 0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .gate h1 { margin: 8px 0 10px; color: var(--green-deep); }
+    .gate p { margin: 0; color: var(--muted); line-height: 1.7; }
+    .eyebrow {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(131, 197, 60, 0.17);
+      color: var(--green-deep);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    .dashboard-header h1 {
+      margin: 8px 0 5px;
+      color: var(--green-deep);
+      font-size: clamp(1.75rem, 4vw, 2.7rem);
+    }
+    .dashboard-header p { margin: 0; color: var(--muted); }
+    .sync-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #126c3d;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .sync-chip::before {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #20a257;
+      content: "";
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .metric {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #f9fcfa;
+    }
+    .metric span { display: block; color: var(--muted); font-size: 0.74rem; font-weight: 800; }
+    .metric strong { display: block; margin-top: 3px; color: var(--green-deep); font-size: 1.5rem; }
+
+    .control-strip {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) auto auto;
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+    input {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 13px;
+      border: 1px solid rgba(20, 50, 41, 0.16);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+    }
+    input:focus { outline: 3px solid rgba(22, 132, 77, 0.13); border-color: var(--green); }
+
+    .board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
+      gap: 20px;
+      align-items: start;
+    }
+    .panel { padding: 20px; }
+    .panel h2 { margin: 0 0 12px; color: var(--green-deep); font-size: 1.2rem; }
+
+    .arrival-list, .round-list {
+      display: grid;
+      gap: 9px;
+      max-height: calc(100vh - 330px);
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .person {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+    }
+    .person input { width: 22px; min-height: 22px; }
+    .person strong { display: block; color: var(--ink); line-height: 1.35; overflow-wrap: anywhere; }
+    .person small { display: block; margin-top: 4px; color: var(--muted); font-weight: 800; }
+    .time-chip {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: #dcfce7;
+      color: #14713f;
+      font-size: 0.76rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .round {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .round header {
+      position: static;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px;
+      border: none;
+      background: #eff8f1;
+      backdrop-filter: none;
+    }
+    .round h3 { margin: 0; color: var(--green-deep); font-size: 1rem; }
+    .round header span { color: var(--muted); font-size: 0.78rem; font-weight: 800; }
+    .round ul { margin: 0; padding: 10px 14px 13px 30px; color: var(--ink); }
+    .round li + li { margin-top: 6px; }
+
+    .empty { margin: 0; padding: 22px; color: var(--muted); text-align: center; }
+    .status { min-height: 24px; margin: 10px 0 0; color: var(--muted); font-size: 0.84rem; font-weight: 800; line-height: 1.45; }
+    .status.ok { color: var(--green); }
+    .status.error { color: var(--red); }
+
+    @media (max-width: 940px) {
+      .board { grid-template-columns: 1fr; }
+      .arrival-list, .round-list { max-height: none; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100%, calc(100% - 22px)); }
+      .brand span { display: none; }
+      .dashboard-header { display: grid; }
+      .control-strip { grid-template-columns: 1fr; }
+      .panel { padding: 15px 12px; }
+      .person { grid-template-columns: auto minmax(0, 1fr); }
+      .time-chip { grid-column: 2; justify-self: start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <a class="brand" href="./closing-ceremony-2026-07-18.html">
+        <img src="../Enter.PNG" alt="Blue Sky Returns" />
+        <div>
+          <strong>到場與介紹</strong>
+          <span>Recognition Arrival Board</span>
+        </div>
+      </a>
+      <nav class="nav-actions" aria-label="Recognition navigation">
+        <a class="pill" href="./closing-ceremony-recognition-list-2026-07-18.html">名單管理</a>
+        <a class="pill" href="./closing-ceremony-workshop-control-2026-07-18.html">工作坊控制台</a>
+        <a class="pill" href="./closing-ceremony-2026-07-18.html">返回活動頁</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="accessGate" class="gate">
+      <span class="eyebrow">Staff Access</span>
+      <h1 id="accessTitle">正在確認工作人員權限</h1>
+      <p id="accessMessage">請保持登入，系統正在讀取你的權限。</p>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div class="dashboard-header">
+        <div>
+          <span class="eyebrow">2026.07.18 Live Recognition</span>
+          <h1>已到嘉賓與本輪介紹</h1>
+          <p>勾選已到未介紹的人，按一次即可歸類為新一輪已介紹並標記時間。</p>
+        </div>
+        <span id="syncStatus" class="sync-chip">即時同步已連線</span>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><span>已到</span><strong id="arrivedCount">0</strong></div>
+        <div class="metric"><span>待介紹</span><strong id="waitingIntroCount">0</strong></div>
+        <div class="metric"><span>已介紹</span><strong id="introducedCount">0</strong></div>
+        <div class="metric"><span>下一輪</span><strong id="nextRound">1</strong></div>
+      </div>
+
+      <div class="control-strip">
+        <input id="searchInput" type="search" placeholder="搜尋已到嘉賓" />
+        <button id="selectAllBtn" class="secondary-btn" type="button">全選待介紹</button>
+        <button id="introduceBtn" class="primary-btn" type="button" disabled>標記本輪已介紹</button>
+      </div>
+      <p id="status" class="status" aria-live="polite"></p>
+
+      <div class="board">
+        <section class="panel" aria-labelledby="arrivalsTitle">
+          <h2 id="arrivalsTitle">已到，尚未介紹</h2>
+          <div id="arrivalList" class="arrival-list"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="historyTitle">
+          <h2 id="historyTitle">已介紹紀錄</h2>
+          <div id="roundList" class="round-list"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import {
+      collection,
+      doc,
+      getDoc,
+      getFirestore,
+      onSnapshot,
+      serverTimestamp,
+      writeBatch
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    import { setupBlueSkyAppCheck } from "../assets/firebase-app-check.js";
+
+    const EVENT_ID = "closing-ceremony-2026-07-18";
+    const COLLECTION = "closingCeremonyRecognitionPeople";
+    const HONORIFICS = ["太平紳士", "參議員", "議員", "博士", "教授", "校長", "主席", "會長", "先生", "女士", "小姐", "MH", "M.H.", "JP", "SBS", "BBS", "GBS"];
+    const firebaseConfig = {
+      apiKey: "AIzaSyALbVjIlBlbfXDnvY8QEkl9PTBd1nj9v2o",
+      authDomain: "blueskyreturns.firebaseapp.com",
+      projectId: "blueskyreturns",
+      storageBucket: "blueskyreturns.firebasestorage.app",
+      messagingSenderId: "782333389987",
+      appId: "1:782333389987:web:d0f3d7094a7758bdd66316",
+      measurementId: "G-FQ0114S8CQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    setupBlueSkyAppCheck(app, { pageName: "closing-ceremony-recognition-arrivals-2026-07-18" });
+    const auth = getAuth(app);
+    const db = getFirestore(app, "default");
+
+    const accessGate = document.getElementById("accessGate");
+    const accessTitle = document.getElementById("accessTitle");
+    const accessMessage = document.getElementById("accessMessage");
+    const dashboard = document.getElementById("dashboard");
+    const syncStatus = document.getElementById("syncStatus");
+    const arrivedCount = document.getElementById("arrivedCount");
+    const waitingIntroCount = document.getElementById("waitingIntroCount");
+    const introducedCount = document.getElementById("introducedCount");
+    const nextRound = document.getElementById("nextRound");
+    const searchInput = document.getElementById("searchInput");
+    const selectAllBtn = document.getElementById("selectAllBtn");
+    const introduceBtn = document.getElementById("introduceBtn");
+    const status = document.getElementById("status");
+    const arrivalList = document.getElementById("arrivalList");
+    const roundList = document.getElementById("roundList");
+
+    let currentUser = null;
+    let unsubscribe = null;
+    let people = [];
+    let selected = new Set();
+
+    const setStatus = (type = "", text = "") => {
+      status.className = `status${type ? ` ${type}` : ""}`;
+      status.textContent = text;
+    };
+
+    const normalizeName = (value = "") => {
+      let next = String(value || "").normalize("NFKC").trim().toLowerCase();
+      next = next.replace(/\([^)]*\)|（[^）]*）/g, "");
+      HONORIFICS.forEach((honorific) => {
+        next = next.replaceAll(honorific.toLowerCase(), "");
+      });
+      return next.replace(/[\s\u3000·・,，、.。:：;；\-/\\]+/g, "");
+    };
+
+    const formatDate = (value) => {
+      const date = value?.toDate ? value.toDate() : null;
+      return date ? date.toLocaleString("zh-HK", { hour12: false }) : "";
+    };
+
+    const getNextRound = () =>
+      Math.max(0, ...people.map((person) => Number(person.introducedRound || 0))) + 1;
+
+    const currentWaiting = () => {
+      const search = normalizeName(searchInput.value);
+      return people
+        .filter((person) => person.eventId === EVENT_ID && person.arrivedAt && !person.introducedAt)
+        .filter((person) => {
+          const haystack = normalizeName(`${person.displayName || ""} ${person.matchName || ""}`);
+          return !search || haystack.includes(search);
+        })
+        .sort((a, b) =>
+          Number(a.sequence || 0) - Number(b.sequence || 0) ||
+          String(a.displayName || "").localeCompare(String(b.displayName || ""), "zh-Hant")
+        );
+    };
+
+    const render = () => {
+      const arrived = people.filter((person) => person.eventId === EVENT_ID && person.arrivedAt);
+      const waiting = currentWaiting();
+      const introduced = people
+        .filter((person) => person.eventId === EVENT_ID && person.introducedAt)
+        .sort((a, b) =>
+          Number(b.introducedRound || 0) - Number(a.introducedRound || 0) ||
+          Number(a.sequence || 0) - Number(b.sequence || 0)
+        );
+      const validIds = new Set(waiting.map((person) => person.id));
+      selected = new Set([...selected].filter((id) => validIds.has(id)));
+      const roundNumber = getNextRound();
+
+      arrivedCount.textContent = String(arrived.length);
+      waitingIntroCount.textContent = String(waiting.length);
+      introducedCount.textContent = String(introduced.length);
+      nextRound.textContent = String(roundNumber);
+      introduceBtn.disabled = selected.size === 0;
+      introduceBtn.textContent = selected.size
+        ? `標記第 ${roundNumber} 輪已介紹（${selected.size} 位）`
+        : "標記本輪已介紹";
+
+      if (!waiting.length) {
+        arrivalList.innerHTML = `<p class="empty">目前沒有已到且尚未介紹的嘉賓。</p>`;
+      } else {
+        arrivalList.innerHTML = waiting.map((person) => `
+          <label class="person" data-id="${person.id}">
+            <input type="checkbox" ${selected.has(person.id) ? "checked" : ""} />
+            <span>
+              <strong>${person.displayName || "(未命名)"}</strong>
+              <small>到場 ${formatDate(person.arrivedAt)} · 比對名 ${person.matchName || "未設定"}</small>
+            </span>
+            <span class="time-chip">#${Number(person.sequence || 0) || "-"}</span>
+          </label>
+        `).join("");
+      }
+
+      const rounds = new Map();
+      introduced.forEach((person) => {
+        const round = Number(person.introducedRound || 0);
+        if (!rounds.has(round)) rounds.set(round, []);
+        rounds.get(round).push(person);
+      });
+
+      if (!rounds.size) {
+        roundList.innerHTML = `<p class="empty">尚未有已介紹紀錄。</p>`;
+      } else {
+        roundList.innerHTML = [...rounds.entries()].map(([round, items]) => {
+          const time = formatDate(items[0]?.introducedAt);
+          return `
+            <article class="round">
+              <header>
+                <h3>第 ${round} 輪</h3>
+                <span>${time || "已標記"} · ${items.length} 位</span>
+              </header>
+              <ul>
+                ${items.map((person) => `<li>${person.displayName || "(未命名)"}</li>`).join("")}
+              </ul>
+            </article>
+          `;
+        }).join("");
+      }
+    };
+
+    const startListener = () => {
+      if (unsubscribe) unsubscribe();
+      unsubscribe = onSnapshot(collection(db, COLLECTION), (snapshot) => {
+        people = snapshot.docs.map((personDoc) => ({ id: personDoc.id, ...personDoc.data() }));
+        syncStatus.textContent = "即時同步已連線";
+        render();
+      }, (error) => {
+        console.error("Recognition arrivals sync failed:", error);
+        syncStatus.textContent = "同步暫時中斷";
+        arrivalList.innerHTML = `<p class="empty">到場名單同步中斷，請重新整理頁面。</p>`;
+      });
+    };
+
+    const markIntroduced = async () => {
+      if (!currentUser || selected.size === 0) return;
+      const round = getNextRound();
+      introduceBtn.disabled = true;
+      setStatus("", `正在標記第 ${round} 輪...`);
+      try {
+        const batch = writeBatch(db);
+        selected.forEach((id) => {
+          batch.update(doc(db, COLLECTION, id), {
+            introducedRound: round,
+            introducedAt: serverTimestamp(),
+            introducedByUid: currentUser.uid,
+            updatedAt: serverTimestamp(),
+            updatedByUid: currentUser.uid
+          });
+        });
+        const count = selected.size;
+        await batch.commit();
+        selected.clear();
+        setStatus("ok", `已將 ${count} 位標記為第 ${round} 輪已介紹。`);
+      } catch (error) {
+        console.error("Mark introduced failed:", error);
+        setStatus("error", "標記失敗，請確認權限及網絡。");
+      } finally {
+        render();
+      }
+    };
+
+    searchInput.addEventListener("input", render);
+    selectAllBtn.addEventListener("click", () => {
+      const waiting = currentWaiting();
+      const allSelected = waiting.length > 0 && waiting.every((person) => selected.has(person.id));
+      selected = allSelected ? new Set() : new Set(waiting.map((person) => person.id));
+      render();
+    });
+    introduceBtn.addEventListener("click", markIntroduced);
+    arrivalList.addEventListener("change", (event) => {
+      const checkbox = event.target.closest("input[type='checkbox']");
+      const card = event.target.closest("[data-id]");
+      if (!checkbox || !card) return;
+      if (checkbox.checked) selected.add(card.dataset.id);
+      else selected.delete(card.dataset.id);
+      render();
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+      dashboard.hidden = true;
+      accessGate.hidden = false;
+      if (unsubscribe) unsubscribe();
+
+      if (!user) {
+        accessTitle.textContent = "請先登入工作人員帳號";
+        accessMessage.innerHTML = "請先到<a href=\"./member-center.html\" style=\"color:#0d6b3b;font-weight:900\">氣候行動者中心</a>登入具 Level 3 權限的帳號，再返回此頁。";
+        return;
+      }
+
+      try {
+        const memberSnapshot = await getDoc(doc(db, "members", user.uid));
+        if (Number(memberSnapshot.data()?.permissionLevel || 0) !== 3) {
+          accessTitle.textContent = "此帳號沒有查看權限";
+          accessMessage.textContent = "到場與介紹頁只開放給 Level 3 工作人員帳號。";
+          return;
+        }
+        accessGate.hidden = true;
+        dashboard.hidden = false;
+        startListener();
+      } catch (error) {
+        console.error("Staff permission check failed:", error);
+        accessTitle.textContent = "暫時無法確認權限";
+        accessMessage.textContent = "請檢查網絡後重新整理頁面。";
+      }
+    });
+  </script>
+</body>
+</html>
