@@ -818,6 +818,7 @@
       '面積': 'Area',
       '較 1981-2010': 'vs 1981–2010',
       '最高氣溫': 'Peak temperature',
+      '最高溫': 'Peak temperature',
       '估計死亡人數': 'Estimated deaths',
       '受影響人口': 'Affected population',
       '淹水面積': 'Flooded area',
@@ -825,6 +826,19 @@
       '撤離人數': 'Evacuations',
       '最大風速': 'Max wind speed',
       '最高雨量': 'Peak rainfall',
+      '月均溫距平': 'Monthly temperature anomaly',
+      '受損房屋': 'Homes damaged',
+      '火勢推進': 'Fire spread',
+      '體感溫度': 'Feels-like temperature',
+      '破紀錄地區': 'Record-setting regions',
+      '區域平均氣溫': 'Regional average temperature',
+      '高於常值': 'Above normal',
+      '動員消防員': 'Firefighters deployed',
+      '資料源': 'Data source',
+      '強度': 'Intensity',
+      '影響區域': 'Affected region',
+      '規模': 'Scale',
+      '參與國家': 'Participating countries',
       '種植樹木': 'Trees planted',
       '參與人數': 'Participants',
       '裝置容量': 'Installed capacity',
@@ -892,7 +906,13 @@
       '多語通知': 'Multilingual alerts',
       '縮短應變時間': 'Shorter response time',
       '單車 / 地板': 'Bikes / floors',
-      '教育 / 參與': 'Education / participation'
+      '教育 / 參與': 'Education / participation',
+      '110 km / 12 小時': '110 km / 12 hours',
+      '葡萄牙 / 英國 / 愛爾蘭 / 法國': 'Portugal / UK / Ireland / France',
+      '長時間偏暖': 'Persistently warmer than normal',
+      '肯亞 / 索馬利亞': 'Kenya / Somalia',
+      '綠蔭 / 冷屋': 'Urban shade / cool roofs',
+      '調蓄 / 防洪': 'Stormwater retention / flood control'
     };
 
     const EVENT_TRANSLATIONS_EN = {
@@ -1007,6 +1027,141 @@
       sol_008: {
         title: 'Kinetic Power Experience Station (Example: Bikes/Floors)',
         description: 'Interactive kinetic power demos turn action → electricity → carbon reduction into public education.'
+      },
+      evt_2021_canada_heat_dome: {
+        title: 'Western Canada Heat Dome',
+        description: 'A high-pressure heat dome drove temperatures to record levels, triggering a major health emergency.'
+      },
+      evt_2021_western_europe_flood: {
+        title: 'Western Europe Floods',
+        description: 'Rivers rose rapidly after extreme rainfall, causing severe flooding in towns and cities.'
+      },
+      evt_2022_pakistan_floods: {
+        title: 'Pakistan Monsoon Floods',
+        description: 'Exceptional monsoon rainfall and glacial melt left one-third of the country affected by flooding.'
+      },
+      evt_2023_ocean_heatwave: {
+        title: 'Expansion of Global Marine Heatwaves',
+        description: 'Abnormally high sea-surface temperatures placed coral reefs and fisheries under severe stress.'
+      },
+      evt_2024_dubai_flood: {
+        title: 'Extreme Rainfall and Flooding in Dubai',
+        description: 'A desert city experienced unprecedented flooding after exceptionally intense rainfall.'
+      },
+      evt_2024_brazil_flood: {
+        title: 'Flooding in Southern Brazil',
+        description: 'Prolonged heavy rainfall caused widespread flooding and brought cities to a standstill.'
+      },
+      evt_2024_chile_wildfire: {
+        title: 'Valparaíso Wildfires in Chile',
+        description: 'Extreme heat and dry conditions allowed wildfires to spread rapidly across the region.'
+      },
+      evt_2024_beryl: {
+        title: 'Category 5 Hurricane Beryl',
+        description: 'Beryl became the earliest Category 5 Atlantic hurricane on record.'
+      },
+      evt_2024_east_africa_floods: {
+        title: 'East Africa Long-Rains Floods',
+        description: 'Exceptionally heavy rainfall caused widespread flooding and displacement across the region.'
+      },
+      act_2024_city_heat_adaptation: {
+        title: 'Urban Cooling and Heat Adaptation',
+        description: 'Cities are introducing shade, cool roofs, and other cooling measures to reduce heatwave risk.'
+      },
+      act_2025_sponge_city: {
+        title: 'Sponge Cities and Flood-Retention Parks',
+        description: 'Nature-based urban design retains stormwater and helps reduce flood risk.'
+      },
+      act_2025_offshore_wind: {
+        title: 'Offshore Wind Energy Transition',
+        description: 'Large offshore wind farms support the transition toward low-carbon energy.'
+      },
+      act_2025_policy_simulation: {
+        title: 'Youth Climate Policy Simulation at the UN',
+        description: 'Young people take part in policy simulations and international dialogue in a UN setting.'
+      },
+      evt_2026_australia_heatwave: {
+        title: 'Record Heatwave in Southeastern Australia',
+        description: 'A late-January heatwave broke daily temperature records across southeastern Australia, with Andamooka and Port Augusta Airport in South Australia both reaching 50.0°C.'
+      },
+      evt_2026_mozambique_floods: {
+        title: 'Large-Scale Flooding in Mozambique',
+        description: 'Weeks of heavy rain caused rivers and reservoirs to overflow into populated areas. At least 650,000 people were affected and hundreds of thousands were displaced.'
+      },
+      evt_2026_madagascar_cyclones: {
+        title: 'Back-to-Back Cyclones and Flooding in Madagascar',
+        description: 'Less than two weeks after Cyclone Fytia, Gezani struck Madagascar at Category 3 strength, causing widespread flooding, dozens of deaths, and damage to more than 27,000 homes.'
+      },
+      evt_2026_nebraska_wildfire: {
+        title: 'Nebraska Grassland Wildfire',
+        description: 'Exceptional dryness, warmth, and strong winds drove the Morrill fire about 110 kilometers in 12 hours. It burned 260,000 hectares in a week, becoming the largest wildfire in state history.'
+      },
+      evt_2026_europe_may_heatwave: {
+        title: 'Early and Intense May Heatwave in Western Europe',
+        description: 'A late-May heat dome brought station-level May records to Portugal, the UK, and Ireland, while France recorded its hottest May day nationally. Large areas experienced strong to very strong heat stress.'
+      },
+      evt_2026_western_europe_june_heatwave: {
+        title: "Western Europe’s Hottest June on Record",
+        description: 'Western Europe experienced its hottest June on record as several countries broke monthly or all-time temperature records. Dry soils and extreme heat also raised wildfire risk in Iberia and southern France.'
+      },
+      evt_2026_oregon_wildfires: {
+        title: 'Oregon Wildfires and Smoke',
+        description: 'Dry thunderstorms ignited dozens of fires that spread through landscapes parched by extreme drought and heat. By July 27, more than one million acres had burned across Oregon.'
+      }
+    };
+
+    const EVENT_TRANSLATIONS_ZH = {
+      evt_2021_canada_heat_dome: {
+        title: '加拿大西岸熱穹效應',
+        description: '高壓穹頂造成破紀錄高溫，導致大量健康危機。'
+      },
+      evt_2021_western_europe_flood: {
+        title: '歐洲西部暴雨洪災',
+        description: '河川快速暴漲，城鎮淹水嚴重。'
+      },
+      evt_2022_pakistan_floods: {
+        title: '巴基斯坦季風洪災',
+        description: '異常季風與融冰導致國土三分之一受災。'
+      },
+      evt_2023_ocean_heatwave: {
+        title: '全球海洋熱浪擴張',
+        description: '海表溫度異常升高，衝擊珊瑚與漁業。'
+      },
+      evt_2024_dubai_flood: {
+        title: '杜拜極端暴雨洪水',
+        description: '沙漠城市出現史無前例洪水。'
+      },
+      evt_2024_brazil_flood: {
+        title: '巴西南部洪災',
+        description: '長時間暴雨導致城市癱瘓。'
+      },
+      evt_2024_chile_wildfire: {
+        title: '智利 Valparaíso 野火',
+        description: '極端高溫與乾燥條件導致快速蔓延野火。'
+      },
+      evt_2024_beryl: {
+        title: '颶風 Beryl（五級）',
+        description: '史上最早形成的五級大西洋颶風。'
+      },
+      evt_2024_east_africa_floods: {
+        title: '東非長雨季洪災',
+        description: '異常強降雨造成大規模淹水與流離失所。'
+      },
+      act_2024_city_heat_adaptation: {
+        title: '城市降溫與熱浪調適計畫',
+        description: '多城市導入降溫設計以因應熱浪。'
+      },
+      act_2025_sponge_city: {
+        title: '海綿城市與滯洪公園',
+        description: '以自然為本的都市防洪設計。'
+      },
+      act_2025_offshore_wind: {
+        title: '離岸風電能源轉型',
+        description: '大型離岸風場支持低碳轉型。'
+      },
+      act_2025_policy_simulation: {
+        title: '青年氣候政策模擬（UN）',
+        description: '青年於 UN 場域進行政策模擬與跨國對話。'
       }
     };
 
@@ -1266,8 +1421,9 @@
     };
 
     const getEventTranslation = (event) => {
-      if (state.language !== 'en') return event;
-      const translated = EVENT_TRANSLATIONS_EN[event.id];
+      const translated = state.language === 'zh'
+        ? EVENT_TRANSLATIONS_ZH[event.id]
+        : EVENT_TRANSLATIONS_EN[event.id];
       if (!translated) return event;
       return {
         ...event,

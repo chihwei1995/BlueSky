@@ -2,7 +2,7 @@
   "meta": {
     "project": "One-Step Blue Sky",
     "brand": "一步．藍天｜Blue Sky Returns",
-    "updated_at": "2025-12-29",
+    "updated_at": "2026-08-12",
     "timezone": "Asia/Taipei",
     "schema_version": "1.4.0",
     "data_sources": [
@@ -10,7 +10,8 @@
       "NASA Worldview",
       "Copernicus Climate Change Service",
       "WMO",
-      "UN / UNEP / UNDP"
+      "UN / UNEP / UNDP",
+      "NASA Earth Observatory"
     ]
   },
 
@@ -241,6 +242,174 @@
     },
 
     {
+      "id": "evt_2026_australia_heatwave",
+      "year": 2026,
+      "date": "2026-01-29",
+      "mode": "crisis",
+      "title": "澳洲東南部破紀錄熱浪",
+      "category": "heatwave",
+      "coordinates": { "lat": -30.45, "lng": 137.17 },
+      "stats": [
+        { "label": "最高氣溫", "value": "50.0°C" },
+        { "label": "月均溫距平", "value": "+1.90°C" }
+      ],
+      "description": "1 月下旬熱浪席捲澳洲東南部，多個測站改寫日高溫紀錄；南澳 Andamooka 與 Port Augusta Airport 先後量得 50.0°C。",
+      "source": {
+        "name": "NASA Earth Observatory",
+        "url": "https://science.nasa.gov/earth/earth-observatory/summer-heat-hits-southeastern-australia/"
+      },
+      "media": {
+        "type": "image",
+        "url": "https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/iotd/2026/summer-heat-hits-southeastern-australia/austheat_gmao_20260129_lrg.jpg?crop=faces%2Cfocalpoint&fit=clip&h=2107&w=2890",
+        "credit": "NASA Earth Observatory / Lauren Dauphin"
+      }
+    },
+
+    {
+      "id": "evt_2026_mozambique_floods",
+      "year": 2026,
+      "date": "2026-01-25",
+      "mode": "crisis",
+      "title": "莫三比克大規模洪災",
+      "category": "flood",
+      "coordinates": { "lat": -25.97, "lng": 32.58 },
+      "stats": [
+        { "label": "受影響人口", "value": "650,000+" },
+        { "label": "受損房屋", "value": "30,000+" }
+      ],
+      "description": "東南非連週豪雨令河川與水庫滿溢，洪水湧入人口密集地區；莫三比克至少 65 萬人受影響，數十萬人流離失所。",
+      "source": {
+        "name": "World Meteorological Organization",
+        "url": "https://public.wmo.int/media/news/extreme-heat-cold-precipitation-and-fires-mark-start-of-2026"
+      },
+      "media": {
+        "type": "image",
+        "url": "https://public.wmo.int/sites/default/files/styles/prose_1x/public/2026-01/mozambiqueflood_amo_20260125_lrg.jpg?itok=fqwRnOCl",
+        "credit": "NASA Earth Observatory / WMO"
+      }
+    },
+
+    {
+      "id": "evt_2026_madagascar_cyclones",
+      "year": 2026,
+      "date": "2026-02-10",
+      "mode": "crisis",
+      "title": "馬達加斯加雙氣旋與洪災",
+      "category": "cyclone",
+      "coordinates": { "lat": -18.15, "lng": 49.4 },
+      "stats": [
+        { "label": "最大風速", "value": "200 km/h" },
+        { "label": "受損房屋", "value": "27,000+" }
+      ],
+      "description": "氣旋 Fytia 登陸後不到兩週，Gezani 再以三級颶風強度侵襲馬達加斯加；暴雨造成廣泛洪水、數十人死亡，並損壞逾 2.7 萬間房屋。",
+      "source": {
+        "name": "NASA Earth Observatory",
+        "url": "https://science.nasa.gov/earth/earth-observatory/a-second-cyclone-slams-madagascar/"
+      },
+      "media": {
+        "type": "image",
+        "url": "https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/iotd/2026/a-second-cyclone-slams-madagascar/cyclonegezani_tmo_20260210_lrg.jpg?crop=faces%2Cfocalpoint&fit=clip&h=1873&w=1927",
+        "credit": "NASA Earth Observatory / Lauren Dauphin"
+      }
+    },
+
+    {
+      "id": "evt_2026_nebraska_wildfire",
+      "year": 2026,
+      "date": "2026-03-12",
+      "mode": "crisis",
+      "title": "內布拉斯加州草原野火",
+      "category": "wildfire",
+      "coordinates": { "lat": 41.68, "lng": -103.01 },
+      "stats": [
+        { "label": "燃燒面積", "value": "260,000 ha" },
+        { "label": "火勢推進", "value": "110 km / 12 小時" }
+      ],
+      "description": "異常乾燥、偏暖與強風令 Morrill 野火在 12 小時內向東推進約 110 公里，一週內燒毀 26 萬公頃，成為州史上最大野火。",
+      "source": {
+        "name": "NASA Earth Observatory",
+        "url": "https://science.nasa.gov/earth/earth-observatory/fires-tear-through-nebraska-grasslands/"
+      },
+      "media": {
+        "type": "image",
+        "url": "https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/iotd/2026/fires-tear-through-nebraska-grasslands/nebraskafire_vir2_20260329_lrg.jpg?crop=faces%2Cfocalpoint&fit=clip&h=1438&w=2511",
+        "credit": "NASA Earth Observatory / Lauren Dauphin"
+      }
+    },
+
+    {
+      "id": "evt_2026_europe_may_heatwave",
+      "year": 2026,
+      "date": "2026-05-21",
+      "mode": "crisis",
+      "title": "西歐 5 月早發強烈熱浪",
+      "category": "heatwave",
+      "coordinates": { "lat": 46.23, "lng": 2.21 },
+      "stats": [
+        { "label": "體感溫度", "value": "35–40°C" },
+        { "label": "破紀錄地區", "value": "葡萄牙 / 英國 / 愛爾蘭 / 法國" }
+      ],
+      "description": "5 月下旬熱穹籠罩西歐，葡萄牙、英國與愛爾蘭出現測站 5 月最高溫，法國更錄得全國最熱的 5 月單日；大片地區達強至非常強熱壓力。",
+      "source": {
+        "name": "Copernicus Climate Change Service",
+        "url": "https://climate.copernicus.eu/what-do-we-know-about-europes-early-and-intense-heatwave-may-2026"
+      },
+      "media": {
+        "type": "image",
+        "url": "https://climate.copernicus.eu/sites/default/files/inline-images/C3S_Bulletin_PR_202605_maps_temperature_contrasts.png",
+        "credit": "C3S / ECMWF"
+      }
+    },
+
+    {
+      "id": "evt_2026_western_europe_june_heatwave",
+      "year": 2026,
+      "date": "2026-06-28",
+      "mode": "crisis",
+      "title": "西歐史上最熱 6 月",
+      "category": "heatwave",
+      "coordinates": { "lat": 50.11, "lng": 8.68 },
+      "stats": [
+        { "label": "區域平均氣溫", "value": "20.74°C" },
+        { "label": "高於常值", "value": "+3.05°C" }
+      ],
+      "description": "西歐經歷有紀錄以來最熱的 6 月，多國改寫月度或歷史高溫；乾燥土壤與極端熱力也提高伊比利半島及法國南部的野火風險。",
+      "source": {
+        "name": "World Meteorological Organization",
+        "url": "https://public.wmo.int/media/news/western-europe-has-hottest-june-record"
+      },
+      "media": {
+        "type": "image",
+        "url": "https://public.wmo.int/sites/default/files/styles/prose_1x/public/2026-07/C3S_Bulletin_PR_202606_map_surface_temperature_anomalies_18-30_june.png?itok=7_6oIHqI",
+        "credit": "C3S / ECMWF / WMO"
+      }
+    },
+
+    {
+      "id": "evt_2026_oregon_wildfires",
+      "year": 2026,
+      "date": "2026-07-26",
+      "mode": "crisis",
+      "title": "奧勒岡州野火與煙霾",
+      "category": "wildfire",
+      "coordinates": { "lat": 44.0, "lng": -120.5 },
+      "stats": [
+        { "label": "燃燒面積", "value": "1M+ acres" },
+        { "label": "動員消防員", "value": "10,000+" }
+      ],
+      "description": "乾雷暴點燃數十處火場，陣風令火勢穿越受極端乾旱與高溫炙烤的土地；截至 7 月 27 日，全州已燃燒逾 100 萬英畝並出現大範圍煙霾。",
+      "source": {
+        "name": "NASA Earth Observatory",
+        "url": "https://science.nasa.gov/earth/natural-disasters/wildfires/smoke-blankets-oregon/"
+      },
+      "media": {
+        "type": "image",
+        "url": "https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/iotd/2026/smoke-blankets-oregon/oregonfires_amo_20260726_lrg.jpg?crop=faces%2Cfocalpoint&fit=clip&h=1740&w=2160",
+        "credit": "NASA Earth Observatory / Michala Garrison"
+      }
+    },
+
+    {
       "id": "act_2024_city_heat_adaptation",
       "year": 2024,
       "date": "2024-10-01",
@@ -304,23 +473,6 @@
       "media": {
         "type": "image",
         "url": "https://commons.wikimedia.org/wiki/Special:FilePath/UN_conference_room_Geneva.jpg",
-        "credit": "Wikimedia Commons"
-      }
-    },
-
-    {
-      "id": "act_2026_kinetic_energy",
-      "year": 2026,
-      "date": "2026-06-05",
-      "mode": "hope",
-      "title": "人體動能轉化為電力",
-      "category": "innovation",
-      "coordinates": { "lat": 22.32, "lng": 114.17 },
-      "stats": [{ "label": "形式", "value": "單車 / 地板" }],
-      "description": "以互動裝置把行動轉為能源。",
-      "media": {
-        "type": "image",
-        "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pedal_power_generator.jpg",
         "credit": "Wikimedia Commons"
       }
     }
