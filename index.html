@@ -1318,6 +1318,7 @@
       '面積': 'Area',
       '較 1981-2010': 'vs 1981–2010',
       '最高氣溫': 'Peak temperature',
+      '最高溫': 'Peak temperature',
       '估計死亡人數': 'Estimated deaths',
       '受影響人口': 'Affected population',
       '淹水面積': 'Flooded area',
@@ -1333,6 +1334,11 @@
       '區域平均氣溫': 'Regional average temperature',
       '高於常值': 'Above normal',
       '動員消防員': 'Firefighters deployed',
+      '資料源': 'Data source',
+      '強度': 'Intensity',
+      '影響區域': 'Affected region',
+      '規模': 'Scale',
+      '參與國家': 'Participating countries',
       '種植樹木': 'Trees planted',
       '參與人數': 'Participants',
       '裝置容量': 'Installed capacity',
@@ -1404,7 +1410,11 @@
       '單車 / 地板': 'Bikes / floors',
       '教育 / 參與': 'Education / participation',
       '110 km / 12 小時': '110 km / 12 hours',
-      '葡萄牙 / 英國 / 愛爾蘭 / 法國': 'Portugal / UK / Ireland / France'
+      '葡萄牙 / 英國 / 愛爾蘭 / 法國': 'Portugal / UK / Ireland / France',
+      '長時間偏暖': 'Persistently warmer than normal',
+      '肯亞 / 索馬利亞': 'Kenya / Somalia',
+      '綠蔭 / 冷屋': 'Urban shade / cool roofs',
+      '調蓄 / 防洪': 'Stormwater retention / flood control'
     };
 
     const EVENT_TRANSLATIONS_EN = {
@@ -1519,6 +1529,58 @@
       sol_008: {
         title: 'Kinetic Power Experience Station (Example: Bikes/Floors)',
         description: 'Interactive kinetic power demos turn action → electricity → carbon reduction into public education.'
+      },
+      evt_2021_canada_heat_dome: {
+        title: 'Western Canada Heat Dome',
+        description: 'A high-pressure heat dome drove temperatures to record levels, triggering a major health emergency.'
+      },
+      evt_2021_western_europe_flood: {
+        title: 'Western Europe Floods',
+        description: 'Rivers rose rapidly after extreme rainfall, causing severe flooding in towns and cities.'
+      },
+      evt_2022_pakistan_floods: {
+        title: 'Pakistan Monsoon Floods',
+        description: 'Exceptional monsoon rainfall and glacial melt left one-third of the country affected by flooding.'
+      },
+      evt_2023_ocean_heatwave: {
+        title: 'Expansion of Global Marine Heatwaves',
+        description: 'Abnormally high sea-surface temperatures placed coral reefs and fisheries under severe stress.'
+      },
+      evt_2024_dubai_flood: {
+        title: 'Extreme Rainfall and Flooding in Dubai',
+        description: 'A desert city experienced unprecedented flooding after exceptionally intense rainfall.'
+      },
+      evt_2024_brazil_flood: {
+        title: 'Flooding in Southern Brazil',
+        description: 'Prolonged heavy rainfall caused widespread flooding and brought cities to a standstill.'
+      },
+      evt_2024_chile_wildfire: {
+        title: 'Valparaíso Wildfires in Chile',
+        description: 'Extreme heat and dry conditions allowed wildfires to spread rapidly across the region.'
+      },
+      evt_2024_beryl: {
+        title: 'Category 5 Hurricane Beryl',
+        description: 'Beryl became the earliest Category 5 Atlantic hurricane on record.'
+      },
+      evt_2024_east_africa_floods: {
+        title: 'East Africa Long-Rains Floods',
+        description: 'Exceptionally heavy rainfall caused widespread flooding and displacement across the region.'
+      },
+      act_2024_city_heat_adaptation: {
+        title: 'Urban Cooling and Heat Adaptation',
+        description: 'Cities are introducing shade, cool roofs, and other cooling measures to reduce heatwave risk.'
+      },
+      act_2025_sponge_city: {
+        title: 'Sponge Cities and Flood-Retention Parks',
+        description: 'Nature-based urban design retains stormwater and helps reduce flood risk.'
+      },
+      act_2025_offshore_wind: {
+        title: 'Offshore Wind Energy Transition',
+        description: 'Large offshore wind farms support the transition toward low-carbon energy.'
+      },
+      act_2025_policy_simulation: {
+        title: 'Youth Climate Policy Simulation at the UN',
+        description: 'Young people take part in policy simulations and international dialogue in a UN setting.'
       },
       evt_2026_australia_heatwave: {
         title: 'Record Heatwave in Southeastern Australia',
@@ -1932,7 +1994,7 @@
       };
     };
 
-    const fetchCurated2026Events = async () => {
+    const fetchCuratedArchiveEvents = async () => {
       const response = await fetch('./data.json', { cache: 'no-cache' });
       if (!response.ok) {
         throw new Error(`Static climate archive returned ${response.status}`);
@@ -1941,14 +2003,17 @@
       const data = await response.json();
       return {
         config: data.config,
-        events: (data.events || []).filter((event) => Number(event.year) === 2026)
+        events: (data.events || []).filter((event) => {
+          const year = Number(event.year);
+          return year >= 2021 && year <= 2026;
+        })
       };
     };
 
     const loadEventsData = async () => {
       const [firestoreResult, curatedResult] = await Promise.allSettled([
         fetchGlobeEventsFromFirestore(),
-        fetchCurated2026Events()
+        fetchCuratedArchiveEvents()
       ]);
 
       if (firestoreResult.status === 'rejected' && curatedResult.status === 'rejected') {
