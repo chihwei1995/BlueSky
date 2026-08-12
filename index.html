@@ -1612,6 +1612,61 @@
       }
     };
 
+    const EVENT_TRANSLATIONS_ZH = {
+      evt_2021_canada_heat_dome: {
+        title: '加拿大西岸熱穹效應',
+        description: '高壓穹頂造成破紀錄高溫，導致大量健康危機。'
+      },
+      evt_2021_western_europe_flood: {
+        title: '歐洲西部暴雨洪災',
+        description: '河川快速暴漲，城鎮淹水嚴重。'
+      },
+      evt_2022_pakistan_floods: {
+        title: '巴基斯坦季風洪災',
+        description: '異常季風與融冰導致國土三分之一受災。'
+      },
+      evt_2023_ocean_heatwave: {
+        title: '全球海洋熱浪擴張',
+        description: '海表溫度異常升高，衝擊珊瑚與漁業。'
+      },
+      evt_2024_dubai_flood: {
+        title: '杜拜極端暴雨洪水',
+        description: '沙漠城市出現史無前例洪水。'
+      },
+      evt_2024_brazil_flood: {
+        title: '巴西南部洪災',
+        description: '長時間暴雨導致城市癱瘓。'
+      },
+      evt_2024_chile_wildfire: {
+        title: '智利 Valparaíso 野火',
+        description: '極端高溫與乾燥條件導致快速蔓延野火。'
+      },
+      evt_2024_beryl: {
+        title: '颶風 Beryl（五級）',
+        description: '史上最早形成的五級大西洋颶風。'
+      },
+      evt_2024_east_africa_floods: {
+        title: '東非長雨季洪災',
+        description: '異常強降雨造成大規模淹水與流離失所。'
+      },
+      act_2024_city_heat_adaptation: {
+        title: '城市降溫與熱浪調適計畫',
+        description: '多城市導入降溫設計以因應熱浪。'
+      },
+      act_2025_sponge_city: {
+        title: '海綿城市與滯洪公園',
+        description: '以自然為本的都市防洪設計。'
+      },
+      act_2025_offshore_wind: {
+        title: '離岸風電能源轉型',
+        description: '大型離岸風場支持低碳轉型。'
+      },
+      act_2025_policy_simulation: {
+        title: '青年氣候政策模擬（UN）',
+        description: '青年於 UN 場域進行政策模擬與跨國對話。'
+      }
+    };
+
     const ANCHORS = {
       en: [
         {
@@ -1870,8 +1925,9 @@
     };
 
     const getEventTranslation = (event) => {
-      if (state.language !== 'en') return event;
-      const translated = EVENT_TRANSLATIONS_EN[event.id];
+      const translated = state.language === 'zh'
+        ? EVENT_TRANSLATIONS_ZH[event.id]
+        : EVENT_TRANSLATIONS_EN[event.id];
       if (!translated) return event;
       return {
         ...event,
