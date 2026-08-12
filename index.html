@@ -1925,14 +1925,26 @@
     };
 
     const getEventTranslation = (event) => {
-      const translated = state.language === 'zh'
+      const predefined = state.language === 'zh'
         ? EVENT_TRANSLATIONS_ZH[event.id]
         : EVENT_TRANSLATIONS_EN[event.id];
-      if (!translated) return event;
+      const localized = state.language === 'zh'
+        ? {
+            title: event.titleZh,
+            description: event.descriptionZh,
+            stats: event.statsZh
+          }
+        : {
+            title: event.titleEn,
+            description: event.descriptionEn,
+            stats: event.statsEn
+          };
+      if (!predefined && !localized.title && !localized.description && !localized.stats) return event;
       return {
         ...event,
-        title: translated.title ?? event.title,
-        description: translated.description ?? event.description
+        title: predefined?.title ?? localized.title ?? event.title,
+        description: predefined?.description ?? localized.description ?? event.description,
+        stats: localized.stats ?? event.stats
       };
     };
 
@@ -2349,7 +2361,7 @@
 
       const statList = document.getElementById('statList');
       statList.innerHTML = '';
-      (data.stats || []).forEach(item => {
+      (translated.stats || data.stats || []).forEach(item => {
         const block = document.createElement('div');
         block.className = 'stat-pill';
         const label = translateStatLabel(item.label);
