@@ -475,27 +475,6 @@
         "url": "https://commons.wikimedia.org/wiki/Special:FilePath/UN_conference_room_Geneva.jpg",
         "credit": "Wikimedia Commons"
       }
-    },
-
-    {
-      "id": "act_2026_kinetic_energy",
-      "year": 2026,
-      "date": "2026-06-05",
-      "mode": "hope",
-      "title": "人體動能轉化為電力",
-      "category": "innovation",
-      "coordinates": { "lat": 22.32, "lng": 114.17 },
-      "stats": [{ "label": "形式", "value": "單車 / 地板" }],
-      "description": "以互動裝置把行動轉為能源。",
-      "source": {
-        "name": "Blue Sky Returns",
-        "url": "https://www.blue-sky-returns.online/blueskyreturns/index.html"
-      },
-      "media": {
-        "type": "image",
-        "url": "assets/green-action-share-characters/energy-saving.webp",
-        "credit": "Blue Sky Returns"
-      }
     }
 
   ]
