@@ -1,8 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 const admin = require("firebase-admin");
+const {getFirestore} = require("firebase-admin/firestore");
 
 const DEFAULT_PROJECT_ID = "blueskyreturns";
+const DEFAULT_DATABASE_ID = "default";
 const BATCH_LIMIT = 400;
 
 function getArgValue(flag, fallback) {
@@ -56,6 +58,7 @@ async function writeEvents(db, events) {
 async function main() {
   const fileArg = getArgValue("--file", path.join("..", "data.json"));
   const projectId = getArgValue("--project", process.env.GCLOUD_PROJECT || DEFAULT_PROJECT_ID);
+  const databaseId = getArgValue("--database", DEFAULT_DATABASE_ID);
   const absolutePath = path.resolve(__dirname, fileArg);
   const shouldReset = hasFlag("--reset");
 
@@ -71,10 +74,13 @@ async function main() {
     throw new Error("No events found in data file.");
   }
 
-  admin.initializeApp({projectId});
-  const db = admin.firestore();
+  const app = admin.initializeApp({projectId});
+  const db = getFirestore(app, databaseId);
 
-  console.log(`Uploading ${events.length} globe events to project ${projectId}...`);
+  console.log(
+    `Uploading ${events.length} globe events to ` +
+    `project ${projectId}/${databaseId}...`,
+  );
   console.log(`Source file: ${absolutePath}`);
 
   if (shouldReset) {

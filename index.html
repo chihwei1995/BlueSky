@@ -1196,6 +1196,7 @@
           collapse: 'Collapse info',
           expand: 'Expand info',
           close: 'Close info panel',
+          source: 'View authoritative source',
           searchGoogle: 'Search this title on Google',
           loading: 'Loading...',
           subtitle: {
@@ -1270,6 +1271,7 @@
           collapse: '收合資訊',
           expand: '展開資訊',
           close: '關閉資訊視窗',
+          source: '查看權威資料來源',
           searchGoogle: '用 Google 搜尋這個標題',
           loading: '載入中...',
           subtitle: {
@@ -1323,6 +1325,14 @@
       '撤離人數': 'Evacuations',
       '最大風速': 'Max wind speed',
       '最高雨量': 'Peak rainfall',
+      '月均溫距平': 'Monthly temperature anomaly',
+      '受損房屋': 'Homes damaged',
+      '火勢推進': 'Fire spread',
+      '體感溫度': 'Feels-like temperature',
+      '破紀錄地區': 'Record-setting regions',
+      '區域平均氣溫': 'Regional average temperature',
+      '高於常值': 'Above normal',
+      '動員消防員': 'Firefighters deployed',
       '種植樹木': 'Trees planted',
       '參與人數': 'Participants',
       '裝置容量': 'Installed capacity',
@@ -1392,7 +1402,9 @@
       '多語通知': 'Multilingual alerts',
       '縮短應變時間': 'Shorter response time',
       '單車 / 地板': 'Bikes / floors',
-      '教育 / 參與': 'Education / participation'
+      '教育 / 參與': 'Education / participation',
+      '110 km / 12 小時': '110 km / 12 hours',
+      '葡萄牙 / 英國 / 愛爾蘭 / 法國': 'Portugal / UK / Ireland / France'
     };
 
     const EVENT_TRANSLATIONS_EN = {
@@ -1507,6 +1519,38 @@
       sol_008: {
         title: 'Kinetic Power Experience Station (Example: Bikes/Floors)',
         description: 'Interactive kinetic power demos turn action → electricity → carbon reduction into public education.'
+      },
+      evt_2026_australia_heatwave: {
+        title: 'Record Heatwave in Southeastern Australia',
+        description: 'A late-January heatwave broke daily temperature records across southeastern Australia, with Andamooka and Port Augusta Airport in South Australia both reaching 50.0°C.'
+      },
+      evt_2026_mozambique_floods: {
+        title: 'Large-Scale Flooding in Mozambique',
+        description: 'Weeks of heavy rain caused rivers and reservoirs to overflow into populated areas. At least 650,000 people were affected and hundreds of thousands were displaced.'
+      },
+      evt_2026_madagascar_cyclones: {
+        title: 'Back-to-Back Cyclones and Flooding in Madagascar',
+        description: 'Less than two weeks after Cyclone Fytia, Gezani struck Madagascar at Category 3 strength, causing widespread flooding, dozens of deaths, and damage to more than 27,000 homes.'
+      },
+      evt_2026_nebraska_wildfire: {
+        title: 'Nebraska Grassland Wildfire',
+        description: 'Exceptional dryness, warmth, and strong winds drove the Morrill fire about 110 kilometers in 12 hours. It burned 260,000 hectares in a week, becoming the largest wildfire in state history.'
+      },
+      evt_2026_europe_may_heatwave: {
+        title: 'Early and Intense May Heatwave in Western Europe',
+        description: 'A late-May heat dome brought station-level May records to Portugal, the UK, and Ireland, while France recorded its hottest May day nationally. Large areas experienced strong to very strong heat stress.'
+      },
+      evt_2026_western_europe_june_heatwave: {
+        title: "Western Europe’s Hottest June on Record",
+        description: 'Western Europe experienced its hottest June on record as several countries broke monthly or all-time temperature records. Dry soils and extreme heat also raised wildfire risk in Iberia and southern France.'
+      },
+      evt_2026_oregon_wildfires: {
+        title: 'Oregon Wildfires and Smoke',
+        description: 'Dry thunderstorms ignited dozens of fires that spread through landscapes parched by extreme drought and heat. By July 27, more than one million acres had burned across Oregon.'
+      },
+      act_2026_kinetic_energy: {
+        title: 'Turning Human Motion into Electricity',
+        description: 'Interactive installations turn physical movement into usable energy and make low-carbon action visible.'
       }
     };
 
@@ -1888,7 +1932,45 @@
       };
     };
 
-    const loadEventsData = async () => fetchGlobeEventsFromFirestore();
+    const fetchCurated2026Events = async () => {
+      const response = await fetch('./data.json', { cache: 'no-cache' });
+      if (!response.ok) {
+        throw new Error(`Static climate archive returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      return {
+        config: data.config,
+        events: (data.events || []).filter((event) => Number(event.year) === 2026)
+      };
+    };
+
+    const loadEventsData = async () => {
+      const [firestoreResult, curatedResult] = await Promise.allSettled([
+        fetchGlobeEventsFromFirestore(),
+        fetchCurated2026Events()
+      ]);
+
+      if (firestoreResult.status === 'rejected' && curatedResult.status === 'rejected') {
+        throw firestoreResult.reason;
+      }
+
+      const firestoreData = firestoreResult.status === 'fulfilled'
+        ? firestoreResult.value
+        : { events: [] };
+      const curatedData = curatedResult.status === 'fulfilled'
+        ? curatedResult.value
+        : { events: [] };
+      const eventsById = new Map();
+
+      (firestoreData.events || []).forEach((event) => eventsById.set(event.id, event));
+      (curatedData.events || []).forEach((event) => eventsById.set(event.id, event));
+
+      return {
+        config: firestoreData.config || curatedData.config,
+        events: Array.from(eventsById.values())
+      };
+    };
 
     const preloadImage = (url) => new Promise((resolve, reject) => {
       const img = new Image();
@@ -2137,14 +2219,16 @@
       tag.textContent = data.mode === 'crisis' ? getI18n('labels.crisis') : getI18n('labels.hope');
 
       document.getElementById('infoTitle').textContent = `${data.year} · ${translated.title}`;
-      document.getElementById('infoSubtitle').textContent = data.category === 'disaster'
+      document.getElementById('infoSubtitle').textContent = data.mode === 'crisis'
         ? getI18n('info.subtitle.disaster')
         : getI18n('info.subtitle.solution');
       document.getElementById('infoDesc').textContent = translated.description || '';
       document.getElementById('infoDate').textContent = data.date || '--';
       const googleSearchBtn = document.getElementById('googleSearchBtn');
       const queryTitle = String(translated.title || data.title || '').trim();
-      googleSearchBtn.href = `https://www.google.com/search?q=${encodeURIComponent(queryTitle)}`;
+      const sourceUrl = String(data.source?.url || '').trim();
+      googleSearchBtn.href = sourceUrl || `https://www.google.com/search?q=${encodeURIComponent(queryTitle)}`;
+      googleSearchBtn.textContent = sourceUrl ? getI18n('info.source') : getI18n('info.searchGoogle');
 
       const statList = document.getElementById('statList');
       statList.innerHTML = '';
@@ -2173,7 +2257,7 @@
       } else if ((data.media?.type === 'image' || (data.media?.type || '').startsWith('image/')) && mediaUrl) {
         const img = document.createElement('img');
         img.src = mediaUrl;
-        img.alt = data.title || 'image';
+        img.alt = translated.title || data.title || 'image';
         img.addEventListener('load', () => {
           mediaContainer.hidden = false;
         }, { once: true });
