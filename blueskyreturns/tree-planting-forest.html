@@ -948,9 +948,10 @@
         leaderboardTitle: "Climate Heroes / Top 10",
         leaderboardBody: "只顯示名次與名字。",
         leaderboardEmpty: "目前還沒有排行榜資料。",
+        leaderboardGuest: "登入後可查看 Climate Heroes 排名。",
         leaderboardAnonymous: "匿名氣候行動者",
         loading: "正在讀取 Firebase 植樹資料...",
-        statsGuest: "登入後即可查看植樹森林的全站統計。",
+        statsGuest: "公開集氣資料暫時無法載入，請稍後重新整理。",
         statsError: "植樹森林統計暫時無法讀取，請稍後重新整理再試。",
         noTrees: "目前尚未累積到植樹名額",
         treeInfoTitle: (slot) => `第 ${slot} 個植樹名額`,
@@ -1010,9 +1011,10 @@
         leaderboardTitle: "Climate Heroes / Top 10",
         leaderboardBody: "Only ranks and names are shown.",
         leaderboardEmpty: "No leaderboard data yet.",
+        leaderboardGuest: "Sign in to view the Climate Heroes ranking.",
         leaderboardAnonymous: "Anonymous Climate Action Partner",
         loading: "Loading tree planting data from Firebase...",
-        statsGuest: "Sign in to view the live forest statistics.",
+        statsGuest: "The public forest statistics are temporarily unavailable. Please refresh later.",
         statsError: "The forest statistics could not be loaded right now. Please refresh and try again later.",
         noTrees: "No tree planting slots have been accumulated yet.",
         treeInfoTitle: (slot) => `Tree Planting Slot ${slot}`,
@@ -1554,7 +1556,9 @@
       if (!entries.length) {
         els.leaderboardList.hidden = true;
         els.leaderboardEmpty.hidden = false;
-        els.leaderboardEmpty.textContent = t("leaderboardEmpty");
+        els.leaderboardEmpty.textContent = state.authResolved && !auth.currentUser && lastStats
+          ? t("leaderboardGuest")
+          : t("leaderboardEmpty");
         return;
       }
       entries.forEach((entry) => {
@@ -1611,6 +1615,30 @@
       els.treeDetailBody.textContent = t("loading");
 
       try {
+        if (!auth.currentUser) {
+          const publicStatsSnap = await getDoc(doc(db, "publicStats", "treePlantingForest"));
+          if (!publicStatsSnap.exists()) {
+            throw new Error("Public tree planting forest stats are unavailable.");
+          }
+          const publicStats = publicStatsSnap.data() || {};
+          const participants = Math.max(0, Math.floor(Number(publicStats.participants || 0)));
+          const points = Math.max(0, Math.floor(Number(publicStats.points || 0)));
+          const partnerTrees = Math.floor(participants / 100);
+          const pointTrees = Math.floor(points / 10);
+          const totalTrees = Math.min(MAX_SLOTS, partnerTrees + pointTrees);
+          const remaining = Math.max(0, MAX_SLOTS - totalTrees);
+
+          setVisibleTrees(
+            totalTrees,
+            Math.min(partnerTrees, totalTrees),
+            Math.max(0, totalTrees - Math.min(partnerTrees, totalTrees))
+          );
+          renderStats({ participants, points, partnerTrees, pointTrees, totalTrees, remaining });
+          renderLeaderboard([]);
+          state.statsLoading = false;
+          return;
+        }
+
         const [memberResult, submissionResult, referralResult, relatedActivityResult] = await Promise.allSettled([
           getDocs(collection(db, "members")),
           getDocs(collection(db, "greenProposalSubmissions")),

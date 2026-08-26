@@ -16,7 +16,9 @@
     "seed:related-activity-accounts": "node scripts/register-related-activity-participants.js",
     "seed:related-activity-accounts:apply": "node scripts/register-related-activity-participants.js --apply",
     "recalc:climate-points": "node scripts/recalculate-climate-points.js",
-    "recalc:climate-points:apply": "node scripts/recalculate-climate-points.js --apply"
+    "recalc:climate-points:apply": "node scripts/recalculate-climate-points.js --apply",
+    "sync:tree-forest-stats": "node scripts/sync-tree-forest-stats.js",
+    "sync:tree-forest-stats:apply": "node scripts/sync-tree-forest-stats.js --apply"
   },
   "engines": {
     "node": "24"

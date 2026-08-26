@@ -308,6 +308,14 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Public forest totals contain aggregate counts only. Keeping this in a
+    // dedicated document lets signed-out visitors see the forest without
+    // exposing member profiles, submissions, or referral records.
+    match /publicStats/{statsId} {
+      allow get: if statsId == "treePlantingForest";
+      allow list, create, update, delete: if false;
+    }
+
     match /closingCeremonyRegistrations/{registrationId} {
       allow create: if isSignedIn() && registrationId == request.auth.uid &&
         isValidClosingCeremonyRegistration(request.resource.data);
